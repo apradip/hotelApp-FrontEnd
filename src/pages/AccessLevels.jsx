@@ -8,7 +8,6 @@ import AccessLevelCard from "../components/accessLevel/AccessLevelCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/useFetchWithAuth";
 
-
 // Start:: Component
 // props parameters
 // onSuccess
@@ -261,7 +260,7 @@ const AccessLevels = forwardRef(( props, ref ) => {
 
                                 {/* Start :: Pagination */}
                                 <div className="col-8 text-muted d-flex justify-content-end">
-                                    {!loading && 
+                                    {
                                             data && 
                                                 <Paging
                                                     itemPerPage = { itemPerPage }
@@ -279,9 +278,9 @@ const AccessLevels = forwardRef(( props, ref ) => {
 
             {/* Start :: add employee component */}
             <AccessLevelAdd 
-                ref = { addRef }   
-                onAdded = { () => { handleSuccess("add") } }
-                onClosed = { close } />
+                ref={addRef}   
+                onAdded={() => {handleSuccess("add")}}
+                onClosed={close}/>
             {/* End :: add employee component */}
 
         </>

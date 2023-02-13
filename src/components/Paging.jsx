@@ -13,17 +13,11 @@ const Paging = ({ itemPerPage, totalItem, selectedPage, onPaging }) => {
             <ul className='pagination'>
                 {pages.map(item => (
                     <li key={item} className={selectedPage === item ? "page-item active" : "page-item"}>
-
                         <Link className="page-link" 
                             href="window.location"
-                            onClick = { onPaging(item) }>
-
+                            onClick={() => onPaging(item)}>
                             {item}
                         </Link>
-
-                        {/* <a onClick={() => onPaging(item)} href='#' className='page-link'>
-                            {item}
-                        </a> */}
                     </li>
                 ))}
             </ul>
