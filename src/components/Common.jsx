@@ -102,8 +102,8 @@ export const getPageAttribute = (selectedCompont) => {
             
             break;
 
-        case "policy":
-            attribute.name = "Policy";
+        case "privacy":
+            attribute.name = "Privacy";
             attribute.dynamic = false;
             attribute.show.name = true; 
             attribute.show.search = false;

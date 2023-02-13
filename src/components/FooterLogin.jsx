@@ -1,13 +1,37 @@
-import React from "react"
-import { NavLink } from "react-router-dom"
+import React, { useState, forwardRef, useImperativeHandle } from "react";
+import { NavLink } from "react-router-dom";
 
-const FooterLogin = () => {
-    // Start:: click page menu
+
+// Start:: Component
+// props parameters
+// onClickPage
+
+// useImperativeHandle
+// changePage
+
+const FooterLogin = forwardRef(( props, ref ) => {
+    const [selectedPage, setSelectedPage] = useState(null);
+
+	// Start:: click page menu
     const handelClickMenuItem = (page) => {
-        //changePage(page);
+        changePage(page);
+		props.onClickPage(page);
     };
     // End:: click page menu
 
+	// Start:: forward reff change page
+	const changePage = (page) => {
+		setSelectedPage(page);
+	};
+	
+	useImperativeHandle(ref, () => {
+		return {
+			changePage
+		}
+	});
+	// End:: forward reff change page
+	
+	// Start:: Html
     return ( 
 		<footer className="footer">
 			<div className="container-fluid">
@@ -44,7 +68,8 @@ const FooterLogin = () => {
 				</div>
 			</div>
 		</footer>      
-    )
-}
+    );
+	// End:: Html
+});
  
-export default FooterLogin
+export default FooterLogin;

@@ -3,7 +3,7 @@ import { React } from 'react';
 const Terms = () => {
     return ( 
         <div className="container mt-5">
-            <h1>Terms of Service</h1><br></br><br></br>
+            {/* <h1>Terms of Service</h1><br></br><br></br> */}
 
             <h3>Introduction:</h3>
             <p>These Terms of Service govern the use of the Hotel Management Software and its services. By using the software, you agree to be bound by these terms and conditions. If you do not agree with these terms, do not use the software.</p>

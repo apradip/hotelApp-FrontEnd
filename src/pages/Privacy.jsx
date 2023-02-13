@@ -3,7 +3,7 @@ import React from 'react';
 const Privacy = () =>{
     return ( 
         <div className="container mt-5">
-            <h1>Privacy Policy</h1><br></br><br></br>
+            {/* <h1>Privacy Policy</h1><br></br><br></br> */}
 
             <h3>Introduction:</h3>
             <p>This privacy policy outlines the data collection, usage, and storage practices of the Hotel Management Software. We take the privacy of our users seriously and are committed to protecting the information you provide to us.</p>

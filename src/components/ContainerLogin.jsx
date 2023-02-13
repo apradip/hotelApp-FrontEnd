@@ -35,6 +35,7 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
   const [menuState, setMenuState] = useState(contextValues.showMenu);
   const [menuSelected, setMenuSelected] = useState(null);
   const navRef = useRef(null);
+  const footerRef = useRef(null);
   const accessLevelRef = useRef(null);
   const employeeRef = useRef(null);
   const idDocumentRef = useRef(null);
@@ -214,6 +215,12 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
     navRef.current.success();
   };
   // End:: handle header operational options
+
+  // Start:: click footer page
+  const handleClickPage = (page) => {
+    setMenuSelected(page);
+  };
+  // End:: click footer page
   
   // Start:: Html
   return ( 
@@ -268,15 +275,15 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
 
         {/* Start:: header nav component */}
         <Navbar
-            pEmployeeId = { pEmployeeId }
-            pEmployeeName = { pEmployeeName }
-            pSelectedPage = { menuSelected }
-            onShowHideSideBar = { (s) => handleShowHideSideBar(s) }
-            onChangeSearch = { (s) => handleSearch(s) } 
-            onClickAdd = { handleAdd } 
-            onClickEdit = { handleEdit }
-            onClickDel = { handleDel }
-            ref = { navRef }/>
+            pEmployeeId={pEmployeeId}
+            pEmployeeName={pEmployeeName}
+            pSelectedPage={menuSelected}
+            onShowHideSideBar={(s) => handleShowHideSideBar(s)}
+            onChangeSearch={(s) => handleSearch(s)} 
+            onClickAdd={handleAdd} 
+            onClickEdit={handleEdit}
+            onClickDel={handleDel}
+            ref={navRef}/>
         {/* End:: header nav component */}
 
         {/* Start:: all page cpmponents */}
@@ -286,9 +293,9 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
               <Route exact path="/dashboard" element={<Dashboard />}/>
               
               <Route exact path="/accesslevels" element={<AccessLevels 
-                                                          ref = { accessLevelRef } 
-                                                          onSuccess = { handleSuccess }
-                                                          onClose = { handleClose } />}/>
+                                                          ref={accessLevelRef} 
+                                                          onSuccess={handleSuccess}
+                                                          onClose={handleClose}/>}/>
 
               <Route exact path="/iddocuments" element={<IDDocuments 
                                                           ref = { idDocumentRef } 
@@ -331,7 +338,9 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
         {/* End:: all page cpmponents */}
 
         {/* Start:: footer component */}
-        <Footer />
+        <Footer 
+          onClickPage={(p) => handleClickPage(p)}  
+          ref={footerRef}/>
         {/* End:: footer component */}
       </div>
 

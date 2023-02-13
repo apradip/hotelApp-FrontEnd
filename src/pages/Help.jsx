@@ -3,7 +3,7 @@ import React from 'react';
 const Help = () => {
     return (
         <div className="container mt-5">
-            <h1>Help Center</h1><br></br><br></br>
+            {/* <h1>Help Center</h1><br></br><br></br> */}
 
             <h3>Introduction:</h3>
             <p>Welcome to the Hotel Management Software, a comprehensive solution for managing your hotel operations efficiently. This software is designed to streamline the day-to-day tasks involved in running a hotel, such as room reservation, billing, front desk management, and more.</p>

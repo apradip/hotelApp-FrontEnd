@@ -3,7 +3,7 @@ import { React } from 'react';
 const Support = () => {
     return ( 
         <div className="container mt-5">
-            <h1>Support Information</h1><br></br><br></br>
+            {/* <h1>Support Information</h1><br></br><br></br> */}
 
             <p>If you need support for the Hotel Management Software, there are several ways to get help:</p>
             <ol>
