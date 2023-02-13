@@ -7,7 +7,7 @@ import { ChevronsLeft, ChevronsRight, Paperclip, Edit3, Scissors, AtSign } from 
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
-import { getFirstName, getPageName } from "../components/Common";
+import { getFirstName, getPageAttribute } from "../components/Common";
 import useFetchWithAuth from "./useFetchWithAuth";
 import Search from "../components/Search";
 import ChangePassword from "./auth/ChangePassword";
@@ -107,6 +107,12 @@ const NavbarLogin = forwardRef(( props, ref ) => {
     };
     // End:: on success of user options
 
+    // Start:: click page menu
+    const handelClickMenuItem = (page) => {
+        changePage(page);
+    };
+    // End:: click page menu
+
     // Start:: handle page component search/add/edit/delete
     // Start:: Search
     const handleSearch = (text) => {
@@ -157,7 +163,8 @@ const NavbarLogin = forwardRef(( props, ref ) => {
             
             {/* Start:: app logo */}
             <div className = { sideBarHeaderClass } id="header-sidebar">
-                <NavLink className="sidebar-brand" to="/dashboard">
+                <NavLink className="sidebar-brand" to="/dashboard"
+                    onClick={() => {handelClickMenuItem("dashboard")}}>
                     <i className="align-middle mr-1">
                         <span className="badge badge-light">
                             <img className="icon" src='assets/img/brands/hotelapp.png' alt="Hotel App" />                  
@@ -183,56 +190,61 @@ const NavbarLogin = forwardRef(( props, ref ) => {
 
             <div className="navbar-collapse collapse">
                 
-                {/* Start:: data operations menu search/add/edit/delete */}
-                { selectedPage !== "" ?
+                {/* {currentPageAttribute = getPageAttribute(selectedPage)} */}
+                {selectedPage !== "" ?
                     <>
-                        <Navbar.Brand href="#">{ getPageName(selectedPage) }</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Brand href="#">{getPageAttribute(selectedPage).name}</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto col-7">
-                                <Search 
-                                    onChange = { handleSearch }
-                                    ref = { searchRef }
-                                    currentPage = { selectedPage } />
 
-                                <OverlayTrigger
-                                    placement="bottom"
-                                    overlay = { <Tooltip>new</Tooltip> } >
-                                    
-                                    <button 
-                                        className="btn btn-success ml-3 mr-1" 
-                                        size="md" 
-                                        onClick = { handleOpenAdd } >
+                                {getPageAttribute(selectedPage).show.search &&
+                                    <Search 
+                                        onChange = { handleSearch }
+                                        ref = { searchRef }
+                                        currentPage = { selectedPage } />}
 
-                                        <Paperclip className="feather-16" />
-                                    </button>
+                                {getPageAttribute(selectedPage).show.add &&
+                                    <OverlayTrigger
+                                        placement="bottom"
+                                        overlay = { <Tooltip>new</Tooltip> } >
+                                        
+                                        <button 
+                                            className="btn btn-success ml-3 mr-1" 
+                                            size="md" 
+                                            onClick = { handleOpenAdd } >
 
-                                </OverlayTrigger>
+                                            <Paperclip className="feather-16" />
+                                        </button>
 
-                                <OverlayTrigger
-                                    placement="bottom"
-                                    overlay = { <Tooltip>edit</Tooltip> } >
-                                    
-                                    <button 
-                                        className="btn btn-info mx-1" 
-                                        size="md" 
-                                        onClick = { handleOpenEdit } >
+                                    </OverlayTrigger>}
 
-                                        <Edit3 className="feather-16" />
-                                    </button>
-                                </OverlayTrigger>
+                                {getPageAttribute(selectedPage).show.edit &&
+                                    <OverlayTrigger
+                                        placement="bottom"
+                                        overlay = { <Tooltip>edit</Tooltip> } >
+                                        
+                                        <button 
+                                            className="btn btn-info mx-1" 
+                                            size="md" 
+                                            onClick = { handleOpenEdit } >
 
-                                <OverlayTrigger
-                                    placement="bottom"
-                                    overlay = { <Tooltip>delete</Tooltip> } >
-                                    <button 
-                                        className="btn btn-danger mx-1" 
-                                        size="md" 
-                                        onClick = { handleOpenDel } >
+                                            <Edit3 className="feather-16" />
+                                        </button>
+                                    </OverlayTrigger>}
 
-                                        <Scissors className="feather-16"/>
-                                    </button>
-                                </OverlayTrigger>
+                                {getPageAttribute(selectedPage).show.delete &&
+                                    <OverlayTrigger
+                                        placement="bottom"
+                                        overlay = { <Tooltip>delete</Tooltip> } >
+                                        <button 
+                                            className="btn btn-danger mx-1" 
+                                            size="md" 
+                                            onClick = { handleOpenDel } >
+
+                                            <Scissors className="feather-16"/>
+                                        </button>
+                                    </OverlayTrigger>}
                             </Nav>
                         </Navbar.Collapse>
                     </> : <></>}

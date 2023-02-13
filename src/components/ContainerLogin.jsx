@@ -34,7 +34,7 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
   const contextValues = useStateContext();
   const [menuState, setMenuState] = useState(contextValues.showMenu);
   const [menuSelected, setMenuSelected] = useState(null);
-  const navRef =  useRef(null);
+  const navRef = useRef(null);
   const accessLevelRef = useRef(null);
   const employeeRef = useRef(null);
   const idDocumentRef = useRef(null);
@@ -44,10 +44,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
   const bookingAgentRef = useRef(null);
 
   useEffect(() => {
-    const page = getPage(contextValues.baseURL, window.location.href);
+    const page = getPage(process.env.REACT_APP_BASE_URI, window.location.href);
     navRef.current.changePage(page);
     setMenuSelected(page);
-  }, [contextValues.baseURL]);
+  }, []);   // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     navRef.current.changePage(menuSelected);
@@ -229,32 +229,32 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                   <span className="align-middle">Master</span>
                 </a>
                 <ul id="masters" className="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
-                  <li className={ `sidebar-item ${ menuSelected === 'accesslevels' ? 'active' : null }` } 
-                      onClick={ () => { handelClickMenuItem('accesslevels') } }>
+                  <li className={`sidebar-item ${menuSelected === 'accesslevels' ? 'active' : null}`} 
+                      onClick={() => {handelClickMenuItem('accesslevels')}}>
                       <NavLink to="/accesslevels" className="sidebar-link">Role</NavLink>
                   </li>
-                  <li className={ `sidebar-item ${ menuSelected === 'plans' ? 'active' : null }` }
-                      onClick={ () => { handelClickMenuItem('plans') } }>
+                  <li className={`sidebar-item ${menuSelected === 'plans' ? 'active' : null}`}
+                      onClick={() => {handelClickMenuItem('plans')}}>
                       <NavLink to="/plans" className="sidebar-link">Plan</NavLink>
                   </li>
-                  <li className={ `sidebar-item ${ menuSelected === 'roomcategories' ? 'active' : null }` }
-                      onClick={ () => { handelClickMenuItem('roomcategories') } }>
+                  <li className={`sidebar-item ${menuSelected === 'roomcategories' ? 'active' : null}`}
+                      onClick={() => {handelClickMenuItem('roomcategories')}}>
                       <NavLink to="/roomcategories" className="sidebar-link">Room category</NavLink>
                   </li>
-                  <li className={ `sidebar-item ${ menuSelected === 'iddocuments' ? 'active' : null }` }
-                      onClick={ () => { handelClickMenuItem('iddocuments') } }>
+                  <li className={`sidebar-item ${ menuSelected === 'iddocuments' ? 'active' : null}`}
+                      onClick={() => {handelClickMenuItem('iddocuments')}}>
                       <NavLink to="/iddocuments" className="sidebar-link">ID document</NavLink>
                   </li>
                   <li className={`sidebar-item ${menuSelected === 'bookingagents' ? 'active' : null}`} 
-                      onClick={ () => { handelClickMenuItem('bookingagents') } }>
+                      onClick={() => {handelClickMenuItem('bookingagents')}}>
                       <NavLink to="/bookingagents" className="sidebar-link">Booking agent</NavLink>
                   </li>
-                  <li className={ `sidebar-item ${ menuSelected === 'employees' ? 'active' : null }` } 
-                      onClick={ () => { handelClickMenuItem('employees') } }>
+                  <li className={`sidebar-item ${menuSelected === 'employees' ? 'active' : null}`} 
+                      onClick={() => {handelClickMenuItem('employees')}}>
                       <NavLink to="/employees" className="sidebar-link">Employee</NavLink>
                   </li>
-                  <li className={ `sidebar-item ${ menuSelected === 'rooms' ? 'active' : null }` }
-                      onClick={ () => { handelClickMenuItem('rooms') } }>
+                  <li className={`sidebar-item ${ menuSelected === 'rooms' ? 'active' : null}`}
+                      onClick={() => {handelClickMenuItem('rooms')}}>
                       <NavLink to="/rooms" className="sidebar-link">Room</NavLink>
                   </li>
                 </ul>
@@ -276,55 +276,55 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
             onClickAdd = { handleAdd } 
             onClickEdit = { handleEdit }
             onClickDel = { handleDel }
-            ref = { navRef } />
+            ref = { navRef }/>
         {/* End:: header nav component */}
 
         {/* Start:: all page cpmponents */}
         <main className="content">
           <div className="container-fluid p-0">
             <Routes>
-              <Route exact path="/dashboard" element={<Dashboard />} />
+              <Route exact path="/dashboard" element={<Dashboard />}/>
               
               <Route exact path="/accesslevels" element={<AccessLevels 
                                                           ref = { accessLevelRef } 
                                                           onSuccess = { handleSuccess }
-                                                          onClose = { handleClose } />} />
+                                                          onClose = { handleClose } />}/>
 
               <Route exact path="/iddocuments" element={<IDDocuments 
                                                           ref = { idDocumentRef } 
                                                           onSuccess = { handleSuccess }
-                                                          onClose = { handleClose } />} />
+                                                          onClose = { handleClose } />}/>
 
               <Route exact path="/bookingagents" element={<BookingAgents 
                                                             ref = { bookingAgentRef } 
                                                             onSuccess = { handleSuccess }
-                                                            onClose = { handleClose } />} />
+                                                            onClose = { handleClose } />}/>
               
               <Route exact path="/plans" element={<Plans 
                                                     ref = { planRef } 
                                                     onSuccess = { handleSuccess }
-                                                    onClose = { handleClose } />} />
+                                                    onClose = { handleClose } />}/>
 
               <Route exact path="/roomcategories" element={<RoomCategories 
                                                             ref = { roomCategoryRef } 
                                                             onSuccess = { handleSuccess }
-                                                            onClose = { handleClose } />} />
+                                                            onClose = { handleClose } />}/>
 
               <Route exact path="/employees" element={<Employees 
                                                         ref = { employeeRef } 
                                                         onSuccess = { handleSuccess }
-                                                        onClose = { handleClose } />} />
+                                                        onClose = { handleClose } />}/>
 
               <Route exact path="/rooms" element={<Rooms
                                                     ref = { roomRef } 
                                                     onSuccess = { handleSuccess }
-                                                    onClose = { handleClose } />} />
+                                                    onClose = { handleClose } />}/>
               
-              <Route exact path="/support" element={<Support />} />
-              <Route exact path="/help" element={<Help />} />
-              <Route exact path="/privacy" element={<Privacy />} />
-              <Route exact path="/terms" element={<Terms />} />
-              <Route path="*" element={<Error404 />} />
+              <Route exact path="/support" element={<Support />}/>
+              <Route exact path="/help" element={<Help />}/>
+              <Route exact path="/privacy" element={<Privacy />}/>
+              <Route exact path="/terms" element={<Terms />}/>
+              <Route path="*" element={<Error404 />}/>
             </Routes>
           </div>
         </main>

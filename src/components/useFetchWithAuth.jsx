@@ -22,21 +22,6 @@ const useFetchWithAuth = (params) => {
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
 
 
-    // const doFetch = async () => {
-    //     setLoading(true);
-    //     setData(undefined);
-    //     setError(null);
-
-    //     try {
-    //         const response = await axiosPrivate.request(params);
-    //         setData(response.data);
-    //     } catch (error) {
-    //         setError(error.message) ;
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
     const doLogout = async (payload) => {
         setLoading(true);
         setData(undefined);
@@ -55,28 +40,28 @@ const useFetchWithAuth = (params) => {
             })
             .finally(() => {
                 setLoading(false);
-            })
+            });
     };
 
     const doChangePassword = async (payload) => {
-        setLoading(true)
-        setData(undefined)
-        setError(null)
+        setLoading(true);
+        setData(undefined);
+        setError(null);
 
         await axiosPrivate.put(`${params.url}`, payload)
             .then((response) => {
                 if (response.status !== 200) {
-                    throw Error('Could not change password')
+                    throw Error("Could not change password");
                 } else {
-                    setData(response.data)
+                    setData(response.data);
                 }
             })
             .catch((error) => {
-                setError(error.message)
+                setError(error.message);
             })
             .finally(() => {
-                setLoading(false)
-            })
+                setLoading(false);
+            });
     }
 
     const doInsert = async (payload) => {
@@ -97,7 +82,7 @@ const useFetchWithAuth = (params) => {
             })
             .finally(() => {
                 setLoading(false);
-            })
+            });
     };
 
     const doUpdate = async (payload) => {
@@ -118,7 +103,7 @@ const useFetchWithAuth = (params) => {
             })
             .finally(() => {
                 setLoading(false);
-            })
+            });
     };
 
     const doDelete = async () => {
@@ -139,7 +124,7 @@ const useFetchWithAuth = (params) => {
             })            
             .finally(() => {
                 setLoading(false);
-            })
+            });
     };
 
     return { data, loading, error, doLogout, doChangePassword, doFetch, doInsert, doUpdate, doDelete };

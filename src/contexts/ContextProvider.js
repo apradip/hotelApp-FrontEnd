@@ -10,6 +10,7 @@ const initialState = {
 };
 
 export const ContextProvider = ({children}) => {
+  const refreshTokenAPI = "/refreshToken";
   const forgetAPI = "/forgetpassword";
   const loginAPI = "/login";
   const logoutAPI = "/logout";
@@ -21,6 +22,8 @@ export const ContextProvider = ({children}) => {
   const roomCategoryAPI = "/roomCategories";
   const roomAPI = "/rooms";
   const bookingAgentAPI = "/bookingAgents";
+  const itemPerRow = 3;
+  const itemPerPage = itemPerRow * 3;
 
   const [screenSize, setScreenSize] = useState(undefined);
   const [currentColor, setCurrentColor] = useState("#03C9D7");
@@ -29,8 +32,6 @@ export const ContextProvider = ({children}) => {
   const [activeMenu, setActiveMenu] = useState(true);
   const [showMenu, setShowMenu] = useState(localStorage.getItem("menuStatus") !== null ? localStorage.getItem("menuStatus") : true);
   const [isClicked, setIsClicked] = useState(initialState);
-  const [itemPerRow, setItemPerRow] = useState(3);
-  const [itemPerPage, setItemPerPage] = useState(itemPerRow * 3);
 
   const setColor = (color) => {
     setCurrentColor(color);
@@ -50,13 +51,13 @@ export const ContextProvider = ({children}) => {
   const handleClick = (clicked) => setIsClicked({...initialState, [clicked]: true});
 
   return (
-    <StateContext.Provider value={{initialState, forgetAPI, loginAPI, logoutAPI, changePasswordAPI,
+    <StateContext.Provider value={{initialState, refreshTokenAPI, forgetAPI, loginAPI, logoutAPI, changePasswordAPI,
       accessLevelAPI, employeeAPI, idDocumentAPI, planAPI, roomCategoryAPI, roomAPI, bookingAgentAPI,
       screenSize, setScreenSize, currentColor, setCurrentColor, 
       currentMode, setCurrentMode, themeSettings, setThemeSettings, 
       activeMenu, setActiveMenu, showMenu, setShowMenu,
-      isClicked, setIsClicked, itemPerRow, setItemPerRow, 
-      itemPerPage, setItemPerPage, setColor, setMode, 
+      isClicked, setIsClicked, itemPerRow, 
+      itemPerPage, setColor, setMode, 
       setMenuStatus, handleClick}} >
 
       { children }

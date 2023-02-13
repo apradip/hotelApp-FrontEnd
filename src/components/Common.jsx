@@ -61,6 +61,159 @@ export const getPageName = (selectedCompont) => {
     return name;
 };
 
+export const getPageAttribute = (selectedCompont) => {
+    const attribute = {
+        "name": null,
+        "dynamic": false,
+        "show": { "title": true, "search": false, "add": false, "edit": false, "delete": false }
+    };
+
+    switch(selectedCompont) {
+        case "dashboard":
+            attribute.name = "Dashboard";
+            attribute.dynamic = false;
+            attribute.show.name = true; 
+            attribute.show.search = false;
+            attribute.show.add = false;
+            attribute.show.edit = false
+            attribute.show.delete = false;
+            
+            break;
+
+        case "support":
+            attribute.name = "Support";
+            attribute.dynamic = false;
+            attribute.show.name = true; 
+            attribute.show.search = false;
+            attribute.show.add = false;
+            attribute.show.edit = false
+            attribute.show.delete = false;
+            
+            break;
+
+        case "help":
+            attribute.name = "Help Center";
+            attribute.dynamic = false;
+            attribute.show.name = true; 
+            attribute.show.search = false;
+            attribute.show.add = false;
+            attribute.show.edit = false
+            attribute.show.delete = false;
+            
+            break;
+
+        case "policy":
+            attribute.name = "Policy";
+            attribute.dynamic = false;
+            attribute.show.name = true; 
+            attribute.show.search = false;
+            attribute.show.add = false;
+            attribute.show.edit = false
+            attribute.show.delete = false;
+            
+            break;
+
+        case "terms":
+            attribute.name = "Terms of Service";
+            attribute.dynamic = false;
+            attribute.show.name = true; 
+            attribute.show.search = false;
+            attribute.show.add = false;
+            attribute.show.edit = false
+            attribute.show.delete = false;
+            
+            break;
+                
+        case "accesslevels":
+            attribute.name = "Role";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+            
+            break;
+
+        case "plans":
+            attribute.name = "Plan";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+
+        case "roomcategories":
+            attribute.name = "Room category";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+
+        case "iddocuments":
+            attribute.name = "ID document";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+                
+        case "bookingagents":
+            attribute.name = "Booking agent";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+
+        case "employees":
+            attribute.name = "Employee";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+
+        case "rooms":
+            attribute.name = "Room";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+                        
+        default:
+            // attribute = {
+            //     name: "",
+            //     dynamic : false,
+            //     show: {name: true, search: false, add: false, edit: false, delete: false}
+            // };
+
+            break;
+        }
+
+    return attribute;
+};
+
 export const getAccessLevel = (accessLevelArray) => {
     let names = "";
 
