@@ -27,31 +27,24 @@ const AccessLevelSelect = ({ onChange, name, value, disabled = false }) => {
         (async () => {
             try {
                 await doFetch();
-
-				if (value !== null) {
-					for (const item of value) {
-						defaultList.push({ value: item.id, label: item.name });
-					}
-				}
             } catch (err) {
               console.log("Error occured when fetching data");
             }
+
+			value &&
+				value.map((item) => {
+					return defaultList.push({value: item.id, label: item.name});
+				})
           })();
     }, [value, doFetch]);		// eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
 		let list = [];
 
-		{data &&
+		data &&
 			data.map((item) => {
-				list.push({ value: item._id, label: item.name })
-			})}
-
-		// if (data !== null) {
-		// for (const item of data) {
-		// 		list.push({ value: item._id, label: item.name });
-		// 	}
-		// }
+				return list.push({ value: item._id, label: item.name })
+			});
 
 		setAccesslevelList(list);
     }, [data, loading, error]);
