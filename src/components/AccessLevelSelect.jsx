@@ -42,11 +42,16 @@ const AccessLevelSelect = ({ onChange, name, value, disabled = false }) => {
     useEffect(() => {
 		let list = [];
 
-		if (data !== null) {
-			for (const item of data) {
-				list.push({ value: item._id, label: item.name });
-			}
-		}
+		{data &&
+			data.map((item) => {
+				list.push({ value: item._id, label: item.name })
+			})}
+
+		// if (data !== null) {
+		// for (const item of data) {
+		// 		list.push({ value: item._id, label: item.name });
+		// 	}
+		// }
 
 		setAccesslevelList(list);
     }, [data, loading, error]);
