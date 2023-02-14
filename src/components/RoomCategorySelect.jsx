@@ -9,7 +9,7 @@ const RoomCategorySelect = ({ onChange, name, value, disabled = false }) => {
 	const contextValues = useStateContext();
 	// const inputRef = useRef();
     const { data, loading, doFetch } = useFetchWithAuth({
-        url: `${contextValues.roomAPI}/${hotelId}`
+        url: `${contextValues.roomCategoryAPI}/${hotelId}`
     });
 
     // Start:: fetch data list from api
