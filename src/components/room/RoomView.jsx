@@ -5,7 +5,7 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
 const Form = ({ pNo, pCategoryId, pTariff, pDiscount, pBed, pPerson, onClosed }) => {
@@ -25,7 +25,7 @@ const Form = ({ pNo, pCategoryId, pTariff, pDiscount, pBed, pPerson, onClosed })
                 console.log("Error occured when fetching data");
             }
             })();
-    }, [pCategoryId, doFetch]);
+    }, [pCategoryId]);      // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         data && setCategoryName(data.name);
@@ -195,7 +195,7 @@ const RoomView = forwardRef(( props, ref ) => {
               console.log("Error occured when fetching data");
             }
           })();
-    }, [props.pId, showModal, doFetch]);
+    }, [props.pId, showModal]);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     useEffect(() => {
@@ -226,13 +226,13 @@ const RoomView = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pNo = { data.no }
-                        pCategoryId = { data.categoryId }
-                        pTariff = { parseFloat(data.tariff, 10).toFixed(2) }
-                        pDiscount = { parseFloat(data.maxDiscount, 10).toFixed(2) }
-                        pBed = { parseFloat(data.extraBedTariff, 10).toFixed(2) }
-                        pPerson = { parseFloat(data.extraPersonTariff, 10).toFixed(2) }
-                        onClosed = { handleCloseModal } />
+                        pNo={data.no}
+                        pCategoryId={data.categoryId}
+                        pTariff={parseFloat(data.tariff, 10).toFixed(2)}
+                        pDiscount={parseFloat(data.maxDiscount, 10).toFixed(2)}
+                        pBed={parseFloat(data.extraBedTariff, 10).toFixed(2)}
+                        pPerson={parseFloat(data.extraPersonTariff, 10).toFixed(2)}
+                        onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
                     
                 </Modal> }

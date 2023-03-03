@@ -4,7 +4,7 @@ import { LogOut } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: Component

@@ -5,8 +5,8 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { getAccessLevel } from "../Common";
-import useFetchWithAuth from "../useFetchWithAuth";
+import { getAccessLevel } from "../common/Common";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
@@ -168,11 +168,10 @@ const EmployeeView = forwardRef(( props, ref ) => {
             try {
                 showModal && await doFetch();
             } catch (err) {
-              console.log('Error occured when fetching data');
+              console.log("Error occured when fetching data");
             }
-          })();
-
-    }, [props.pId, showModal, doFetch]);
+        })();
+    }, [props.pId, showModal]);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     useEffect(() => {
@@ -203,12 +202,12 @@ const EmployeeView = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pAccessLevels = { data.accessLevels }
-                        pName = { data.name }
-                        pAddress = { data.address }
-                        pMobile = { data.mobile }
-                        pEmail = { data.email }
-                        onClosed = { handleCloseModal } />
+                        pAccessLevels={data.accessLevels}
+                        pName={data.name}
+                        pAddress={data.address}
+                        pMobile={data.mobile}
+                        pEmail={data.email}
+                        onClosed={handleCloseModal} />
                     {/* End:: Form component */}
                     
                 </Modal> }

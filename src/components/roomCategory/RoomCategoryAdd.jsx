@@ -7,7 +7,7 @@ import { X } from "react-feather";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { roomCategorySchema } from "../../schemas";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form

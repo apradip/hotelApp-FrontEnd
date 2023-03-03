@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { loginOtpSchema } from "../../schemas";
-import useFetch from "../useFetch";
+import useFetch from "../common/useFetch";
 
 import "react-toastify/dist/ReactToastify.css";
 

@@ -3,7 +3,7 @@ import mem from "mem";
 import { axiosPublic } from "./axiosPublic";
 
 const refreshTokenFn = async () => {
-    axiosPublic.defaults.headers.common = { Authorization: `Bearer ${localStorage.getItem("refreshToken")}` };
+    axiosPublic.defaults.headers.common = {Authorization: `Bearer ${localStorage.getItem("refreshToken")}`};
     
     await axiosPublic.get('/refreshToken')
         .then((response) => {

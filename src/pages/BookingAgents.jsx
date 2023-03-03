@@ -6,7 +6,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import BookingAgentAdd from "../components/bookingAgent/BookingAgentAdd";
 import BookingAgentCard from "../components/bookingAgent/BookingAgentCard";
 import Paging from "../components/Paging";
-import useFetchWithAuth from "../components/useFetchWithAuth";
+import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
 
 // Start:: Component
@@ -209,7 +209,7 @@ const BookingAgents = forwardRef(( props, ref ) => {
               console.log("Error occured when fetching data");
             }
           })();
-    }, [dataChanged, search, doFetch]);
+    }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
 
     useEffect(() => {

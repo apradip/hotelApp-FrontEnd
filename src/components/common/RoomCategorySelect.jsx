@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 
-import { HotelId } from "../App";
-import { useStateContext } from "../contexts/ContextProvider";
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
 const RoomCategorySelect = ({ onChange, name, value, disabled = false }) => {
@@ -19,14 +19,14 @@ const RoomCategorySelect = ({ onChange, name, value, disabled = false }) => {
             } catch (err) {
                 console.log("Error occured when fetching data");
             }
-            })();
-    }, [doFetch]);
+		})();
+    }, []);		// eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
 
 	return (
 		<select 
 			className="form-control"
-			autoFocus
+			// autoFocus
 			name={name}
 			disabled={loading && disabled} 
 			value={value} 

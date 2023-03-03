@@ -2,7 +2,7 @@ import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
 import { Table, Card, Dropdown } from "react-bootstrap";
 
 import { Edit3, Scissors } from "react-feather";
-import { subStr } from "../Common";
+import { subStr } from "../common/Common";
 import IDDocumentView from "./IDDocumentView";
 import IDDocumentEdit from "./IDDocumentEdit";
 import IDDocumentDelete from "./IDDocumentDelete";

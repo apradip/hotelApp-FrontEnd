@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { X } from "react-feather";
 
 import { useStateContext } from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
@@ -129,7 +129,7 @@ const AccessLevelView = forwardRef(( props, ref ) => {
             }
           })();
 
-    }, [props.pId, showModal, doFetch]);
+    }, [props.pId, showModal]);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     useEffect(() => {

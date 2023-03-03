@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { axiosPublic } from "./axiosPublic";
+import {useState} from "react";
+import {axiosPublic} from "./axiosPublic";
 
 const useFetch = (params) => {
     const [data, setData] = useState(undefined);

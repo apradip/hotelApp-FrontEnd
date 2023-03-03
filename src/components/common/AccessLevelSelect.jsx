@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
-import { useStateContext } from "../contexts/ContextProvider";
+import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
 const AccessLevelSelect = ({ onChange, name, value, disabled = false }) => {
@@ -36,7 +36,7 @@ const AccessLevelSelect = ({ onChange, name, value, disabled = false }) => {
 					return defaultList.push({value: item.id, label: item.name});
 				})
           })();
-    }, [value, doFetch]);		// eslint-disable-line react-hooks/exhaustive-deps
+    }, [value]);		// eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
 		let list = [];
@@ -55,7 +55,7 @@ const AccessLevelSelect = ({ onChange, name, value, disabled = false }) => {
 
 	return (
 		<Select 
-			autoFocus
+			// autoFocus
 			name = { name }
 			options = { accesslevelList } 
 			defaultValue = { defaultList }

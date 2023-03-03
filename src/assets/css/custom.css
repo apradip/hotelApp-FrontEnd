@@ -12,17 +12,62 @@
   background-color: rgb(248, 248, 248)!important;
 }
 
+.border {
+  border: solid 2px #efebeb!important;
+}
 
 .border-primary {
-  border: solid 3px #caeaed!important;
-  margin: -3px!important;
+  border: solid 2px #caeaed!important;
 }
 
 .border-info {
-  border: solid 3px #6d71f3!important;
-  margin: -3px!important;
+  border: solid 2px #6d71f3!important;
 }
 
 .header-text {
   color:#354052;
+}
+
+
+
+.example-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+
+/* customization of ag-grid */
+.grid {
+  flex: 1 1 0px;
+  width: 100%;
+  height: 300px;
+}
+
+.grid-header {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
+  margin-bottom: 1rem;
+}
+
+.ag-lock-pinned {
+  background: #ddd;
+  text-align: left;
+}
+
+.ag-lock-pinned .right{
+  text-align: right;
+}
+
+
+.ag-row-pinned {
+  background: #ddd;
+  color: #ff5622;
+  font-weight:600;
+  text-align: left;
+}
+
+.right{
+  text-align: right;
 }

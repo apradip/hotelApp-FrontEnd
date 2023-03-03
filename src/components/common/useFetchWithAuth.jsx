@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { axiosPrivate } from "./axiosPrivate";
 
 const useFetchWithAuth = (params) => {
@@ -6,7 +6,8 @@ const useFetchWithAuth = (params) => {
     const [data, setData] = useState(undefined);
     const [error, setError] = useState(null);
 
-    const doFetch = useCallback(async () => {
+
+    const doFetch = async () => {        
         setLoading(true);
         setData(undefined);
         setError(null);
@@ -19,7 +20,7 @@ const useFetchWithAuth = (params) => {
         } finally {
             setLoading(false);
         }
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    };     // eslint-disable-line react-hooks/exhaustive-deps
 
 
     const doLogout = async (payload) => {
@@ -127,7 +128,7 @@ const useFetchWithAuth = (params) => {
             });
     };
 
-    return { data, loading, error, doLogout, doChangePassword, doFetch, doInsert, doUpdate, doDelete };
+    return {data, loading, error, doLogout, doChangePassword, doFetch, doInsert, doUpdate, doDelete};
 }
 
 export default useFetchWithAuth;

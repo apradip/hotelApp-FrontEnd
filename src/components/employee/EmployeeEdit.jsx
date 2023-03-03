@@ -7,8 +7,8 @@ import { X } from "react-feather";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { employeeSchema } from "../../schemas";
-import AccessLevelSelect from "../AccessLevelSelect";
-import useFetchWithAuth from "../useFetchWithAuth";
+import AccessLevelSelect from "../common/AccessLevelSelect";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
@@ -328,7 +328,7 @@ const EmployeeEdit = forwardRef(( props, ref ) => {
               console.log("Error occured when fetching data");
             }
           })();
-    }, [showModal, doFetch]);
+    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     useEffect(() => {

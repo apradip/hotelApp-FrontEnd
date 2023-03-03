@@ -6,9 +6,9 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import RoomCategorySelect from '../RoomCategorySelect';
+import RoomCategorySelect from '../common/RoomCategorySelect';
 import { roomSchema } from "../../schemas";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
 const Form = ({ onSubmited, onClosed }) => {

@@ -2,7 +2,7 @@ import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
 import { Table, Card, Dropdown } from "react-bootstrap";
 
 import { Edit3, Scissors } from "react-feather";
-import { subStr, getAccessLevel } from "../Common";
+import { subStr, getAccessLevel } from "../common/Common";
 import EmployeeView from "./EmployeeView";
 import EmployeeEdit from "./EmployeeEdit";
 import EmployeeDelete from "./EmployeeDelete";

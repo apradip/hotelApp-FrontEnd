@@ -7,7 +7,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import EmployeeAdd from "../components/employee/EmployeeAdd";
 import EmployeeCard from "../components/employee/EmployeeCard";
 import Paging from "../components/Paging";
-import useFetchWithAuth from "../components/useFetchWithAuth";
+import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
 
 // Start:: Component
@@ -214,7 +214,7 @@ const Employees = forwardRef(( props, ref ) => {
               console.log("Error occured when fetching data");
             }
           })();
-    }, [dataChanged, search, doFetch]);
+    }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
 
     useEffect(() => {

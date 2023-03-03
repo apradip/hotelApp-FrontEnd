@@ -1,5 +1,9 @@
+import moment from 'moment';
+
 export const subStr = (text, len) => {
-    return text.length > len ? text.substr(1, len) + " ..." : text;
+    let t = "";
+    t = text && text.length > len ? text.substr(1, len) + " ..." : text;
+    return t;
 }
 
 export const  getPage = (baseURL, url) => {
@@ -14,11 +18,6 @@ export const  getPage = (baseURL, url) => {
     }
     
     return component;
-};
-
-export const getFirstName = (name) => {
-    const names = name.split(" ");
-    return names.length > 0 ? names[0] : name;
 };
 
 export const getPageName = (selectedCompont) => {
@@ -52,7 +51,11 @@ export const getPageName = (selectedCompont) => {
         case "rooms":
             name = "Room";
             break;
-                        
+
+        case "guestrooms":
+            name = "Guest room";
+            break;
+                
         default:
             name = "";
     
@@ -200,7 +203,18 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.delete = true;
 
             break;
-                        
+  
+        case "guestrooms":
+            attribute.name = "Guest room";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+
         default:
             // attribute = {
             //     name: "",
@@ -224,4 +238,42 @@ export const getAccessLevel = (accessLevelArray) => {
     }
 
     return names;
+};
+
+export const getRooms = (roomList) => {
+    let rooms = "";
+    const roomArr = roomList && roomList.split(",");
+
+    // if (roomArr !== "undefined") {
+    //     for (const item of roomArr) {
+    //         rooms === "" ? rooms = item.no : rooms = rooms + ", " + item.no;
+    //     }
+    // }
+
+    return rooms;
+};
+
+export const formatMMDDYYYY = (longDateTime) => {
+    let dt = new Date(longDateTime),
+      mon = ("0" + (dt.getMonth() + 1)).slice(-2),
+      day = ("0" + dt.getDate()).slice(-2);
+    return [dt.getFullYear(), mon, day].join("-");
+}
+  
+export const formatHHMM = (longDateTime) => {
+    const tim = new Date(longDateTime);
+    const tim1 = moment(tim);
+    return tim1.format('HH:mm');
+}
+
+export const formatINR = (number) => {
+    return "₹ " + parseFloat(number, 10).toFixed(2);
+     
+};
+
+
+//  get employee first name
+export const getFirstName = (name) => {
+    const names = name.split(" ");
+    return names.length > 0 ? names[0] : name;
 };

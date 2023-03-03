@@ -7,7 +7,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import RoomAdd from "../components/room/RoomAdd";
 import RoomCard from "../components/room/RoomCard";
 import Paging from "../components/Paging";
-import useFetchWithAuth from "../components/useFetchWithAuth";
+import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
 // Start:: Component
 // props parameters
@@ -213,8 +213,8 @@ const Rooms = forwardRef(( props, ref ) => {
             } catch (err) {
                 console.log("Error occured when fetching data");
             }
-            })();
-    }, [dataChanged, search, doFetch]);
+        })();
+    }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
     
     useEffect(() => {

@@ -5,7 +5,7 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
@@ -128,11 +128,11 @@ const PlanView = forwardRef(( props, ref ) => {
             try {
                 showModal && await doFetch();
             } catch (err) {
-              console.log('Error occured when fetching data');
+              console.log("Error occured when fetching data");
             }
           })();
 
-    }, [props.pId, showModal, doFetch]);
+    }, [props.pId, showModal]);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     useEffect(() => {

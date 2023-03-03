@@ -5,7 +5,7 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
@@ -164,7 +164,7 @@ const RoomCategoryView = forwardRef(( props, ref ) => {
                 console.log("Error occured when fetching data");
             }
             })();
-    }, [showModal, props.pId, doFetch]);
+    }, [showModal, props.pId]);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     useEffect(() => {

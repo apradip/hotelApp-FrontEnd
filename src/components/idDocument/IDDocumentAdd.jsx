@@ -6,7 +6,7 @@ import { X } from "react-feather";
 
 import { useStateContext } from "../../contexts/ContextProvider";
 import { idDocumentSchema } from "../../schemas";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form

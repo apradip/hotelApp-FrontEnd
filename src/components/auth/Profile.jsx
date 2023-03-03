@@ -8,8 +8,8 @@ import { X, User } from "react-feather";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { employeeSchema } from "../../schemas";
-import AccessLevelSelect from "../AccessLevelSelect";
-import useFetchWithAuth from "../useFetchWithAuth";
+import AccessLevelSelect from "../common/AccessLevelSelect";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form

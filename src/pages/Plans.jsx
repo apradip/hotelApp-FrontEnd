@@ -7,7 +7,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import PlanAdd from "../components/plan/PlanAdd";
 import PlanCard from "../components/plan/PlanCard";
 import Paging from "../components/Paging";
-import useFetchWithAuth from "../components/useFetchWithAuth";
+import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
 
 // Start:: Component
@@ -211,7 +211,7 @@ const Plans = forwardRef(( props, ref ) => {
               console.log("Error occured when fetching data");
             }
           })();
-    }, [dataChanged, search, doFetch]);
+    }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
 
     useEffect(() => {

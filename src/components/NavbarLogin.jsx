@@ -7,8 +7,8 @@ import { ChevronsLeft, ChevronsRight, Paperclip, Edit3, Scissors, AtSign } from 
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
-import { getFirstName, getPageAttribute } from "../components/Common";
-import useFetchWithAuth from "./useFetchWithAuth";
+import { getFirstName, getPageAttribute } from "./common/Common";
+import useFetchWithAuth from "./common/useFetchWithAuth";
 import Search from "../components/Search";
 import ChangePassword from "./auth/ChangePassword";
 import Profile from "./auth/Profile";
@@ -189,31 +189,27 @@ const NavbarLogin = forwardRef(( props, ref ) => {
             {/* End:: open/close menu icon */}
 
             <div className="navbar-collapse collapse">
-                
-                {/* {currentPageAttribute = getPageAttribute(selectedPage)} */}
                 {selectedPage !== "" ?
                     <>
                         <Navbar.Brand href="#">{getPageAttribute(selectedPage).name}</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto col-7">
-
                                 {getPageAttribute(selectedPage).show.search &&
                                     <Search 
-                                        onChange = { handleSearch }
-                                        ref = { searchRef }
-                                        currentPage = { selectedPage } />}
+                                        onChange={handleSearch}
+                                        ref={searchRef}
+                                        currentPage={selectedPage}/>}
 
                                 {getPageAttribute(selectedPage).show.add &&
                                     <OverlayTrigger
                                         placement="bottom"
-                                        overlay = { <Tooltip>new</Tooltip> } >
+                                        overlay={<Tooltip>new</Tooltip>}>
                                         
                                         <button 
                                             className="btn btn-success ml-3 mr-1" 
                                             size="md" 
-                                            onClick = { handleOpenAdd } >
-
+                                            onClick={handleOpenAdd}>
                                             <Paperclip className="feather-16" />
                                         </button>
 
@@ -222,13 +218,12 @@ const NavbarLogin = forwardRef(( props, ref ) => {
                                 {getPageAttribute(selectedPage).show.edit &&
                                     <OverlayTrigger
                                         placement="bottom"
-                                        overlay = { <Tooltip>edit</Tooltip> } >
+                                        overlay={<Tooltip>edit</Tooltip>}>
                                         
                                         <button 
                                             className="btn btn-info mx-1" 
                                             size="md" 
-                                            onClick = { handleOpenEdit } >
-
+                                            onClick={handleOpenEdit}>
                                             <Edit3 className="feather-16" />
                                         </button>
                                     </OverlayTrigger>}
@@ -236,12 +231,11 @@ const NavbarLogin = forwardRef(( props, ref ) => {
                                 {getPageAttribute(selectedPage).show.delete &&
                                     <OverlayTrigger
                                         placement="bottom"
-                                        overlay = { <Tooltip>delete</Tooltip> } >
+                                        overlay={<Tooltip>delete</Tooltip>}>
                                         <button 
                                             className="btn btn-danger mx-1" 
                                             size="md" 
-                                            onClick = { handleOpenDel } >
-
+                                            onClick={handleOpenDel}>
                                             <Scissors className="feather-16"/>
                                         </button>
                                     </OverlayTrigger>}
@@ -260,8 +254,8 @@ const NavbarLogin = forwardRef(( props, ref ) => {
 
                             <span className="text-dark fw-bold mx-2">
                                 <AtSign size={20} className="mx-1"/>
-                                { data && getFirstName(data.name) }
-                                { !data && getFirstName(props.pEmployeeName) }
+                                {data && getFirstName(data.name)}
+                                {!data && getFirstName(props.pEmployeeName)}
                             </span>
                         </Link>
                         {/* End:: user first name & menu icon */}
@@ -270,20 +264,20 @@ const NavbarLogin = forwardRef(( props, ref ) => {
                         <div className="dropdown-menu dropdown-menu-right">
                             {/* Profile component */}
                             <Profile 
-                                pEmployeeId = { props.pEmployeeId }
-                                onEdited = { handleChangeProfileSuccess } 
-                                onClosed = { handleClose } />
+                                pEmployeeId={props.pEmployeeId}
+                                onEdited={handleChangeProfileSuccess} 
+                                onClosed={handleClose}/>
 
                             {/* Change password component */}
                             <ChangePassword 
-                                pEmployeeId = { props.pEmployeeId }
-                                onEdited = { handleChangePasswordSuccess }
-                                onClosed = { handleClose } />
+                                pEmployeeId={props.pEmployeeId}
+                                onEdited={handleChangePasswordSuccess}
+                                onClosed={handleClose}/>
 
                             {/* Logout component */}
                             <Logout
-                                pEmployeeId = { props.pEmployeeId }
-                                onLogout = { handleLogoutSuccess } />
+                                pEmployeeId={props.pEmployeeId}
+                                onLogout={handleLogoutSuccess}/>
                         </div>
                         {/* End:: dropdown menu */}
                     </li>

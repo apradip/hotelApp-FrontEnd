@@ -6,9 +6,9 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import RoomCategorySelect from '../RoomCategorySelect';
+import RoomCategorySelect from '../common/RoomCategorySelect';
 import { roomSchema } from "../../schemas";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
@@ -276,7 +276,7 @@ const RoomEdit = forwardRef(( props, ref ) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.roomAPI}/${hotelId}/${props.pId}`
     });
     
@@ -329,7 +329,7 @@ const RoomEdit = forwardRef(( props, ref ) => {
                 console.log("Error occured when fetching data");
             }
             })();
-    }, [showModal, doFetch]);
+    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
         
     useEffect(() => {

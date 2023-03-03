@@ -53,9 +53,9 @@ const Search = forwardRef(( props, ref ) => {
                 placeholder="search" 
                 autoComplete="off"
                 autoFocus
-                ref = { inputRef }
-                maxLength = { 100 }
-                onKeyUp = { handleSearchChange } />
+                ref={inputRef}
+                maxLength={100}
+                onKeyUp={handleSearchChange}/>
         </form>
     )
     // End:: Html

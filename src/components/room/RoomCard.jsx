@@ -4,8 +4,8 @@ import { Edit3, Scissors } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { subStr } from "../Common";
-import useFetchWithAuth from "../useFetchWithAuth";
+import { subStr } from "../common/Common";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 import RoomView from "./RoomView";
 import RoomEdit from "./RoomEdit";
 import RoomDelete from "./RoomDelete";
@@ -86,8 +86,8 @@ const RoomCard = forwardRef(( props, ref ) => {
             } catch (err) {
                 console.log("Error occured when fetching data");
             }
-            })();
-    }, [props.pCategoryId, doFetch]);
+        })();
+    }, [props.pCategoryId]);        // eslint-disable-line react-hooks/exhaustive-deps
     // Start:: fetch id wise detail from api
 
     useEffect(() => {
@@ -181,23 +181,23 @@ const RoomCard = forwardRef(( props, ref ) => {
                         <tbody>
                             <tr>
                                 <td>Category</td>
-                                <td className="text-right">{ subStr(categoryName, 20) }</td>
+                                <td className="text-right">{subStr(categoryName, 20)}</td>
                             </tr>
                             <tr>
                                 <td>Room tariff</td>
-                                <td className="text-right">{ `₹ ${props.pTariff}` }</td>
+                                <td className="text-right">{`₹ ${props.pTariff}`}</td>
                             </tr>
                             <tr>
                                 <td>Max. discount</td>
-                                <td className="text-right">{ `₹ ${props.pDiscount}` }</td>
+                                <td className="text-right">{`₹ ${props.pDiscount}`}</td>
                             </tr>
                             <tr>
                                 <td>Ext. bed tariff</td>
-                                <td className="text-right">{ `₹ ${props.pBed}` }</td>
+                                <td className="text-right">{`₹ ${props.pBed}`}</td>
                             </tr>
                             <tr>
                                 <td>Ext. person tariff</td>
-                                <td className="text-right">{ `₹ ${props.pPerson}` }</td>
+                                <td className="text-right">{`₹ ${props.pPerson}`}</td>
                             </tr>
                         </tbody>                            
                     </Table>

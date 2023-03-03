@@ -6,7 +6,7 @@ import { X } from "react-feather";
 
 import { useStateContext } from "../../contexts/ContextProvider";
 import { bookingAgentSchema } from "../../schemas";
-import useFetchWithAuth from "../useFetchWithAuth";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
@@ -66,7 +66,7 @@ const Form = ({ onSubmited, onClosed }) => {
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor = { "keyInputName" }>Name</label>
+                            htmlFor={"keyInputName"}>Name</label>
 
                         {/* Input element text*/}
                         <input 
@@ -76,16 +76,16 @@ const Form = ({ onSubmited, onClosed }) => {
                             className="form-control"
                             autoComplete="off"
                             autoFocus
-                            maxLength = { 100 }
-                            disabled = { loading } 
-                            value = { values.keyInputName } 
-                            onChange = { handleChange } />
+                            maxLength={100}
+                            disabled={loading} 
+                            value={values.keyInputName} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
-                        { errors.keyInputName && 
+                        {errors.keyInputName && 
                             touched.keyInputName ? 
-                                (<small className="text-danger">{ errors.keyInputName }</small>) : 
-                                    null }
+                                (<small className="text-danger">{errors.keyInputName}</small>) : 
+                                    null}
                     
                     </div>
                     {/* End:: Column name */}
@@ -102,24 +102,24 @@ const Form = ({ onSubmited, onClosed }) => {
                         
                         {/* Label element */}
                         <label className="form-label" 
-                                htmlFor = { "keyInputDescription" }>Description</label>
+                                htmlFor={"keyInputDescription"}>Description</label>
                         
                         {/* Input element text*/}
                         <textarea
-                            name = { "keyInputDescription" }
-                            rows = { "5" }
-                            placeholder = "Description"
-                            className = "form-control"
-                            autoComplete = "off"
-                            maxLength = { 1000 }
-                            disabled = { loading }
-                            value = { values.keyInputAddress } 
-                            onChange = { handleChange}  />
+                            name={"keyInputDescription"}
+                            rows={"5"}
+                            placeholder="Description"
+                            className="form-control"
+                            autoComplete="off"
+                            maxLength={1000}
+                            disabled={loading}
+                            value={values.keyInputAddress} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
-                        { errors.keyInputDescription && 
+                        {errors.keyInputDescription && 
                             touched.keyInputDescription ? 
-                                (<small className="text-danger">{ errors.keyInputDescription }</small>) : 
+                                (<small className="text-danger">{errors.keyInputDescription}</small>) : 
                                     null}
                     </div>
                     {/* End:: Column description */}

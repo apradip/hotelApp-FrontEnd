@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Routes, Route, NavLink } from "react-router-dom";
-import { Sliders } from "react-feather";
+import { Command, Feather, BookOpen } from "react-feather";
 import { ToastContainer } from "react-toastify";
 
 import { useStateContext } from "../contexts/ContextProvider";
-import { getPage } from "./Common";
+import { getPage } from "./common/Common";
 import Navbar from "./NavbarLogin";
 import Footer from "./FooterLogin";
 import Dashboard from "../pages/Dashboard"
@@ -15,6 +15,7 @@ import IDDocuments from "../pages/IDDocuments";
 import BookingAgents from "../pages/BookingAgents";
 import Employees from "../pages/Employees";
 import Rooms from "../pages/Rooms";
+import GuestRooms from "../pages/GuestRooms";
 import Support from "../pages/Support";
 import Help from "../pages/Help";
 import Privacy from "../pages/Privacy";
@@ -43,6 +44,7 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
   const roomCategoryRef = useRef(null);
   const roomRef = useRef(null);
   const bookingAgentRef = useRef(null);
+  const guestRoomRef = useRef(null);
 
   useEffect(() => {
     const page = getPage(process.env.REACT_APP_BASE_URI, window.location.href);
@@ -96,6 +98,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
       case "rooms":
         roomRef && roomRef.current.changeSearch(text);
         break;
+
+      case "guestrooms":
+        guestRoomRef && guestRoomRef.current.changeSearch(text);
+        break;
           
       default:
         break;        
@@ -130,6 +136,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
 
       case "rooms":
         roomRef && roomRef.current.openAdd();
+        break;
+
+      case "guestrooms":
+        guestRoomRef && guestRoomRef.current.openAdd();
         break;
           
       default:
@@ -167,6 +177,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
         roomRef && roomRef.current.openEdit();
         break;
           
+      case "guestrooms":
+        guestRoomRef && guestRoomRef.current.openEdit();
+        break;
+  
       default:
         break;        
       }
@@ -202,6 +216,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
         roomRef && roomRef.current.openDelete();
         break;
           
+      case "guestrooms":
+        guestRoomRef && guestRoomRef.current.openDelete();
+        break;
+  
       default:
         break;
     }
@@ -232,8 +250,8 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
             <ul className="sidebar-nav mt-3">
               <li className="sidebar-item">
                 <a href="#masters" data-toggle="collapse" className="sidebar-link collapsed">
-                  <Sliders size={16}/>
-                  <span className="align-middle">Master</span>
+                  <Command size={16}/>
+                  <span className="align-middle">Masters</span>
                 </a>
                 <ul id="masters" className="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                   <li className={`sidebar-item ${menuSelected === 'accesslevels' ? 'active' : null}`} 
@@ -263,6 +281,30 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                   <li className={`sidebar-item ${ menuSelected === 'rooms' ? 'active' : null}`}
                       onClick={() => {handelClickMenuItem('rooms')}}>
                       <NavLink to="/rooms" className="sidebar-link">Room</NavLink>
+                  </li>
+                </ul>
+              </li>
+              <li className="sidebar-item">
+                <a href="#transactions" data-toggle="collapse" className="sidebar-link collapsed">
+                  <Feather size={16}/>
+                  <span className="align-middle">Transactions</span>
+                </a>
+                <ul id="transactions" className="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
+                  <li className={`sidebar-item ${menuSelected === 'guestrooms' ? 'active' : null}`} 
+                      onClick={() => {handelClickMenuItem('guestrooms')}}>
+                      <NavLink to="/guestrooms" className="sidebar-link">Check In</NavLink>
+                  </li>
+                </ul>
+              </li>
+              <li className="sidebar-item">
+                <a href="#reports" data-toggle="collapse" className="sidebar-link collapsed">
+                  <BookOpen size={16}/>
+                  <span className="align-middle">Reports</span>
+                </a>
+                <ul id="reports" className="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
+                  <li className={`sidebar-item ${menuSelected === 'bookings' ? 'active' : null}`} 
+                      onClick={() => {handelClickMenuItem('bookings')}}>
+                      <NavLink to="/bookings" className="sidebar-link">Booking</NavLink>
                   </li>
                 </ul>
               </li>
@@ -298,35 +340,40 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                                                           onClose={handleClose}/>}/>
 
               <Route exact path="/iddocuments" element={<IDDocuments 
-                                                          ref = { idDocumentRef } 
-                                                          onSuccess = { handleSuccess }
-                                                          onClose = { handleClose } />}/>
+                                                          ref={idDocumentRef} 
+                                                          onSuccess={handleSuccess}
+                                                          onClose={handleClose}/>}/>
 
               <Route exact path="/bookingagents" element={<BookingAgents 
-                                                            ref = { bookingAgentRef } 
-                                                            onSuccess = { handleSuccess }
-                                                            onClose = { handleClose } />}/>
+                                                            ref={bookingAgentRef} 
+                                                            onSuccess={handleSuccess}
+                                                            onClose={handleClose} />}/>
               
               <Route exact path="/plans" element={<Plans 
-                                                    ref = { planRef } 
-                                                    onSuccess = { handleSuccess }
-                                                    onClose = { handleClose } />}/>
+                                                    ref={planRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
 
               <Route exact path="/roomcategories" element={<RoomCategories 
-                                                            ref = { roomCategoryRef } 
-                                                            onSuccess = { handleSuccess }
-                                                            onClose = { handleClose } />}/>
+                                                            ref={roomCategoryRef} 
+                                                            onSuccess={handleSuccess}
+                                                            onClose={handleClose}/>}/>
 
               <Route exact path="/employees" element={<Employees 
-                                                        ref = { employeeRef } 
-                                                        onSuccess = { handleSuccess }
-                                                        onClose = { handleClose } />}/>
+                                                        ref={employeeRef} 
+                                                        onSuccess={handleSuccess}
+                                                        onClose={handleClose}/>}/>
 
               <Route exact path="/rooms" element={<Rooms
-                                                    ref = { roomRef } 
-                                                    onSuccess = { handleSuccess }
-                                                    onClose = { handleClose } />}/>
-              
+                                                    ref={roomRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
+              <Route exact path="/guestrooms" element={<GuestRooms
+                                                    ref={guestRoomRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
               <Route exact path="/support" element={<Support />}/>
               <Route exact path="/help" element={<Help />}/>
               <Route exact path="/privacy" element={<Privacy />}/>

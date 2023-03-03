@@ -36,7 +36,7 @@ const FooterLogin = forwardRef(( props, ref ) => {
 		<footer className="footer">
 			<div className="container-fluid">
 				<div className="row text-muted">
-					<div className="col-6 text-left">
+					<div className="col-8 text-left">
 						<ul className="list-inline">
 							<li className="list-inline-item mx-3">
 								<NavLink to="/support" className="text-muted"
@@ -60,7 +60,7 @@ const FooterLogin = forwardRef(( props, ref ) => {
 							</li>
 						</ul>
 					</div>
-					<div className="col-6 text-right">
+					<div className="col-4 text-right">
 						<p className="mb-0">
 							&copy; 2023 - <a href="index.html" className="text-muted">Pixel Informatics</a>
 						</p>
