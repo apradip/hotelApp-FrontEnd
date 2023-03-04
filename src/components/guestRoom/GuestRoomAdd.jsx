@@ -23,20 +23,20 @@ const Form = ({ pRoomList, onSubmited, onClosed }) => {
     const contextValues = useStateContext();
     
     const roomList = pRoomList.filter(element => element.isOccupied === false);
-    const [noOfDay, setNoOfDay] = useState(0);
+    const [noOfDay, setNoOfDay] = useState(1);
     const [roomData, setRoomData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const [defaultRowData, setDefaultRowData] = useState([
-        {rowId: 1, room: "Select room", occupancyDate: "", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
-        {rowId: 2, room: "Select room", occupancyDate: "", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
-        {rowId: 3, room: "Select room", occupancyDate: "", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
-        // {rowId: 4, room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
-        // {rowId: 5, room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 6, room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 7, room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 8, room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 9, room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 10, room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0}
+        {rowId: 1, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
+        {rowId: 2, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
+        {rowId: 3, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
+        // {rowId: 4, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
+        // {rowId: 5, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
+        // {rowId: 6, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
+        // {rowId: 7, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
+        // {rowId: 8, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
+        // {rowId: 9, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
+        // {rowId: 10, occupancyDate: "", room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0}
     ]);
 
     const {data, loading, error, doInsert} = useFetchWithAuth({
@@ -63,10 +63,10 @@ const Form = ({ pRoomList, onSubmited, onClosed }) => {
             keyInputPhone: "",
             keyInputMobile: "",
             keyInputEmail: "",
-            keyInputGuestCount: 0,
+            keyInputGuestCount: 1,
             keyInputGuestCountMale: 0,
             keyInputGuestCountFemale: 0,
-            keyInputDayCount: 0,
+            keyInputDayCount: 1,
             keyInputBookingAgentId: "",
             keyInputPlanId: "",
             keyInputCorporateName: "",

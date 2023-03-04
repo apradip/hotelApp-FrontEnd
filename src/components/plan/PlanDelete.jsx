@@ -40,8 +40,8 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
                     type="button"   
                     className="btn btn-danger"
                     autoFocus
-                    disabled = { loading }
-                    onClick = { onClosed } >
+                    disabled={loading}
+                    onClick={onClosed} >
                     Close
                 </button>
                 {/* End:: Close button */}

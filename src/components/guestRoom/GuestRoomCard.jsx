@@ -102,7 +102,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                         <div className="row">
                             {/* Start:: Column name */}
                             <div className="col-md-10">
-                                <h4>{ subStr(props.pRoomNos, 20) }</h4>
+                                <h4>{subStr(props.pRoomNos, 20)}</h4>
                             </div>
                             {/* End:: Column name */}
                             
