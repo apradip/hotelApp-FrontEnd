@@ -160,7 +160,7 @@ const GuestRoomDelete = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Delete booking</Modal.Title>
+                        <Modal.Title>Delete guest room</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 

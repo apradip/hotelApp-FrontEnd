@@ -1,43 +1,123 @@
 import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
+import { Modal, NavLink, Accordion } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
+import DatePicker from "react-datepicker";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { employeeSchema } from "../../schemas";
-// import AccessLevelSelect from "../common/AccessLevelSelect";
+import { guestRoomSchema } from "../../schemas";
+import { formatMMDDYYYY, formatHHMM } from "../common/Common";
+import IDDocumentSelect from "../common/IDDocumentSelect";
+import BookingAgentSelect from "../common/BookingAgentSelect";
+import PlanSelect from "../common/PlanSelect";
+import RoomBookingGrid from "./RoomBookingGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited, onClosed }) => {
+const Form = ({ pData, onSubmited, onClosed }) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
+
+    const [noOfDay, setNoOfDay] = useState(1);
+    const [roomData, setRoomData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
+
+    const [defaultRowData, setDefaultRowData] = useState([]);
     const { loading, error, doUpdate } = useFetchWithAuth({
-        url: `${contextValues.employeeAPI}/${hotelId}/${pId}`
+        url: `${contextValues.roomBookingAPI}/${hotelId}/${pData.pId}`
     });
+
+    useEffect(() => {
+        pData.roomDetails.forEach(element => {
+            const rowData = {
+                            rowId: defaultRowData.length + 1, 
+                            occupancyDate: element.occupancyDate,
+                            room: element.roomNo, 
+                            extPerson: element.extraPersonCount, 
+                            extBed: element.extraBedCount, 
+                            discount: element.discount, 
+                            gst: element.gstAmount, 
+                            finalTariff: element.tariff, 
+                            roomId: element.roomId, 
+                            extraBedTariff: element.extraBedTariff, 
+                            extraPersonTariff: element.extraPersonTariff, 
+                            maxDiscount: element.maxDiscount, 
+                            tariff: element.price, 
+                            gstPercentage: element.gstPercentage
+                        };
+    
+            defaultRowData.push(rowData);
+        });
+
+        defaultRowData.push({rowId: defaultRowData.length + 1, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0});
+        setDefaultRowData(defaultRowData);
+    }, [pData]);
+
+
+    const handelChangeRoomData = (roomData) => {
+        setRoomData(roomData);
+    } 
 
     // Start:: Form validate and save data
     const { values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm } = useFormik({
         initialValues: {
-            keyInputAccessLevels: pAccessLevels,
-            keyInputName: pName,
-            keyInputAddress: pAddress,
-            keyInputMobile: pMobile,
-            keyInputEmail: pEmail
+            keyInputIDDocumentId: pData.idDocumentId,
+            keyInputIDNo: pData.idNo,
+            keyInputName: pData.name,
+            keyInputAge: pData.age,
+            keyInputFatherName: pData.fatherName,
+            keyInputAddress: pData.address,
+            keyInputCity: pData.city,
+            keyInputPS: pData.policeStation,
+            keyInputState: pData.state,
+            keyInputPIN: pData.pin,
+            keyInputPhone: pData.phone,
+            keyInputMobile: pData.mobile,
+            keyInputEmail: pData.email,
+            keyInputGuestCount: pData.guestCount,
+            keyInputGuestCountMale: pData.guestMaleCount,
+            keyInputGuestCountFemale: pData.guestFemaleCount,
+            keyInputDayCount: pData.dayCount,
+            keyInputBookingAgentId: pData.bookingAgentId,
+            keyInputPlanId: pData.planId,
+            keyInputCorporateName: pData.corporateName,
+            keyInputCorporateAddress: pData.corporateAddress,
+            keyInputGST: pData.gstNo,
+            keyInputCheckInDate: new Date(pData.checkInDate),
+            keyInputCheckInTime: new Date()
         },
-        validationSchema: employeeSchema,
+        validationSchema: guestRoomSchema,
         validateOnChange,
         onSubmit: async (values) => {
             const payload = {   
-                "accessLevels": values.keyInputAccessLevels,
+                "idDocumentId": values.keyInputIDDocumentId, 
+                "idNo": values.keyInputIDNo.toUpperCase(), 
                 "name": values.keyInputName.toUpperCase(), 
+                "age": parseInt(values.keyInputAge),
+                "fatherName": values.keyInputFatherName.toUpperCase(), 
                 "address": values.keyInputAddress.toUpperCase(), 
-                "mobile": values.keyInputMobile.toString(), 
-                "email": values.keyInputEmail.toLowerCase()
+                "city": values.keyInputCity.toUpperCase(), 
+                "policeStation": values.keyInputPS.toUpperCase(), 
+                "state": values.keyInputState.toUpperCase(),
+                "pin": values.keyInputPIN,
+                "phone": values.keyInputPhone,
+                "mobile": parseInt(values.keyInputMobile),
+                "email": values.keyInputEmail.toLowerCase(),
+                "guestCount": parseInt(values.keyInputGuestCount),
+                "guestMaleCount": parseInt(values.keyInputGuestCountMale),
+                "guestFemaleCount": parseInt(values.keyInputGuestCountFemale),
+                "dayCount": parseInt(values.keyInputDayCount),
+                "bookingAgentId": values.keyInputBookingAgentId,
+                "planId": values.keyInputPlanId,
+                "corporateName": values.keyInputCorporateName,
+                "corporateAddress": values.keyInputCorporateAddress,
+                "gstNo": values.keyInputGST,
+                "checkInDate": formatMMDDYYYY(values.keyInputCheckInDate),
+                "checkInTime": formatHHMM(values.keyInputCheckInTime),
+                "roomDetails": roomData
             }
 
             await doUpdate(payload);
@@ -66,159 +146,750 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
 
             {/* Start:: Modal body */}
             <Modal.Body>
+                {/* <Accordion defaultActiveKey="0" flush>
+                    <Accordion.Item eventKey="0">   
+                        <Accordion.Header>Guest detail</Accordion.Header>
+                        <Accordion.Body> */}
 
-                {/* Start:: Row */}
-                <div className="row mb-2">
+                            <div>
+                                {/* Start:: Row */}
+                                <div className="row mb-3">
 
-                    {/* Start:: Column role */}
-                    <div className="col-12">
+                                    {/* Start:: Column document type */}
+                                    <div className="col-4">
+                                        
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                                htmlFor={"keyInputIDDocumentId"}>Photo ID</label>
 
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor="keyInputAccessLevels">Role</label>
+                                        {/* Input select */}
+                                        <IDDocumentSelect 
+                                            name={"keyInputIDDocumentId"}
+                                            autoFocus
+                                            value={values.keyInputIDDocumentId} 
+                                            onChange={(value) => {setFieldValue("keyInputIDDocumentId", value)}}/>
 
-                        {/* Input element multi select */}
-                        <accessLevelSelect
-                            name = { 'keyInputAccessLevels' }
-                            value = { values.keyInputAccessLevels } 
-                            disabled ={ true } 
-                            onChange={ (value) => { setFieldValue('keyInputAccessLevels', value) } }/>
+                                        {/* Validation message */}
+                                        {errors.keyInputIDDocumentId && 
+                                            touched.keyInputIDDocumentId ? 
+                                                (<small className="text-danger">{errors.keyInputIDDocumentId}</small>) : 
+                                                    null}
+                                    </div>
+                                    {/* End:: Column document type */}
 
-                        {/* Validation message */}
-                        { errors.keyInputAccessLevels && 
-                            touched.keyInputAccessLevels ? 
-                                (<small className="text-danger">{ errors.keyInputAccessLevels }</small>) : 
-                                    null }
-                    </div>
-                    {/* End:: Column role */}
+                                    {/* Start:: Column id no. */}
+                                    <div className="col-4">
 
-                </div>
-                {/* End:: Row */}
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputIDNo"}>ID No.</label>
 
-                {/* Start:: Row */}
-                <div className="row mb-2">
-                    
-                    {/* Start:: Column role */}
-                    <div className="col-12">
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputIDNo"
+                                            placeholder="ID No."
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={30}
+                                            disabled={loading} 
+                                            value={values.keyInputIDNo} 
+                                            onChange={handleChange}/>
 
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor="keyInputName">Name</label>
+                                        {/* Validation message */}
+                                        {errors.keyInputIDNo && 
+                                            touched.keyInputIDNo ? 
+                                                (<small className="text-danger">{errors.keyInputIDNo}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column id no. */}
 
-                        {/* Input element text*/}
-                        <input 
-                            type="text" 
-                            id="keyInputName"
-                            className="form-control"
-                            placeholder="Name" 
-                            autoComplete="off"
-                            autoFocus
-                            maxLength = { 100 }
-                            value = { values.keyInputName } 
-                            onChange = { handleChange } />
+                                    {/* Start:: Column name */}
+                                    <div className="col-4">
 
-                        {/* Validation message */}
-                        { errors.keyInputName && 
-                            touched.keyInputName ? 
-                                (<small className="text-danger">{ errors.keyInputName }</small>) : 
-                                    null }
-                    </div>
-                    {/* End:: Column role */}
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputName"}>Name</label>
 
-                </div>
-                {/* End:: Row */}
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputName"
+                                            placeholder="Name"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputName} 
+                                            onChange={handleChange}/>
 
-                {/* Start:: Row */}
-                <div className="row mb-2">
+                                        {/* Validation message */}
+                                        {errors.keyInputName && 
+                                            touched.keyInputName ? 
+                                                (<small className="text-danger">{errors.keyInputName}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column name */}
 
-                    {/* Start:: Column role */}
-                    <div className="col-12">
+                                </div>
+                                {/* End:: Row */}
 
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor="keyInputAddress">Address</label>
+                                {/* Start:: Row */}
+                                <div className="row mb-3">
 
-                        {/* Input element text*/}
-                        <textarea 
-                            id="keyInputAddress"
-                            placeholder="Address"
-                            className="form-control"
-                            rows = { "5" }
-                            maxLength = { "256" }
-                            disabled = { loading || error !== null }
-                            // ref = { inputRef }
-                            value = { values.keyInputAddress } 
-                            onChange = { handleChange } />
+                                    {/* Start:: Column age */}
+                                    <div className="col-4">
 
-                    {/* Validation message */}
-                    { errors.keyInputAddress && 
-                        touched.keyInputAddress ? 
-                            (<small className="text-danger">{ errors.keyInputAddress }</small>) : 
-                                null }
-                    </div>
-                    {/* End:: Column role */}
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputAge"}>Age</label>
 
-                </div>
-                {/* End:: Row */}
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputAge"
+                                            placeholder="Age"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={3}
+                                            disabled={loading} 
+                                            value={values.keyInputAge} 
+                                            onChange={handleChange}/>
 
-                {/* Start:: Row */}
-                <div className="row mb-2">
+                                        {/* Validation message */}
+                                        {errors.keyInputAge && 
+                                            touched.keyInputAge ? 
+                                                (<small className="text-danger">{errors.keyInputAge}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column age */}
 
-                    {/* Start:: Column role */}
-                    <div className="col-xs-12 col-md-6">
+                                    {/* Start:: Column fathe'sname */}
+                                    <div className="col-4">
 
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor="keyInputBed">Mobile no.</label>
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputFatherName"}>Father's name</label>
 
-                        {/* Input element text*/}
-                        <input 
-                            type="number"
-                            id="keyInputMobile"
-                            className="form-control"
-                            placeholder="Mobile no." 
-                            autoComplete="off"
-                            maxLength = { 256 }
-                            disabled = { loading || error !== null }
-                            value = { values.keyInputMobile } 
-                            onChange = { handleChange } />
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputFatherName"
+                                            placeholder="Father's name"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputFatherName} 
+                                            onChange={handleChange}/>
 
-                        {/* Validation message */}
-                        { errors.keyInputMobile && 
-                            touched.keyInputMobile ? 
-                                (<small className="text-danger">{ errors.keyInputMobile }</small>) : 
-                                    null }
-                    </div>
-                    {/* End:: Column role */}
+                                        {/* Validation message */}
+                                        {errors.keyInputFatherName && 
+                                            touched.keyInputFatherName ? 
+                                                (<small className="text-danger">{errors.keyInputFatherName}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column father'sname */}
 
-                    {/* Start:: Column role */}
-                    <div className="col-xs-12 col-md-6">
+                                    {/* Start:: Column address */}
+                                    <div className="col-4">
 
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor="keyInputEmail">Email</label>
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputAddress"}>Address</label>
 
-                        {/* Input element text*/}
-                        <input 
-                            type="text"
-                            id="keyInputEmail"
-                            className="form-control"
-                            placeholder="Email" 
-                            maxLength = { 100 }
-                            disabled = { loading || error !== null }
-                            value = { values.keyInputEmail } 
-                            onChange = { handleChange } />
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputAddress"
+                                            placeholder="Address"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputAddress} 
+                                            onChange={handleChange}/>
 
-                        {/* Validation message */}
-                        { errors.keyInputEmail && 
-                            touched.keyInputEmail ? 
-                                (<small className="text-danger">{ errors.keyInputEmail }</small>) : 
-                                    null }
-                    </div>
-                    {/* End:: Column role */}
+                                        {/* Validation message */}
+                                        {errors.keyInputAddress && 
+                                            touched.keyInputAddress ? 
+                                                (<small className="text-danger">{errors.keyInputAddress}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column address */}
 
-                </div>
-                {/* End:: Row */}
+                                </div>
+                                {/* End:: Row */}
+
+                                {/* Start:: Row */}
+                                <div className="row mb-3">
+
+                                    {/* Start:: Column city */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputCity"}>City</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputCity"
+                                            placeholder="City"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={30}
+                                            disabled={loading} 
+                                            value={values.keyInputCity} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputCity && 
+                                            touched.keyInputCity ? 
+                                                (<small className="text-danger">{errors.keyInputCity}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column city */}
+
+                                    {/* Start:: Column police station */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputPS"}>P.S</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputPS"
+                                            placeholder="P.S"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputPS} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputPS && 
+                                            touched.keyInputPS ? 
+                                                (<small className="text-danger">{errors.keyInputPS}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column police station */}
+
+                                    {/* Start:: Column state */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputState"}>State</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputState"
+                                            placeholder="State"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputState} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputState && 
+                                            touched.keyInputState ? 
+                                                (<small className="text-danger">{errors.keyInputState}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column state */}
+
+                                </div>
+                                {/* End:: Row */}
+
+                                {/* Start:: Row */}
+                                <div className="row mb-3">
+
+                                    {/* Start:: Column pin */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputPIN"}>PIN</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputPIN"
+                                            placeholder="PIN"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={10}
+                                            disabled={loading} 
+                                            value={values.keyInputPIN} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputPIN && 
+                                            touched.keyInputPIN ? 
+                                                (<small className="text-danger">{errors.keyInputPIN}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column pin */}
+
+                                    {/* Start:: Column phone */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputPhone"}>Phone</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputPhone"
+                                            placeholder="Phone"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={10}
+                                            disabled={loading} 
+                                            value={values.keyInputPhone} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputPhone && 
+                                            touched.keyInputPhone ? 
+                                                (<small className="text-danger">{errors.keyInputPhone}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column phone */}
+
+                                    {/* Start:: Column mobile */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputMobile"}>Mobile</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputMobile"
+                                            placeholder="Mobile"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputMobile} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputMobile && 
+                                            touched.keyInputMobile ? 
+                                                (<small className="text-danger">{errors.keyInputMobile}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column mobile */}
+
+                                </div>
+                                {/* End:: Row */}
+
+                                {/* Start:: Row */}
+                                <div className="row mb-3">
+
+                                    {/* Start:: Column email */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputEmail"}>Email</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputEmail"
+                                            placeholder="Email"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputEmail} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputEmail && 
+                                            touched.keyInputEmail ? 
+                                                (<small className="text-danger">{errors.keyInputEmail}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column email */}
+
+                                    {/* Start:: Column no of guest */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputGuestCount"}>Guest count</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputGuestCount"
+                                            placeholder="Guest count"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={2}
+                                            disabled={loading} 
+                                            value={values.keyInputGuestCount} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputGuestCount && 
+                                            touched.keyInputGuestCount ? 
+                                                (<small className="text-danger">{errors.keyInputGuestCount}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column no of guest */}
+
+                                    {/* Start:: Column no of male guest */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputGuestCountMale"}>Guest count (Male)</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputGuestCountMale"
+                                            placeholder="Guest count (Male)"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={2}
+                                            disabled={loading} 
+                                            value={values.keyInputGuestCountMale} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputGuestCountMale && 
+                                            touched.keyInputGuestCountMale ? 
+                                                (<small className="text-danger">{errors.keyInputGuestCountMale}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column no of male guest */}
+
+                                </div>
+                                {/* End:: Row */}
+
+                                {/* Start:: Row */}
+                                <div className="row mb-3">
+
+                                    {/* Start:: Column no of female guest */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputGuestCountFemale"}>Guest count (Female)</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputGuestCountFemale"
+                                            placeholder="Guest count (Female)"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={2}
+                                            disabled={loading} 
+                                            value={values.keyInputGuestCountFemale} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputGuestCountFemale && 
+                                            touched.keyInputGuestCountFemale ? 
+                                                (<small className="text-danger">{errors.keyInputGuestCountFemale}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column no of female guest */}
+
+                                    {/* Start:: Column no of day */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputDayCount"}>Day count</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputDayCount"
+                                            placeholder="Day count"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={2}
+                                            disabled={loading} 
+                                            value={values.keyInputDayCount} 
+                                            onChange={e => {handleChange(e); setNoOfDay(e.target.value)}} />
+
+                                        {/* Validation message */}
+                                        {errors.keyInputDayCount && 
+                                            touched.keyInputDayCount ? 
+                                                (<small className="text-danger">{errors.keyInputDayCount}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column no of day */}
+
+                                    {/* Start:: Column booking agent */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputBookingAgentId"}>Agent</label>
+
+                                        {/* Label element */}
+                                        <BookingAgentSelect 
+                                            name={"keyInputBookingAgentId"}
+                                            value={values.keyInputBookingAgentId} 
+                                            onChange={(value) => {setFieldValue("keyInputBookingAgentId", value)}}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputBookingAgentId && 
+                                            touched.keyInputBookingAgentId ? 
+                                                (<small className="text-danger">{errors.keyInputBookingAgentId}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column no of male guest */}
+
+                                </div>
+                                {/* End:: Row */}
+
+                                {/* Start:: Row */}
+                                <div className="row mb-3">
+
+                                    {/* Start:: Column plan */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputPlanId"}>Plan</label>
+
+                                        {/* Input element select*/}
+                                        <PlanSelect 
+                                            name={"keyInputPlanId"}
+                                            value={values.keyInputPlanId} 
+                                            onChange={(value) => {setFieldValue("keyInputPlanId", value)}}/>
+
+
+                                        {/* Validation message */}
+                                        {errors.keyInputPlanId && 
+                                            touched.keyInputPlanId ? 
+                                                (<small className="text-danger">{errors.keyInputPlanId}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column plan */}
+
+                                    {/* Start:: Column corporate name */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputCorporateName"}>Corporate name</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputCorporateName"
+                                            placeholder="Corporate name"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputCorporateName} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputCorporateName && 
+                                            touched.keyInputCorporateName ? 
+                                                (<small className="text-danger">{errors.keyInputCorporateName}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column corporate name */}
+
+                                    {/* Start:: Column coroprate address */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputCorporateAddress"}>Corporate address</label>
+
+                                        {/* Input element text*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputCorporateAddress"
+                                            placeholder="Corporate address"
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputCorporateAddress} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputCorporateAddress && 
+                                            touched.keyInputCorporateAddress ? 
+                                                (<small className="text-danger">{errors.keyInputCorporateAddress}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column coroprate address */}
+
+                                </div>
+                                {/* End:: Row */}
+
+                                {/* Start:: Row */}
+                                <div className="row mb-3">
+
+                                    {/* Start:: Column gst no */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputGST"}>GST No.</label>
+
+                                        {/* Input element select*/}
+                                        <input 
+                                            type="text" 
+                                            name="keyInputGST"
+                                            placeholder="GST No."
+                                            className="form-control"
+                                            autoComplete="off"
+                                            maxLength={100}
+                                            disabled={loading} 
+                                            value={values.keyInputGST} 
+                                            onChange={handleChange}/>
+
+                                        {/* Validation message */}
+                                        {errors.keyInputGST && 
+                                            touched.keyInputGST ? 
+                                                (<small className="text-danger">{errors.keyInputGST}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column gst no */}
+
+                                    {/* Start:: Column check in date */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputCheckInDate"}>Check in date</label>
+
+                                        {/* Input element text*/}
+                                        <DatePicker
+                                            name="keyInputCheckInDate"
+                                            placeholder="Check in date"
+                                            className="form-control"
+                                            disabled={loading} 
+                                            minDate={new Date()}
+                                            dateFormat="dd/MM/yyyy"
+                                            showDisabledMonthNavigation
+                                            selected={values.keyInputCheckInDate}
+                                            onChange={(value) => {setFieldValue("keyInputCheckInDate", value)}} />
+
+                                        {/* Validation message */}
+                                        {errors.keyInputCheckInDate && 
+                                            touched.keyInputCheckInDate ? 
+                                                (<small className="text-danger">{errors.keyInputCheckInDate}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column check in date */}
+
+                                    {/* Start:: Column check in time */}
+                                    <div className="col-4">
+
+                                        {/* Label element */}
+                                        <label className="form-label" 
+                                            htmlFor={"keyInputCheckInTime"}>Check in time</label>
+
+                                        {/* Input element text*/}
+                                        <DatePicker
+                                            name="keyInputCheckInTime"
+                                            placeholder="Check in time"
+                                            className="form-control"
+                                            disabled={loading} 
+                                            showTimeSelect
+                                            showTimeSelectOnly
+                                            timeIntervals={15}
+                                            timeCaption="Time"
+                                            dateFormat="h:mm aa"
+                                            selected={values.keyInputCheckInTime}
+                                            onChange={(value) => {setFieldValue("keyInputCheckInTime", value)}} />
+
+                                        {/* Validation message */}
+                                        {errors.keyInputCheckInTime && 
+                                            touched.keyInputCheckInTime ? 
+                                                (<small className="text-danger">{errors.keyInputCheckInTime}</small>) : 
+                                                    null}
+                                    
+                                    </div>
+                                    {/* End:: Column check in time */}
+
+                                </div>
+                                {/* End:: Row */}
+                            </div>
+
+                            {/* </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="1">
+                        <Accordion.Header>Room detail</Accordion.Header>
+                        <Accordion.Body> */}
+
+                            {/* Start:: Row */}
+                            <div className="row">
+
+                                {/* Start:: Column room detail */}
+                                <div className="col-12">
+
+                                    {/* Label element */}
+                                    <label className="form-label">Room detail</label>
+
+                                    {/* Start:: Column room detail */}
+                                    <RoomBookingGrid
+                                        pState="MOD"
+                                        pDefaultRowData={defaultRowData}
+                                        pNoOfDay={noOfDay}
+                                        onChange={handelChangeRoomData} />
+                                    {/* End:: Column room detail */}
+
+                                </div>                
+                                {/* End:: Column room detail */}
+
+                            </div>
+                            {/* End:: Row */}
+
+                            {/* </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion> */}
 
             </Modal.Body>
             {/* End:: Modal body */}
@@ -240,15 +911,15 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading } 
-                    onClick = { handleSubmit } >
+                    disabled={loading} 
+                    onClick={handleSubmit} >
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                                 <>
                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     Working
-                                </> }
+                                </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -276,7 +947,7 @@ const GuestRoomEdit = forwardRef(( props, ref ) => {
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const { data, loading, error, doFetch } = useFetchWithAuth({
-        url: `${contextValues.employeeAPI}/${hotelId}/${props.pId}`
+        url: `${contextValues.roomBookingAPI}/${hotelId}/${props.pId}`
     });
 
     // Start:: Show modal
@@ -331,27 +1002,23 @@ const GuestRoomEdit = forwardRef(( props, ref ) => {
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
-    useEffect(() => {
-        error && toast.error(error);
-    }, [data, error, loading]);
-
     // Start:: Html
     return (
         <>
             {/* Start:: Edit modal */}
             { data &&
-                <Modal 
-                    show = { showModal } >
+                <Modal size="lg"
+                    show={showModal} >
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Edit employee</Modal.Title>
+                        <Modal.Title>Edit room booking</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = { handleCloseModal } >
+                            onClick={handleCloseModal} >
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -359,14 +1026,9 @@ const GuestRoomEdit = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pId = { data._id }    
-                        pAccessLevels = { data.accessLevels }
-                        pName = { data.name }
-                        pAddress = { data.address }
-                        pMobile = { data.mobile }
-                        pEmail = { data.email }
-                        onSubmited = { handleSave } 
-                        onClosed = { handleCloseModal } />
+                        pData={data}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal} />
                         {/* End:: Form component */}
                     
                 </Modal>}

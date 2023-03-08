@@ -41,7 +41,6 @@ const Form = ({ pData, onClosed }) => {
         setDefaultRowData(defaultRowData);
     }, [pData]);
 
-
     // Start:: Html
     return (
         <form>
@@ -290,7 +289,6 @@ const Form = ({ pData, onClosed }) => {
                                 <div className="col-12 ag-theme-alpine grid">
                                     <RoomBookingGrid
                                         pState="VIEW"
-                                        pRoomList={[]}
                                         pDefaultRowData={defaultRowData}
                                         pNoOfDay={pData.dayCount}
                                         onChange={null} />
@@ -401,7 +399,7 @@ const GuestRoomView = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View booking</Modal.Title>
+                        <Modal.Title>View guest room</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 

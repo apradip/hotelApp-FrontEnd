@@ -284,9 +284,9 @@ const Rooms = forwardRef(( props, ref ) => {
 
             {/* Start :: add employee component */}
             <RoomAdd 
-                ref = { addRef }   
-                onAdded = { () => { handleSuccess("add") } }
-                onClosed = { close } />
+                ref={addRef}   
+                onAdded={() => {handleSuccess("add")}}
+                onClosed={close} />
             {/* End :: add employee component */}
 
         </>

@@ -257,9 +257,18 @@ export const formatMMDDYYYY = (longDateTime) => {
     let dt = new Date(longDateTime),
       mon = ("0" + (dt.getMonth() + 1)).slice(-2),
       day = ("0" + dt.getDate()).slice(-2);
+    
     return [dt.getFullYear(), mon, day].join("-");
 }
-  
+
+export const formatDDMMYYYY = (longDateTime) => {
+    let dt = new Date(longDateTime),
+      mon = ("0" + (dt.getMonth() + 1)).slice(-2),
+      day = ("0" + dt.getDate()).slice(-2);
+    
+    return [day, mon, dt.getFullYear()].join("/");
+}
+
 export const formatHHMM = (longDateTime) => {
     const tim = new Date(longDateTime);
     const tim1 = moment(tim);

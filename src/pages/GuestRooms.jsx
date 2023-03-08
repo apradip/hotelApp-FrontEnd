@@ -230,8 +230,8 @@ const GuestRooms = forwardRef(( props, ref ) => {
             {/* Seart :: Bread crumb */}
             <Breadcrumb className="mt-5">
                 <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
-                <Breadcrumb.Item href = "/">Master</Breadcrumb.Item>
-                <Breadcrumb.Item active>Employee</Breadcrumb.Item>
+                <Breadcrumb.Item href = "/">Transaction</Breadcrumb.Item>
+                <Breadcrumb.Item active>Guest room</Breadcrumb.Item>
             </Breadcrumb>
             {/* End :: Bread crumb */}
 

@@ -125,7 +125,6 @@ export default class NumericEditor extends Component {
   }
 
   setCaret() {
-    // https://github.com/facebook/react/issues/7835#issuecomment-395504863
     setTimeout(() => {
       const currentInput = this.inputRef.current;
       currentInput.focus();

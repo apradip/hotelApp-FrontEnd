@@ -1,7 +1,7 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Table, Card, Dropdown } from "react-bootstrap";
 
-import { Edit3, Scissors } from "react-feather";
+import { Edit3, Scissors, CreditCard, LogOut } from "react-feather";
 import { subStr, formatINR } from "../common/Common";
 import { formatMMDDYYYY } from "../common/Common";
 import View from "./GuestRoomView";
@@ -53,6 +53,18 @@ const GuestRoomCard = forwardRef((props, ref) => {
     };
     // End:: Show delete modal 
 
+    // Start:: Show payment modal 
+    const handelOpenPayment = () => {
+        // deleteRef && deleteRef.current.handleShowModal();
+    };
+    // End:: Show payment modal 
+
+    // Start:: Show checkout modal 
+    const handelOpenCheckout = () => {
+        // deleteRef && deleteRef.current.handleShowModal();
+    };
+    // End:: Show checkout modal 
+    
     // Start:: Close all modal 
     const handleClose = () => {
         props.onClosed();
@@ -121,7 +133,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                         <Dropdown.Item 
                                             href="#" 
                                             className="pl-2"
-                                            onClick = { handelOpenEdit } >
+                                            onClick={handelOpenEdit}>
                                             <span 
                                                 className="pr-5">
                                                 <Edit3 className="feather-16 mr-3"/>Edit
@@ -133,13 +145,37 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                         <Dropdown.Item 
                                             href="#" 
                                             className="m-0 pl-2"
-                                            onClick = { handelOpenDelete } >
+                                            onClick={handelOpenDelete} >
                                                 <span 
                                                     className="pr-5">
                                                     <Scissors className="feather-16 mr-3"/>Delete
                                                 </span>
                                         </Dropdown.Item>
                                         {/* End:: delete menu */}
+
+                                        {/* Start:: payment menu */}
+                                        <Dropdown.Item 
+                                            href="#" 
+                                            className="m-0 pl-2"
+                                            onClick={handelOpenPayment} >
+                                                <span 
+                                                    className="pr-5">
+                                                    <CreditCard className="feather-16 mr-3"/>Payment
+                                                </span>
+                                        </Dropdown.Item>
+                                        {/* End:: payment menu */}
+
+                                        {/* Start:: checkout menu */}
+                                        <Dropdown.Item 
+                                            href="#" 
+                                            className="m-0 pl-2"
+                                            onClick={handelOpenCheckout} >
+                                                <span 
+                                                    className="pr-5">
+                                                    <LogOut className="feather-16 mr-3"/>Check out
+                                                </span>
+                                        </Dropdown.Item>
+                                        {/* End:: checkout menu */}
 
                                     </Dropdown.Menu>
                                     

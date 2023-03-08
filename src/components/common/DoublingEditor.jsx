@@ -19,7 +19,7 @@ export default class DoublingEditor extends Component {
     // the final value to send to the grid, on completion of editing
     getValue() {
         // this simple editor doubles any value entered into the input
-        return this.state.value * 2;
+        return this.state.value;
     }
  
     // Gets called once before editing starts, to give editor a chance to
@@ -32,7 +32,7 @@ export default class DoublingEditor extends Component {
     // If you return true, then the result of the edit will be ignored.
     isCancelAfterEnd() {
         // our editor will reject any value greater than 1000
-        return this.state.value > 1000;
+        return this.state.value;
     }
  
     render() {
