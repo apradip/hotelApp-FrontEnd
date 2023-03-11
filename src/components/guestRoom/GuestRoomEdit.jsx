@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink, Accordion } from "react-bootstrap";
+import { Modal, NavLink } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
@@ -54,7 +54,7 @@ const Form = ({ pData, onSubmited, onClosed }) => {
 
         defaultRowData.push({rowId: defaultRowData.length + 1, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0});
         setDefaultRowData(defaultRowData);
-    }, [pData]);
+    }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
 
 
     const handelChangeRoomData = (roomData) => {
@@ -946,7 +946,7 @@ const GuestRoomEdit = forwardRef(( props, ref ) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const { data, doFetch } = useFetchWithAuth({
         url: `${contextValues.roomBookingAPI}/${hotelId}/${props.pId}`
     });
 

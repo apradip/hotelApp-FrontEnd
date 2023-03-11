@@ -55,12 +55,8 @@ const RoomEditor = forwardRef(( props, ref ) => {
 
     useEffect(() => {
 		let list = [emptyElement];
-		data && data.filter(item => !item.isOccupied).map(room => (list.push(room)));
-		data && data.filter(item => item.no === defaultRoom).map(room => (list.push(room)));
-		
-		// data && data.filter(item => item.no === defaultRoom).map(room => (list.map(l => (l._id !== room._id).map(l2 => list.push(l2)))));
 
-		data && data.filter(item => item.no === defaultRoom).map(room => (setDefaultRoom(room._id)));
+		data && data.filter(item => !item.isOccupied).map(room => (list.push(room)));
 		data && setListRoom(list);
     }, [data, loading, error]);		// eslint-disable-line react-hooks/exhaustive-deps
 
@@ -76,7 +72,6 @@ const RoomEditor = forwardRef(( props, ref ) => {
 				{listRoom && listRoom.map((item) => {
 					return(<option key={item._id} value={item._id}>{item.no}</option>)
 		 		})}
-
 			</select>
     );
 })
