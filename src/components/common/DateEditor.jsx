@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import DatePicker from "react-datepicker";
 
-import { formatMMDDYYYY } from "../common/Common";
+import { formatYYYYMMDD } from "../common/Common";
 
 const DateEditor = forwardRef(( props, ref ) => {	
 	const dateInput = React.createRef();

@@ -8,7 +8,7 @@ import DatePicker from "react-datepicker";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { guestRoomSchema } from "../../schemas";
-import { formatMMDDYYYY, formatHHMM } from "../common/Common";
+import { formatYYYYMMDD, formatHHMM } from "../common/Common";
 import IDDocumentSelect from "../common/IDDocumentSelect";
 import BookingAgentSelect from "../common/BookingAgentSelect";
 import PlanSelect from "../common/PlanSelect";
@@ -40,7 +40,7 @@ const Form = ({ onSubmited, onClosed }) => {
     ]);
 
     const {data, loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.roomBookingAPI}/${hotelId}`
+        url: `${contextValues.guestRoomAPI}/${hotelId}`
     });
 
     const handelChangeRoomData = (roomData) => {
@@ -101,7 +101,7 @@ const Form = ({ onSubmited, onClosed }) => {
                 "corporateName": values.keyInputCorporateName,
                 "corporateAddress": values.keyInputCorporateAddress,
                 "gstNo": values.keyInputGST,
-                "checkInDate": formatMMDDYYYY(values.keyInputCheckInDate),
+                "checkInDate": formatYYYYMMDD(values.keyInputCheckInDate),
                 "checkInTime": formatHHMM(values.keyInputCheckInTime),
                 "roomDetails": roomData
             }

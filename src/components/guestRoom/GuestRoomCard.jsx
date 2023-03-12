@@ -3,7 +3,7 @@ import { Table, Card, Dropdown } from "react-bootstrap";
 
 import { Edit3, Scissors, CreditCard, LogOut } from "react-feather";
 import { subStr, formatINR } from "../common/Common";
-import { formatMMDDYYYY } from "../common/Common";
+import { formatDDMMYYYY } from "../common/Common";
 import View from "./GuestRoomView";
 import Edit from "./GuestRoomEdit";
 import Delete from "./GuestRoomDelete";
@@ -201,8 +201,8 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                 <td colSpan="2">{"Mobile : " + props.pMobile}</td>
                             </tr>
                             <tr>
-                                <td>Check In : {formatMMDDYYYY(props.pCheckInDate)}</td>
-                                <td className="text-danger">Check Out : {formatMMDDYYYY(props.pCheckOutDate)}</td>
+                                <td>Check In : {formatDDMMYYYY(props.pCheckInDate)}</td>
+                                <td className="text-danger">Check Out : {formatDDMMYYYY(props.pCheckOutDate)}</td>
                             </tr>
                             <tr>
                                 <td >Expense : {formatINR(props.pTotalExpenseAmount)}</td>

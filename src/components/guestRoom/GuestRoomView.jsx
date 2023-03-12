@@ -4,7 +4,7 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { formatMMDDYYYY } from "../common/Common";
+import { formatDDMMYYYY } from "../common/Common";
 import GetPhotoIDName from "../common/GetPhotoIDName";
 import GetPlanName from "../common/GetPlanName";
 import GetBookingAgentName from "../common/GetBookingAgentName";
@@ -256,7 +256,7 @@ const Form = ({ pData, onClosed }) => {
                                     {/* Start:: Column check in date */}
                                     <div className="col-4">
                                         <label className="form-label mr-2">Check in date :</label>
-                                        <label className="form-label">{formatMMDDYYYY(pData.checkInDate)}</label>
+                                        <label className="form-label">{formatDDMMYYYY(pData.checkInDate)}</label>
                                     </div>
                                     {/* End:: Column check in date */}
 
@@ -341,7 +341,7 @@ const GuestRoomView = forwardRef(( props, ref ) => {
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const {data, doFetch} = useFetchWithAuth({
-        url: `${contextValues.roomBookingAPI}/${hotelId}/${props.pId}`
+        url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pId}`
     });
 
     // Start :: Show modal 

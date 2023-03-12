@@ -253,7 +253,7 @@ export const getRooms = (roomList) => {
     return rooms;
 };
 
-export const formatMMDDYYYY = (longDateTime) => {
+export const formatYYYYMMDD = (longDateTime) => {
     let dt = new Date(longDateTime),
       mon = ("0" + (dt.getMonth() + 1)).slice(-2),
       day = ("0" + dt.getDate()).slice(-2);

@@ -36,7 +36,7 @@ const GuestRooms = forwardRef(( props, ref ) => {
     const indexOfLastItem = selectedPage * itemPerPage;
     const indexOfFirstItem = indexOfLastItem - itemPerPage;
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.roomBookingAPI}/${hotelId}`,
+        url: `${contextValues.guestRoomAPI}/${hotelId}`,
         params: {
             search: search
         }

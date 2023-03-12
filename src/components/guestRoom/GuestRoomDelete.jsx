@@ -14,7 +14,7 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
     const contextValues = useStateContext();
     const inputRef = useRef(null);
     const { loading, error, doDelete } = useFetchWithAuth({
-        url: `${contextValues.roomBookingAPI}/${hotelId}/${pId}`
+        url: `${contextValues.guestRoomAPI}/${hotelId}/${pId}`
     });
 
     // Start:: Call delete api
@@ -89,7 +89,7 @@ const GuestRoomDelete = forwardRef(( props, ref ) => {
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const { data, loading, error, doFetch } = useFetchWithAuth({
-        url: `${contextValues.roomBookingAPI}/${hotelId}/${props.pId}`
+        url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pId}`
     });
 
     // Start :: Show modal 
