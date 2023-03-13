@@ -4,10 +4,9 @@ import { Table, Card, Dropdown } from "react-bootstrap";
 import { Edit3, Scissors, CreditCard, LogOut } from "react-feather";
 import { subStr, formatINR } from "../common/Common";
 import { formatDDMMYYYY } from "../common/Common";
-import View from "./GuestRoomView";
-import Edit from "./GuestRoomEdit";
-import Delete from "./GuestRoomDelete";
-import AddPayment from "../guestPayment/GuestPaymentAdd";
+import View from "./GuestPaymentView";
+import Edit from "./GuestPaymentEdit";
+import Delete from "./GuestPaymentDelete";
 
 
 // Start:: Component
@@ -29,11 +28,10 @@ import AddPayment from "../guestPayment/GuestPaymentAdd";
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
-const GuestRoomCard = forwardRef((props, ref) => {
+const GuestPaymentCard = forwardRef((props, ref) => {
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
-    const addPaymentRef = useRef(null);
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
 
@@ -57,7 +55,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
 
     // Start:: Show payment modal 
     const handelOpenPayment = () => {
-        addPaymentRef && addPaymentRef.current.handleShowModal();
+        // deleteRef && deleteRef.current.handleShowModal();
     };
     // End:: Show payment modal 
 
@@ -79,7 +77,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
         setFocus(false);
     };
     // End:: de-select card
-
+    
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
         return {
@@ -240,19 +238,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 onDeleted={props.onDeleted} 
                 onClosed={handleClose}/>
             {/* End :: delete component */}
-
-            {/* Start :: add payment component */}
-            <AddPayment 
-                ref={addPaymentRef}
-                pGuestId={props.pId}    
-                pName={props.pName}
-                pMobile={props.pMobile}
-                pAddress={props.pAddress}    
-                pBalance={props.pTotalExpenseAmount - props.pTotalPaidAmount}    
-                onAdded={props.onPaymentAdded}
-                onClosed={handleClose} />
-            {/* End :: add payment component */}
-
         </>
     );
     // End:: Html
@@ -260,4 +245,4 @@ const GuestRoomCard = forwardRef((props, ref) => {
 });
 
 
-export default GuestRoomCard;
+export default GuestPaymentCard;

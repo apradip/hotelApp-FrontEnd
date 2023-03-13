@@ -199,3 +199,10 @@ export const guestRoomSchema = Yup.object({
     keyInputCheckInTime: Yup.string().required("Check In time can't be empty!"),
     // keyInputRooms: Yup.array(),
 });
+
+export const guestPaymentSchema = Yup.object({
+    keyInputPaymentAmount: Yup.number().required("Payment can't be empty!").positive("Invalid payment amount!").min(1, "Invalid payment amount!"),
+    keyInputNarration: Yup.string().required("Narration can't be empty!").min(5, "Invalid narration!"),
+    keyInputTransactionDate: Yup.string().required("Transaction date can't be empty!"),
+    keyInputTransactionTime: Yup.string().required("Transaction time can't be empty!"),
+});

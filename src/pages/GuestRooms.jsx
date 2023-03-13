@@ -112,6 +112,12 @@ const GuestRooms = forwardRef(( props, ref ) => {
                 props.onSuccess();
                 break;                
 
+            case "addPayment":
+                toast.success("Payment successfully added");
+                setDataChanged(true);
+                props.onSuccess();
+                break;
+    
             default:                
                 break;                
         }
@@ -193,6 +199,7 @@ const GuestRooms = forwardRef(( props, ref ) => {
                     pTotalPaidAmount={pData.totalPaidAmount}
                     onEdited={() => {handleSuccess("edit")}}
                     onDeleted={() => {handleSuccess("delete")}} 
+                    onPaymentAdded={() => {handleSuccess("addPayment")}} 
                     onClosed={close} 
                     onActivated={handleActivated}/>                
             </div>);

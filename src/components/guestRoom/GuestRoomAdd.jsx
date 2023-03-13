@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink, Accordion } from "react-bootstrap";
+import { Modal, NavLink } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
@@ -17,7 +17,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-var colors = ['#000000', '#000066', '#006600', '#660000'];
+// var colors = ['#000000', '#000066', '#006600', '#660000'];
 
 const Form = ({ onSubmited, onClosed }) => {
     const hotelId = useContext(HotelId);
@@ -39,7 +39,7 @@ const Form = ({ onSubmited, onClosed }) => {
         // {rowId: 10, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0}
     ]);
 
-    const {data, loading, error, doInsert} = useFetchWithAuth({
+    const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.guestRoomAPI}/${hotelId}`
     });
 
