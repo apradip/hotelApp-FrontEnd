@@ -22,6 +22,7 @@ export const ContextProvider = ({children}) => {
   const planAPI = "/plans";
   const roomCategoryAPI = "/roomCategories";
   const roomAPI = "/rooms";
+  const tableAPI = "/tables";
   const bookingAgentAPI = "/bookingAgents";
   const guestAPI = "/guests";
   const guestRoomAPI = "/guestRooms";
@@ -56,7 +57,7 @@ export const ContextProvider = ({children}) => {
 
   return (
     <StateContext.Provider value={{initialState, refreshTokenAPI, forgetAPI, loginAPI, logoutAPI, changePasswordAPI,
-      accessLevelAPI, gstAPI, employeeAPI, idDocumentAPI, planAPI, roomCategoryAPI, roomAPI, bookingAgentAPI,
+      accessLevelAPI, gstAPI, employeeAPI, idDocumentAPI, planAPI, roomCategoryAPI, roomAPI, tableAPI, bookingAgentAPI,
       guestAPI, guestRoomAPI, guestPaymentAPI,
       screenSize, setScreenSize, currentColor, setCurrentColor, 
       currentMode, setCurrentMode, themeSettings, setThemeSettings, 

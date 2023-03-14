@@ -12,7 +12,7 @@ import { formatYYYYMMDD, formatHHMM } from "../common/Common";
 import IDDocumentSelect from "../common/IDDocumentSelect";
 import BookingAgentSelect from "../common/BookingAgentSelect";
 import PlanSelect from "../common/PlanSelect";
-import PaymentgGrid from "./ExpensePaymentGrid";
+import RoomBookingGrid from "./FoodOrderGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -874,7 +874,7 @@ const Form = ({ pData, onSubmited, onClosed }) => {
                                     <label className="form-label">Room detail</label>
 
                                     {/* Start:: Column room detail */}
-                                    <PaymentgGrid
+                                    <RoomBookingGrid
                                         pState="MOD"
                                         pDefaultRowData={defaultRowData}
                                         pNoOfDay={noOfDay}
@@ -942,12 +942,12 @@ const Form = ({ pData, onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const GuestPaymentEdit = forwardRef(( props, ref ) => {    
+const GuestFoodEdit = forwardRef(( props, ref ) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const { data, doFetch } = useFetchWithAuth({
-        url: `${contextValues.guestPaymentAPI}/${hotelId}/${props.pId}`
+        url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pId}`
     });
 
     // Start:: Show modal
@@ -1013,7 +1013,7 @@ const GuestPaymentEdit = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Edit payment</Modal.Title>
+                        <Modal.Title>Edit room booking</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
@@ -1041,4 +1041,4 @@ const GuestPaymentEdit = forwardRef(( props, ref ) => {
 // End:: Component
 
 
-export default GuestPaymentEdit;
+export default GuestFoodEdit;

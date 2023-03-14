@@ -4,20 +4,16 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-// import { formatDDMMYYYY } from "../common/Common";
-// import GetPhotoIDName from "../common/GetPhotoIDName";
-// import GetPlanName from "../common/GetPlanName";
-// import GetBookingAgentName from "../common/GetBookingAgentName";
 import ExpensePaymentGrid from "./ExpensePaymentGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pName, pMobile, pAddress, pData, onClosed }) => {
+const Form = ({ pName, pAddress, pMobile, pTransactionData, onPrint, onClosed }) => {
     const [defaultRowData, setDefaultRowData] = useState([]);
 
     useEffect(() => {
-        pData.forEach(element => {
+        pTransactionData.forEach(element => {
             const rowData = {
                             rowId: defaultRowData.length + 1, 
                             transactionDate: element.transactionDate,
@@ -30,7 +26,7 @@ const Form = ({ pName, pMobile, pAddress, pData, onClosed }) => {
         });
 
         setDefaultRowData(defaultRowData);
-    }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
+    }, [pTransactionData]);        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: Html
     return (
@@ -42,12 +38,12 @@ const Form = ({ pName, pMobile, pAddress, pData, onClosed }) => {
                     {/* Start:: Row */}
                     <div className="row mb-3">
 
-                        {/* Start:: Column name */}
-                        <div className="col-4">
-                            <label className="form-label mr-2">Name :</label>
-                            <label className="form-label">{pName}</label>
+                        {/* Start:: Column address */}
+                        <div className="col-8">
+                            <label className="form-label mr-2">Address :</label>
+                            <label className="form-label">{pAddress}</label>
                         </div>
-                        {/* End:: Column name */}
+                        {/* End:: Column address */}
 
                         {/* Start:: Column mobile no. */}
                         <div className="col-4">
@@ -56,25 +52,12 @@ const Form = ({ pName, pMobile, pAddress, pData, onClosed }) => {
                         </div>
                         {/* End:: Column mobile no. */}
 
-                        {/* Start:: Column email */}
-                        <div className="col-4">
-                            <label className="form-label mr-2">Address :</label>
-                            <label className="form-label">{pAddress}</label>
-                        </div>
-                        {/* End:: Column email */}
-
                     </div>
                     {/* End:: Row */}
                 </div>
 
-
                 {/* Start:: Row */}
                 <div className="row mb-3">
-
-                    <div className="col-12">
-                        {/* Label element */}
-                        <label className="form-label">Expense/Payment details :</label>
-                    </div>                
 
                     {/* Start:: Column expense/payment detail */}
                     <div className="col-12 ag-theme-alpine grid">
@@ -85,23 +68,34 @@ const Form = ({ pName, pMobile, pAddress, pData, onClosed }) => {
 
                 </div>
                 {/* End:: Row */}
-
             </Modal.Body>
             {/* End:: Modal body */}
 
             {/* Start:: Modal footer */}
             <Modal.Footer>
+                {/* <div class="container"> */}
+                    {/* Start:: Print button */}
+                    <button
+                        type="button"
+                        // className="btn btn-primary pull-left"
+                        className="btn btn-primary"
+                        autoFocus
+                        onClick={onPrint} >
+                        Print
+                    </button>
+                    {/* End:: Print button */}
 
-                {/* Start:: Close button */}
-                <button
-                    type="button"
-                    className="btn btn-danger"
-                    autoFocus
-                    onClick={onClosed} >
-                    Close
-                </button>
-                {/* End:: Close button */}
-
+                    {/* Start:: Close button */}
+                    <button
+                        type="button"
+                        // className="btn btn-danger pull-right"
+                        className="btn btn-danger"
+                        autoFocus
+                        onClick={onClosed} >
+                        Close
+                    </button>
+                    {/* End:: Close button */}
+                {/* </div>                     */}
             </Modal.Footer>
             {/* End:: Modal footer */}
 
@@ -133,6 +127,12 @@ const GuestPaymentView = forwardRef(( props, ref ) => {
         setShowModal(true);
     };
     // End :: Show modal 
+
+    // Start :: print modal
+    const handlePrint = () => {
+
+    }
+    // End :: print modal
 
     // Start :: Close modal 
     const handleCloseModal = () => {
@@ -183,7 +183,7 @@ const GuestPaymentView = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View guest expense/payment</Modal.Title>
+                        <Modal.Title>Expense / Payment list of [{props.pName}]</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
@@ -197,9 +197,10 @@ const GuestPaymentView = forwardRef(( props, ref ) => {
                     {/* Start:: Form component */}
                     <Form 
                         pName={props.pName}
-                        pMobile={props.pMobile}
                         pAddress={props.pAddress}
-                        pData={data}
+                        pMobile={props.pMobile}
+                        pTransactionData={data}
+                        onPrint={handlePrint}
                         onClosed={handleCloseModal} />
                     {/* End:: Form component */}
                     

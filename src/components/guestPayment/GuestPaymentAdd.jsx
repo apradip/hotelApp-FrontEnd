@@ -5,8 +5,6 @@ import { toast } from "react-toastify";
 import { X } from "react-feather";
 import DatePicker from "react-datepicker";
 
-
-
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { guestPaymentSchema } from "../../schemas";
@@ -16,7 +14,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pGuestId, pName, pMobile, pAddress, pBalance, onSubmited, onClosed, onShowView }) => {
+const Form = ({ pGuestId, pName, pAddress, pMobile, pBalance, onSubmited, onClosed, onShowView }) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
@@ -77,15 +75,14 @@ const Form = ({ pGuestId, pName, pMobile, pAddress, pBalance, onSubmited, onClos
 
                 {/* Start:: Row */}
                 <div className="row mb-3">
-
-                    {/* Start:: Column name */}
-                    <div className="col-4">
+                    {/* Start:: Column address */}
+                    <div className="col-8">
 
                         {/* Label element */}
-                        <label className="form-label mr-2">Name :</label>
-                        <label className="form-label">{pName}</label>
+                        <label className="form-label mr-2">Address :</label>
+                        <label className="form-label">{pAddress}</label>
                     </div>
-                    {/* End:: Column name */}
+                    {/* End:: Column address */}
 
                     {/* Start:: Column mobile no. */}
                     <div className="col-4">
@@ -95,16 +92,6 @@ const Form = ({ pGuestId, pName, pMobile, pAddress, pBalance, onSubmited, onClos
                         <label className="form-label">{pMobile}</label>
                     </div>
                     {/* End:: Column mobile no. */}
-
-                    {/* Start:: Column address */}
-                    <div className="col-4">
-
-                        {/* Label element */}
-                        <label className="form-label mr-2">Address :</label>
-                        <label className="form-label">{pAddress}</label>
-                    </div>
-                    {/* End:: Column address */}
-
                 </div>
                 {/* End:: Row */}
 
@@ -240,43 +227,47 @@ const Form = ({ pGuestId, pName, pMobile, pAddress, pBalance, onSubmited, onClos
 
             {/* Start:: Modal footer */}
             <Modal.Footer>
+                {/* <div class="container"> */}
 
-                {/* Start:: Detail button */}
-                <button 
-                    type="button"
-                    className="btn btn-primary"
-                    disabled={loading} 
-                    onClick={handleOpenView} >
-                    Detail
-                </button>
-                {/* End:: Detail button */}
+                    {/* Start:: Detail button */}
+                    <button 
+                        type="button"
+                        // className="btn btn-primary pull-left"
+                        className="btn btn-primary"
+                        disabled={loading} 
+                        onClick={handleOpenView} >
+                        Detail
+                    </button>
+                    {/* End:: Detail button */}
 
-                {/* Start:: Close button */}
-                <button 
-                    type="button"
-                    className="btn btn-danger"
-                    disabled={loading}
-                    onClick={handleClose} >
-                    Close
-                </button>
-                {/* End:: Close button */}
+                    {/* Start:: Close button */}
+                    <button 
+                        type="button"
+                        // className="btn btn-danger pull-right"
+                        className="btn btn-danger"
+                        disabled={loading}
+                        onClick={handleClose} >
+                        Close
+                    </button>
+                    {/* End:: Close button */}
 
-                {/* Start:: Save button */}
-                <button 
-                    type="button"
-                    className="btn btn-success"
-                    disabled={loading} 
-                    onClick={handleSubmit} >
+                    {/* Start:: Save button */}
+                    <button 
+                        type="button"
+                        // className="btn btn-success pull-right"
+                        className="btn btn-success"
+                        disabled={loading} 
+                        onClick={handleSubmit} >
 
-                    {!loading && "Confirm"}
-                    {loading && 
-                        <>
-                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Working
-                        </> }
-                </button>
-                {/* End:: Save button */}
-
+                        {!loading && "Confirm"}
+                        {loading && 
+                            <>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Working
+                            </> }
+                    </button>
+                    {/* End:: Save button */}
+                {/* </div>             */}
             </Modal.Footer>
             {/* End:: Modal footer */}
 
@@ -353,7 +344,7 @@ const GuestPaymentAdd = forwardRef(( props, ref ) => {
                 {/* Start:: Modal header */}
                 <Modal.Header>
                     {/* Header text */}
-                    <Modal.Title>Add guest payment</Modal.Title>
+                    <Modal.Title>Add payment of [{props.pName}]</Modal.Title>
 
                     {/* Close button */}
                     <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>
@@ -366,8 +357,8 @@ const GuestPaymentAdd = forwardRef(( props, ref ) => {
                 <Form
                     pGuestId={props.pGuestId}
                     pName={props.pName}
-                    pMobile={props.pMobile}
                     pAddress={props.pAddress}
+                    pMobile={props.pMobile}
                     pBalance={props.pBalance}
                     onSubmited={handleSave} 
                     onClosed={handleCloseModal}
@@ -381,8 +372,8 @@ const GuestPaymentAdd = forwardRef(( props, ref ) => {
             <View 
                 pGuestId={props.pGuestId}
                 pName={props.pName}
-                pMobile={props.pMobile}
                 pAddress={props.pAddress}
+                pMobile={props.pMobile}
                 ref={viewRef} />
             {/* End :: add employee component */}
         </>            

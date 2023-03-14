@@ -15,7 +15,12 @@ import IDDocuments from "../pages/IDDocuments";
 import BookingAgents from "../pages/BookingAgents";
 import Employees from "../pages/Employees";
 import Rooms from "../pages/Rooms";
+import Tables from "../pages/Tables";
 import GuestRooms from "../pages/GuestRooms";
+import GuestTables from "../pages/GuestTables";
+import GuestFoods from "../pages/GuestFoods";
+import GuestMiscellaneous from "../pages/GuestMiscellaneous";
+import GuestPayments from "../pages/GuestPayments";
 import Support from "../pages/Support";
 import Help from "../pages/Help";
 import Privacy from "../pages/Privacy";
@@ -43,8 +48,13 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
   const planRef = useRef(null);
   const roomCategoryRef = useRef(null);
   const roomRef = useRef(null);
+  const tableRef = useRef(null);
   const bookingAgentRef = useRef(null);
   const guestRoomRef = useRef(null);
+  const guestTableRef = useRef(null);
+  const guestFoodRef = useRef(null);
+  const guestMiscellaneousRef = useRef(null);
+  const guestPaymentRef = useRef(null);
 
   useEffect(() => {
     const page = getPage(process.env.REACT_APP_BASE_URI, window.location.href);
@@ -99,8 +109,28 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
         roomRef && roomRef.current.changeSearch(text);
         break;
 
+      case "tables":
+        tableRef && tableRef.current.changeSearch(text);
+        break;
+  
       case "guestrooms":
         guestRoomRef && guestRoomRef.current.changeSearch(text);
+        break;
+
+      case "guesttables":
+        guestTableRef && guestTableRef.current.changeSearch(text);
+        break;
+  
+      case "guestfoods":
+        guestFoodRef && guestFoodRef.current.changeSearch(text);
+        break;
+
+      case "guestmiscellaneous":
+        guestMiscellaneousRef && guestMiscellaneousRef.current.changeSearch(text);
+        break;
+          
+      case "guestpayments":
+        guestPaymentRef && guestPaymentRef.current.changeSearch(text);
         break;
           
       default:
@@ -138,8 +168,28 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
         roomRef && roomRef.current.openAdd();
         break;
 
+      case "tables":
+        tableRef && tableRef.current.openAdd();
+        break;
+  
       case "guestrooms":
         guestRoomRef && guestRoomRef.current.openAdd();
+        break;
+
+      case "guesttables":
+        guestTableRef && guestTableRef.current.openAdd();
+        break;
+
+      case "guestfoods":
+        guestFoodRef && guestFoodRef.current.openAdd();
+        break;
+
+      case "guestmiscellaneous":
+        guestMiscellaneousRef && guestMiscellaneousRef.current.openAdd();
+        break;
+          
+      case "guestpayments":
+        guestPaymentRef && guestPaymentRef.current.openAdd();
         break;
           
       default:
@@ -176,11 +226,31 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
       case "rooms":
         roomRef && roomRef.current.openEdit();
         break;
+
+      case "tables":
+        tableRef && tableRef.current.openEdit();
+        break;
           
       case "guestrooms":
         guestRoomRef && guestRoomRef.current.openEdit();
         break;
+
+      case "guesttables":
+        guestTableRef && guestTableRef.current.openEdit();
+        break;
   
+      case "guestfoods":
+        guestFoodRef && guestFoodRef.current.openEdit();
+        break;
+
+      case "guestmiscellaneous":
+        guestMiscellaneousRef && guestMiscellaneousRef.current.openEdit();
+        break;
+          
+      case "guestpayments":
+        guestPaymentRef && guestPaymentRef.current.openEdit();
+        break;
+          
       default:
         break;        
       }
@@ -215,11 +285,31 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
       case "rooms":
         roomRef && roomRef.current.openDelete();
         break;
+
+      case "tables":
+        tableRef && tableRef.current.openDelete();
+        break;
           
       case "guestrooms":
         guestRoomRef && guestRoomRef.current.openDelete();
         break;
+
+      case "guesttables":
+        guestTableRef && guestTableRef.current.openDelete();
+        break;
   
+      case "guestfoods":
+        guestFoodRef && guestFoodRef.current.openDelete();
+        break;
+
+      case "guestmiscellaneous":
+        guestMiscellaneousRef && guestMiscellaneousRef.current.openDelete();
+        break;
+          
+      case "guestpayments":
+        guestPaymentRef && guestPaymentRef.current.openDelete();
+        break;
+          
       default:
         break;
     }
@@ -282,6 +372,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                       onClick={() => {handelClickMenuItem('rooms')}}>
                       <NavLink to="/rooms" className="sidebar-link">Room</NavLink>
                   </li>
+                  <li className={`sidebar-item ${ menuSelected === 'tables' ? 'active' : null}`}
+                      onClick={() => {handelClickMenuItem('tables')}}>
+                      <NavLink to="/tables" className="sidebar-link">Table</NavLink>
+                  </li>                  
                 </ul>
               </li>
               <li className="sidebar-item">
@@ -292,7 +386,23 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                 <ul id="transactions" className="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                   <li className={`sidebar-item ${menuSelected === 'guestrooms' ? 'active' : null}`} 
                       onClick={() => {handelClickMenuItem('guestrooms')}}>
-                      <NavLink to="/guestrooms" className="sidebar-link">Check In</NavLink>
+                      <NavLink to="/guestrooms" className="sidebar-link">Rooms</NavLink>
+                  </li>
+                  <li className={`sidebar-item ${menuSelected === 'guesttables' ? 'active' : null}`} 
+                      onClick={() => {handelClickMenuItem('guesttables')}}>
+                      <NavLink to="/guesttables" className="sidebar-link">Tables</NavLink>
+                  </li>
+                  <li className={`sidebar-item ${menuSelected === 'guestfoods' ? 'active' : null}`} 
+                      onClick={() => {handelClickMenuItem('guestfoods')}}>
+                      <NavLink to="/guestfoods" className="sidebar-link">Foods</NavLink>
+                  </li>
+                  <li className={`sidebar-item ${menuSelected === 'guestmiscellaneous' ? 'active' : null}`} 
+                      onClick={() => {handelClickMenuItem('guestmiscellaneous')}}>
+                      <NavLink to="/guestmiscellaneous" className="sidebar-link">Miscellaneous</NavLink>
+                  </li>
+                  <li className={`sidebar-item ${menuSelected === 'guestpayments' ? 'active' : null}`} 
+                      onClick={() => {handelClickMenuItem('guestpayments')}}>
+                      <NavLink to="/guestpayments" className="sidebar-link">Payments</NavLink>
                   </li>
                 </ul>
               </li>
@@ -317,6 +427,7 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
 
         {/* Start:: header nav component */}
         <Navbar
+            ref={navRef}
             pEmployeeId={pEmployeeId}
             pEmployeeName={pEmployeeName}
             pSelectedPage={menuSelected}
@@ -324,8 +435,7 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
             onChangeSearch={(s) => handleSearch(s)} 
             onClickAdd={handleAdd} 
             onClickEdit={handleEdit}
-            onClickDel={handleDel}
-            ref={navRef}/>
+            onClickDel={handleDel} />
         {/* End:: header nav component */}
 
         {/* Start:: all page cpmponents */}
@@ -369,8 +479,33 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                                                     onSuccess={handleSuccess}
                                                     onClose={handleClose}/>}/>
 
+              <Route exact path="/tables" element={<Tables
+                                                    ref={tableRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
               <Route exact path="/guestrooms" element={<GuestRooms
                                                     ref={guestRoomRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
+              <Route exact path="/guesttables" element={<GuestTables
+                                                    ref={guestTableRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
+              <Route exact path="/guestfoods" element={<GuestFoods
+                                                    ref={guestFoodRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
+              <Route exact path="/guestmiscellaneous" element={<GuestMiscellaneous
+                                                    ref={guestMiscellaneousRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
+              <Route exact path="/guestpayments" element={<GuestPayments
+                                                    ref={guestPaymentRef} 
                                                     onSuccess={handleSuccess}
                                                     onClose={handleClose}/>}/>
 

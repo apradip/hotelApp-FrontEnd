@@ -36,6 +36,9 @@ const ExpensePaymentGrid = ({ pDefaultRowData }) => {
             field: "expenseAmount", 
             type: "rightAligned",
             width: 120,
+            cellStyle: function(params) {
+                return {color: 'red'};
+            },
             valueFormatter: (params) => {return Number(params.value) > 0 ? `₹ ${Number(params.value).toFixed(2)}` : ""},
         },
         {
@@ -43,6 +46,9 @@ const ExpensePaymentGrid = ({ pDefaultRowData }) => {
             field: "paymentAmount", 
             type: "rightAligned",
             width: 120,
+            cellStyle: function(params) {
+                return {color: 'green'};
+            },
             valueFormatter: (params) => {return Number(params.value) > 0 ? `₹ ${Number(params.value).toFixed(2)}` : ""},
         },
         {

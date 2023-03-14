@@ -52,8 +52,28 @@ export const getPageName = (selectedCompont) => {
             name = "Room";
             break;
 
+        case "tables":
+            name = "Table";
+            break;
+    
         case "guestrooms":
             name = "Guest room";
+            break;
+
+        case "guesttables":
+            name = "Guest table";
+            break;
+
+        case "guestfoods":
+            name = "Guest food";
+            break;
+
+        case "guestmiscellaneous":
+            name = "Guest miscellaneous";
+            break;
+
+        case "guestpayments":
+            name = "Guest payment";
             break;
                 
         default:
@@ -203,7 +223,18 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.delete = true;
 
             break;
-  
+
+        case "tables":
+            attribute.name = "Table";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+                
         case "guestrooms":
             attribute.name = "Guest room";
             attribute.dynamic = true;
@@ -215,6 +246,50 @@ export const getPageAttribute = (selectedCompont) => {
 
             break;
 
+        case "guesttables":
+            attribute.name = "Guest table";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+
+        case "guestfoods":
+            attribute.name = "Guest food";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+        
+        case "guestmiscellaneous":
+            attribute.name = "Guest miscellaneous";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+            
+        case "guestpayments":
+            attribute.name = "Guest payment";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+                    
         default:
             // attribute = {
             //     name: "",
