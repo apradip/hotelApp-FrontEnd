@@ -16,6 +16,7 @@ import BookingAgents from "../pages/BookingAgents";
 import Employees from "../pages/Employees";
 import Rooms from "../pages/Rooms";
 import Tables from "../pages/Tables";
+import Foods from "../pages/Foods";
 import GuestRooms from "../pages/GuestRooms";
 import GuestTables from "../pages/GuestTables";
 import GuestFoods from "../pages/GuestFoods";
@@ -49,6 +50,7 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
   const roomCategoryRef = useRef(null);
   const roomRef = useRef(null);
   const tableRef = useRef(null);
+  const foodRef = useRef(null);
   const bookingAgentRef = useRef(null);
   const guestRoomRef = useRef(null);
   const guestTableRef = useRef(null);
@@ -112,7 +114,11 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
       case "tables":
         tableRef && tableRef.current.changeSearch(text);
         break;
-  
+
+      case "foods":
+        foodRef && foodRef.current.changeSearch(text);
+        break;
+          
       case "guestrooms":
         guestRoomRef && guestRoomRef.current.changeSearch(text);
         break;
@@ -171,7 +177,11 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
       case "tables":
         tableRef && tableRef.current.openAdd();
         break;
-  
+
+      case "foods":
+        foodRef && foodRef.current.openAdd();
+        break;
+          
       case "guestrooms":
         guestRoomRef && guestRoomRef.current.openAdd();
         break;
@@ -229,6 +239,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
 
       case "tables":
         tableRef && tableRef.current.openEdit();
+        break;
+
+      case "foods":
+        foodRef && foodRef.current.openEdit();
         break;
           
       case "guestrooms":
@@ -288,6 +302,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
 
       case "tables":
         tableRef && tableRef.current.openDelete();
+        break;
+
+      case "foods":
+        foodRef && foodRef.current.openDelete();
         break;
           
       case "guestrooms":
@@ -375,6 +393,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                   <li className={`sidebar-item ${ menuSelected === 'tables' ? 'active' : null}`}
                       onClick={() => {handelClickMenuItem('tables')}}>
                       <NavLink to="/tables" className="sidebar-link">Table</NavLink>
+                  </li>                  
+                  <li className={`sidebar-item ${ menuSelected === 'foods' ? 'active' : null}`}
+                      onClick={() => {handelClickMenuItem('foods')}}>
+                      <NavLink to="/foods" className="sidebar-link">Food</NavLink>
                   </li>                  
                 </ul>
               </li>
@@ -481,6 +503,11 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
 
               <Route exact path="/tables" element={<Tables
                                                     ref={tableRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
+              <Route exact path="/foods" element={<Foods
+                                                    ref={foodRef} 
                                                     onSuccess={handleSuccess}
                                                     onClose={handleClose}/>}/>
 

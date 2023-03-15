@@ -6,7 +6,7 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { tableSchema } from "../../schemas";
+import { foodSchema } from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
@@ -15,21 +15,24 @@ const Form = ({ onSubmited, onClosed }) => {
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
     const { loading, error, doInsert } = useFetchWithAuth({
-        url: `${contextValues.tableAPI}/${hotelId}`
+        url: `${contextValues.foodAPI}/${hotelId}`
     });
 
     // Start:: Form validate and save data
     const { values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm } = useFormik({
         initialValues: {
-            keyInputNo: "",
-            keyInputDescription: "",
+            keyInputName: "",
+            keyInputPrice: 0,
+            keyInputDescription: ""
+
         },
-        validationSchema: tableSchema,
+        validationSchema: foodSchema,
         validateOnChange,
         onSubmit: async (values, action) => {
             const payload = {   
-                            "no": values.keyInputNo.toUpperCase(),
-                            "description": values.keyInputDescription
+                            "name": values.keyInputName.toUpperCase(),
+                            "price": parseFloat(Number.isNaN(values.keyInputPrice) ? 0 : values.keyInputPrice, 10),
+                            "description": values.keyInputDescription.trim()
                         };
 
             await doInsert(payload);
@@ -61,32 +64,63 @@ const Form = ({ onSubmited, onClosed }) => {
 
                 {/* Start:: Row */}
                 <div className="row mb-3">
-                    {/* Start:: Column no */}
+                    {/* Start:: Column name */}
                     <div className="col-12">
                         {/* Label element */}
                         <label className="form-label" 
-                             htmlFor={"keyInputNo"}>Table No.</label>
+                             htmlFor={"keyInputName"}>Name</label>
                         
                         {/* Input element text*/}
                         <input 
                              type="text" 
-                             name={"keyInputNo"}
-                             placeholder="Room no."
+                             name={"keyInputName"}
+                             placeholder="Name"
                              className="form-control"
                              autoComplete="off"
                              autoFocus
-                             maxLength={10}
+                             maxLength={100}
                              disabled={loading} 
-                             value={values.keyInputNo} 
+                             value={values.keyInputName} 
                              onChange={handleChange} />
 
                         {/* Validation message */}
-                        { errors.keyInputNo && 
-                             touched.keyInputNo ? 
-                                 (<small className="text-danger">{errors.keyInputNo}</small>) : 
+                        { errors.keyInputName && 
+                             touched.keyInputName ? 
+                                 (<small className="text-danger">{errors.keyInputName}</small>) : 
                                      null }
                     </div>
-                    {/* End:: Column no */}
+                    {/* End:: Column name */}
+                </div>
+
+                <div className="row mb-3">
+
+                    {/* Start:: Column price */}
+                    <div className="col-12">
+
+                        {/* Label element */}
+                        <label className="form-label" 
+                                htmlFor={"keyInputPrice"}>Price</label>
+                        
+                        {/* Input element text*/} 
+                        <input 
+                            type="number" 
+                            name={"keyInputPrice"}
+                            placeholder="Price"
+                            className="form-control"
+                            autoComplete="off"
+                            maxLength={8}
+                            disabled={loading}
+                            value={values.keyInputPrice} 
+                            onChange={handleChange} />
+
+                        {/* Validation message */}
+                        { errors.keyInputPrice && 
+                             touched.keyInputPrice ? 
+                                 (<small className="text-danger">{errors.keyInputPrice}</small>) : 
+                                     null }
+                    </div>
+                    {/* End:: Column price */}
+
                 </div>
 
                 <div className="row mb-3">
@@ -170,7 +204,7 @@ const Form = ({ onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const TableAdd = forwardRef(( props, ref ) => {
+const FoodAdd = forwardRef(( props, ref ) => {
     const [showModal, setShowModal] = useState(false);
 
     // Start:: Show modal
@@ -224,7 +258,7 @@ const TableAdd = forwardRef(( props, ref ) => {
                 {/* Start:: Modal header */}
                 <Modal.Header>
                     {/* Header text */}
-                    <Modal.Title>Add table</Modal.Title>
+                    <Modal.Title>Add food</Modal.Title>
 
                     {/* Close button */}
                     <NavLink className="nav-icon" href="#" onClick={handleCloseModal} >
@@ -249,4 +283,4 @@ const TableAdd = forwardRef(( props, ref ) => {
 // End:: Component
 
 
-export default TableAdd;
+export default FoodAdd;

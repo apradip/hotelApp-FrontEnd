@@ -137,6 +137,13 @@ export const roomSchema = Yup.object({
 
 export const tableSchema = Yup.object({
     keyInputNo: Yup.string().required("No can't be empty!").min(1, "Invalid no!"),
+    keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
+});
+
+export const foodSchema = Yup.object({
+    keyInputName: Yup.string().required("Name can't be empty!").min(1, "Invalid name!"),
+    keyInputPrice: Yup.number().required("Price can't be empty!").positive("Invalid price!").min(3, "Invalid price!"),
+    keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
 export const guestRoomSchema = Yup.object({

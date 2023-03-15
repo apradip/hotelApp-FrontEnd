@@ -55,7 +55,11 @@ export const getPageName = (selectedCompont) => {
         case "tables":
             name = "Table";
             break;
-    
+
+        case "foods":
+            name = "Food";
+            break;
+                
         case "guestrooms":
             name = "Guest room";
             break;
@@ -226,6 +230,17 @@ export const getPageAttribute = (selectedCompont) => {
 
         case "tables":
             attribute.name = "Table";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+
+        case "foods":
+            attribute.name = "Food";
             attribute.dynamic = true;
             attribute.show.name = true; 
             attribute.show.search = true;
