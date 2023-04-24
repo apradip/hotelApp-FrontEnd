@@ -146,6 +146,18 @@ export const foodSchema = Yup.object({
     keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
+export const miscellaneousSchema = Yup.object({
+    keyInputName: Yup.string().required("Name can't be empty!").min(1, "Invalid name!"),
+    keyInputPrice: Yup.number().required("Price can't be empty!").positive("Invalid price!").min(3, "Invalid price!"),
+    keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
+});
+
+export const serviceSchema = Yup.object({
+    keyInputName: Yup.string().required("Name can't be empty!").min(1, "Invalid name!"),
+    keyInputPrice: Yup.number().required("Price can't be empty!").positive("Invalid price!").min(3, "Invalid price!"),
+    keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
+});
+
 export const guestRoomSchema = Yup.object({
     keyInputIDDocumentId: Yup.string().required("ID can't be empty!").min(2, "Invalid ID!"),
     keyInputIDNo: Yup.string().required("ID No can't be empty!").min(4, "Invalid ID no!"),
@@ -268,6 +280,99 @@ export const guestTableSchema = Yup.object({
 export const guestPaymentSchema = Yup.object({
     keyInputPaymentAmount: Yup.number().required("Payment can't be empty!").positive("Invalid payment amount!").min(1, "Invalid payment amount!"),
     keyInputNarration: Yup.string().required("Narration can't be empty!").min(5, "Invalid narration!"),
-    keyInputTransactionDate: Yup.string().required("Transaction date can't be empty!"),
-    keyInputTransactionTime: Yup.string().required("Transaction time can't be empty!"),
+    // keyInputTransactionDate: Yup.string().required("Transaction date can't be empty!"),
+    // keyInputTransactionTime: Yup.string().required("Transaction time can't be empty!"),
+});
+
+export const guestMiscellaneousSchema = Yup.object({
+    keyInputName: Yup.string().required("Name can't be empty!").min(5, "Invalid name!"),
+    keyInputMobile: Yup.string().required("Mobile can't be empty!").matches(phoneRegExp, "Invalid mobile no!"),
+    keyInputCorporateName: Yup.string(),
+    keyInputCorporateAddress: Yup.string()
+        .test({
+            params: { },
+            message: 'Invalid corporate address!',
+            test: function (value) {
+                if (this.parent.keyInputCorporateName === "") {
+                    if (value === "") {
+                        return true
+                    } else {
+                        return false
+                    }
+                } else {
+                    if (value === "") {
+                        return false
+                    } else {
+                        return true
+                    }
+                }
+            }
+        }),
+    keyInputGSTNo: Yup.string()
+        .test({
+            params: { },
+            message: 'Invalid gst no!',
+            test: function (value) {
+                if (this.parent.keyInputCorporateName === "") {
+                    if (value === "") {
+                        return true
+                    } else {
+                        return false
+                    }
+                } else {
+                    if (value === "") {
+                        return false
+                    } else {
+                        return true
+                    }
+                }
+            }
+        }),
+});
+
+export const guestSmallSchema = Yup.object({
+    keyInputName: Yup.string().required("Name can't be empty!").min(5, "Invalid name!"),
+    keyInputMobile: Yup.string().required("Mobile can't be empty!").matches(phoneRegExp, "Invalid mobile no!"),
+    keyInputGuestCount: Yup.number().required("No of guest can't be empty!").positive("Invalid guest count!").min(1, "Invalid guest count!"),
+    keyInputCorporateName: Yup.string(),
+    keyInputCorporateAddress: Yup.string()
+        .test({
+            params: { },
+            message: 'Invalid corporate address!',
+            test: function (value) {
+                if (this.parent.keyInputCorporateName === "") {
+                    if (value === "") {
+                        return true
+                    } else {
+                        return false
+                    }
+                } else {
+                    if (value === "") {
+                        return false
+                    } else {
+                        return true
+                    }
+                }
+            }
+        }),
+    keyInputGSTNo: Yup.string()
+        .test({
+            params: { },
+            message: 'Invalid gst no!',
+            test: function (value) {
+                if (this.parent.keyInputCorporateName === "") {
+                    if (value === "") {
+                        return true
+                    } else {
+                        return false
+                    }
+                } else {
+                    if (value === "") {
+                        return false
+                    } else {
+                        return true
+                    }
+                }
+            }
+        }),
 });

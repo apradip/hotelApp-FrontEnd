@@ -1,29 +1,29 @@
-import React, { useEffect, useState, useRef, useMemo, useCallback } from "react";
+import React, { useContext, useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react"; 
 
-// import { HotelId } from "../../App";
+import { HotelId } from "../../App";
+import { formatINR } from "../common/Common";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { formatDDMMYYYY } from "../common/Common";
-import NumericEditor from "../common/NumericEditor";
-import DateEditor from "../common/DateEditor";
-import RoomEditor from "../common/RoomEditor";
-import ExtraPersonEditor from "../common/ExtraPersonEditor";
-import ExtraBedEditor from "../common/ExtraBedEditor";
-
+import MiscellaneousEditor from "../common/MiscellaneousEditor";
+import QuantityEditor from "../common/QuantityEditor";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const FoodOrderGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {    
-	const contextValues = useStateContext();
+const MiscellaneousOrderGrid = ({ pState, pDefaultRowData, onChange }) => {    
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
     const gridRef = useRef();
 	const [selectedRowNode, setSelectedRowNode] = useState();
-    const [finalTariff, setFinalTariff] = useState(0);
-        
+    const [totalPrice, setTotalPrice] = useState(0);
     const [rowData, setRowData] = useState(pDefaultRowData);
-    const [emptyRowCount, setEmptyRowCount] = useState(pDefaultRowData.length);
-    const [roomData, setRoomData] = useState(null);
+    const [emptyRowCount, setEmptyRowCount] = useState(-1);
+    const [itemData, setItemData] = useState(null);
+    
+    const { data, doFetch } = useFetchWithAuth({
+        url: `${contextValues.hotelAPI}/${hotelId}`
+    });
 
     const defaultColDef = useMemo(() => {
         return {
@@ -41,226 +41,106 @@ const FoodOrderGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
             field: "rowId", 
             width: 100,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : ``},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : "Total"},
         },
         {
-            headerName: "Date", 
-            field: "occupancyDate", 
-            width: 190,
-            hide: operationWiseHideState(pState, "occupancyDate"),
-            cellEditor: DateEditor, 
-            editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},            
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatDDMMYYYY(params.value)}` : ""},
-        },
-        {
-            headerName: "Room No.", 
-            field: "room", 
+            headerName: "Item", 
+            field: "name", 
             width: 210,
             hide: false,
-            cellEditor: RoomEditor, 
+            cellEditor: MiscellaneousEditor, 
             editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},
             cellRenderer: (params) => {return params.value},
-            valueGetter: (params) => {return params.data.room},
+            valueGetter: (params) => {return params.data.name},
             valueSetter: (params) => {
-                params.data.room = "Select room";
-                params.data.extPerson = 0;
-                params.data.extraPersonTariff = 0;
-                params.data.extBed = 0;
-                params.data.extraBedTariff = 0;
-                params.data.maxDiscount = 0;
-                params.data.discount = 0;
-                params.data.tariff = 0;
-                params.data.roomId = "";
-                params.data.gstPercentage = 0;    
-                params.data.gst = 0;
+                params.data.name = "Select item";
+                params.data.id = "";
+                params.data.unitPrice = 0;
 
                 if (params.newValue) {
-                    const selectedRoom = params.newValue[0];
+                    const selectedItem = params.newValue[0];
 
-                    // find selected room details
-                    params.data.room = selectedRoom.no;
-                    params.data.extPerson = 0;
-                    params.data.extraPersonTariff = selectedRoom.extraPersonTariff;
-                    params.data.extBed = 0;
-                    params.data.extraBedTariff = selectedRoom.extraBedTariff;
-                    params.data.maxDiscount = selectedRoom.maxDiscount;
-                    params.data.discount = selectedRoom.maxDiscount;
-                    params.data.tariff = selectedRoom.tariff;
-                    params.data.roomId = selectedRoom._id;
-                    params.data.gstPercentage = 0;    
-                    params.data.gst = 0;
-
-                    // calculate room tariff
-                    const tariff = (params.data.extPerson * params.data.extraPersonTariff) + 
-                                    (params.data.extBed * params.data.extraBedTariff) + 
-                                    (params.data.tariff - params.data.discount) +
-                                    params.data.gst;
-                                    
-                    params.data.finalTariff = tariff;
-                        
-                    // set tariff to get the gst percentage
-                    setFinalTariff(tariff);
+                    // find selected table details
+                    params.data.id = selectedItem._id;
+                    params.data.name = selectedItem.name;
+                    params.data.unitPrice = selectedItem.price;
+                    params.data.quantity = 0;
                 }
 
                 return true;
             }
         },
         {
-            headerName: "Ext. Person",
-            field: "extPerson", 
-            width: 180,
+            headerName: "Unit price",
+            field: "unitPrice",
             hide: false,
             type: "rightAligned",
-            cellEditor: ExtraPersonEditor,
-            editable: (params) => {return params.data.roomId !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
+            valueGetter: (params) => {return params.data.unitPrice}
+        },
+        {
+            headerName: "Quantity",
+            field: "quantity", 
+            hide: false,
+            type: "rightAligned",
+            cellEditor: QuantityEditor,
+            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
-            valueGetter: (params) => {return params.data.extPerson},
+            valueGetter: (params) => {return params.data.quantity},
             valueSetter: (params) => {
-                params.data.extPerson = params.newValue;
+                params.data.quantity = params.newValue;
 
-                // calculate room tariff
-                const tariff = (params.newValue * params.data.extraPersonTariff) + 
-                                    (params.data.extBed * params.data.extraBedTariff) + 
-                                    (params.data.tariff - params.data.discount);
+                // calculate price with gst and service charge
+                // const totalPrice = (params.newValue * params.data.unitPrice) + 
+                //                ((params.newValue * params.data.unitPrice) * (params.data.serviceChargePercentage / 100)) + 
+                //                ((params.newValue * params.data.unitPrice) * (params.data.gstPercentage / 100));
 
-                params.data.finalTariff = tariff;                                    
+                params.data.serviceCharge = ((params.newValue * params.data.unitPrice) * (params.data.serviceChargePercentage / 100));
+                params.data.gstCharge = ((params.newValue * params.data.unitPrice) * (params.data.gstPercentage / 100));
+                const totalPrice = (params.newValue * params.data.unitPrice);
+                params.data.totalPrice = totalPrice;                                    
 
                 // set tariff to get the gst percentage
-				setFinalTariff(tariff);
+                setTotalPrice(totalPrice);
 
                 return true;
             }
         },
         {
-            headerName: "Ext. Bed", 
-            field: "extBed", 
-            width: 150,
+            headerName: "Price",
+            field: "totalPrice",
             hide: false,
             type: "rightAligned",
-            cellEditor: ExtraBedEditor,
-            editable: (params) => {return params.data.roomId !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
-            valueGetter: (params) => {return params.data.extBed},
+            valueFormatter: (params) => {return `${formatINR(params.value)}`},
+            valueGetter: (params) => {return params.data.totalPrice},
             valueSetter: (params) => {
-                params.data.extBed = params.newValue;
-
-                // calculate room tariff
-                const tariff = (params.data.extPerson * params.data.extraPersonTariff) + 
-                                    (params.newValue * params.data.extraBedTariff) + 
-                                    (params.data.tariff - params.data.discount);
-
-                params.data.finalTariff = tariff;                                    
-
-                // set tariff to get the gst percentage
-				setFinalTariff(tariff);
-
+                params.data.totalPrice = params.newValue;
                 return true;
             }
         },
         {
-            headerName: "Discount", 
-            field: "discount", 
-            hide: operationWiseHideState(pState, "discount"),
-            type: "rightAligned",
-            cellEditor: NumericEditor, 
-            editable: (params) => {return params.data.roomId !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
-            valueFormatter: (params) => {return !params.node.rowPinned ? `₹ ${Number(params.value).toFixed(2)}` : ""},
-            valueGetter: (params) => {return params.data.discount},
-            valueSetter: (params) => {
-                if (params.newValue <= params.data.maxDiscount) {
-                    params.data.discount = params.newValue;
-
-                    // calculate room tariff
-                    const tariff = (params.data.extPerson * params.data.extraPersonTariff) + 
-								   (params.data.extBed * params.data.extraBedTariff) + 
-                                   (params.data.tariff - params.newValue);
-
-                    params.data.finalTariff = tariff;                                        
-
-                    // set tariff to get the gst percentage
-					setFinalTariff(tariff);
-
-                    return true;
-                }
-            }
+            field: "id"
         },
         {
-            headerName: "GST", 
-            field: "gst", 
-            hide: operationWiseHideState(pState, "gst"),
-            type: "rightAligned",
-            valueFormatter: (params) => {return !params.node.rowPinned ? `₹ ${Number(params.value).toFixed(2)}` : ""},
-            valueGetter: (params) => {return params.data.gst},
-            valueSetter: (params) => {
-                params.data.gst = params.newValue;
-                return true;
-            }
+            field: "serviceChargePercentage"
         },
         {
-            headerName: "Tariff", 
-            field: "finalTariff", 
-            hide: false,
-            type: "rightAligned",
-            cellClass: "ag-lock-pinned right",
-            valueFormatter: (params) => {return `₹ ${Number(params.value).toFixed(2)}`},
-            valueGetter: (params) => {return params.data.finalTariff},
-            valueSetter: (params) => {
-                params.data.finalTariff = params.newValue;
-                return true;
-            }
+            field: "serviceCharge"
         },
         {
-            field: "roomId"
+            field: "gstPercentage"
         },
         {
-            field: "tariff"
-        },
-        {
-            field: "extraBedTariff"
-        },
-        {
-            field: "extraPersonTariff"
-        },
-        {
-            field: "maxDiscount"
-        },
-        {
-            field: "gstPercentage", 
-            valueGetter: (params) => {
-                return params.data.gstPercentage;
-            },
-            valueSetter: (params) => {
-                params.data.gstPercentage = params.newValue;
-
-                // calculate room tariff
-                const finalTariff = (params.data.extPerson * params.data.extraPersonTariff) + 
-                                    (params.data.extBed * params.data.extraBedTariff) + 
-                                    (params.data.tariff - params.data.discount);
-
-                params.data.gst = (finalTariff * (params.newValue / 100));                                    
-                params.data.finalTariff = finalTariff + params.data.gst;                                    
-
-                // set tariff to get the gst percentage
-    			setFinalTariff(params.data.finalTariff);
-
-                return true;
-            }
+            field: "gstCharge"
         }
     ]);
     const pinnedRowData = [
-        {room: `Total ${pNoOfDay} day(s)`, finalTariff: 0}
+        {rowId: 'Total', totalPrice: 0}
     ];
-	const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.gstAPI}`,
-        params: {
-			search: finalTariff
-        }
-    });
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
         gridRef.current.api.setRowData(rowData);
-                
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
@@ -270,7 +150,6 @@ const FoodOrderGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
     // Start:: load empty data to grid
     const handleFirstDataRendered = (params) => {
         gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
@@ -278,124 +157,77 @@ const FoodOrderGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
         calculateSum();
     };
     // End:: load empty data to grid
-    
+
     // Start:: on row selection change set selected 
     const handleSelectionChanged = (event) => {
 		setSelectedRowNode(event.api.getSelectedNodes()[0]);		
-        setFinalTariff(0);
     };
     // End:: on row selection change set selected 
 
     // set grid data to a parent component
     const handleCellValueChanged = (event) => {
-        let row = [];    
+        let dataRows = [];    
 
-        gridRef.current.api.forEachNode((rowNode, index) => {
-            if (rowNode.data.room !== "Select room") {
-                row.push({
-                            roomId : rowNode.data.roomId, 
-                            occupancyDate : "", 
-                            roomNo: rowNode.data.room, 
-                            isAC : true, 
-                            tariff : rowNode.data.finalTariff, 
-                            extraBedCount : rowNode.data.extBed, 
-                            extraBedTariff : rowNode.data.extraBedTariff, 
-                            extraPersonCount : rowNode.data.extPerson, 
-                            extraPersonTariff : rowNode.data.extraPersonTariff, 
-                            discount : rowNode.data.discount, 
-                            maxDiscount : rowNode.data.maxDiscount, 
-                            gstPercentage : rowNode.data.gstPercentage, 
-                            gstAmount : rowNode.data.gst, 
-                            price : rowNode.data.tariff
+        gridRef.current.api.forEachNode((gridRow, index) => {
+            if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))){
+                dataRows.push({
+                            id: gridRow.data.id, 
+                            name: gridRow.data.name,
+                            unitPrice: gridRow.data.unitPrice,
+                            quantity: gridRow.data.quantity,
+                            serviceChargePercentage: gridRow.data.serviceChargePercentage,
+                            serviceCharge: gridRow.data.serviceCharge,
+                            gstPercentage: gridRow.data.gstPercentage,
+                            gstCharge: gridRow.data.gstCharge,
+                            totalPrice: gridRow.data.totalPrice
                         });
             }
         });
               
-        setRoomData(row);
+        //setItemData(dataRows);
+        onChange(dataRows);
         calculateSum();
-        onChange(roomData);
     };
 
-    // Start:: find gst% from api
+    // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
             try {
-                if (finalTariff > 0) {
-                    await doFetch();
-                }
+                await doFetch();
             } catch (err) {
                 console.log("Error occured when fetching data");
             }
-        })();
-    }, [finalTariff]);   // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: find gst% from api
+          })();
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch hotel detail from api
 
-    // Start:: set gst% to grid
     useEffect(() => {
-        !error && 
-            !loading && 
-                data && 
-                    selectedRowNode && 
-                        selectedRowNode.setDataValue('gstPercentage', data.gstPercentage);
-    }, [data, error, loading]);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: set gst% to grid
+        data && calculateSum();
+    }, [data]);
 
     // Start:: set add empty row grid
     useEffect(() => {
-        addRow(); 
+        data && addRow(); 
     }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: set add empty row grid
-    
-    const addRow = useCallback (() => {
-        if (rowData.length > 0) {
-            if (emptyRowCount < 1) {
-                
-                let emptyRow = rowData;
-
-                emptyRow.push({
-                            rowId: emptyRow.length + 1, 
-                            occupancyDate: new Date(), 
-                            room: "Select room", 
-                            extPerson: 0, 
-                            extBed: 0, 
-                            discount: 0, 
-                            gst: 0, 
-                            finalTariff: 0, 
-                            roomId: "", 
-                            extraBedTariff: 0, 
-                            extraPersonTariff: 0, 
-                            maxDiscount: 0, 
-                            tariff: 0, 
-                            gstPercentage: 0
-                        });
-
-                setRowData(emptyRow);
-
-                gridRef.current.api.setRowData(rowData);
-                gridRef.current.api.sizeColumnsToFit();
-            }
-        }
-    }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: calculate sum on change tariff
     const calculateSum = useCallback (() => {
-        let subTotalTariff = 0;
+        let totalPrice = 0;
         let emptyCount = 0;
 
         // calculate total expance
         gridRef.current.api && gridRef.current.api.forEachNode((rowNode, index) => {
-            subTotalTariff = subTotalTariff + rowNode.data.finalTariff;
+            totalPrice += rowNode.data.totalPrice;
         })
-
-        pinnedRowData[0].room = `Total ${pNoOfDay} day(s)`;
-        pinnedRowData[0].finalTariff = subTotalTariff * pNoOfDay;
+    
+        pinnedRowData[0].totalPrice = totalPrice;
         
         gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
 
-
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode, index) => {
-            if (rowNode.data.room === "Select room") {
+            if (rowNode.data.name === "Select item") {
                 emptyCount ++;
             }
         });
@@ -403,82 +235,50 @@ const FoodOrderGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
         setEmptyRowCount(emptyCount);
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: calculate sum on change tariff
+    
+    const addRow = useCallback (() => {
+        // if (rowData.length > 0) {
+            if (emptyRowCount < 1) {
+                let emptyRow = rowData;
 
-    function operationWiseHideState (state, colName) {
-        switch(state){
-            case 'ADD': 
-                switch(colName) {
-                    case 'occupancyDate': 
-                        return true;
+                emptyRow.push({
+                            rowId: emptyRow.length + 1, 
+                            id: "", 
+                            name: "Select item", 
+                            unitPrice: 0,
+                            quantity: 0,
+                            serviceChargePercentage: data.serviceChargePercentage,
+                            serviceCharge: 0,
+                            gstPercentage: data.foodGstPercentage,
+                            gstCharge: 0,
+                            totalPrice: 0,
+                        });
 
-                    case 'room': 
-                        return false;
+                setRowData(emptyRow);
+                gridRef.current.api.setRowData(rowData);
+                gridRef.current.api.sizeColumnsToFit();
 
-                    case 'discount': 
-                        return false;
+                setEmptyRowCount(-1);
+            }
 
-                    case 'gst': 
-                        return false;
+        // }
+    }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
 
-                    default: 
-                        return false;
-                }
-
-            case 'MOD': 
-                switch(colName) {
-                    case 'occupancyDate': 
-                        return false;
-
-                    case 'room': 
-                        return false;
-
-                    case 'discount': 
-                        return false;
-
-                    case 'gst': 
-                        return false;
-
-                    default: 
-                        return false;
-                }
-
-            case 'VIEW': 
-                switch(colName) {
-                    case 'occupancyDate': 
-                        return false;
-
-                    case 'room': 
-                        return false;
-
-                    case 'discount': 
-                        return true;
-
-                    case 'gst': 
-                        return true;
-
-                    default: 
-                        return false;
-                }
-
-            default: 
-                return false;
-        }
-    };
-
+    
 	return (
-            <div className="ag-theme-alpine grid">
-                <AgGridReact	
-                    ref={gridRef}
-                    columnDefs={columnDefs}
-                    defaultColDef={defaultColDef}
-                    rowData={null}
-                    rowSelection={"single"}
-                    onGridReady={handleGridReady}
-                    onFirstDataRendered={handleFirstDataRendered}
-                    onSelectionChanged={handleSelectionChanged}
-                    onCellValueChanged={handleCellValueChanged} />
-            </div>
+        <div className="ag-theme-alpine grid">
+            <AgGridReact	
+                ref={gridRef}
+                columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
+                rowData={null}
+                rowSelection={"single"}
+                onGridReady={handleGridReady}
+                onFirstDataRendered={handleFirstDataRendered}
+                onSelectionChanged={handleSelectionChanged}
+                onCellValueChanged={handleCellValueChanged} />
+        </div>
     )
 }
  
-export default FoodOrderGrid;
+export default MiscellaneousOrderGrid;

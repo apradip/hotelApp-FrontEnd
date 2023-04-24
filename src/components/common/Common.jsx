@@ -59,7 +59,15 @@ export const getPageName = (selectedCompont) => {
         case "foods":
             name = "Food";
             break;
+
+        case "items":
+            name = "Item";
+            break;
                 
+        case "services":
+            name = "Service";
+            break;
+    
         case "guestrooms":
             name = "Guest room";
             break;
@@ -249,6 +257,28 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.delete = true;
 
             break;
+
+        case "items":
+            attribute.name = "Item";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
+
+        case "services":
+            attribute.name = "Service";
+            attribute.dynamic = true;
+            attribute.show.name = true; 
+            attribute.show.search = true;
+            attribute.show.add = true;
+            attribute.show.edit = true
+            attribute.show.delete = true;
+
+            break;
                 
         case "guestrooms":
             attribute.name = "Guest room";
@@ -284,13 +314,13 @@ export const getPageAttribute = (selectedCompont) => {
             break;
         
         case "guestmiscellaneous":
-            attribute.name = "Guest miscellaneous";
-            attribute.dynamic = true;
-            attribute.show.name = true; 
-            attribute.show.search = true;
-            attribute.show.add = true;
-            attribute.show.edit = true
-            attribute.show.delete = true;
+            attribute.name = 'Guest miscellaneous'
+            attribute.dynamic = true
+            attribute.show.name = true 
+            attribute.show.search = true
+            attribute.show.add = true
+            attribute.show.edit = false
+            attribute.show.delete = true
 
             break;
             
@@ -334,11 +364,11 @@ export const getRooms = (roomList) => {
     let rooms = "";
     const roomArr = roomList && roomList.split(",");
 
-    // if (roomArr !== "undefined") {
-    //     for (const item of roomArr) {
-    //         rooms === "" ? rooms = item.no : rooms = rooms + ", " + item.no;
-    //     }
-    // }
+    if (roomArr !== "undefined") {
+        for (const item of roomArr) {
+            rooms === "" ? rooms = item.no : rooms = rooms + ", " + item.no;
+        }
+    }
 
     return rooms;
 };

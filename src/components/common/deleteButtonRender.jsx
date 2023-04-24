@@ -17,12 +17,7 @@ export default class DeleteButtonRender extends Component {
   render() {
     return (
       <span>
-        {/* <button
-          style={{ height: 20, lineHeight: 0.5 }}
-          onClick={this.invokeDeleteMethod}
-          className="btn btn-info"> */}
           <i className="align-middle" style={{color: "red", fontSize: "4px"}}><Scissors/></i>
-        {/* </button> */}
       </span>
     );
   }

@@ -9,7 +9,8 @@ import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { guestTableSchema } from "../../schemas";
 import { formatYYYYMMDD, formatHHMM } from "../common/Common";
-import TableBookingGrid from "./TableBookingGrid";
+// import TableBookingGrid from "./TableBookingGrid";
+import TableSelect from "../common/TableSelect";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -20,40 +21,29 @@ const Form = ({ onSubmited, onClosed }) => {
     
     const [tableData, setTableData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const [defaultRowData, setDefaultRowData] = useState([
-        {rowId: 1, table: "Select table", tableId: ""},
-        {rowId: 2, table: "Select table", tableId: ""},
-        // {rowId: 3, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
-        // {rowId: 4, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0},
-        // {rowId: 5, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 6, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 7, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 8, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 9, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0},
-        // {rowId: 10, occupancyDate: new Date(), room: "Select room", extPerson: 0, extBed: 0, discount: 0, gst: 0, finalTariff: 0, roomId: "", extraBedTariff: 0, extraPersonTariff: 0, maxDiscount: 0, tariff: 0, gstPercentage: 0, days: 0}
-    ]);
+    // const [defaultRowData, setDefaultRowData] = useState([
+    //     {rowId: 1, table: "Select table", tableId: ""},
+    //     {rowId: 2, table: "Select table", tableId: ""}
+    // ]);
 
     const {loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.guestRoomAPI}/${hotelId}`
+        url: `${contextValues.guestTableAPI}/${hotelId}`
     });
 
-    const handelChangeTableData = (tableData) => {
-        setTableData(tableData);
-    } 
+    // const handelChangeTableData = (tableData) => {
+    //     setTableData(tableData);
+    // } 
 
     // Start:: Form validate and save data
     const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputName: "",
             keyInputMobile: "",
-            keyInputEmail: "",
-            keyInputAddress: "",
-            keyInputCity: "",
-            keyInputState: "",
             keyInputGuestCount: 1,
             keyInputCorporateName: "",
             keyInputCorporateAddress: "",
             keyInputGST: "",
+            keyInputTables: "",
             keyInputCheckInDate: new Date(),
             keyInputCheckInTime: new Date()
         },
@@ -63,17 +53,13 @@ const Form = ({ onSubmited, onClosed }) => {
             const payload = {   
                 "name": values.keyInputName.toUpperCase(), 
                 "mobile": parseInt(values.keyInputMobile),
-                "email": values.keyInputEmail.toLowerCase(),
-                "address": values.keyInputAddress.toUpperCase(), 
-                "city": values.keyInputCity.toUpperCase(), 
-                "state": values.keyInputState.toUpperCase(),
                 "guestCount": parseInt(values.keyInputGuestCount),
                 "corporateName": values.keyInputCorporateName,
                 "corporateAddress": values.keyInputCorporateAddress,
                 "gstNo": values.keyInputGST,
+                "tables": values.keyInputTables,
                 "checkInDate": formatYYYYMMDD(values.keyInputCheckInDate),
                 "checkInTime": formatHHMM(values.keyInputCheckInTime),
-                "tableDetails": tableData
             }
 
             await doInsert(payload);
@@ -162,130 +148,6 @@ const Form = ({ onSubmited, onClosed }) => {
                     </div>
                     {/* End:: Column mobile */}
 
-                    {/* Start:: Column email */}
-                    <div className="col-4">
-
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor={"keyInputEmail"}>Email</label>
-
-                        {/* Input element text*/}
-                        <input 
-                            type="text" 
-                            name="keyInputEmail"
-                            placeholder="Email"
-                            className="form-control"
-                            autoComplete="off"
-                            maxLength={100}
-                            disabled={loading} 
-                            value={values.keyInputEmail} 
-                            onChange={handleChange}/>
-
-                        {/* Validation message */}
-                        {errors.keyInputEmail && 
-                            touched.keyInputEmail ? 
-                                (<small className="text-danger">{errors.keyInputEmail}</small>) : 
-                                    null}
-                    
-                    </div>
-                    {/* End:: Column email */}
-
-                </div>
-                {/* End:: Row */}
-
-                {/* Start:: Row */}
-                <div className="row mb-3">
-
-                    {/* Start:: Column address */}
-                    <div className="col-4">
-
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor={"keyInputAddress"}>Address</label>
-
-                        {/* Input element text*/}
-                        <input 
-                            type="text" 
-                            name="keyInputAddress"
-                            placeholder="Address"
-                            className="form-control"
-                            autoComplete="off"
-                            maxLength={100}
-                            disabled={loading} 
-                            value={values.keyInputAddress} 
-                            onChange={handleChange}/>
-
-                        {/* Validation message */}
-                        {errors.keyInputAddress && 
-                            touched.keyInputAddress ? 
-                                (<small className="text-danger">{errors.keyInputAddress}</small>) : 
-                                    null}
-                    
-                    </div>
-                    {/* End:: Column address */}
-
-                    {/* Start:: Column city */}
-                    <div className="col-4">
-
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor={"keyInputCity"}>City</label>
-
-                        {/* Input element text*/}
-                        <input 
-                            type="text" 
-                            name="keyInputCity"
-                            placeholder="City"
-                            className="form-control"
-                            autoComplete="off"
-                            maxLength={30}
-                            disabled={loading} 
-                            value={values.keyInputCity} 
-                            onChange={handleChange}/>
-
-                        {/* Validation message */}
-                        {errors.keyInputCity && 
-                            touched.keyInputCity ? 
-                                (<small className="text-danger">{errors.keyInputCity}</small>) : 
-                                    null}
-                    
-                    </div>
-                    {/* End:: Column city */}
-
-                    {/* Start:: Column state */}
-                    <div className="col-4">
-
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor={"keyInputState"}>State</label>
-
-                        {/* Input element text*/}
-                        <input 
-                            type="text" 
-                            name="keyInputState"
-                            placeholder="State"
-                            className="form-control"
-                            autoComplete="off"
-                            maxLength={100}
-                            disabled={loading} 
-                            value={values.keyInputState} 
-                            onChange={handleChange}/>
-
-                        {/* Validation message */}
-                        {errors.keyInputState && 
-                            touched.keyInputState ? 
-                                (<small className="text-danger">{errors.keyInputState}</small>) : 
-                                    null}
-                    
-                    </div>
-                    {/* End:: Column state */}
-
-                </div>
-                {/* End:: Row */}
-
-                {/* Start:: Row */}
-                <div className="row mb-3">
-
                     {/* Start:: Column no of guest */}
                     <div className="col-4">
 
@@ -313,6 +175,12 @@ const Form = ({ onSubmited, onClosed }) => {
                     
                     </div>
                     {/* End:: Column no of guest */}
+
+                </div>
+                {/* End:: Row */}
+
+                {/* Start:: Row */}
+                <div className="row mb-3">
 
                     {/* Start:: Column corporate name */}
                     <div className="col-4">
@@ -370,12 +238,6 @@ const Form = ({ onSubmited, onClosed }) => {
                     </div>
                     {/* End:: Column coroprate address */}
 
-                </div>
-                {/* End:: Row */}
-
-                {/* Start:: Row */}
-                <div className="row mb-3">
-
                     {/* Start:: Column gst no */}
                     <div className="col-4">
 
@@ -403,6 +265,33 @@ const Form = ({ onSubmited, onClosed }) => {
                     
                     </div>
                     {/* End:: Column gst no */}
+
+                </div>
+                {/* End:: Row */}
+
+                {/* Start:: Row */}
+                <div className="row mb-3">
+
+                    {/* Start:: Column table */}
+                    <div className="col-4">
+
+                        {/* Label element */}
+                        <label className="form-label" 
+                            htmlFor={"keyInputTables"}>Tables</label>
+
+                        {/* Input element select*/}
+                        <TableSelect 
+                            name={"keyInputTables"}
+                            onChange={(value) => {setFieldValue("keyInputTables", value)}}/>
+
+                        {/* Validation message */}
+                        {errors.keyInputTables && 
+                            touched.keyInputTables ? 
+                                (<small className="text-danger">{errors.keyInputTables}</small>) : 
+                                    null}
+                    
+                    </div>
+                    {/* End:: Column table */}
 
                     {/* Start:: Column check in date */}
                     <div className="col-4">
@@ -468,18 +357,18 @@ const Form = ({ onSubmited, onClosed }) => {
                 {/* Start:: Row */}
                 <div className="row">
 
-                    {/* Start:: Column table detail */}
+                    {/* Start:: Column food detail */}
                     <div className="col-12">
                         
                         {/* Label element */}
-                        <label className="form-label">Table detail</label>
+                        <label className="form-label">Food detail</label>
 
-                        <TableBookingGrid
+                        {/* <TableBookingGrid
                             pState="ADD"
                             pDefaultRowData={defaultRowData}
-                            onChange={handelChangeTableData}/>
+                            onChange={handelChangeTableData}/> */}
                     </div>                
-                    {/* End:: Column table detail */}
+                    {/* End:: Column food detail */}
 
                 </div>
                 {/* End:: Row */}

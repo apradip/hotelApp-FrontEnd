@@ -17,10 +17,12 @@ import Employees from "../pages/Employees";
 import Rooms from "../pages/Rooms";
 import Tables from "../pages/Tables";
 import Foods from "../pages/Foods";
+import Miscellaneouses from "../pages/Miscellaneouses";
+import Services from "../pages/Services";
 import GuestRooms from "../pages/GuestRooms";
 import GuestTables from "../pages/GuestTables";
 import GuestFoods from "../pages/GuestFoods";
-import GuestMiscellaneous from "../pages/GuestMiscellaneous";
+import GuestMiscellaneouses from "../pages/GuestMiscellaneouses";
 import GuestPayments from "../pages/GuestPayments";
 import Support from "../pages/Support";
 import Help from "../pages/Help";
@@ -51,6 +53,8 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
   const roomRef = useRef(null);
   const tableRef = useRef(null);
   const foodRef = useRef(null);
+  const miscellaneousRef = useRef(null);
+  const serviceRef = useRef(null);
   const bookingAgentRef = useRef(null);
   const guestRoomRef = useRef(null);
   const guestTableRef = useRef(null);
@@ -118,6 +122,14 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
       case "foods":
         foodRef && foodRef.current.changeSearch(text);
         break;
+
+      case "miscellaneouses":
+        miscellaneousRef && miscellaneousRef.current.changeSearch(text);
+        break;
+
+      case "services":
+        serviceRef && serviceRef.current.changeSearch(text);
+        break;
           
       case "guestrooms":
         guestRoomRef && guestRoomRef.current.changeSearch(text);
@@ -181,6 +193,14 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
       case "foods":
         foodRef && foodRef.current.openAdd();
         break;
+
+      case "miscellaneouses":
+        miscellaneousRef && miscellaneousRef.current.openAdd();
+        break;
+
+      case "services":
+        serviceRef && serviceRef.current.openAdd();
+        break;
           
       case "guestrooms":
         guestRoomRef && guestRoomRef.current.openAdd();
@@ -236,13 +256,21 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
       case "rooms":
         roomRef && roomRef.current.openEdit();
         break;
-
+  
       case "tables":
         tableRef && tableRef.current.openEdit();
         break;
 
       case "foods":
         foodRef && foodRef.current.openEdit();
+        break;
+
+      case "miscellaneouses":
+        miscellaneousRef && miscellaneousRef.current.openEdit();
+        break;
+    
+      case "services":
+        serviceRef && serviceRef.current.openEdit();
         break;
           
       case "guestrooms":
@@ -257,9 +285,9 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
         guestFoodRef && guestFoodRef.current.openEdit();
         break;
 
-      case "guestmiscellaneous":
-        guestMiscellaneousRef && guestMiscellaneousRef.current.openEdit();
-        break;
+      // case "guestmiscellaneous":
+      //   guestMiscellaneousRef && guestMiscellaneousRef.current.openEdit();
+      //   break;
           
       case "guestpayments":
         guestPaymentRef && guestPaymentRef.current.openEdit();
@@ -306,6 +334,14 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
 
       case "foods":
         foodRef && foodRef.current.openDelete();
+        break;
+
+      case "miscellaneouses":
+        miscellaneousRef && miscellaneousRef.current.openDelete();
+        break;
+
+      case "services":
+        serviceRef && serviceRef.current.openDelete();
         break;
           
       case "guestrooms":
@@ -397,6 +433,14 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                   <li className={`sidebar-item ${ menuSelected === 'foods' ? 'active' : null}`}
                       onClick={() => {handelClickMenuItem('foods')}}>
                       <NavLink to="/foods" className="sidebar-link">Food</NavLink>
+                  </li>                  
+                  <li className={`sidebar-item ${ menuSelected === 'miscellaneouses' ? 'active' : null}`}
+                      onClick={() => {handelClickMenuItem('miscellaneouses')}}>
+                      <NavLink to="/Miscellaneouses" className="sidebar-link">Miscellaneous</NavLink>
+                  </li>                  
+                  <li className={`sidebar-item ${ menuSelected === 'services' ? 'active' : null}`}
+                      onClick={() => {handelClickMenuItem('services')}}>
+                      <NavLink to="/services" className="sidebar-link">Service</NavLink>
                   </li>                  
                 </ul>
               </li>
@@ -511,6 +555,16 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                                                     onSuccess={handleSuccess}
                                                     onClose={handleClose}/>}/>
 
+              <Route exact path="/miscellaneouses" element={<Miscellaneouses
+                                                    ref={miscellaneousRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
+              <Route exact path="/services" element={<Services
+                                                    ref={serviceRef} 
+                                                    onSuccess={handleSuccess}
+                                                    onClose={handleClose}/>}/>
+
               <Route exact path="/guestrooms" element={<GuestRooms
                                                     ref={guestRoomRef} 
                                                     onSuccess={handleSuccess}
@@ -526,10 +580,10 @@ const ContainerLogin = ({ pEmployeeId, pEmployeeName }) => {
                                                     onSuccess={handleSuccess}
                                                     onClose={handleClose}/>}/>
 
-              <Route exact path="/guestmiscellaneous" element={<GuestMiscellaneous
-                                                    ref={guestMiscellaneousRef} 
-                                                    onSuccess={handleSuccess}
-                                                    onClose={handleClose}/>}/>
+              <Route exact path="/guestmiscellaneous" element = {<GuestMiscellaneouses
+                                                    ref = {guestMiscellaneousRef} 
+                                                    onSuccess = {handleSuccess}
+                                                    onClose = {handleClose}/>}/>
 
               <Route exact path="/guestpayments" element={<GuestPayments
                                                     ref={guestPaymentRef} 

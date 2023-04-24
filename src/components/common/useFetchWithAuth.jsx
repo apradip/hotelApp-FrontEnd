@@ -90,10 +90,26 @@ const useFetchWithAuth = (params) => {
         setLoading(true);
         setData(undefined);
         setError(null);
-
-        await axiosPrivate.put(`${params.url}`, payload)
+        
+        if (payload) {
+            await axiosPrivate.put(`${params.url}`, payload)
+                .then(response => {
+                    if (!response.ok) {
+                        throw Error("Could not update data");
+                    } else {
+                        setData(response.data);
+                    }
+                })
+                .catch((error) => {
+                    setError(error.message);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        } else {
+            await axiosPrivate.put(`${params.url}`)
             .then(response => {
-                if (!response.ok) {
+                if (response.status !== 200) {
                     throw Error("Could not update data");
                 } else {
                     setData(response.data);
@@ -105,6 +121,7 @@ const useFetchWithAuth = (params) => {
             .finally(() => {
                 setLoading(false);
             });
+        }
     };
 
     const doDelete = async () => {

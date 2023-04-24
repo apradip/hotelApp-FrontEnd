@@ -466,18 +466,18 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
     };
 
 	return (
-            <div className="ag-theme-alpine grid">
-                <AgGridReact	
-                    ref={gridRef}
-                    columnDefs={columnDefs}
-                    defaultColDef={defaultColDef}
-                    rowData={null}
-                    rowSelection={"single"}
-                    onGridReady={handleGridReady}
-                    onFirstDataRendered={handleFirstDataRendered}
-                    onSelectionChanged={handleSelectionChanged}
-                    onCellValueChanged={handleCellValueChanged} />
-            </div>
+        <div className="ag-theme-alpine grid">
+            <AgGridReact	
+                ref={gridRef}
+                columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
+                rowData={null}
+                rowSelection={"single"}
+                onGridReady={handleGridReady}
+                onFirstDataRendered={handleFirstDataRendered}
+                onSelectionChanged={handleSelectionChanged}
+                onCellValueChanged={handleCellValueChanged} />
+        </div>
     )
 }
  

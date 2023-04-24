@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { Modal, NavLink } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
@@ -7,14 +7,12 @@ import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
-
 // Start:: form
-const Form = ({pId, pName, onSubmited, onClosed}) => {
+const Form = ({ pId, pName, onSubmited, onClosed }) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const inputRef = useRef(null);
     const { loading, error, doDelete } = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}/${pId}`
+        url: `${contextValues.serviceAPI}/${hotelId}/${pId}`
     });
 
     // Start:: Call delete api
@@ -43,7 +41,6 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
                     className="btn btn-danger"
                     autoFocus
                     disabled={loading}
-                    ref={inputRef} 
                     onClick={onClosed} >
                     Close
                 </button>
@@ -53,15 +50,15 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading || error }
-                    onClick = { handleSave } >
+                    disabled={loading || error}
+                    onClick={handleSave} >
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
-                        </> }
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -75,43 +72,6 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
 };
 // End:: form
 
-// Start:: form
-const FormError = ({pName, onClosed}) => {
-    // Start:: Html
-    return (
-        <form>
-
-            {/* Start:: Modal body */}
-            <Modal.Body>
-                <label className="form-label">Guest <mark><code>{pName}</code></mark>can't be deleted, because there is some activity.</label>
-            </Modal.Body>
-            {/* End:: Modal body */}
-
-            {/* Start:: Modal footer */}
-            <Modal.Footer>
-
-                {/* Start:: Close button */}
-                <button 
-                    type = "button"   
-                    className = "btn btn-danger"
-                    autoFocus
-                    onClick = {onClosed} >
-                    Close
-                </button>
-                {/* End:: Close button */}
-
-            </Modal.Footer>
-            {/* End:: Modal footer */}
-
-        </form>                    
-    );
-    // End:: Html
-
-};
-// End:: form
-
-
-
 
 // Start:: Component
 // props parameters
@@ -121,12 +81,12 @@ const FormError = ({pName, onClosed}) => {
 
 // useImperativeHandle
 // handleShowModal
-const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
+const ServiceDelete = forwardRef(( props, ref ) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const { data, loading, error, doFetch } = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}/${props.pId}`
+        url: `${contextValues.serviceAPI}/${hotelId}/${props.pId}`
     });
 
     // Start :: Show modal 
@@ -148,7 +108,7 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
         props.onDeleted(); 
     };
     // End :: Save 
-
+    
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
         return {
@@ -168,7 +128,7 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
         }
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
+
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
@@ -177,7 +137,7 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
             } catch (err) {
               console.log("Error occured when fetching data");
             }
-          })();
+        })();
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
@@ -189,13 +149,7 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            { data && 
-                (data.balance === 0 && 
-                data.roomsDetail.length === 0 && 
-                data.tablesDetail.length === 0 && 
-                data.miscellaneousesDetail.length === 0 && 
-                data.servicesDetail.length === 0 && 
-                data.expensesPaymentsDetail.length === 0) && 
+            { data &&
                 <Modal 
                     size="sm"
                     show={showModal} >
@@ -203,12 +157,12 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Delete guest</Modal.Title>
+                        <Modal.Title>Delete service</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -217,43 +171,9 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
                     {/* Start:: Form component */}
                     <Form 
                         pId={props.pId} 
-                        pName={props.pName}
+                        pName={data.name}
                         onSubmited={handleSave} 
                         onClosed={handleCloseModal} />
-                        {/* End:: Form component */}
-            </Modal> }
-            {/* End:: Delete modal */}
-
-            {/* Start:: Delete modal */}
-            { data && 
-                (data.balance !== 0 || 
-                data.roomsDetail.length !== 0 ||
-                data.tablesDetail.length !== 0 ||
-                data.miscellaneousesDetail.length !== 0 ||
-                data.servicesDetail.length !== 0 ||
-                data.expensesPaymentsDetail.length !== 0) && 
-                <Modal 
-                    size="sm"
-                    show={showModal} >
-
-                    {/* Start:: Modal header */}
-                    <Modal.Header>
-                        {/* Header text */}
-                        <Modal.Title>Delete guest error</Modal.Title>
-
-                        {/* Close button */}
-                        <NavLink 
-                            className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
-                            <i className="align-middle"><X/></i>
-                        </NavLink>
-                    </Modal.Header>
-                    {/* End:: Modal header */}
-
-                    {/* Start:: Form component */}
-                    <FormError 
-                        pName = {props.pName}
-                        onClosed = {handleCloseModal} />
                         {/* End:: Form component */}
             </Modal>}
             {/* End:: Delete modal */}
@@ -265,4 +185,4 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
 // End:: Component
 
 
-export default GuestMiscellaneousDelete;
+export default ServiceDelete;

@@ -4,11 +4,10 @@ import { toast } from "react-toastify";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
-import Add from "../components/guestRoom/GuestRoomAdd";
-import Card from "../components/guestRoom/GuestRoomCard";
+import Add from "../components/service/ServiceAdd";
+import Card from "../components/service/ServiceCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-
 
 // Start:: Component
 // props parameters
@@ -21,7 +20,7 @@ import useFetchWithAuth from "../components/common/useFetchWithAuth";
 // openEdit 
 // openDelete
 // close
-const GuestMiscellaneous = forwardRef(( props, ref ) => {
+const Services = forwardRef(( props, ref ) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const itemPerRow = contextValues.itemPerRow;
@@ -36,7 +35,7 @@ const GuestMiscellaneous = forwardRef(( props, ref ) => {
     const indexOfLastItem = selectedPage * itemPerPage;
     const indexOfFirstItem = indexOfLastItem - itemPerPage;
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestRoomAPI}/${hotelId}`,
+        url: `${contextValues.serviceAPI}/${hotelId}`,
         params: {
             search: search
         }
@@ -112,12 +111,6 @@ const GuestMiscellaneous = forwardRef(( props, ref ) => {
                 props.onSuccess();
                 break;                
 
-            case "addPayment":
-                toast.success("Payment successfully added");
-                setDataChanged(true);
-                props.onSuccess();
-                break;
-    
             default:                
                 break;                
         }
@@ -184,24 +177,19 @@ const GuestMiscellaneous = forwardRef(( props, ref ) => {
         const colKey = `col_${pData._id}`;
 
         return (
-            <div className="col-xl-4 col-md-4 m-0" key={colKey}>
+
+            <div className="col-xl-4 col-md-4 m-0" key={colKey} >
                 <Card 
                     ref={(el) => cardRefs.current[itemIdx] = el}
                     pIndex={itemIdx}
-                    pId={pData._id} 
-                    pRoomNos={pData.roomNos}
+                    pId={pData._id}
                     pName={pData.name}
-                    pMobile={pData.mobile}
-                    pAddress={pData.address + ", " + pData.city + ", " + pData.state}
-                    pCheckInDate={pData.checkInDate}
-                    pCheckOutDate={pData.checkOutDate}
-                    pTotalExpenseAmount={pData.totalExpenseAmount}
-                    pTotalPaidAmount={pData.totalPaidAmount}
+                    pPrice={pData.price}
+                    pDescription={pData.description}
                     onEdited={() => {handleSuccess("edit")}}
                     onDeleted={() => {handleSuccess("delete")}} 
-                    onPaymentAdded={() => {handleSuccess("addPayment")}} 
                     onClosed={close} 
-                    onActivated={handleActivated}/>                
+                    onActivated={handleActivated} />                
             </div>);
     };
     // End:: show all data in card format
@@ -213,20 +201,20 @@ const GuestMiscellaneous = forwardRef(( props, ref ) => {
         }
     });
     // End:: forward reff change search and open add/edit/delete modal
-
+    
     // Start:: fetch data list from api
     useEffect(() => {
         (async () => {
             try {
-              await doFetch();
-              setDataChanged(false);
+                await doFetch();
+                setDataChanged(false);
             } catch (err) {
-              console.log("Error occured when fetching data");
+                console.log("Error occured when fetching data");
             }
-          })();
+        })();
     }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
-
+    
     useEffect(() => {
         error && toast.error(error);
     }, [data, error, loading]);
@@ -237,8 +225,8 @@ const GuestMiscellaneous = forwardRef(( props, ref ) => {
             {/* Seart :: Bread crumb */}
             <Breadcrumb className="mt-5">
                 <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
-                <Breadcrumb.Item href = "/">Transaction</Breadcrumb.Item>
-                <Breadcrumb.Item active>Guest miscellaneous</Breadcrumb.Item>
+                <Breadcrumb.Item href = "/">Master</Breadcrumb.Item>
+                <Breadcrumb.Item active>Service</Breadcrumb.Item>
             </Breadcrumb>
             {/* End :: Bread crumb */}
 
@@ -292,17 +280,19 @@ const GuestMiscellaneous = forwardRef(( props, ref ) => {
             </div>
             {/* End :: display data */}
 
-            {/* Start :: add employee component */}
+            {/* Start :: add table component */}
             <Add 
                 ref={addRef}   
                 onAdded={() => {handleSuccess("add")}}
                 onClosed={close} />
-            {/* End :: add employee component */}
+            {/* End :: add table component */}
 
         </>
-    )
+    );
     // End:: Html
 
 });
+// End:: Component
 
-export default GuestMiscellaneous;
+
+export default Services;
