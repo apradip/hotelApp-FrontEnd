@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import Dropdown from 'react-bootstrap/Dropdown';
 import { LogOut } from "react-feather";
 
 import { HotelId } from "../../App";
@@ -15,10 +15,6 @@ const Logout = ({ pEmployeeId, onLogout }) => {
         url: `${contextValues.logoutAPI}/${hotelId}/${pEmployeeId}`
     });
 
-	// useEffect(() => {
-	// 	pEmployeeId && !error && data === "OK" && onLogout();
-    // }, [data, loading, error, pEmployeeId]);
-
 	// Strat:: logout   
 	const handleLogout = async () => {
 		await doLogout();
@@ -31,11 +27,10 @@ const Logout = ({ pEmployeeId, onLogout }) => {
 
 	// Start:: Html
     return ( 
-		<Link className="dropdown-item" 
-			href="window.location" 
-			onClick = { handleLogout }>
-			<LogOut className="mr-2" size={16}/>Sign out
-		</Link>
+		<Dropdown.Item eventKey="3"
+			onClick={handleLogout}>
+			<LogOut className="mr-2" size={16} />Sign out
+		</Dropdown.Item>
     );
 	// End:: Html
 	

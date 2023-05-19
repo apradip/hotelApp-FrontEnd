@@ -3,8 +3,8 @@ import { Breadcrumb } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 import { useStateContext } from "../contexts/ContextProvider";
-import AccessLevelAdd from "../components/accessLevel/AccessLevelAdd";
-import AccessLevelCard from "../components/accessLevel/AccessLevelCard";
+import Add from "../components/accessLevel/AccessLevelAdd";
+import Card from "../components/accessLevel/AccessLevelCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
@@ -176,7 +176,7 @@ const AccessLevels = forwardRef(( props, ref ) => {
 
         return (
             <div className="col-xl-4 col-md-4 m-0" key={colKey}>
-                <AccessLevelCard 
+                <Card 
                     ref = { (el) => cardRefs.current[itemIdx] = el }
                     pIndex = { itemIdx }
                     pId = { pData._id } 
@@ -217,21 +217,42 @@ const AccessLevels = forwardRef(( props, ref ) => {
 
     // Start:: Html
     return ( 
-        <>
+        <div className="content-wrapper">
+
             {/* Seart :: Bread crumb */}
-            <Breadcrumb className="mt-5">
-                <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
-                <Breadcrumb.Item href = "/">Master</Breadcrumb.Item>
-                <Breadcrumb.Item active>Role</Breadcrumb.Item>
-            </Breadcrumb>
+            <div className="content-header">
+                <div className="container-fluid">   
+                    <div className="row">
+                        <div className="col-sm-4 m-0">
+                            <h1 className="text-dark">Role</h1>
+                        </div>
+
+                        <div className="col-sm-8">
+                            <Breadcrumb className="breadcrumb float-sm-right">
+                                <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
+                                <Breadcrumb.Item href = "/">Master</Breadcrumb.Item>
+                                <Breadcrumb.Item active>Role</Breadcrumb.Item>
+                            </Breadcrumb>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {/* End :: Bread crumb */}
 
             {/* Start :: display data */}
-            <div className="row">
-                <div className="col-12">
-                    <div className="card">
+            <section className="content">
+                <div className="container-fluid">
+                    <div className="card mb-0">
+
                         {/* Start :: Header & operational panel */}
-                        <div className="card-header mx-3">
+                        <div className="card-header">
+                            {/* Start :: Display data count */}
+                            <div className="col-12 text-danger">
+                                {!loading && 
+                                    data && 
+                                        `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
+                            </div>
+                            {/* End :: Display data count */}
                         </div>
                         {/* End :: Header & operational panel */}
 
@@ -248,18 +269,11 @@ const AccessLevels = forwardRef(( props, ref ) => {
                         </div>
                         {/* End :: Display data */}
                         
+                        {/* Start :: Footer & operational panel */}
                         <div className="card-footer ">
                             <div className="row">
-                                {/* Start :: Display data count */}
-                                <div className="col-4 text-danger">
-                                    {!loading && 
-                                        data && 
-                                            `display count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
-                                </div>
-                                {/* End :: Display data count */}
-
                                 {/* Start :: Pagination */}
-                                <div className="col-8 text-muted d-flex justify-content-end">
+                                <div className="col-12 d-flex justify-content-end">
                                     {
                                             data && 
                                                 <Paging
@@ -271,19 +285,21 @@ const AccessLevels = forwardRef(( props, ref ) => {
                                 {/* End :: Pagination */}
                             </div>
                         </div>
+                        {/* End :: Footer & operational panel */}
+
                     </div>
                 </div>
-            </div>
+            </section>
             {/* End :: display data */}
 
-            {/* Start :: add employee component */}
-            <AccessLevelAdd 
+            {/* Start :: add component */}
+            <Add 
                 ref={addRef}   
                 onAdded={() => {handleSuccess("add")}}
                 onClosed={close}/>
-            {/* End :: add employee component */}
+            {/* End :: add component */}
 
-        </>
+        </div>
     )
     // End:: Html
 

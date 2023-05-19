@@ -1,38 +1,39 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react"
-import { Modal, NavLink } from "react-bootstrap"
-import { useFormik } from "formik"
-import { toast } from "react-toastify"
-import { X } from "react-feather"
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink } from "react-bootstrap";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { X } from "react-feather";
+import { subStr } from "../common/Common";
 
-import { HotelId } from "../../App"
-import { useStateContext } from "../../contexts/ContextProvider"
-import { guestPaymentSchema } from "../../schemas"
-import useFetchWithAuth from "../common/useFetchWithAuth"
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { guestPaymentSchema } from "../../schemas";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
 const Form = ({pGuestId, pName, pMobile, 
                pCorporateName, pCorporateAddress, 
                pBalance, onSubmited, onClosed}) => {
-    const hotelId = useContext(HotelId)
-    const contextValues = useStateContext()
-    const [validateOnChange, setValidateOnChange] = useState(false)
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+    const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.guestPaymentAPI}/${hotelId}/${pGuestId}`
-    })
+    });
 
     // Start:: Form validate and save data
     const {values, errors, touched, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputPaymentAmount: pBalance,
-            keyInputNarration: "",
+            keyInputNarration: ""
         },
         validationSchema: guestPaymentSchema,
         validateOnChange,
         onSubmit: async (values) => {
             const payload = {   
-                amount: parseInt(values.keyInputPaymentAmount), 
-                narration: values.keyInputNarration,
+                amount: values.keyInputPaymentAmount, 
+                narration: values.keyInputNarration
             }
 
             await doInsert(payload)
@@ -65,24 +66,24 @@ const Form = ({pGuestId, pName, pMobile,
                 {/* Start:: Row */}
                 <div className="row mb-3">
                     {/* End:: Column name / corporate name */}
-                    {pMobile ?
+                    {pCorporateName ?
                         <div className="col-6">
-                            <label className="form-label mr-2">Name :</label>
-                            <label className="form-label">{pName}</label>
+                            <label className="form-label mr-2">Company :</label>
+                            <label className="form-label">{subStr(pCorporateName, 20)}</label>
                         </div>
                     :
                         <div className="col-6">
-                            <label className="form-label mr-2">Company :</label>
-                            <label className="form-label">{pCorporateName}</label>
+                            <label className="form-label mr-2">Name :</label>
+                            <label className="form-label">{subStr(pName, 20)}</label>
                         </div>
                     }
                     {/* End:: Column name / corporate name */}
 
                     {/* Start:: Column mobile no. / corporate address */}
-                    {pMobile ?
+                    {pCorporateName ?
                         <div className="col-6">
-                            <label className="form-label mr-2">Mobile :</label>
-                            <label className="form-label">{pMobile}</label>
+                            <label className="form-label mr-2">Address :</label>
+                            <label className="form-label">{subStr(pCorporateAddress, 20)}</label>
                         </div>
                         :
                         <div className="col-6">
@@ -103,7 +104,7 @@ const Form = ({pGuestId, pName, pMobile,
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputPaymentAmount"}>Payment amount</label>
+                            htmlFor={"keyInputPaymentAmount"}>Amount :</label>
 
                         {/* Input element text*/}
                         <input 
@@ -138,7 +139,7 @@ const Form = ({pGuestId, pName, pMobile,
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputGST"}>Narration</label>
+                            htmlFor={"keyInputGST"}>Narration :</label>
 
                         {/* Input element select*/}
                         <textarea
@@ -265,7 +266,7 @@ const GuestPaymentAdd = forwardRef((props, ref) => {
                 {/* Start:: Modal header */}
                 <Modal.Header>
                     {/* Header text */}
-                    <Modal.Title>Add payment</Modal.Title>
+                    <Modal.Title>Payment</Modal.Title>
 
                     {/* Close button */}
                     <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>

@@ -1,7 +1,7 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
 
-const Navbar = () => {
+const Header = () => {
     return (
         <nav className="navbar navbar-expand navbar-light fixed-top" style={{"padding":"0px", "backgroundColor": "#575989"}}>
             <div id="header-sidebar">
@@ -18,4 +18,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default Header

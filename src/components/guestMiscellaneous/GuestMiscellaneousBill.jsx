@@ -1,29 +1,30 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react"
-import { Modal, NavLink } from "react-bootstrap"
-import { X } from "react-feather"
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink } from "react-bootstrap";
+import { X } from "react-feather";
+import { subStr } from "../common/Common";
 
-import { HotelId } from "../../App"
-import { useStateContext } from "../../contexts/ContextProvider"
-import BillGrid from "./MiscellaneousBillGrid"
-import useFetchWithAuth from "../common/useFetchWithAuth"
-import { formatDDMMYYYY } from "../common/Common"
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import BillGrid from "./MiscellaneousBillGrid";
+import useFetchWithAuth from "../common/useFetchWithAuth";
+import { formatDDMMYYYY, formatTime12Hour, formatBillNo } from "../common/Common";
 
 // Start:: form
-const Form = ({pTransactionId, pTransactionDate, pTransactionTime, 
+const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTime, 
                pGuestId, pName, pMobile, pGuestCount, 
                pCorporateName, pCorporateAddress, pGstNo, 
                pData, onClosed}) => {
 
     // Strat:: close form    
     const handleClose = () => {
-        onClosed()
-    }
+        onClosed();
+    };
     // End:: close form    
 
     // Strat:: print form    
     const handlePrint = () => {
         // onPrinted()
-    }
+    };
     // End:: print form    
 
     // Start:: Html
@@ -34,76 +35,71 @@ const Form = ({pTransactionId, pTransactionDate, pTransactionTime,
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div>
-                    {/* Start:: Row */}
-                    <div className="row mb-3">
+                <div className="row">
 
-                        {/* Start:: Column transaction date */}
-                        <div className="col-4">
-                            <label className="form-label mr-2">Date :</label>
-                            <label className="form-label">{formatDDMMYYYY(pTransactionDate)}</label>
-                        </div>
-                        {/* End:: Column transaction date */}
-
-                        {/* Start:: Column transaction time */}
-                        <div className="col-4">
-                            <label className="form-label mr-2">Time :</label>
-                            <label className="form-label">{pTransactionTime}</label>
-                        </div>
-                        {/* End:: Column transaction time */}
-                        
+                    {/* Start:: Column transaction date */}
+                    <div className="col-5">
+                        <label className="form-label mr-2">Bill No. :</label>
+                        <label className="form-label">{formatBillNo(pTransactionNo)}</label>
                     </div>
-                    {/* End:: Row */}
+                    {/* End:: Column transaction date */}
 
-                    {/* Start:: Row */}
-                    <div className="row mb-3">
-
-                        {/* Start:: Column name / company */}
-                        {pName ? 
-                            <div className="col-4">
-                                <label className="form-label mr-2">Name :</label>
-                                <label className="form-label">{pName}</label>
-                            </div>
-                        :
-                            <div className="col-4">
-                                <label className="form-label mr-2">Company :</label>
-                                <label className="form-label">{pCorporateName}</label>
-                            </div>
-                        }
-                        {/* End:: Column name / company */}
-
-                        {/* Start:: Column mobile no / company address */}
-                        {pName ? 
-                            <div className="col-4">
-                                <label className="form-label mr-2">Mobile :</label>
-                                <label className="form-label">{pMobile}</label>
-                            </div>
-                        :
-                            <div className="col-4">
-                                <label className="form-label mr-2">Address :</label>
-                                <label className="form-label">{pCorporateAddress}</label>
-                            </div>
-                        }
-                        {/* End:: Column mobile no / company address */}
-
-                        {/* Start:: Column mobile no / company address */}
-                        {pName ? 
-                            <div className="col-4">
-                                <label className="form-label mr-2">Guest count :</label>
-                                <label className="form-label">{pGuestCount}</label>
-                            </div>
-                        :
-                            <div className="col-4">
-                                <label className="form-label mr-2">GST No. :</label>
-                                <label className="form-label">{pGstNo}</label>
-                            </div>
-                        }
-                        {/* End:: Column mobile no / company address */}
-
+                    {/* Start:: Column transaction date */}
+                    <div className="col-5">
+                        <label className="form-label mr-2">Date :</label>
+                        <label className="text-muted">{formatDDMMYYYY(pTransactionDate)}</label>
                     </div>
-                    {/* End:: Row */}
+                    {/* End:: Column transaction date */}
+
+                    {/* Start:: Column transaction time */}
+                    <div className="col-2">
+                        <label className="form-label mr-2">Time :</label>
+                        <label className="text-muted">{formatTime12Hour(pTransactionTime)}</label>
+                    </div>
+                    {/* End:: Column transaction time */}
+                    
                 </div>
+                {/* End:: Row */}
 
+                {/* Start:: Row */}
+                <div className="row">
+
+                    {/* Start:: Column name / company */}
+                    {pCorporateName ? 
+                        <div className="col-5">
+                            <label className="form-label mr-2">Company :</label>
+                            <label className="text-muted">{subStr(pCorporateName, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-5">
+                            <label className="form-label mr-2">Name :</label>
+                            <label className="text-muted">{subStr(pName, 30)}</label>
+                        </div>
+                    }
+                    {/* End:: Column name / company */}
+
+                    {/* Start:: Column mobile no / company address */}
+                    {pCorporateName ? 
+                        <div className="col-5">
+                            <label className="form-label mr-2">Address :</label>
+                            <label className="text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-5">
+                            <label className="form-label mr-2">Mobile :</label>
+                            <label className="text-muted">{pMobile}</label>
+                        </div>
+                    }
+                    {/* End:: Column mobile no / company address */}
+
+                    {/* Start:: Column mobile no / company address */}
+                    <div className="col-2">
+                        <label className="form-label mr-2">Guest count :</label>
+                        <label className="text-muted">{pGuestCount}</label>
+                    </div>
+                    {/* End:: Column mobile no / company address */}
+
+                </div>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
@@ -151,10 +147,10 @@ const Form = ({pTransactionId, pTransactionDate, pTransactionTime,
             {/* End:: Modal footer */}
 
         </form> 
-    )
+    );
     // End:: Html
 
-}
+};
 // End:: form
 
 
@@ -162,7 +158,7 @@ const Form = ({pTransactionId, pTransactionDate, pTransactionTime,
 const FormError = ({onClosed}) => {
     // Strat:: close form    
     const handleClose = () => {
-        onClosed()
+        onClosed();
     };
     // End:: close form    
     
@@ -198,11 +194,10 @@ const FormError = ({onClosed}) => {
             {/* End:: Modal footer */}
 
         </form> 
-    )
+    );
     // End:: Html
-}
+};
 // End:: form error
-
 
 
 // Start:: Component
@@ -222,53 +217,51 @@ const FormError = ({onClosed}) => {
 // useImperativeHandle
 // handleShowModal
 const GuestMiscellaneousBill = forwardRef((props, ref) => {    
-    const hotelId = useContext(HotelId)
-    const contextValues = useStateContext()
-    const [showModal, setShowModal] = useState(false)
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+    const [showModal, setShowModal] = useState(false);
     const { data, doFetch } = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}/${props.pTransactionId}`
-    })
+    });
 
     // Start:: Show modal
     const handleShowModal = () => {
-        setShowModal(true)
-    }
+        setShowModal(true);
+    };
     // End:: Show modal
 
     // Start:: Close modal
     const handleCloseModal = () => {
-        setShowModal(false)
-    }
+        setShowModal(false);
+    };
     // End:: Close modal
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    })
+        return {handleShowModal};
+    });
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
         document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal()
+            if (event.key === "Escape") handleCloseModal();
         })
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal)
-        }
-    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
+        return () => {document.removeEventListener("keydown", handleCloseModal)};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
             try {
-                showModal && await doFetch()
+                showModal && await doFetch();
             } catch (err) {
-                console.log("Error occured when fetching data")
+                console.log("Error occured when fetching data");
             }
-          })()
-    }, [showModal])        // eslint-disable-line react-hooks/exhaustive-deps
+          })();
+    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Html
@@ -282,7 +275,7 @@ const GuestMiscellaneousBill = forwardRef((props, ref) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Miscellaneous items bill</Modal.Title>
+                        <Modal.Title>Bill detail</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
@@ -296,6 +289,7 @@ const GuestMiscellaneousBill = forwardRef((props, ref) => {
                     {/* Start:: Form component */}
                     <Form
                         pTransactionId = {props.pTransactionId} 
+                        pTransactionNo = {props.pTransactionNo} 
                         pTransactionDate = {props.pTransactionDate}
                         pTransactionTime = {props.pTransactionTime}
                         pGuestId = {props.pGuestId}
@@ -318,7 +312,7 @@ const GuestMiscellaneousBill = forwardRef((props, ref) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Bill error</Modal.Title>
+                        <Modal.Title>Error</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
@@ -338,11 +332,11 @@ const GuestMiscellaneousBill = forwardRef((props, ref) => {
             }
             {/* End:: Edit modal */}
         </>
-    )
+    );
     // End:: Html
 
-})
+});
 // End:: Component
 
 
-export default GuestMiscellaneousBill
+export default GuestMiscellaneousBill;

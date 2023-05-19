@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, NavLink } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import Dropdown from 'react-bootstrap/Dropdown';
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X, User } from "react-feather";
@@ -257,7 +257,7 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
 
 
 // Start:: Component
-const Profile = ({ pEmployeeId, onEdited, onClosed }) => {
+const Profile = ({pEmployeeId, onEdited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -318,11 +318,10 @@ const Profile = ({ pEmployeeId, onEdited, onClosed }) => {
         <div className="text-left">
 
             {/* Start:: Profile link */}
-            <Link className="dropdown-item" 
-                href="window.location" 
-                onClick = { handleShowModal }>
-			    <User className="mr-2" size={16} />Profile
-            </Link>
+            <Dropdown.Item eventKey="1"
+                onClick={handleShowModal}>
+                <User className="mr-2" size={16} />Profile
+            </Dropdown.Item>
             {/* End:: Profile link */}
 
             {/* Start:: modal */}
@@ -337,7 +336,7 @@ const Profile = ({ pEmployeeId, onEdited, onClosed }) => {
                     {/* Close button */}
                     <NavLink 
                         className="nav-icon" href="#" 
-                        onClick = { handleCloseModal }>
+                        onClick={handleCloseModal} >
                         <i className="align-middle"><X/></i>
                     </NavLink>
                 </Modal.Header>

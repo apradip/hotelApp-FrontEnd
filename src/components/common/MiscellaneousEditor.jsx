@@ -1,10 +1,11 @@
 import React, { useContext, forwardRef, useImperativeHandle, useEffect, useState } from "react";
+import { Form } from "react-bootstrap";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
-const MiscellaneousEditor = forwardRef(( props, ref ) => {	
+const MiscellaneousEditor = forwardRef((props, ref) => {	
 	const hotelId = useContext(HotelId);
 	const contextValues = useStateContext();
 	const selectInput = React.createRef();
@@ -55,18 +56,18 @@ const MiscellaneousEditor = forwardRef(( props, ref ) => {
 
 	return (
 		data && 
-			<select
-				ref={selectInput}
-				multiple={false}
-				value={defaultItem}
-				onChange={handleChange}
-				style={{border: "none", height: "99%", width: "100%"}} >
+			<Form.Select
+				ref = {selectInput}
+				multiple = {false}
+				value = {defaultItem}
+				onChange = {handleChange}
+				style = {{border: "none", height: "99%", width: "100%"}} >
 
 				{listItem && listItem.map((item) => {
 					return(<option key={item._id} value={item._id}>{item.name}</option>)
 		 		})}
-			</select>
+			</Form.Select>
     );
-})
+});
  
 export default MiscellaneousEditor;

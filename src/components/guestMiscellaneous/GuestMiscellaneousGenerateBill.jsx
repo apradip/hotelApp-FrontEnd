@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react"
 import { Modal, NavLink } from "react-bootstrap"
 import { X } from "react-feather"
+import { subStr } from "../common/Common"
 
 import { HotelId } from "../../App"
 import { useStateContext } from "../../contexts/ContextProvider"
@@ -27,56 +28,44 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div>
-                    {/* Start:: Row */}
-                    <div className="row mb-3">
+                <div className="row">
 
-                        {/* Start:: Column name / company */}
-                        {pName ? 
-                            <div className="col-4">
-                                <label className="form-label mr-2">Name :</label>
-                                <label className="form-label">{pName}</label>
-                            </div>
-                        :
-                            <div className="col-4">
-                                <label className="form-label mr-2">Company :</label>
-                                <label className="form-label">{pCorporateName}</label>
-                            </div>
-                        }
-                        {/* End:: Column name / company */}
+                    {/* Start:: Column name / company */}
+                    {pCorporateName ? 
+                        <div className="col-5">
+                            <label className="form-label mr-2">Company :</label>
+                            <label className="text-muted">{subStr(pCorporateName, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-5">
+                            <label className="form-label mr-2">Name :</label>
+                            <label className="text-muted">{subStr(pName, 30)}</label>
+                        </div>
+                    }
+                    {/* End:: Column name / company */}
 
-                        {/* Start:: Column mobile no / company address */}
-                        {pName ? 
-                            <div className="col-4">
-                                <label className="form-label mr-2">Mobile :</label>
-                                <label className="form-label">{pMobile}</label>
-                            </div>
-                        :
-                            <div className="col-4">
-                                <label className="form-label mr-2">Address :</label>
-                                <label className="form-label">{pCorporateAddress}</label>
-                            </div>
-                        }
-                        {/* End:: Column mobile no / company address */}
+                    {/* Start:: Column mobile no / company address */}
+                    {pCorporateName ? 
+                        <div className="col-5">
+                            <label className="form-label mr-2">Address :</label>
+                            <label className="text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-5">
+                            <label className="form-label mr-2">Mobile :</label>
+                            <label className="text-muted">{pMobile}</label>
+                        </div>
+                    }
+                    {/* End:: Column mobile no / company address */}
 
-                        {/* Start:: Column mobile no / company address */}
-                        {pName ? 
-                            <div className="col-4">
-                                <label className="form-label mr-2">Guest count :</label>
-                                <label className="form-label">{pGuestCount}</label>
-                            </div>
-                        :
-                            <div className="col-4">
-                                <label className="form-label mr-2">GST No. :</label>
-                                <label className="form-label">{pGstNo}</label>
-                            </div>
-                        }
-                        {/* End:: Column mobile no / company address */}
-
+                    {/* Start:: Column mobile no / company address */}
+                    <div className="col-2">
+                        <label className="form-label mr-2">Guest count :</label>
+                        <label className="text-muted">{pGuestCount}</label>
                     </div>
-                    {/* End:: Row */}
-                </div>
+                    {/* End:: Column mobile no / company address */}
 
+                </div>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
@@ -86,7 +75,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     <div className="col-12">
 
                         {/* Label element */}
-                        <label className="form-label">Bill list :</label>
+                        <label className="form-label">Bills :</label>
 
                         {/* Start:: Column miscellaneous detail */}
                         <SummeryBillGrid
@@ -179,7 +168,6 @@ const FormError = ({onClosed}) => {
 // End:: form error
 
 
-
 // Start:: Component
 // props parameters
 // pGuestId
@@ -255,7 +243,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Miscellaneous items bill</Modal.Title>
+                        <Modal.Title>Bill summery</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
@@ -288,7 +276,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Bill error</Modal.Title>
+                        <Modal.Title>Error</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
@@ -303,7 +291,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                     <FormError 
                         onClosed = {handleCloseModal} />
                         {/* End:: Form component */}
-                    </Modal>
+                </Modal>
             }
             {/* End:: Edit modal */}
         </>

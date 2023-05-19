@@ -1,14 +1,24 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Table, Card, Dropdown } from "react-bootstrap";
+import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Card, Dropdown, Stack} from "react-bootstrap";
+// import TimeElapsed from "../common/TimeElapsed";
+import {NavLink} from "react-router-dom";
+import {Edit3, ShoppingBag, CreditCard, LogOut, ChevronDown} from "react-feather";
 
-import { Edit3, Scissors, CreditCard, LogOut } from "react-feather";
-import { subStr, formatINR } from "../common/Common";
-import { formatDDMMYYYY } from "../common/Common";
+import {subStr, formatINR} from "../common/Common";
+import {formatDDMMYYYY} from "../common/Common";
+
 import View from "./GuestRoomView";
 import Edit from "./GuestRoomEdit";
 import Delete from "./GuestRoomDelete";
 import AddPayment from "../guestPayment/GuestPaymentAdd";
 
+
+const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
+    <NavLink to="#" className="dropdown" ref={ref} 
+        onClick={(e) => {e.preventDefault(); onClick(e);}}>
+      {children}
+    </NavLink>
+));
 
 // Start:: Component
 // props parameters
@@ -92,128 +102,99 @@ const GuestRoomCard = forwardRef((props, ref) => {
     return (
         <>
             {/* Start :: card component */}
-            <Card className="border"
-                ref={ref}
+            <Card 
+                key={props.pIndex}
                 index={props.pIndex}
+                className={"border"}
                 border={active ? "info" : focus ? "primary" : ""}  
+                ref={ref}
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
                                         if (e.detail === 1) {
-                                            setActive(!active); 
-                                            props.onActivated(props.pIndex);
+                                            setActive(!active) 
+                                            props.onActivated(props.pIndex)
                                         }    
                                         else if (e.detail === 2) {
-                                            handelOpenView();
+                                            handelOpenView()
                                         }  
                                    }}>
 
-                <Card.Body className="pt-3 pl-1 pb-1 pr-1 m-0 card-element">
-                    
-                    {/* Start:: card header */}
-                    <Card.Subtitle>
-                        {/* Start:: Row */}
-                        <div className="row">
-                            {/* Start:: Column name */}
-                            <div className="col-md-10">
+                <Card.Body className="text-sm p-1">
+                    <Stack gap={1}>
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-10 text-left">
                                 <h4>{subStr(props.pRoomNos, 20)}</h4>
-                            </div>
-                            {/* End:: Column name */}
-                            
+                            </span>
+
                             {/* Start:: Column menu */}
-                            <div className="col-md-2 text-right">
+                            <span className="col-2 text-right">
                                 {/* Start:: operational menu */}
-                                <Dropdown autoClose="true">
-                                    <Dropdown.Toggle 
-                                        variant="light" 
-                                        size="sm"
-                                        align="end"
-                                        drop="down" />
+                                <Dropdown>
+                                    <Dropdown.Toggle as={CustomToggle}>
+                                        <ChevronDown size={16}/>
+                                    </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
-                                        {/* Start:: edit menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="pl-2"
+                                        <Dropdown.Item eventKey="1" 
                                             onClick={handelOpenEdit}>
-                                            <span 
-                                                className="pr-5">
-                                                <Edit3 className="feather-16 mr-3"/>Edit
-                                            </span>
+                                            <Edit3 className="feather-16 mr-3"/>Edit
                                         </Dropdown.Item>
-                                        {/* End:: edit menu */}
 
-                                        {/* Start:: delete menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="m-0 pl-2"
-                                            onClick={handelOpenDelete} >
-                                                <span 
-                                                    className="pr-5">
-                                                    <Scissors className="feather-16 mr-3"/>Delete
-                                                </span>
+                                        <Dropdown.Item eventKey="2"
+                                            onClick = {handelOpenDelete}>
+                                            <ShoppingBag className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>
-                                        {/* End:: delete menu */}
 
-                                        {/* Start:: payment menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="m-0 pl-2"
-                                            onClick={handelOpenPayment} >
-                                                <span 
-                                                    className="pr-5">
-                                                    <CreditCard className="feather-16 mr-3"/>Payment
-                                                </span>
+                                        <Dropdown.Item eventKey="3" 
+                                            onClick = {handelOpenPayment}>
+                                            <CreditCard className="feather-16 mr-3"/>Payment
                                         </Dropdown.Item>
-                                        {/* End:: payment menu */}
 
-                                        {/* Start:: checkout menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="m-0 pl-2"
-                                            onClick={handelOpenCheckout} >
-                                                <span 
-                                                    className="pr-5">
-                                                    <LogOut className="feather-16 mr-3"/>Check out
-                                                </span>
+                                        {/* <Dropdown.Item eventKey="4"
+                                            onClick = {handelOpenPayment}>
+                                            <CreditCard className="feather-16 mr-3"/>Payment
+                                        </Dropdown.Item> */}
+
+                                        <Dropdown.Item eventKey="5"
+                                            onClick = {handelOpenCheckout}>
+                                            <LogOut className="feather-16 mr-3"/>Check out
                                         </Dropdown.Item>
-                                        {/* End:: checkout menu */}
-
                                     </Dropdown.Menu>
-                                    
                                 </Dropdown>
                                 {/* End:: operational menu */}
-                            </div>
+                            </span>
                             {/* End:: Column menu */}
-                        </div>
-                        {/* End:: Row */}
-                    </Card.Subtitle>
-                    {/* End:: card header */}
+                        </Stack>
 
-                    {/* Start:: card body */}
-                    <Table striped size="sm" className="text-muted mb-0 mt-2">
-                        <tbody>
-                            <tr>
-                                <td colSpan="2">{subStr(props.pName, 45)}</td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">{subStr(props.pAddress, 45)}</td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">{"Mobile : " + props.pMobile}</td>
-                            </tr>
-                            <tr>
-                                <td>Check In : {formatDDMMYYYY(props.pCheckInDate)}</td>
-                                <td className="text-danger">Check Out : {formatDDMMYYYY(props.pCheckOutDate)}</td>
-                            </tr>
-                            <tr>
-                                <td >Expense : {formatINR(props.pTotalExpenseAmount)}</td>
-                                <td className="text-danger">Due : {formatINR(props.pTotalExpenseAmount - props.pTotalPaidAmount)}</td>
-                            </tr>
-                        </tbody>                            
-                    </Table>
-                    {/* End:: card body */}
+                        <Stack gap={0}>
+                            <div className="col-12">{subStr(props.pName, 45)}</div>
+                        </Stack>
 
+                        <Stack gap={0}>
+                            <div className="col-12">{subStr(props.pAddress, 45)}</div>
+                        </Stack>        
+
+                        <Stack gap={0}>
+                            <div className="col-12">Mobile : {props.pMobile}</div>
+                        </Stack>        
+
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left">
+                                Check In : {formatDDMMYYYY(props.pCheckInDate)}</span>
+                                
+                            <span className="col-6 text-right text-danger">
+                                Check Out : {formatDDMMYYYY(props.pCheckOutDate)}</span>
+                        </Stack>
+
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left">
+                                Expense : {formatINR(props.pTotalExpenseAmount)}</span>
+                                
+                            <span className="col-6 text-right text-danger">
+                                Due : {formatINR(props.pTotalExpenseAmount - props.pTotalPaidAmount)}</span>
+                        </Stack>                        
+                    </Stack>
                 </Card.Body>
             </Card>
             {/* End :: card component */}

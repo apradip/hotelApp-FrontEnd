@@ -1,14 +1,25 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Table, Card, Dropdown } from "react-bootstrap"
+import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Card, Dropdown, Stack} from "react-bootstrap";
+import TimeElapsed from "../common/TimeElapsed";
+import {NavLink} from "react-router-dom";
+import {PenTool, ShoppingBag, FileText, CreditCard, LogOut, ChevronDown} from "react-feather";
 
-import { PenTool, ShoppingBag, FileText, CreditCard } from "react-feather"
-import { subStr, formatINR } from "../common/Common"
-import View from "./GuestMiscellaneousView"
-import Order from "./GuestMiscellaneousOrder"
-import Despatch from "./GuestMiscellaneousDespatch"
-import GenerateBill from "./GuestMiscellaneousGenerateBill"
-import AddPayment from "../guestPayment/GuestPaymentAdd"
-import Delete from "./GuestMiscellaneousDelete"
+import {subStr, formatINR} from "../common/Common";
+
+import View from "./GuestMiscellaneousView";
+import Order from "./GuestMiscellaneousOrder";
+import Despatch from "./GuestMiscellaneousDespatch";
+import GenerateBill from "./GuestMiscellaneousGenerateBill";
+import AddPayment from "../guestPayment/GuestPaymentAdd";
+import Checkout from "./GuestMiscellaneousCheckout";
+import Delete from "./GuestMiscellaneousDelete";
+
+const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
+    <NavLink to="#" className="dropdown" ref={ref} 
+        onClick={(e) => {e.preventDefault(); onClick(e);}}>
+      {children}
+    </NavLink>
+));
 
 // Start:: Component
 // props parameters
@@ -31,64 +42,72 @@ import Delete from "./GuestMiscellaneousDelete"
 // handelDespatch 
 // handelOpenGenerateBill
 // handelOpenPayment
+// handelOpenCheckout
 // handelOpenDelete
 const GuestMiscellaneousCard = forwardRef((props, ref) => {
-    const viewRef = useRef(null)
-    const orderRef = useRef(null)
-    const despatchRef = useRef(null)
-    const generateBillRef = useRef(null)
-    const addPaymentRef = useRef(null)
-    const deleteRef = useRef(null)
-    const [focus, setFocus] = useState(false)
-    const [active, setActive] = useState(false)
+    const viewRef = useRef(null);
+    const orderRef = useRef(null);
+    const despatchRef = useRef(null);
+    const generateBillRef = useRef(null);
+    const addPaymentRef = useRef(null);
+    const checkoutRef = useRef(null);
+    const deleteRef = useRef(null);
+    const [focus, setFocus] = useState(false);
+    const [active, setActive] = useState(false);
 
     // Start:: Show view modal 
     const handelOpenView = () => {
-        viewRef && viewRef.current.handleShowModal()
-    }
+        viewRef && viewRef.current.handleShowModal();
+    };
     // End:: Show view modal 
 
     // Start:: Show order modal 
     const handelOpenOrder = () => {
-        orderRef && orderRef.current.handleShowModal()
-    }
+        orderRef && orderRef.current.handleShowModal();
+    };
     // End:: Show order modal 
 
     // Start:: Show despatch modal 
     const handelOpenDespatch = () => {
-        despatchRef && despatchRef.current.handleShowModal()
-    }
+        despatchRef && despatchRef.current.handleShowModal();
+    };
     // End:: Show despatch modal 
     
     // Start:: Show generate bill modal 
     const handelOpenGenerateBill = () => {
-        generateBillRef && generateBillRef.current.handleShowModal()
-    }
+        generateBillRef && generateBillRef.current.handleShowModal();
+    };
     // End:: Show generate bill modal 
 
     // Start:: Show payment modal 
     const handelOpenPayment = () => {
-        addPaymentRef && addPaymentRef.current.handleShowModal()
-    }
+        addPaymentRef && addPaymentRef.current.handleShowModal();
+    };
     // End:: Show payment modal 
+    
+    // Start:: Show checkout modal 
+    const handelOpenCheckout = () => {
+        checkoutRef && checkoutRef.current.handleShowModal();
+    };
+    // End:: Show checkout modal 
     
     // Start:: Show delete modal 
     const handelOpenDelete = () => {
-        deleteRef && deleteRef.current.handleShowModal()
-    }
+        deleteRef && deleteRef.current.handleShowModal();
+    };
     // End:: Show delete modal 
     
     // Start:: Close all modal 
     const handleClose = () => {
-        props.onClosed()
-    }
+        props.onClosed();
+    };
     // End:: Close all modal 
 
     // Start:: de-select card 
     const handleDeSelect = () => {
-        setActive(false)
-        setFocus(false)
-    }
+        setActive(false);
+        setFocus(false);
+    };
     // End:: de-select card
 
     // Start:: forward reff de-select, show edit/delete modal function
@@ -101,17 +120,19 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
             handelOpenPayment,
             handelOpenDelete
         }
-    })
+    });
     // End:: forward reff de-select, show edit/delete modal function
 
     // Start:: Html
     return (
         <>
             {/* Start :: card component */}
-            <Card className="border"
-                ref={ref}
+            <Card 
+                key={props.pIndex}
                 index={props.pIndex}
+                className={"border"}
                 border={active ? "info" : focus ? "primary" : ""}  
+                ref={ref}
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
@@ -122,120 +143,88 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                     else if (e.detail === 2) {
                                         handelOpenView()
                                     }  
-                                }}>
+                                }}> 
 
-                <Card.Body className="pt-3 pl-1 pb-1 pr-1 m-0 card-element">
-                    
-                    {/* Start:: card header */}
-                    <Card.Subtitle>
-                        {/* Start:: Row */}
-                        <div className="row">
-                            {/* Start:: Column name / company name*/}
-                            <div className="col-md-10">
-                                <h4>
-                                    {props.pCorporateName ? subStr(props.pCorporateName, 20): subStr(props.pName, 20)}
-                                </h4>
-                            </div>
-                            {/* End:: Column name / company name */}
-                            
+                {/* Start:: card body */}
+                <Card.Body className="text-sm p-1"> 
+                    <Stack gap={1}>
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-10 text-left">
+                                <TimeElapsed
+                                    pInDate = {props.pIndate}
+                                    pInTime = {props.pInTime} />
+                            </span>
+
                             {/* Start:: Column menu */}
-                            <div className="col-md-2 text-right">
+                            <span className="col-2 text-right">
                                 {/* Start:: operational menu */}
-                                <Dropdown autoClose="true">
-                                    <Dropdown.Toggle 
-                                        variant="light" 
-                                        size="sm"
-                                        align="end"
-                                        drop="down" />
+                                <Dropdown>
+                                    <Dropdown.Toggle as={CustomToggle}>
+                                        <ChevronDown size={16}/>
+                                    </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
-                                        {/* Start:: order menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="pl-2"
-                                            onClick={handelOpenOrder}>
-                                            <span 
-                                                className="pr-5">
-                                                <PenTool className="feather-16 mr-3"/>Order
-                                            </span>
+                                        <Dropdown.Item eventKey="1" 
+                                            onClick = {handelOpenOrder}>
+                                            <PenTool className="feather-16 mr-3" />Order
                                         </Dropdown.Item>
-                                        {/* End:: order menu */}
 
-                                        {/* Start:: despatch menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="pl-2"
-                                            onClick={handelOpenDespatch}>
-                                            <span 
-                                                className="pr-5">
-                                                <ShoppingBag className="feather-16 mr-3"/>Despatch
-                                            </span>
+                                        <Dropdown.Item eventKey="2"
+                                            onClick = {handelOpenDespatch}>
+                                            <ShoppingBag className="feather-16 mr-3"/>Despatch
                                         </Dropdown.Item>
-                                        {/* End:: despatch menu */}
 
-                                        {/* Start:: bill menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="pl-2"
-                                            onClick={handelOpenGenerateBill}>
-                                            <span 
-                                                className="pr-5">
-                                                <FileText className="feather-16 mr-3"/>Bill
-                                            </span>
+                                        <Dropdown.Item eventKey="3" 
+                                            onClick = {handelOpenGenerateBill}>
+                                            <FileText className="feather-16 mr-3"/>Bill
                                         </Dropdown.Item>
-                                        {/* End:: bill menu */}
 
-                                        {/* Start:: payment menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="m-0 pl-2"
-                                            onClick={handelOpenPayment} >
-                                                <span 
-                                                    className="pr-5">
-                                                    <CreditCard className="feather-16 mr-3"/>Payment
-                                                </span>
+                                        <Dropdown.Item eventKey="4"
+                                            onClick = {handelOpenPayment}>
+                                            <CreditCard className="feather-16 mr-3"/>Payment
                                         </Dropdown.Item>
-                                        {/* End:: payment menu */}
 
-                                        {/* Start:: checkout menu */}
-                                        {/* <Dropdown.Item 
-                                            href="#" 
-                                            className="m-0 pl-2"
-                                            onClick={handelOpenCheckout} >
-                                                <span 
-                                                    className="pr-5">
-                                                    <LogOut className="feather-16 mr-3"/>Check out
-                                                </span>
-                                        </Dropdown.Item> */}
-                                        {/* End:: checkout menu */}
-
+                                        <Dropdown.Item eventKey="5"
+                                            onClick = {handelOpenCheckout}>
+                                            <LogOut className="feather-16 mr-3"/>Check out
+                                        </Dropdown.Item>
                                     </Dropdown.Menu>
-                                    
                                 </Dropdown>
                                 {/* End:: operational menu */}
-                            </div>
+                            </span>
                             {/* End:: Column menu */}
-                        </div>
-                        {/* End:: Row */}
-                    </Card.Subtitle>
-                    {/* End:: card header */}
+                        </Stack>
 
-                    {/* Start:: card body */}
-                    <Table striped size="sm" className="text-muted mb-0 mt-2">
-                        <tbody>
-                            <tr>
-                                <td>{props.pCorporateName ? props.pCorporateAddress : `Mobile : ${props.pMobile}`}</td>
-                                <td>{props.pCorporateName ? `GST No : ${props.pCorporateAddress}` : `Guest count : ${props.pGuestCount}`}</td>
-                            </tr>
-                            <tr>
-                                <td>Expense : {formatINR(props.pTotalExpense)}</td>
-                                <td className="text-danger">Due : {formatINR(props.pTotalBalance)}</td>
-                            </tr>
-                        </tbody>                            
-                    </Table>
-                    {/* End:: card body */}
+                        <Stack gap={0}>
+                            <div className="col-12">
+                                {props.pCorporateName ? subStr(props.pCorporateName, 40): subStr(props.pName, 40)}
+                            </div>
+                        </Stack>
 
+                        <Stack gap={0}>
+                            {props.pCorporateName ?
+                                <span className="col-12">{subStr(props.pCorporateAddress, 40)}</span>
+                                :
+                                <Stack direction="horizontal" gap={0}>
+                                    <span className="col-6 text-left">
+                                        Mobile : {props.pMobile}</span>
+
+                                    <span className="col-6 text-right">
+                                        Guest count : {props.pGuestCount}</span>
+                                </Stack> 
+                            }
+                        </Stack>        
+
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left">
+                                Expense : {formatINR(props.pTotalExpense)}</span>
+                                
+                            <span className="col-6 text-right text-danger">
+                                    Due : {formatINR(props.pTotalBalance)}</span>
+                        </Stack>
+                    </Stack>
                 </Card.Body>
+                {/* End:: card body */}
             </Card>
             {/* End :: card component */}
 
@@ -308,6 +297,16 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 onClosed = {handleClose} />
             {/* End :: add payment component */}
 
+            {/* Start :: checkout component */}
+            <Checkout
+                ref = {checkoutRef}
+                pGuestId = {props.pGuestId} 
+                pName = {props.pName}
+                pCorporateName = {props.pCorporateName}
+                onSaved = {props.onCheckedout} 
+                onClosed = {handleClose} />
+            {/* End :: checkout component */}
+
             {/* Start :: delete employee component */}
             <Delete 
                 ref = {deleteRef}
@@ -318,10 +317,9 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
             {/* End :: delete employee component */}
 
         </>
-    )
+    );
     // End:: Html
 
-})
+});
 
-
-export default GuestMiscellaneousCard
+export default GuestMiscellaneousCard;

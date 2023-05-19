@@ -1,7 +1,7 @@
 import React from "react"
 import { Routes, Route } from "react-router-dom"
 
-import Navbar from "./Navbar"
+import Header from "./Header"
 import Footer from "./Footer"
 
 import Login from "../pages/Login"
@@ -15,7 +15,7 @@ const Container = () => {
   return ( 
     <>
       <div className="main">
-        <Navbar/>
+        <Header/>
 
         <main className="content">
           <div className="container-fluid p-0">

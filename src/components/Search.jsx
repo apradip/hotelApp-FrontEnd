@@ -43,19 +43,19 @@ const Search = forwardRef(( props, ref ) => {
     // Start:: Html
     return (
         <form 
-            className="d-flex col-7" 
-            role="search">
+            className="d-flex me-auto" 
+            role="search" >
 
             {/* Input element text */}
             <input 
-                type="search" 
-                className="form-control mr-1"
-                placeholder="search" 
-                autoComplete="off"
                 autoFocus
-                ref={inputRef}
-                maxLength={100}
-                onKeyUp={handleSearchChange}/>
+                type = "search" 
+                className = "form-control mr-2"
+                placeholder = "search" 
+                autoComplete = "off"
+                ref = {inputRef}
+                maxLength = {100}
+                onKeyUp = {handleSearchChange} />
         </form>
     )
     // End:: Html

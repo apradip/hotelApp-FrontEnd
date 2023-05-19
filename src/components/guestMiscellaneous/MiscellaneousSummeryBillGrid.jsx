@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react"; 
 
-import { formatINR, formatDDMMYYYY } from "../common/Common";
+import { formatBillNo, formatDDMMYYYY, formatTime12Hour, formatINR } from "../common/Common";
 import Bill from "./GuestMiscellaneousBill";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount, 
-                                       pCorporateName, pCorporateAddress, pGstNo, pData,
-                                       onClosed}) => {    
+                                       pCorporateName, pCorporateAddress, pGstNo, pData}) => {    
 
     const gridRef = useRef()
     const billRef = useRef(null)
     const [rowData, setRowData] = useState([])
     const [transactionId, setTransactionId] = useState()
+    const [transactionNo, setTransactionNo] = useState()
     const [transactionDate, setTransactionDate] = useState()
     const [transactionTime, setTransactionTime] = useState()
 
@@ -31,35 +31,43 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
 
     const [columnDefs] = useState([
         {
-            headerName: "#", 
-            field: "rowId", 
-            width: 100,
+            headerName: '#', 
+            field: 'rowId', 
+            width: 20,
             hide: false,
             editable: (params) => {return false},
             valueFormatter: (params) => {return `${params.value}.`}
         },
         {
-            headerName: "Date", 
-            field: "date", 
+            headerName: 'Bill No.', 
+            field: 'no', 
+            width: 50,
+            hide: false,
+            valueFormatter: (params) => {return `${formatBillNo(params.value)}`}
+        },
+        {
+            headerName: 'Date', 
+            field: 'date', 
+            width: 50,
             hide: false,
             valueFormatter: (params) => {return `${formatDDMMYYYY(params.value)}`}
         },
         {
-            headerName: "Time",
-            field: "time",
+            headerName: 'Time',
+            field: 'time',
+            width: 45,
             hide: false,
-            type: "rightAligned",
-            valueFormatter: (params) => {return `${params.value}`}
+            valueFormatter: (params) => {return `${formatTime12Hour(params.value)}`}
         },
         {
-            headerName: "Amount",
-            field: "amount", 
+            headerName: 'Amount',
+            field: 'amount', 
             hide: false,
-            type: "rightAligned",
+            type: 'rightAligned',
             valueFormatter: (params) => {return `${formatINR(params.value)}`}
         },
         {
-            field: "id"
+            field: 'id'
         }
     ]);
 
@@ -83,6 +91,7 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
     // Start:: on row selection change set selected 
     const handleOpenBill = (event) => {
         setTransactionId(event.api.getSelectedNodes()[0].data.id)
+        setTransactionNo(event.api.getSelectedNodes()[0].data.no)
         setTransactionDate(event.api.getSelectedNodes()[0].data.date)
         setTransactionTime(event.api.getSelectedNodes()[0].data.time)
 
@@ -97,6 +106,7 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
             const row = {
                             rowId: rows.length + 1, 
                             id: element.expensesPaymentsDetail.expenseId,
+                            no: element.expensesPaymentsDetail.billNo,
                             date: element.expensesPaymentsDetail.transactionDate, 
                             time: element.expensesPaymentsDetail.transactionTime,
                             amount: element.expensesPaymentsDetail.expenseAmount
@@ -108,10 +118,6 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
         setRowData(rows)
     }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
 
-    // const handleClose = () => {
-    //     onClosed()
-    // };
-
 	return (
         <>
             <div className="ag-theme-alpine grid">
@@ -120,7 +126,7 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
                     columnDefs = {columnDefs}
                     defaultColDef = {defaultColDef}
                     rowData = {null}
-                    rowSelection = {"single"}
+                    rowSelection = {'single'}
                     onGridReady = {handleGridReady}
                     onFirstDataRendered = {handleFirstDataRendered}
                     onRowDoubleClicked = {handleOpenBill} />
@@ -137,6 +143,7 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
                 pCorporateAddress = {pCorporateAddress}
                 pGstNo = {pGstNo}
                 pTransactionId = {transactionId}
+                pTransactionNo = {transactionNo}
                 pTransactionDate = {transactionDate}
                 pTransactionTime = {transactionTime} />
             {/* End :: bill component */}

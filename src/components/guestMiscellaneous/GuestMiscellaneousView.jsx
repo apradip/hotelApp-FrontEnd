@@ -1,18 +1,19 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { X } from "react-feather";
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react"
+import { Modal, NavLink } from "react-bootstrap"
+import { X } from "react-feather"
+import { subStr } from "../common/Common"
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import MiscellaneousOrderGrid from "./MiscellaneousOrderGrid";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import { HotelId } from "../../App"
+import { useStateContext } from "../../contexts/ContextProvider"
+import OrderGrid from "./MiscellaneousOrderGrid"
+import useFetchWithAuth from "../common/useFetchWithAuth"
 
 // Start:: form
-const Form = ({ pGuestId, pName, pMobile, pGuestCount, 
-                pCorporateName, pCorporateAddress, pGstNo, 
-                pData, onClosed }) => {
+const Form = ({pGuestId, pName, pMobile, pGuestCount, 
+               pCorporateName, pCorporateAddress, pGstNo, 
+               pData, onClosed}) => {
                     
-    const [defaultRowData, setDefaultRowData] = useState([]);
+    const [defaultRowData, setDefaultRowData] = useState([])
 
     useEffect(() => {
         pData.forEach(element => {
@@ -26,15 +27,14 @@ const Form = ({ pGuestId, pName, pMobile, pGuestCount,
                             serviceCharge: element.serviceCharge, 
                             gstPercentage: element.gstPercentage, 
                             gstCharge: element.gstCharge, 
-                            // totalPrice: element.totalPrice, 
                             totalPrice: element.unitPrice * element.quantity
-                        };
+                        }
     
-            defaultRowData.push(rowData);
-        });
+            defaultRowData.push(rowData)
+        })
 
-        setDefaultRowData(defaultRowData);
-    }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
+        setDefaultRowData(defaultRowData)
+    }, [pData])        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: Html
     return (
@@ -43,70 +43,61 @@ const Form = ({ pGuestId, pName, pMobile, pGuestCount,
             {/* Start:: Modal body */}
             <Modal.Body>
 
-                <div>
-                    {/* Start:: Row */}
-                    <div className="row mb-3">
+                {/* Start:: Row */}
+                <div className="row">
 
-                        {/* Start:: Column name / company */}
-                        {pMobile ? 
-                            <div className="col-4">
-                                <label className="form-label mr-2">Name :</label>
-                                <label className="form-label">{pName}</label>
-                            </div>
-                        :
-                            <div className="col-4">
-                                <label className="form-label mr-2">Company :</label>
-                                <label className="form-label">{pCorporateName}</label>
-                            </div>
-                        }
-                        {/* End:: Column name / company */}
+                    {/* Start:: Column name / company */}
+                    {pCorporateName ? 
+                        <div className="col-5">
+                            <label className="form-label mr-2">Company :</label>
+                            <label className="text-muted">{subStr(pCorporateName, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-5">
+                            <label className="form-label mr-2">Name :</label>
+                            <label className="text-muted">{subStr(pName, 30)}</label>
+                        </div>
+                    }
+                    {/* End:: Column name / company */}
 
-                        {/* Start:: Column mobile no / company address */}
-                        {pMobile ? 
-                            <div className="col-4">
-                                <label className="form-label mr-2">Mobile :</label>
-                                <label className="form-label">{pMobile}</label>
-                            </div>
-                        :
-                            <div className="col-4">
-                                <label className="form-label mr-2">Address :</label>
-                                <label className="form-label">{pCorporateAddress}</label>
-                            </div>
-                        }
-                        {/* End:: Column mobile no / company address */}
+                    {/* Start:: Column mobile no / company address */}
+                    {pCorporateName ? 
+                        <div className="col-5">
+                            <label className="form-label mr-2">Address :</label>
+                            <label className="text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-5">
+                            <label className="form-label mr-2">Mobile :</label>
+                            <label className="text-muted">{pMobile}</label>
+                        </div>
+                    }
+                    {/* End:: Column mobile no / company address */}
 
-                        {/* Start:: Column mobile no / company address */}
-                        {pName ? 
-                            <div className="col-4">
-                                <label className="form-label mr-2">Guest count :</label>
-                                <label className="form-label">{pGuestCount}</label>
-                            </div>
-                        :
-                            <div className="col-4">
-                                <label className="form-label mr-2">GST No. :</label>
-                                <label className="form-label">{pGstNo}</label>
-                            </div>
-                        }
-                        {/* End:: Column mobile no / company address */}
-
+                    {/* Start:: Column mobile no / company address */}
+                    <div className="col-2">
+                        <label className="form-label mr-2">Guest count :</label>
+                        <label className="text-muted">{pGuestCount}</label>
                     </div>
-                    {/* End:: Row */}
+                    {/* End:: Column mobile no / company address */}
+
                 </div>
+                {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     <div className="col-12">
                         {/* Label element */}
-                        <label className="form-label">All miscellaneous items :</label>
+                        <label className="text-muted">Items :</label>
                     </div>                
 
                     {/* Start:: Column room detail */}
                     <div className="col-12 ag-theme-alpine grid">
-                        <MiscellaneousOrderGrid
-                            pState="VIEW"
-                            pDefaultRowData={defaultRowData}
-                            onChange={null} />
+                        <OrderGrid
+                            pState = "VIEW"
+                            pDefaultRowData = {defaultRowData}
+                            onChange = {null} />
                     </div>                
                     {/* End:: Column room detail */}
 
@@ -124,7 +115,7 @@ const Form = ({ pGuestId, pName, pMobile, pGuestCount,
                     type="button"
                     className="btn btn-danger"
                     autoFocus
-                    onClick={onClosed} >
+                    onClick = {onClosed} >
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -133,10 +124,10 @@ const Form = ({ pGuestId, pName, pMobile, pGuestCount,
             {/* End:: Modal footer */}
 
         </form> 
-    );
+    )
     // End:: Html
 
-};
+}
 // End:: form
 
 
@@ -148,23 +139,26 @@ const Form = ({ pGuestId, pName, pMobile, pGuestCount,
 // useImperativeHandle
 // handleShowModal
 const GuestMiscellaneousView = forwardRef(( props, ref ) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
-    const [showModal, setShowModal] = useState(false);
+    const hotelId = useContext(HotelId)
+    const contextValues = useStateContext()
+    const [showModal, setShowModal] = useState(false)
     const {data, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}/A`
-    });
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
+        params: {
+            option: 'A'
+        }
+    })
 
     // Start :: Show modal 
     const handleShowModal = () => {
-        setShowModal(true);
-    };
+        setShowModal(true)
+    }
     // End :: Show modal 
 
     // Start :: Close modal 
     const handleCloseModal = () => {
-        setShowModal(false);
-    };
+        setShowModal(false)
+    }
     // End :: Close modal 
 
     // Start:: forward reff show modal function
@@ -172,31 +166,29 @@ const GuestMiscellaneousView = forwardRef(( props, ref ) => {
         return {
             handleShowModal
         }
-    });
+    })
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal();
-        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') handleCloseModal()
+        })
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+        return () => {document.removeEventListener('keydown', handleCloseModal)}
+    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
             try {
-                showModal && await doFetch();
+                showModal && await doFetch()
             } catch (err) {
-              console.log('Error occured when fetching data');
+              console.log('Error occured when fetching data')
             }
-          })();
-    }, [showModal]);         // eslint-disable-line react-hooks/exhaustive-deps
+          })()
+    }, [showModal])         // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Html
@@ -205,17 +197,17 @@ const GuestMiscellaneousView = forwardRef(( props, ref ) => {
             {/* Start:: View modal */}
             {data &&
                 <Modal size="lg"
-                    show={showModal}>
+                    show = {showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>All miscellaneous items</Modal.Title>
+                        <Modal.Title>View</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal}>
+                            onClick = {handleCloseModal} >
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -223,25 +215,25 @@ const GuestMiscellaneousView = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pGuestId={props.pGuestId}
-                        pName={props.pName}
-                        pMobile={props.pMobile}
-                        pGuestCount={props.pGuestCount}
-                        pCorporateName={props.pCorporateName}
-                        pCorporateAddress={props.pCorporateAddress}
-                        pGstNo={props.pGstNo}
-                        pData={data}
-                        onClosed={handleCloseModal} />
+                        pGuestId = {props.pGuestId}
+                        pName = {props.pName}
+                        pMobile = {props.pMobile}
+                        pGuestCount = {props.pGuestCount}
+                        pCorporateName = {props.pCorporateName}
+                        pCorporateAddress = {props.pCorporateAddress}
+                        pGstNo = {props.pGstNo}
+                        pData = {data}
+                        onClosed = {handleCloseModal} />
                     {/* End:: Form component */}
                     
                 </Modal> }
             {/* End:: View modal */}
         </>
-    );
+    )
     // End:: Html
 
-});
+})
 // End:: Component
 
 
-export default GuestMiscellaneousView;
+export default GuestMiscellaneousView

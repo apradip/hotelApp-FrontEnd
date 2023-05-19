@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
-import PlanAdd from "../components/plan/PlanAdd";
-import PlanCard from "../components/plan/PlanCard";
+import Add from "../components/plan/PlanAdd";
+import Card from "../components/plan/PlanCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
@@ -179,7 +179,7 @@ const Plans = forwardRef(( props, ref ) => {
 
         return (
             <div className="col-xl-4 col-md-4 m-0" key={colKey}>
-                <PlanCard 
+                <Card 
                     ref = { (el) => cardRefs.current[itemIdx] = el }
                     pIndex = { itemIdx }
                     pId = { pData._id } 
@@ -221,26 +221,47 @@ const Plans = forwardRef(( props, ref ) => {
 
     // Start:: Html
     return ( 
-        <>
+        <div className="content-wrapper">
+
             {/* Seart :: Bread crumb */}
-            <Breadcrumb className="mt-5">
-                <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
-                <Breadcrumb.Item href = "/">Master</Breadcrumb.Item>
-                <Breadcrumb.Item active>Plan</Breadcrumb.Item>
-            </Breadcrumb>
+            <div className="content-header">
+                <div className="container-fluid">   
+                    <div className="row">
+                        <div className="col-sm-4 m-0">
+                            <h1 className="text-dark">Plan</h1>
+                        </div>
+
+                        <div className="col-sm-8">
+                            <Breadcrumb className="breadcrumb float-sm-right">
+                                <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
+                                <Breadcrumb.Item href = "/">Master</Breadcrumb.Item>
+                                <Breadcrumb.Item active>Plan</Breadcrumb.Item>
+                            </Breadcrumb>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {/* End :: Bread crumb */}
 
             {/* Start :: display data */}
-            <div className="row">
-                <div className="col-12">
-                    <div className="card">
+            <section className="content">
+                <div className="container-fluid">
+                    <div className="card mb-0">
+                        
                         {/* Start :: Header & operational panel */}
-                        <div className="card-header mx-3">
+                        <div className="card-header">
+                            {/* Start :: Display data count */}
+                            <div className="col-12 text-danger">
+                                {!loading && 
+                                    data && 
+                                        `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
+                            </div>
+                            {/* End :: Display data count */}
                         </div>
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body py-0">
+                        <div className="card-body">
                             { loading &&
                                 <div className="d-flex justify-content-center">
                                     <div className="spinner-border text-primary" role="status"/>
@@ -252,18 +273,11 @@ const Plans = forwardRef(( props, ref ) => {
                         </div>
                         {/* End :: Display data */}
                         
+                        {/* Start :: Footer & operational panel */}
                         <div className="card-footer ">
                             <div className="row">
-                                {/* Start :: Display data count */}
-                                <div className="col-4 text-danger">
-                                    {!loading && 
-                                        data && 
-                                            `display count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
-                                </div>
-                                {/* End :: Display data count */}
-
                                 {/* Start :: Pagination */}
-                                <div className="col-8 text-muted d-flex justify-content-end">
+                                <div className="col-12 d-flex justify-content-end">
                                     {!loading && 
                                             data && 
                                                 <Paging
@@ -275,19 +289,21 @@ const Plans = forwardRef(( props, ref ) => {
                                 {/* End :: Pagination */}
                             </div>
                         </div>
+                        {/* End :: Footer & operational panel */}
+
                     </div>
                 </div>
-            </div>
+            </section>
             {/* End :: display data */}
 
-            {/* Start :: add employee component */}
-            <PlanAdd 
+            {/* Start :: add component */}
+            <Add 
                 ref = { addRef }   
                 onAdded = { () => { handleSuccess("add") } }
                 onClosed = { close } />
-            {/* End :: add employee component */}
+            {/* End :: add component */}
 
-        </>
+        </div>
     )
     // End:: Html
 

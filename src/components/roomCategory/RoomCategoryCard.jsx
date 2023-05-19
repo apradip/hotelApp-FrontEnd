@@ -1,12 +1,18 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Table, Card, Dropdown } from "react-bootstrap";
+import { NavLink, Card, Stack, Dropdown } from "react-bootstrap";
 
-import { Edit3, Scissors } from "react-feather";
+import { ChevronDown, Edit3, Scissors } from "react-feather";
 import { subStr } from "../common/Common";
 import RoomCategoryView from "./RoomCategoryView";
 import RoomCategoryEdit from "./RoomCategoryEdit";
 import RoomCategoryDelete from "./RoomCategoryDelete";
 
+const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
+    <NavLink to="#" className="dropdown" ref={ref} 
+        onClick={(e) => {e.preventDefault(); onClick(e);}}>
+      {children}
+    </NavLink>
+));
 
 // Start:: Component
 // props parameters
@@ -74,13 +80,15 @@ const RoomCategoryCard = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start :: card component */}
-            <Card className='border'
-                ref = { ref }
-                index = { props.pIndex }
-                border = { active ? 'info' : focus ? 'primary' : '' }  
-                onMouseEnter = { () => setFocus(true) }
-                onMouseLeave = { () => setFocus(false) } 
-                onClick = { (e) => { 
+            <Card 
+                key={props.pIndex}
+                index={props.pIndex}
+                className={"border"}
+                border={active ? "info" : focus ? "primary" : ""}  
+                ref={ref}
+                onMouseEnter={() => setFocus(true)}
+                onMouseLeave={() => setFocus(false)} 
+                onClick={(e) => { 
                                         if (e.detail === 1) {
                                             setActive(!active) 
                                             props.onActivated(props.pIndex)
@@ -88,93 +96,61 @@ const RoomCategoryCard = forwardRef(( props, ref ) => {
                                         else if (e.detail === 2) {
                                             handelOpenView()
                                         }  
-                                   } } >
+                                   }}>
 
-                <Card.Body className="pt-3 pl-1 pb-1 pr-1 m-0 card-element">
-                    
-                    {/* Start:: card header */}
-                    <Card.Subtitle>
-
-                        {/* Start:: Row */}
-                        <div className="row">
-                            {/* Start:: Column name */}
-                            <div className="col-md-10">
+                <Card.Body className="text-sm p-1">
+                    <Stack gap={1}>
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-10 text-left">
                                 <h4>{ subStr(props.pName, 20) }</h4>
-                            </div>
-                            {/* End:: Column name */}
-                            
+                            </span>
+
                             {/* Start:: Column menu */}
-                            <div className="col-md-2 text-right">
-                                
+                            <span className="col-2 text-right">
                                 {/* Start:: operational menu */}
-                                <Dropdown autoClose="true">
-                                    <Dropdown.Toggle 
-                                        variant="light" 
-                                        size="sm"
-                                        align="end"
-                                        drop="down" />
+                                <Dropdown>
+                                    <Dropdown.Toggle as={CustomToggle}>
+                                        <ChevronDown size={16}/>
+                                    </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
-                                        {/* Start:: edit menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="pl-2"
-                                            onClick = { handelOpenEdit } >
-                                            <span 
-                                                className="pr-5">
-                                                <Edit3 className="feather-16 mr-3"/>Edit
-                                            </span>
+                                        <Dropdown.Item eventKey="1" 
+                                            onClick = {handelOpenEdit}>
+                                            <Edit3 className="feather-16 mr-3"/>Edit
                                         </Dropdown.Item>
-                                        {/* End:: edit menu */}
 
-                                        {/* Start:: delete menu */}
-                                        <Dropdown.Item 
-                                            href="#" 
-                                            className="m-0 pl-2"
-                                            onClick = { handelOpenDelete } >
-                                                <span 
-                                                    className="pr-5">
-                                                    <Scissors className="feather-16 mr-3"/>Delete
-                                                </span>
+                                        <Dropdown.Item eventKey="2"
+                                            onClick = {handelOpenDelete}>
+                                            <Scissors className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>
-                                        {/* End:: delete menu */}
 
                                     </Dropdown.Menu>
-                                    
                                 </Dropdown>
                                 {/* End:: operational menu */}
-
-                            </div>
+                            </span>
                             {/* End:: Column menu */}
-                        </div>
-                        {/* End:: Row */}
+                        </Stack>
 
-                    </Card.Subtitle>
-                    {/* End:: card header */}
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left">Room tariff</span>
+                            <span className="col-6 text-right">{`₹ ${props.pTariff}`}</span>
+                        </Stack>
 
-                    {/* Start:: card body */}
-                    <Table striped size="sm" className="text-muted mb-0 mt-2">
-                        <tbody>
-                            <tr>
-                                <td>Room tariff</td>
-                                <td className="text-right">{`₹ ${props.pTariff}`}</td>
-                            </tr>
-                            <tr>
-                                <td>Max. discount</td>
-                                <td className="text-right">{`₹ ${props.pDiscount}`}</td>
-                            </tr>
-                            <tr>
-                                <td>Ext. bed tariff</td>
-                                <td className="text-right">{`₹ ${props.pBed}`}</td>
-                            </tr>
-                            <tr>
-                                <td>Ext. person tariff</td>
-                                <td className="text-right">{`₹ ${props.pPerson}`}</td>
-                            </tr>
-                        </tbody>                            
-                    </Table>
-                    {/* End:: card body */}
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left">Max. discount</span>
+                            <span className="col-6 text-right">{`₹ ${props.pDiscount}`}</span>
+                        </Stack>                        
 
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left">Ext. bed tariff</span>
+                            <span className="col-6 text-right">{`₹ ${props.pBed}`}</span>
+                        </Stack>                                                
+
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left">Ext. person tariff</span>
+                            <span className="col-6 text-right">{`₹ ${props.pPerson}`}</span>
+                        </Stack>                                                                        
+                    </Stack>
                 </Card.Body>
             </Card>
             {/* End :: card component */}
