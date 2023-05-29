@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react"
-import { Modal, NavLink } from "react-bootstrap"
-import { X } from "react-feather"
-import { subStr } from "../common/Common"
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react"
+import {Modal, NavLink} from "react-bootstrap"
+import {X} from "react-feather"
+import {subStr} from "../common/Common"
 
-import { HotelId } from "../../App"
-import { useStateContext } from "../../contexts/ContextProvider"
+import {HotelId} from "../../App"
+import {useStateContext} from "../../contexts/ContextProvider"
 import OrderGrid from "./MiscellaneousOrderGrid"
 import useFetchWithAuth from "../common/useFetchWithAuth"
 
@@ -48,38 +48,38 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-5">
-                            <label className="form-label mr-2">Company :</label>
-                            <label className="text-muted">{subStr(pCorporateName, 30)}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                            <label className="col-12 form-label"><b>Company</b></label>
+                            <label className="col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
                         </div>
                     :
-                        <div className="col-5">
-                            <label className="form-label mr-2">Name :</label>
-                            <label className="text-muted">{subStr(pName, 30)}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                            <label className="col-12 form-label"><b>Name</b></label>
+                            <label className="col-12 text-muted">{subStr(pName, 30)}</label>
                         </div>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-5">
-                            <label className="form-label mr-2">Address :</label>
-                            <label className="text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                            <label className="col-12 form-label"><b>Address</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </div>
                     :
-                        <div className="col-5">
-                            <label className="form-label mr-2">Mobile :</label>
-                            <label className="text-muted">{pMobile}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                            <label className="col-12 form-label"><b>Guest count</b></label>
+                            <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
                     {/* End:: Column mobile no / company address */}
 
-                    {/* Start:: Column mobile no / company address */}
-                    <div className="col-2">
-                        <label className="form-label mr-2">Guest count :</label>
-                        <label className="text-muted">{pGuestCount}</label>
+                    {/* Start:: Column guest count */}
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 mb-3">
+                        <label className="col-12 form-label"><b>Guest count</b></label>
+                        <label className="col-12 text-muted">{pGuestCount}</label>
                     </div>
-                    {/* End:: Column mobile no / company address */}
+                    {/* End:: Column guest count */}
 
                 </div>
                 {/* End:: Row */}
@@ -89,15 +89,15 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     <div className="col-12">
                         {/* Label element */}
-                        <label className="text-muted">Items :</label>
+                        <label className="col-12 form-label"><b>Items</b></label>
                     </div>                
 
                     {/* Start:: Column room detail */}
                     <div className="col-12 ag-theme-alpine grid">
                         <OrderGrid
-                            pState = "VIEW"
-                            pDefaultRowData = {defaultRowData}
-                            onChange = {null} />
+                            pState="VIEW"
+                            pDefaultRowData={defaultRowData}
+                            onChange={null} />
                     </div>                
                     {/* End:: Column room detail */}
 
@@ -115,7 +115,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     type="button"
                     className="btn btn-danger"
                     autoFocus
-                    onClick = {onClosed} >
+                    onClick={onClosed} >
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -138,7 +138,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
 // useImperativeHandle
 // handleShowModal
-const GuestMiscellaneousView = forwardRef(( props, ref ) => {    
+const GuestMiscellaneousView = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId)
     const contextValues = useStateContext()
     const [showModal, setShowModal] = useState(false)
@@ -197,17 +197,17 @@ const GuestMiscellaneousView = forwardRef(( props, ref ) => {
             {/* Start:: View modal */}
             {data &&
                 <Modal size="lg"
-                    show = {showModal}>
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View</Modal.Title>
+                        <Modal.Title>All ordered items</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal} >
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -215,15 +215,15 @@ const GuestMiscellaneousView = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pGuestId = {props.pGuestId}
-                        pName = {props.pName}
-                        pMobile = {props.pMobile}
-                        pGuestCount = {props.pGuestCount}
-                        pCorporateName = {props.pCorporateName}
-                        pCorporateAddress = {props.pCorporateAddress}
-                        pGstNo = {props.pGstNo}
-                        pData = {data}
-                        onClosed = {handleCloseModal} />
+                        pGuestId={props.pGuestId}
+                        pName={props.pName}
+                        pMobile={props.pMobile}
+                        pGuestCount={props.pGuestCount}
+                        pCorporateName={props.pCorporateName}
+                        pCorporateAddress={props.pCorporateAddress}
+                        pGstNo={props.pGstNo}
+                        pData={data}
+                        onClosed={handleCloseModal} />
                     {/* End:: Form component */}
                     
                 </Modal> }

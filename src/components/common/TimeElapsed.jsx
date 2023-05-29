@@ -1,10 +1,4 @@
 import { useEffect, useState } from "react";
-//import { toast } from "react-toastify";
-
-//import { HotelId } from "../../App";
-//import { useStateContext } from "../../contexts/ContextProvider";
-//import useFetchWithAuth from "./useFetchWithAuth";
-
 
 // Start:: Component
 // props parameters
@@ -40,7 +34,7 @@ const TimeElapsed = ({pInDate, pInTime}) => {
 
     return (
         <span style={{color:"#708090"}}> 
-            Time elapsed : {timeElapsed && `${timeElapsed.days} : ${timeElapsed.hours} : ${timeElapsed.minutes} : ${timeElapsed.seconds}`}
+            {timeElapsed &&  `${timeElapsed.days > 0 ? timeElapsed.days + " days" : timeElapsed.hours > 0 ? timeElapsed.hours + " hours" : timeElapsed.minutes > 0 ? timeElapsed.minutes + " minutes" : "0 minut"} ago`}
         </span>
     )
 }

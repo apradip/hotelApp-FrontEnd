@@ -1,11 +1,11 @@
 import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
 import {NavLink, Card, Stack, Dropdown} from "react-bootstrap";
 
-import {ChevronDown, Edit3, Scissors} from "react-feather";
+import {MoreVertical, Edit3, Scissors} from "react-feather";
 import {subStr} from "../common/Common";
-import AccessLevelView from "./AccessLevelView";
-import AccessLevelEdit from "./AccessLevelEdit";
-import AccessLevelDelete from "./AccessLevelDelete";
+import View from "./AccessLevelView";
+import Edit from "./AccessLevelEdit";
+import Delete from "./AccessLevelDelete";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown" ref={ref} 
@@ -26,7 +26,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
-const AccessLevelCard = forwardRef(( props, ref ) => {
+const AccessLevelCard = forwardRef((props, ref) => {
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
@@ -66,9 +66,7 @@ const AccessLevelCard = forwardRef(( props, ref ) => {
     
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleDeSelect, handelOpenEdit, handelOpenDelete
-        }
+        return {handleDeSelect, handelOpenEdit, handelOpenDelete}
     });
     // Edit:: forward reff de-select, show edit/delete modal function
 
@@ -85,28 +83,28 @@ const AccessLevelCard = forwardRef(( props, ref ) => {
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
-                                        if (e.detail === 1) {
-                                            setActive(!active) 
-                                            props.onActivated(props.pIndex)
-                                        }    
-                                        else if (e.detail === 2) {
-                                            handelOpenView()
-                                        }  
-                                   }}>
+                                    if (e.detail === 1) {
+                                        setActive(!active)
+                                        props.onActivated(props.pIndex)
+                                    }    
+                                    else if (e.detail === 2) {
+                                        handelOpenView()
+                                    }  
+                                }}> 
 
                 <Card.Body className="text-sm p-1">
-                    <Stack gap={1}>
-                        <Stack direction="horizontal" gap={0}>
-                            <span className="col-10 text-left">
-                                <h4>{subStr(props.pName, 20)}</h4>
+                    <Stack gap={0}>
+                        <Stack direction="horizontal" gap={0}>  
+                            <span className="col-11 text-left pl-1">
+                                <b>{subStr(props.pName, 25)}</b>
                             </span>
 
                             {/* Start:: Column menu */}
-                            <span className="col-2 text-right">
+                            <span className="col-1 text-right p-0">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>
-                                        <ChevronDown size={16}/>
+                                        <MoreVertical size={16} />
                                     </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
@@ -119,7 +117,6 @@ const AccessLevelCard = forwardRef(( props, ref ) => {
                                             onClick = {handelOpenDelete}>
                                             <Scissors className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>
-
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 {/* End:: operational menu */}
@@ -128,9 +125,9 @@ const AccessLevelCard = forwardRef(( props, ref ) => {
                         </Stack>
 
                         <Stack gap={0}>
-                            <div className="col-12">
+                            <span className="col-12 text-left px-1">
                                 {subStr(props.pDescription, 40)}
-                            </div>
+                            </span>
                         </Stack>
                     </Stack>
                 </Card.Body>
@@ -138,26 +135,26 @@ const AccessLevelCard = forwardRef(( props, ref ) => {
             {/* End :: card component */}
 
             {/* Start :: view employee component */}
-            <AccessLevelView
-                ref = { viewRef }
-                pId = { props.pId } 
-                onClosed = { handleClose } />
+            <View
+                ref={viewRef}
+                pId={props.pId} 
+                onClosed={handleClose}/>
             {/* End :: view employee component */}
 
             {/* Start :: edit employee component */}
-            <AccessLevelEdit 
-                ref = { editRef }
-                pId = { props.pId } 
-                onEdited = { props.onEdited } 
-                onClosed = { handleClose } />
+            <Edit 
+                ref={editRef}
+                pId={props.pId} 
+                onEdited={props.onEdited} 
+                onClosed={handleClose}/>
             {/* End :: edit employee component */}
 
             {/* Start :: delete employee component */}
-            <AccessLevelDelete 
-                ref = { deleteRef }
-                pId = { props.pId } 
-                onDeleted = { props.onDeleted } 
-                onClosed = { handleClose } />
+            <Delete 
+                ref={deleteRef}
+                pId={props.pId} 
+                onDeleted={props.onDeleted} 
+                onClosed={handleClose}/>
             {/* End :: delete employee component */}
         </>
     );

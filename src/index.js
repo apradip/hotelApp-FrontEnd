@@ -6,7 +6,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import "overlayscrollbars/overlayscrollbars.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-datepicker/dist/react-datepicker.css";
-// import "simplebar-react/dist/simplebar.min.css";
 import "ag-grid-community/styles/ag-grid.css"; 
 import "ag-grid-community/styles/ag-theme-alpine.css"; 
 import "./assets/css/adminlte.css";

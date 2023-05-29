@@ -1,26 +1,26 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import RoomCategorySelect from '../common/RoomCategorySelect';
-import { roomSchema } from "../../schemas";
+import {roomSchema} from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
-const Form = ({ onSubmited, onClosed }) => {
+const Form = ({onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const { loading, error, doInsert } = useFetchWithAuth({
+    const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.roomAPI}/${hotelId}`
     });
 
     // Start:: Form validate and save data
-    const { values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm } = useFormik({
+    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputNo: "",
             keyInputCategoryId: "",
@@ -33,12 +33,12 @@ const Form = ({ onSubmited, onClosed }) => {
         validateOnChange,
         onSubmit: async (values, action) => {
             const payload = {   
-                            "no": values.keyInputNo.toUpperCase(), 
-                            "categoryId": values.keyInputCategoryId, 
-                            "tariff": parseFloat(Number.isNaN(values.keyInputTariff) ? 0 : values.keyInputTariff, 10), 
-                            "maxDiscount": parseFloat(Number.isNaN(values.keyInputDiscount) ? 0 : values.keyInputDiscount, 10), 
-                            "extraBedTariff": parseFloat(Number.isNaN(values.keyInputBed) ? 0 : values.keyInputBed, 10), 
-                            "extraPersonTariff": parseFloat(Number.isNaN(values.keyInputPerson) ? 0 : values.keyInputPerson, 10),
+                            no: values.keyInputNo.toUpperCase(), 
+                            categoryId: values.keyInputCategoryId, 
+                            tariff: parseFloat(Number.isNaN(values.keyInputTariff) ? 0 : values.keyInputTariff, 10), 
+                            maxDiscount: parseFloat(Number.isNaN(values.keyInputDiscount) ? 0 : values.keyInputDiscount, 10), 
+                            extraBedTariff: parseFloat(Number.isNaN(values.keyInputBed) ? 0 : values.keyInputBed, 10), 
+                            extraPersonTariff: parseFloat(Number.isNaN(values.keyInputPerson) ? 0 : values.keyInputPerson, 10),
                         };
 
             await doInsert(payload);
@@ -69,13 +69,14 @@ const Form = ({ onSubmited, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
                     
                     {/* Start:: Column no */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
+                        
                         {/* Label element */}
                         <label className="form-label" 
-                             htmlFor={"keyInputNo"}>Room No.</label>
+                             htmlFor={"keyInputNo"}><b>Room No.</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -88,22 +89,22 @@ const Form = ({ onSubmited, onClosed }) => {
                              maxLength={10}
                              disabled={loading} 
                              value={values.keyInputNo} 
-                             onChange={handleChange} />
+                             onChange={handleChange}/>
 
                         {/* Validation message */}
-                        { errors.keyInputNo && 
+                        {errors.keyInputNo && 
                              touched.keyInputNo ? 
                                  (<small className="text-danger">{errors.keyInputNo}</small>) : 
-                                     null }
+                                     null}
                     </div>
                     {/* End:: Column no */}
 
                     {/* Start:: Column category */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
-                                 htmlFor={"keyInputCategoryId"}>Category</label>
+                                 htmlFor={"keyInputCategoryId"}><b>Category</b></label>
 
                         {/* Input element text*/}
                         <RoomCategorySelect 
@@ -123,59 +124,59 @@ const Form = ({ onSubmited, onClosed }) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column tariff */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                                htmlFor={ "keyInputTariff" }>Tariff</label>
+                                htmlFor={"keyInputTariff"}><b>Tariff</b></label>
                         
                         {/* Input element text*/} 
                         <input 
                             type="number" 
-                            name={ "keyInputTariff" }
+                            name={"keyInputTariff"}
                             placeholder="Tariff"
                             className="form-control"
                             autoComplete="off"
-                            maxLength={ 8 }
-                            disabled={ loading }
-                            value={ values.keyInputTariff } 
-                            onChange={ handleChange } />
+                            maxLength={8}
+                            disabled={loading}
+                            value={values.keyInputTariff} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
-                        { errors.keyInputTariff && 
+                        {errors.keyInputTariff && 
                              touched.keyInputTariff ? 
                                  (<small className="text-danger">{ errors.keyInputTariff }</small>) : 
-                                     null }
+                                     null}
                     </div>
                     {/* End:: Column tariff */}
 
                     {/* Start:: Column max. discount */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={ "keyInputDiscount" }>Maximum discount</label>
+                            htmlFor={"keyInputDiscount"}><b>Maximum discount</b></label>
 
                         {/* Input element text*/} 
                         <input 
                             type="number" 
-                            name={ "keyInputDiscount" }
+                            name={"keyInputDiscount"}
                             placeholder="Maximum discount"
                             className="form-control"
                             autoComplete="off"
-                            maxLength={ 8 }
-                            disabled={ loading } 
-                            value={ values.keyInputDiscount } 
-                            onChange={ handleChange } />
+                            maxLength={8}
+                            disabled={loading} 
+                            value={values.keyInputDiscount} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
-                        { errors.keyInputDiscount && 
+                        {errors.keyInputDiscount && 
                             touched.keyInputDiscount ? 
                                 (<small className="text-danger">{ errors.keyInputDiscount }</small>) : 
-                                    null }
+                                    null}
                     </div>
                     {/* End:: Column max. discount */}
 
@@ -183,40 +184,40 @@ const Form = ({ onSubmited, onClosed }) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column ext. bed teriff */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
                          
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={ "keyInputBed" }>Extra bed tariff</label>
+                            htmlFor={"keyInputBed"}><b>Extra bed tariff</b></label>
                             
                         {/* Input element text*/} 
                         <input
                             type="number"
-                            name={ "keyInputBed" }
+                            name={"keyInputBed"}
                             placeholder="Extra bed tariff" 
                             className="form-control"
                             autoComplete="off"
-                            maxLength={ 8 }
-                            disabled={ loading }
-                            value={ values.keyInputBed } 
-                            onChange={ handleChange } />
+                            maxLength={8}
+                            disabled={loading}
+                            value={values.keyInputBed} 
+                            onChange={handleChange} />
 
                         {/* Validation message */}
-                        { errors.keyInputBed && 
+                        {errors.keyInputBed && 
                             touched.keyInputBed ? 
                                 (<small className="text-danger">{ errors.keyInputBed }</small>) : 
-                                    null }
+                                    null}
                     </div>
                     {/* End:: Column ext. bed teriff */}
 
                     {/* Start:: Column ext. person teriff */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={ "keyInputPerson" }>Extra person tariff</label>
+                            htmlFor={"keyInputPerson"}><b>Extra person tariff</b></label>
                          
                         {/* Input element text*/} 
                         <input 
@@ -225,16 +226,16 @@ const Form = ({ onSubmited, onClosed }) => {
                             placeholder="Extra person tariff" 
                             className="form-control"
                             autoComplete="off"
-                            maxLength={ 8 }
-                            disabled={ loading }
-                            value={ values.keyInputPerson } 
-                            onChange={ handleChange } />
+                            maxLength={8}
+                            disabled={loading}
+                            value={values.keyInputPerson} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
-                        { errors.addPerson && 
+                        {errors.addPerson && 
                             touched.addPerson ? 
-                                (<small className="text-danger">{ errors.addPerson }</small>) : 
-                                    null }    
+                                (<small className="text-danger">{errors.addPerson}</small>) : 
+                                    null}    
                     </div>
                     {/* End:: Column ext. person teriff */}
 
@@ -251,8 +252,8 @@ const Form = ({ onSubmited, onClosed }) => {
                 <button 
                     type="button"
                     className="btn btn-danger"
-                    disabled = { loading }
-                    onClick = { handleClose } >
+                    disabled={loading}
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -261,15 +262,15 @@ const Form = ({ onSubmited, onClosed }) => {
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading } 
-                    onClick = { handleSubmit } >
+                    disabled={loading} 
+                    onClick={handleSubmit}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
-                        </> }
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -291,7 +292,7 @@ const Form = ({ onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const RoomAdd = forwardRef(( props, ref ) => {
+const RoomAdd = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
 
     // Start:: Show modal
@@ -316,9 +317,7 @@ const RoomAdd = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -328,9 +327,7 @@ const RoomAdd = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -339,15 +336,15 @@ const RoomAdd = forwardRef(( props, ref ) => {
         <>
             {/* Start:: Add modal */}
             <Modal 
-                show = { showModal } >
+                show={showModal}>
 
                 {/* Start:: Modal header */}
                 <Modal.Header>
                     {/* Header text */}
-                    <Modal.Title>Add room</Modal.Title>
+                    <Modal.Title>New</Modal.Title>
 
                     {/* Close button */}
-                    <NavLink className="nav-icon" href="#" onClick = { handleCloseModal } >
+                    <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>
                         <i className="align-middle"><X/></i>
                     </NavLink>
                 </Modal.Header>
@@ -355,8 +352,8 @@ const RoomAdd = forwardRef(( props, ref ) => {
 
                 {/* Start:: Form component */}
                 <Form
-                    onSubmited = { handleSave } 
-                    onClosed = { handleCloseModal } />
+                    onSubmited={handleSave} 
+                    onClosed={handleCloseModal}/>
                 {/* End:: Form component */}
 
             </Modal>

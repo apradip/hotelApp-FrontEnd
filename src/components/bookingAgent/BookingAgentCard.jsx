@@ -1,11 +1,11 @@
 import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
 import {NavLink, Card, Stack, Dropdown} from "react-bootstrap";
 
-import {ChevronDown, Edit3, Scissors} from "react-feather";
+import {MoreVertical, Edit3, Scissors} from "react-feather";
 import {subStr} from "../common/Common";
-import BookingAgentView from "./BookingAgentView";
-import BookingAgentEdit from "./BookingAgentEdit";
-import BookingAgentDelete from "./BookingAgentDelete";
+import View from "./BookingAgentView";
+import Edit from "./BookingAgentEdit";
+import Delete from "./BookingAgentDelete";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown" ref={ref} 
@@ -26,7 +26,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
-const BookingAgentCard = forwardRef(( props, ref ) => {
+const BookingAgentCard = forwardRef((props, ref) => {
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
@@ -66,9 +66,7 @@ const BookingAgentCard = forwardRef(( props, ref ) => {
     
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleDeSelect, handelOpenEdit, handelOpenDelete
-        }
+        return {handleDeSelect, handelOpenEdit, handelOpenDelete}
     });
     // Edit:: forward reff de-select, show edit/delete modal function
 
@@ -85,38 +83,38 @@ const BookingAgentCard = forwardRef(( props, ref ) => {
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
-                                        if (e.detail === 1) {
-                                            setActive(!active) 
-                                            props.onActivated(props.pIndex)
-                                        }    
-                                        else if (e.detail === 2) {
-                                            handelOpenView()
-                                        }  
-                                   }}>
+                                    if (e.detail === 1) {
+                                        setActive(!active)
+                                        props.onActivated(props.pIndex)
+                                    }    
+                                    else if (e.detail === 2) {
+                                        handelOpenView()
+                                    }  
+                                }}>
 
                 <Card.Body className="text-sm p-1">
-                    <Stack gap={1}>
+                    <Stack gap={0}>
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-10 text-left">
-                                <h4>{subStr(props.pName, 20)}</h4>
+                            <span className="col-11 text-left pl-1">
+                                <b>{subStr(props.pName, 25)}</b>
                             </span>
 
                             {/* Start:: Column menu */}
-                            <span className="col-2 text-right">
+                            <span className="col-1 text-right p-0">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>
-                                        <ChevronDown size={16}/>
+                                        <MoreVertical size={16} />
                                     </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
                                         <Dropdown.Item eventKey="1" 
-                                            onClick = {handelOpenEdit}>
+                                            onClick={handelOpenEdit}>
                                             <Edit3 className="feather-16 mr-3"/>Edit
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="2"
-                                            onClick = {handelOpenDelete}>
+                                            onClick={handelOpenDelete}>
                                             <Scissors className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>
 
@@ -128,9 +126,9 @@ const BookingAgentCard = forwardRef(( props, ref ) => {
                         </Stack>
 
                         <Stack gap={0}>
-                            <div className="col-12">
+                            <span className="col-12 text-left px-1">
                                 {subStr(props.pDescription, 40)}
-                            </div>
+                            </span>
                         </Stack>
                     </Stack>
                 </Card.Body>
@@ -138,26 +136,26 @@ const BookingAgentCard = forwardRef(( props, ref ) => {
             {/* End :: card component */}
 
             {/* Start :: view component */}
-            <BookingAgentView
+            <View
                 ref={viewRef}
                 pId={props.pId} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: view component */}
 
             {/* Start :: edit component */}
-            <BookingAgentEdit 
+            <Edit 
                 ref={editRef}
-                pId = { props.pId } 
-                onEdited = { props.onEdited } 
-                onClosed={handleClose} />
+                pId={props.pId} 
+                onEdited={props.onEdited} 
+                onClosed={handleClose}/>
             {/* End :: edit component */}
 
             {/* Start :: delete component */}
-            <BookingAgentDelete 
-                ref = {deleteRef}
-                pId = { props.pId } 
-                onDeleted = { props.onDeleted } 
-                onClosed={handleClose} />
+            <Delete 
+                ref={deleteRef}
+                pId={props.pId} 
+                onDeleted={props.onDeleted} 
+                onClosed={handleClose}/>
             {/* End :: delete component */}
         </>
     );

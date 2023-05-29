@@ -1,26 +1,26 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { roomCategorySchema } from "../../schemas";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {roomCategorySchema} from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ onSubmited, onClosed }) => {
+const Form = ({onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const { loading, error, doInsert } = useFetchWithAuth({
+    const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.roomCategoryAPI}/${hotelId}`
     });
 
     // Start:: Form validate and save data
-    const { values, errors, touched, handleChange, handleSubmit, resetForm } = useFormik({
+    const {values, errors, touched, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputName: "",
             keyInputTariff: 0 ,
@@ -32,11 +32,11 @@ const Form = ({ onSubmited, onClosed }) => {
         validateOnChange,
         onSubmit: async (values, action) => {
             const payload = {   
-                            "name": values.keyInputName, 
-                            "tariff": parseFloat(Number.isNaN(values.keyInputTariff) ? 0 : values.keyInputTariff, 10), 
-                            "maxDiscount": parseFloat(Number.isNaN(values.keyInputDiscount) ? 0 : values.keyInputDiscount, 10), 
-                            "extraBedTariff": parseFloat(Number.isNaN(values.keyInputBed) ? 0 : values.keyInputBed, 10), 
-                            "extraPersonTariff": parseFloat(Number.isNaN(values.keyInputPerson) ? 0 : values.keyInputPerson, 10)
+                            name: values.keyInputName, 
+                            tariff: parseFloat(Number.isNaN(values.keyInputTariff) ? 0 : values.keyInputTariff, 10), 
+                            maxDiscount: parseFloat(Number.isNaN(values.keyInputDiscount) ? 0 : values.keyInputDiscount, 10), 
+                            extraBedTariff: parseFloat(Number.isNaN(values.keyInputBed) ? 0 : values.keyInputBed, 10), 
+                            extraPersonTariff: parseFloat(Number.isNaN(values.keyInputPerson) ? 0 : values.keyInputPerson, 10)
                         };
 
             await doInsert(payload);
@@ -67,14 +67,14 @@ const Form = ({ onSubmited, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row ">
 
                     {/* Start:: Column name */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputName">Name</label>
+                            htmlFor="keyInputName"><b>Name</b></label>
                         
                         {/* Input element text*/}
                         <input
@@ -84,10 +84,10 @@ const Form = ({ onSubmited, onClosed }) => {
                             className="form-control"
                             autoComplete="off"
                             autoFocus
-                            maxLength = { 100 }
-                            disabled = { loading }
-                            value = { values.keyInputName }
-                            onChange = { handleChange } />
+                            maxLength={100}
+                            disabled={loading}
+                            value={values.keyInputName}
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputName && 
@@ -101,14 +101,14 @@ const Form = ({ onSubmited, onClosed }) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column tariff */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
-                                htmlFor={"keyInputTariff"}>Tariff</label>
+                                htmlFor={"keyInputTariff"}><b>Tariff</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -120,22 +120,22 @@ const Form = ({ onSubmited, onClosed }) => {
                             maxLength={8}
                             disabled={loading}
                             value={values.keyInputTariff} 
-                            onChange={handleChange} />
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputTariff && 
                             touched.keyInputTariff ? 
-                                (<small className="text-danger">{ errors.keyInputTariff }</small>) : 
+                                (<small className="text-danger">{errors.keyInputTariff}</small>) : 
                                     null}
                     </div>
                     {/* End:: Column tariff */}
 
                     {/* Start:: Column max discount */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputDiscount"}>Maximum discount</label>
+                            htmlFor={"keyInputDiscount"}><b>Maximum discount</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -147,7 +147,7 @@ const Form = ({ onSubmited, onClosed }) => {
                             maxLength={8}
                             disabled={loading} 
                             value={values.keyInputDiscount} 
-                            onChange={handleChange} />
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputDiscount && 
@@ -161,14 +161,14 @@ const Form = ({ onSubmited, onClosed }) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column extra bed tariff */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputBed"}>Extra bed tariff</label>
+                            htmlFor={"keyInputBed"}><b>Extra bed tariff</b></label>
                         
                         {/* Input element text*/}
                         <input
@@ -180,7 +180,7 @@ const Form = ({ onSubmited, onClosed }) => {
                             maxLength={8}
                             disabled={loading}
                             value={values.keyInputBed} 
-                            onChange={handleChange} />
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputBed && 
@@ -191,11 +191,11 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column extra bed tariff */}
 
                     {/* Start:: Column extra person tariff */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputPerson"}>Extra person tariff</label>
+                            htmlFor={"keyInputPerson"}><b>Extra person tariff</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -207,7 +207,7 @@ const Form = ({ onSubmited, onClosed }) => {
                             maxLength={8}
                             disabled={loading}
                             value={values.keyInputPerson} 
-                            onChange={handleChange} />
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.addPerson && 

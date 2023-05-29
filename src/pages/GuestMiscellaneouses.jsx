@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Breadcrumb } from "react-bootstrap";
-import { toast } from "react-toastify";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Breadcrumb} from "react-bootstrap";
+import {toast} from "react-toastify";
 
-import { HotelId } from "../App";
-import { useStateContext } from "../contexts/ContextProvider";
+import {HotelId} from "../App";
+import {useStateContext} from "../contexts/ContextProvider";
 import Add from "../components/guestMiscellaneous/GuestMiscellaneousAdd";
 import Card from "../components/guestMiscellaneous/GuestMiscellaneousCard";
 import Paging from "../components/Paging";
@@ -294,7 +294,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
                             {/* Start :: Display data count */}
-                            <div className="col-12 text-danger">
+                            <div className="col-12 text-danger p-0">
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -304,7 +304,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body">
+                        <div className="card-body py-0">
                             {loading &&
                                 <div className="d-flex justify-content-center">
                                     <div className="spinner-border text-primary" role="status"/>
@@ -317,7 +317,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer">
+                        <div className="card-footer py-0">
                             {/* Start :: Pagination */}
                             <div className="col-12 d-flex justify-content-end">
                                 {!loading && 

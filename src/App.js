@@ -1,10 +1,10 @@
-import React, { createContext, useEffect, useState, useRef, Component } from "react";
-import { BrowserRouter } from "react-router-dom";
+import React, {createContext, useEffect, useState, useRef} from "react";
+import {BrowserRouter} from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 import './App.css';
 
-import { ContextProvider } from "./contexts/ContextProvider";
+import {ContextProvider} from "./contexts/ContextProvider";
 import Container from "./components/Container";
 import ContainerLogin from "./components/ContainerLogin";
 

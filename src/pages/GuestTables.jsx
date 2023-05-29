@@ -1,14 +1,23 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Breadcrumb } from "react-bootstrap";
-import { toast } from "react-toastify";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Breadcrumb} from "react-bootstrap";
+import {toast} from "react-toastify";
 
-import { HotelId } from "../App";
-import { useStateContext } from "../contexts/ContextProvider";
+import {HotelId} from "../App";
+import {useStateContext} from "../contexts/ContextProvider";
 import Add from "../components/guestTable/GuestTableAdd";
 import Card from "../components/guestTable/GuestTableCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
+const Operation = {
+    GuestAdd: 'GUEST_ADD',
+    Order: 'ORDER',
+    Despatch: 'DESPATCH',
+    BillGenerate: 'BILL_GENERATE',
+    PaymentAdd: 'PAYMENT_ADD',
+    Checkout: 'GUEST_CHECKOUT',
+    GuestDel: 'GUEST_DEL'
+};
 
 // Start:: Component
 // props parameters
@@ -21,12 +30,12 @@ import useFetchWithAuth from "../components/common/useFetchWithAuth";
 // openEdit 
 // openDelete
 // close
-const GuestTables = forwardRef(( props, ref ) => {
+const GuestTables = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState('');
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -36,7 +45,7 @@ const GuestTables = forwardRef(( props, ref ) => {
     const indexOfLastItem = selectedPage * itemPerPage;
     const indexOfFirstItem = indexOfLastItem - itemPerPage;
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestRoomAPI}/${hotelId}`,
+        url: `${contextValues.guestTableAPI}/${hotelId}`,
         params: {
             search: search
         }
@@ -62,9 +71,9 @@ const GuestTables = forwardRef(( props, ref ) => {
                 cardRefs.current.forEach((item, idx) => {
                     if (selectedCardIndex === idx)
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
-                });
+                })
             } else {
-                toast.warning("Nothing selected to edit");
+                toast.warning('Nothing selected to edit');
             }
         }
     };
@@ -77,9 +86,9 @@ const GuestTables = forwardRef(( props, ref ) => {
                 cardRefs.current.forEach((item, idx) => {
                     if (selectedCardIndex === idx)
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
-                });
+                })
             } else {
-                toast.warning("Nothing selected to delete");
+                toast.warning('Nothing selected to delete');
             }
         }
     };
@@ -92,32 +101,50 @@ const GuestTables = forwardRef(( props, ref ) => {
     // End:: Close modal
 
     // Start:: on data operation successfully
-    const handleSuccess = ( operation ) => {
+    const handleSuccess = (operation) => {
         switch (operation) {
-            case "add":
-                toast.success("Data successfully added");
+            case Operation.GuestAdd:
+                toast.success('Guest successfully added');
                 setDataChanged(true);
                 props.onSuccess();
                 break;
 
-            case "edit":
-                toast.success("Data successfully changed");
+            case Operation.GuestDel:
+                toast.success('Guest successfully deleted');
                 setDataChanged(true);
                 props.onSuccess();
-                break;                
-
-            case "delete":
-                toast.success("Data successfully deleted");
-                setDataChanged(true);
-                props.onSuccess();
-                break;                
-
-            case "addPayment":
-                toast.success("Payment successfully added");
-                setDataChanged(true);
-                props.onSuccess();
-                break;
+                break;               
     
+            case Operation.Order:
+                toast.success('Item successfully ordered');
+                setDataChanged(true);
+                props.onSuccess();
+                break;               
+
+            case Operation.Despatch:
+                toast.success('Item successfully despatched');
+                setDataChanged(true);
+                props.onSuccess();
+                break;                
+
+            case Operation.BillGenerate:
+                // toast.success("Bill successfully generated");
+                setDataChanged(true);
+                props.onSuccess();
+                break;                
+                    
+            case Operation.PaymentAdd:
+                toast.success('Payment successfully added');
+                setDataChanged(true);
+                props.onSuccess();
+                break;
+
+            case Operation.Checkout:
+                toast.success('Guest successfully checked out');
+                setDataChanged(true);
+                props.onSuccess();
+                break;
+                    
             default:                
                 break;                
         }
@@ -129,8 +156,9 @@ const GuestTables = forwardRef(( props, ref ) => {
             setSelectedCardIndex(index);
 
             cardRefs.current && cardRefs.current.forEach((item, idx) => {
-                if (index !== idx)
+                if (index !== idx) {
                     cardRefs.current[idx] && cardRefs.current[idx].handleDeSelect();
+                }
             });
     };
     // End:: change selection of card element    
@@ -163,54 +191,57 @@ const GuestTables = forwardRef(( props, ref ) => {
             } else { 
                 return null;
             }
-        })
+        });
     };
 
     const createRow = ( pData, rowIdx ) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className="row m-0 p-0" key={rowKey}>
+            <div className="row" key={rowKey}>
                 {
                     pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
                         return createCol(item, itemIdx);
                     })
                 }
-            </div>);
+            </div>)
     };
 
     const createCol = (pData = undefined, itemIdx) => {
-        const colKey = `col_${pData._id}`;
+        const colKey = `col_${pData.id}`;
 
         return (
-            <div className="col-xl-4 col-md-4 m-0" key={colKey}>
+            <div className="col-xl-4 col-md-4" key={colKey}>
                 <Card 
-                    ref={(el) => cardRefs.current[itemIdx] = el}
-                    pIndex={itemIdx}
-                    pId={pData._id} 
-                    pRoomNos={pData.roomNos}
-                    pName={pData.name}
-                    pMobile={pData.mobile}
-                    pAddress={pData.address + ", " + pData.city + ", " + pData.state}
-                    pCheckInDate={pData.checkInDate}
-                    pCheckOutDate={pData.checkOutDate}
-                    pTotalExpenseAmount={pData.totalExpenseAmount}
-                    pTotalPaidAmount={pData.totalPaidAmount}
-                    onEdited={() => {handleSuccess("edit")}}
-                    onDeleted={() => {handleSuccess("delete")}} 
-                    onPaymentAdded={() => {handleSuccess("addPayment")}} 
-                    onClosed={close} 
-                    onActivated={handleActivated}/>                
-            </div>);
+                    ref = {(el) => cardRefs.current[itemIdx] = el}
+                    pIndex = {itemIdx}
+                    pGuestId = {pData.id} 
+                    pName = {pData.name}
+                    pMobile = {pData.mobile}
+                    pGuestCount = {pData.guestCount}
+                    pCorporateName = {pData.corporateName}
+                    pCorporateAddress = {pData.corporateAddress}
+                    pGstNo = {pData.gstNo}
+                    pTotalExpense = {pData.totalExpense}
+                    pTotalBalance = {pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
+                    pIndate = {pData.inDate}
+                    pInTime = {pData.inTime}
+                    onOrdered = {() => {handleSuccess(Operation.Order)}}
+                    onDespatched = {() => {handleSuccess(Operation.Despatch)}}
+                    onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
+                    onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
+                    onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
+                    onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
+                    onClosed = {close} 
+                    onActivated = {handleActivated} />                
+            </div>)
     };
     // End:: show all data in card format
 
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
-        return {
-            changeSearch, openAdd, openEdit, openDelete, close
-        }
+        return {changeSearch, openAdd, openEdit, openDelete, close};
     });
     // End:: forward reff change search and open add/edit/delete modal
 
@@ -221,7 +252,7 @@ const GuestTables = forwardRef(( props, ref ) => {
               await doFetch();
               setDataChanged(false);
             } catch (err) {
-              console.log("Error occured when fetching data");
+              console.log('Error occured when fetching data');
             }
           })();
     }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
@@ -234,20 +265,20 @@ const GuestTables = forwardRef(( props, ref ) => {
     // Start:: Html
     return ( 
         <div className="content-wrapper">
-
+            
             {/* Seart :: Bread crumb */}
             <div className="content-header">
-                <div className="container-fluid">   
+                <div className="container-fluid">
                     <div className="row">
                         <div className="col-sm-4 m-0">
-                            <h1 className="text-dark">Table</h1>
+                            <h1 className="text-dark">Service</h1>
                         </div>
 
                         <div className="col-sm-8">
                             <Breadcrumb className="breadcrumb float-sm-right">
                                 <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
                                 <Breadcrumb.Item href = "/">Transaction</Breadcrumb.Item>
-                                <Breadcrumb.Item active>Table</Breadcrumb.Item>
+                                <Breadcrumb.Item active>Service</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
                     </div>
@@ -258,12 +289,12 @@ const GuestTables = forwardRef(( props, ref ) => {
             {/* Start :: display data */}
             <section className="content">
                 <div className="container-fluid">
-                    <div className="card mb-0">
-                        
+                    <div className="card">
+
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
                             {/* Start :: Display data count */}
-                            <div className="col-12 text-danger">
+                            <div className="col-12 text-danger p-0">
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -273,33 +304,31 @@ const GuestTables = forwardRef(( props, ref ) => {
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body">
-                            { loading &&
+                        <div className="card-body py-0">
+                            {loading &&
                                 <div className="d-flex justify-content-center">
                                     <div className="spinner-border text-primary" role="status"/>
-                                </div> }
+                                </div>}
 
-                            { !loading && 
+                            {!loading && 
                                 data && 
-                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem)) }
+                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
                         </div>
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer">
-                            <div className="row">
-                                {/* Start :: Pagination */}
-                                <div className="col-12 d-flex justify-content-end">
-                                    {!loading && 
-                                            data && 
-                                                <Paging
-                                                    itemPerPage={itemPerPage}
-                                                    totalItem={data.length}
-                                                    selectedPage={selectedPage}
-                                                    onPaging={handlePaging} />}
-                                </div>
-                                {/* End :: Pagination */}
+                        <div className="card-footer p-0">
+                            {/* Start :: Pagination */}
+                            <div className="col-12 d-flex justify-content-end">
+                                {!loading && 
+                                        data && 
+                                            <Paging
+                                                itemPerPage = {itemPerPage}
+                                                totalItem = {data.length}
+                                                selectedPage = {selectedPage}
+                                                onPaging = {handlePaging} />}
                             </div>
+                            {/* End :: Pagination */}
                         </div>
                         {/* End :: Footer & operational panel */}
 
@@ -308,18 +337,17 @@ const GuestTables = forwardRef(( props, ref ) => {
             </section>
             {/* End :: display data */}
 
-            {/* Start :: add employee component */}
+            {/* Start :: add component */}
             <Add 
-                ref={addRef}   
-                onAdded={() => {handleSuccess("add")}}
-                onClosed={close} />
-            {/* End :: add employee component */}
+                ref = {addRef}   
+                onAdded = {() => {handleSuccess(Operation.GuestAdd)}}
+                onClosed = {close} />
+            {/* End :: add component */}
 
         </div>
-    )
+    );
     // End:: Html
 
 });
-
 
 export default GuestTables;

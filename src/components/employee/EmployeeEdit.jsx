@@ -1,27 +1,27 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { employeeSchema } from "../../schemas";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {employeeSchema} from "../../schemas";
 import AccessLevelSelect from "../common/AccessLevelSelect";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited, onClosed }) => {
+const Form = ({pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const { loading, error, doUpdate } = useFetchWithAuth({
+    const {loading, error, doUpdate} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${pId}`
     });
 
     // Start:: Form validate and save data
-    const { values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm } = useFormik({
+    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputAccessLevels: pAccessLevels,
             keyInputName: pName,
@@ -33,11 +33,11 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
         validateOnChange,
         onSubmit: async (values) => {
             const payload = {   
-                "accessLevels": values.keyInputAccessLevels,
-                "name": values.keyInputName.toUpperCase(), 
-                "address": values.keyInputAddress.toUpperCase(), 
-                "mobile": values.keyInputMobile.toString(), 
-                "email": values.keyInputEmail.toLowerCase()
+                accessLevels: values.keyInputAccessLevels,
+                name: values.keyInputName.toUpperCase(), 
+                address: values.keyInputAddress.toUpperCase(), 
+                mobile: values.keyInputMobile.toString(), 
+                email: values.keyInputEmail.toLowerCase()
             }
 
             await doUpdate(payload);
@@ -68,27 +68,27 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
+                <div className="row">
 
                     {/* Start:: Column role */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputAccessLevels">Role</label>
+                            htmlFor="keyInputAccessLevels"><b>Role</b></label>
 
                         {/* Input element multi select */}
                         <AccessLevelSelect
-                            name = { 'keyInputAccessLevels' }
-                            value = { values.keyInputAccessLevels } 
-                            disabled ={ true } 
-                            onChange={ (value) => { setFieldValue('keyInputAccessLevels', value) } }/>
+                            name={"keyInputAccessLevels"}
+                            value={values.keyInputAccessLevels} 
+                            disabled={true} 
+                            onChange={(value) => {setFieldValue('keyInputAccessLevels', value)}}/>
 
                         {/* Validation message */}
-                        { errors.keyInputAccessLevels && 
+                        {errors.keyInputAccessLevels && 
                             touched.keyInputAccessLevels ? 
-                                (<small className="text-danger">{ errors.keyInputAccessLevels }</small>) : 
-                                    null }
+                                (<small className="text-danger">{errors.keyInputAccessLevels}</small>) : 
+                                    null}
                     </div>
                     {/* End:: Column role */}
 
@@ -96,14 +96,14 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
+                <div className="row">
                     
                     {/* Start:: Column role */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputName">Name</label>
+                            htmlFor="keyInputName"><b>Name</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -113,15 +113,15 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
                             placeholder="Name" 
                             autoComplete="off"
                             autoFocus
-                            maxLength = { 100 }
-                            value = { values.keyInputName } 
-                            onChange = { handleChange } />
+                            maxLength={100}
+                            value={values.keyInputName} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
-                        { errors.keyInputName && 
+                        {errors.keyInputName && 
                             touched.keyInputName ? 
-                                (<small className="text-danger">{ errors.keyInputName }</small>) : 
-                                    null }
+                                (<small className="text-danger">{errors.keyInputName}</small>) : 
+                                    null}
                     </div>
                     {/* End:: Column role */}
 
@@ -129,47 +129,14 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
+                <div className="row">
 
                     {/* Start:: Column role */}
-                    <div className="col-12">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputAddress">Address</label>
-
-                        {/* Input element text*/}
-                        <textarea 
-                            id="keyInputAddress"
-                            placeholder="Address"
-                            className="form-control"
-                            rows = { "5" }
-                            maxLength = { "256" }
-                            disabled = { loading || error !== null }
-                            // ref = { inputRef }
-                            value = { values.keyInputAddress } 
-                            onChange = { handleChange } />
-
-                    {/* Validation message */}
-                    { errors.keyInputAddress && 
-                        touched.keyInputAddress ? 
-                            (<small className="text-danger">{ errors.keyInputAddress }</small>) : 
-                                null }
-                    </div>
-                    {/* End:: Column role */}
-
-                </div>
-                {/* End:: Row */}
-
-                {/* Start:: Row */}
-                <div className="row mb-2">
-
-                    {/* Start:: Column role */}
-                    <div className="col-xs-12 col-md-6">
-
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor="keyInputBed">Mobile no.</label>
+                            htmlFor="keyInputBed"><b>Mobile no.</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -178,25 +145,25 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
                             className="form-control"
                             placeholder="Mobile no." 
                             autoComplete="off"
-                            maxLength = { 256 }
-                            disabled = { loading || error !== null }
-                            value = { values.keyInputMobile } 
-                            onChange = { handleChange } />
+                            maxLength={256}
+                            disabled={loading || error !== null}
+                            value={values.keyInputMobile} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
-                        { errors.keyInputMobile && 
+                        {errors.keyInputMobile && 
                             touched.keyInputMobile ? 
-                                (<small className="text-danger">{ errors.keyInputMobile }</small>) : 
-                                    null }
+                                (<small className="text-danger">{errors.keyInputMobile}</small>) : 
+                                    null}
                     </div>
                     {/* End:: Column role */}
 
                     {/* Start:: Column role */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputEmail">Email</label>
+                            htmlFor="keyInputEmail"><b>Email</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -204,16 +171,48 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
                             id="keyInputEmail"
                             className="form-control"
                             placeholder="Email" 
-                            maxLength = { 100 }
-                            disabled = { loading || error !== null }
-                            value = { values.keyInputEmail } 
-                            onChange = { handleChange } />
+                            maxLength={100}
+                            disabled={loading || error !== null}
+                            value={values.keyInputEmail} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
-                        { errors.keyInputEmail && 
+                        {errors.keyInputEmail && 
                             touched.keyInputEmail ? 
-                                (<small className="text-danger">{ errors.keyInputEmail }</small>) : 
-                                    null }
+                                (<small className="text-danger">{errors.keyInputEmail}</small>) : 
+                                    null}
+                    </div>
+                    {/* End:: Column role */}
+
+                </div>
+                {/* End:: Row */}
+
+                {/* Start:: Row */}
+                <div className="row">
+
+                    {/* Start:: Column role */}
+                    <div className="col-12 mb-3">
+
+                        {/* Label element */}
+                        <label className="form-label" 
+                            htmlFor="keyInputAddress"><b>Address</b></label>
+
+                        {/* Input element text*/}
+                        <textarea 
+                            id="keyInputAddress"
+                            placeholder="Address"
+                            className="form-control"
+                            rows={"5"}
+                            maxLength={"256"}
+                            disabled={loading || error !== null}
+                            value={values.keyInputAddress} 
+                            onChange={handleChange}/>
+
+                        {/* Validation message */}
+                        {errors.keyInputAddress && 
+                            touched.keyInputAddress ? 
+                                (<small className="text-danger">{errors.keyInputAddress}</small>) : 
+                                    null}
                     </div>
                     {/* End:: Column role */}
 
@@ -230,8 +229,8 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
                 <button
                     type="button"
                     className="btn btn-danger"
-                    disabled = { loading }
-                    onClick = { handleClose } >
+                    disabled={loading}
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -240,15 +239,15 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading } 
-                    onClick = { handleSubmit } >
+                    disabled={loading} 
+                    onClick={handleSubmit}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                                 <>
                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     Working
-                                </> }
+                                </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -271,11 +270,11 @@ const Form = ({ pAccessLevels, pId, pName, pAddress, pMobile, pEmail, onSubmited
 
 // useImperativeHandle
 // handleShowModal
-const EmployeeEdit = forwardRef(( props, ref ) => {    
+const EmployeeEdit = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${props.pId}`
     });
 
@@ -301,9 +300,7 @@ const EmployeeEdit = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -313,9 +310,7 @@ const EmployeeEdit = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
@@ -339,19 +334,19 @@ const EmployeeEdit = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            { data &&
+            {data &&
                 <Modal 
-                    show = { showModal } >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Edit employee</Modal.Title>
+                        <Modal.Title>Edit</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = { handleCloseModal } >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -359,14 +354,14 @@ const EmployeeEdit = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pId = { data._id }    
-                        pAccessLevels = { data.accessLevels }
-                        pName = { data.name }
-                        pAddress = { data.address }
-                        pMobile = { data.mobile }
-                        pEmail = { data.email }
-                        onSubmited = { handleSave } 
-                        onClosed = { handleCloseModal } />
+                        pId={data._id}    
+                        pAccessLevels={data.accessLevels}
+                        pName={data.name}
+                        pAddress={data.address}
+                        pMobile={data.mobile}
+                        pEmail={data.email}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>}

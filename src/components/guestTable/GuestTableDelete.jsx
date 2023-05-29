@@ -1,20 +1,20 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pId, pName, onSubmited, onClosed }) => {
+const Form = ({pId, pName, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const inputRef = useRef(null);
     const { loading, error, doDelete } = useFetchWithAuth({
-        url: `${contextValues.guestRoomAPI}/${hotelId}/${pId}`
+        url: `${contextValues.guestAPI}/${hotelId}/${pId}`
     });
 
     // Start:: Call delete api
@@ -75,6 +75,43 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
 };
 // End:: form
 
+// Start:: form
+const FormError = ({pName, onClosed}) => {
+    // Start:: Html
+    return (
+        <form>
+
+            {/* Start:: Modal body */}
+            <Modal.Body>
+                <label className="form-label">Guest <mark><code>{pName}</code></mark>can't be deleted, because there is some activity.</label>
+            </Modal.Body>
+            {/* End:: Modal body */}
+
+            {/* Start:: Modal footer */}
+            <Modal.Footer>
+
+                {/* Start:: Close button */}
+                <button 
+                    type="button"   
+                    className="btn btn-danger"
+                    autoFocus
+                    onClick={onClosed} >
+                    Close
+                </button>
+                {/* End:: Close button */}
+
+            </Modal.Footer>
+            {/* End:: Modal footer */}
+
+        </form>                    
+    );
+    // End:: Html
+
+};
+// End:: form
+
+
+
 
 // Start:: Component
 // props parameters
@@ -89,7 +126,7 @@ const GuestTableDelete = forwardRef(( props, ref ) => {
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const { data, loading, error, doFetch } = useFetchWithAuth({
-        url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pId}`
+        url: `${contextValues.guestAPI}/${hotelId}/${props.pId}`
     });
 
     // Start :: Show modal 
@@ -152,7 +189,13 @@ const GuestTableDelete = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            { data &&
+            {data && 
+                (data.balance === 0 && 
+                data.roomsDetail.length === 0 && 
+                data.tablesDetail.length === 0 && 
+                data.miscellaneousesDetail.length === 0 && 
+                data.servicesDetail.length === 0 && 
+                data.expensesPaymentsDetail.length === 0) && 
                 <Modal 
                     size="sm"
                     show={showModal} >
@@ -160,12 +203,12 @@ const GuestTableDelete = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Delete guest room</Modal.Title>
+                        <Modal.Title>Delete guest</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = { handleCloseModal } >
+                            onClick = {handleCloseModal} >
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -174,8 +217,42 @@ const GuestTableDelete = forwardRef(( props, ref ) => {
                     {/* Start:: Form component */}
                     <Form 
                         pId={props.pId} 
-                        pName={data.roomNos}
+                        pName={props.pName}
                         onSubmited={handleSave} 
+                        onClosed={handleCloseModal} />
+                        {/* End:: Form component */}
+            </Modal>}
+            {/* End:: Delete modal */}
+
+            {/* Start:: Delete modal */}
+            {data && 
+                (data.balance !== 0 || 
+                data.roomsDetail.length !== 0 ||
+                data.tablesDetail.length !== 0 ||
+                data.miscellaneousesDetail.length !== 0 ||
+                data.servicesDetail.length !== 0 ||
+                data.expensesPaymentsDetail.length !== 0) && 
+                <Modal 
+                    size="sm"
+                    show={showModal} >
+
+                    {/* Start:: Modal header */}
+                    <Modal.Header>
+                        {/* Header text */}
+                        <Modal.Title>Delete guest error</Modal.Title>
+
+                        {/* Close button */}
+                        <NavLink 
+                            className="nav-icon" href="#" 
+                            onClick={handleCloseModal} >
+                            <i className="align-middle"><X/></i>
+                        </NavLink>
+                    </Modal.Header>
+                    {/* End:: Modal header */}
+
+                    {/* Start:: Form component */}
+                    <FormError 
+                        pName={props.pName}
                         onClosed={handleCloseModal} />
                         {/* End:: Form component */}
             </Modal>}

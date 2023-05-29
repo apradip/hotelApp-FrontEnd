@@ -1,11 +1,11 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { NavLink, Card, Stack, Dropdown } from "react-bootstrap";
+import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {NavLink, Card, Stack, Dropdown} from "react-bootstrap";
 
-import { ChevronDown, Edit3, Scissors } from "react-feather";
-import { subStr } from "../common/Common";
-import RoomCategoryView from "./RoomCategoryView";
-import RoomCategoryEdit from "./RoomCategoryEdit";
-import RoomCategoryDelete from "./RoomCategoryDelete";
+import {MoreVertical, Edit3, Scissors} from "react-feather";
+import {subStr, formatINR} from "../common/Common";
+import View from "./RoomCategoryView";
+import Edit from "./RoomCategoryEdit";
+import Delete from "./RoomCategoryDelete";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown" ref={ref} 
@@ -30,7 +30,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
-const RoomCategoryCard = forwardRef(( props, ref ) => {
+const RoomCategoryCard = forwardRef((props, ref) => {
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
@@ -70,9 +70,7 @@ const RoomCategoryCard = forwardRef(( props, ref ) => {
     
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleDeSelect, handelOpenEdit, handelOpenDelete
-        }
+        return {handleDeSelect, handelOpenEdit, handelOpenDelete}
     });
     // Edit:: forward reff de-select, show edit/delete modal function
 
@@ -89,28 +87,28 @@ const RoomCategoryCard = forwardRef(( props, ref ) => {
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
-                                        if (e.detail === 1) {
-                                            setActive(!active) 
-                                            props.onActivated(props.pIndex)
-                                        }    
-                                        else if (e.detail === 2) {
-                                            handelOpenView()
-                                        }  
-                                   }}>
+                                    if (e.detail === 1) {
+                                        setActive(!active)
+                                        props.onActivated(props.pIndex)
+                                    }    
+                                    else if (e.detail === 2) {
+                                        handelOpenView()
+                                    }  
+                                }}> 
 
                 <Card.Body className="text-sm p-1">
-                    <Stack gap={1}>
+                    <Stack gap={0}>
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-10 text-left">
-                                <h4>{ subStr(props.pName, 20) }</h4>
+                            <span className="col-11 text-left pl-1">
+                                <b>{subStr(props.pName, 25)}</b>
                             </span>
 
                             {/* Start:: Column menu */}
-                            <span className="col-2 text-right">
+                            <span className="col-1 text-right p-0">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>
-                                        <ChevronDown size={16}/>
+                                        <MoreVertical size={16}/>
                                     </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
@@ -132,23 +130,23 @@ const RoomCategoryCard = forwardRef(( props, ref ) => {
                         </Stack>
 
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-6 text-left">Room tariff</span>
-                            <span className="col-6 text-right">{`₹ ${props.pTariff}`}</span>
+                            <span className="col-6 text-left p-0 pl-1">Tariff</span>
+                            <span className="col-6 text-right text-danger p-0 pr-1">{formatINR(props.pTariff)}</span>
                         </Stack>
 
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-6 text-left">Max. discount</span>
-                            <span className="col-6 text-right">{`₹ ${props.pDiscount}`}</span>
+                            <span className="col-6 text-left p-0 pl-1">Max. discount</span>
+                            <span className="col-6 text-right text-danger p-0 pr-1">{formatINR(props.pDiscount)}</span>
                         </Stack>                        
 
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-6 text-left">Ext. bed tariff</span>
-                            <span className="col-6 text-right">{`₹ ${props.pBed}`}</span>
+                            <span className="col-6 text-left p-0 pl-1">Ext. bed tariff</span>
+                            <span className="col-6 text-right text-danger p-0 pr-1">{formatINR(props.pBed)}</span>
                         </Stack>                                                
 
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-6 text-left">Ext. person tariff</span>
-                            <span className="col-6 text-right">{`₹ ${props.pPerson}`}</span>
+                            <span className="col-6 text-left p-0 pl-1">Ext. person tariff</span>
+                            <span className="col-6 text-right text-danger p-0 pr-1">{formatINR(props.pPerson)}</span>
                         </Stack>                                                                        
                     </Stack>
                 </Card.Body>
@@ -156,26 +154,26 @@ const RoomCategoryCard = forwardRef(( props, ref ) => {
             {/* End :: card component */}
 
             {/* Start :: view component */}
-            <RoomCategoryView
-                ref = { viewRef }
-                pId = { props.pId } 
-                onClosed = { handleClose } />
+            <View
+                ref={viewRef}
+                pId={props.pId} 
+                onClosed={handleClose}/>
             {/* End :: view component */}
 
             {/* Start :: edit component */}
-            <RoomCategoryEdit 
-                ref = { editRef }
-                pId = { props.pId } 
-                onEdited = { props.onEdited } 
-                onClosed = { handleClose } />
+            <Edit 
+                ref={editRef}
+                pId={props.pId} 
+                onEdited={props.onEdited} 
+                onClosed={handleClose}/>
             {/* End :: edit component */}
 
             {/* Start :: delete component */}
-            <RoomCategoryDelete 
-                ref = { deleteRef }
-                pId = { props.pId } 
-                onDeleted = { props.onDeleted } 
-                onClosed = { handleClose } />
+            <Delete 
+                ref={deleteRef}
+                pId={props.pId} 
+                onDeleted={props.onDeleted} 
+                onClosed={handleClose}/>
             {/* End :: delete component */}
         </>
     );

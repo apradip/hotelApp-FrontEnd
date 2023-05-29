@@ -64,31 +64,31 @@ const Form = ({pGuestId, pName, pMobile,
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
                     {/* End:: Column name / corporate name */}
                     {pCorporateName ?
-                        <div className="col-6">
-                            <label className="form-label mr-2">Company :</label>
-                            <label className="form-label">{subStr(pCorporateName, 20)}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+                            <label className="col-12 form-label"><b>Company</b></label>
+                            <label className="col-12 form-label">{subStr(pCorporateName, 20)}</label>
                         </div>
                     :
-                        <div className="col-6">
-                            <label className="form-label mr-2">Name :</label>
-                            <label className="form-label">{subStr(pName, 20)}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+                            <label className="col-12 form-label"><b>Name</b></label>
+                            <label className="col-12 form-label">{subStr(pName, 20)}</label>
                         </div>
                     }
                     {/* End:: Column name / corporate name */}
 
                     {/* Start:: Column mobile no. / corporate address */}
                     {pCorporateName ?
-                        <div className="col-6">
-                            <label className="form-label mr-2">Address :</label>
-                            <label className="form-label">{subStr(pCorporateAddress, 20)}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+                            <label className="col-12 form-label"><b>Address</b></label>
+                            <label className="col-12 form-label">{subStr(pCorporateAddress, 20)}</label>
                         </div>
                         :
-                        <div className="col-6">
-                            <label className="form-label mr-2">Mobile :</label>
-                            <label className="form-label">{pMobile}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+                            <label className="col-12 form-label"><b>Mobile</b></label>
+                            <label className="col-12 form-label">{pMobile}</label>
                         </div>
                     }
                     {/* End:: Column mobile no. / corporate address */}
@@ -97,27 +97,27 @@ const Form = ({pGuestId, pName, pMobile,
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column payment amount */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputPaymentAmount"}>Amount :</label>
+                            htmlFor={"keyInputPaymentAmount"}><b>Amount</b></label>
 
                         {/* Input element text*/}
                         <input 
-                            type = "text" 
-                            name = "keyInputPaymentAmount"
-                            placeholder = "Payment amount"
-                            className = "form-control"
-                            autoComplete = "off"
+                            type="text" 
+                            name="keyInputPaymentAmount"
+                            placeholder="Payment amount"
+                            className="form-control"
+                            autoComplete="off"
                             autoFocus
-                            maxLength = {10}
-                            disabled = {loading} 
-                            value = {values.keyInputPaymentAmount} 
-                            onChange = {handleChange} />
+                            maxLength={10}
+                            disabled={loading} 
+                            value={values.keyInputPaymentAmount} 
+                            onChange={handleChange} />
 
                         {/* Validation message */}
                         {errors.keyInputPaymentAmount && 
@@ -132,14 +132,14 @@ const Form = ({pGuestId, pName, pMobile,
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column narration */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputGST"}>Narration :</label>
+                            htmlFor={"keyInputGST"}><b>Narration</b></label>
 
                         {/* Input element select*/}
                         <textarea

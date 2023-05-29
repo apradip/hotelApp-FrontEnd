@@ -1,19 +1,19 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pId, pName, onSubmited, onClosed }) => {
+const Form = ({pId, pName, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const inputRef = useRef(null);
-    const { loading, error, doDelete } = useFetchWithAuth({
+    const {loading, error, doDelete} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${pId}`
     });
 
@@ -30,7 +30,7 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
 
             {/* Start:: Modal body */}
             <Modal.Body>
-                <label className="form-label">Are you really want to remove <mark><code>{ pName }</code></mark> ?</label>
+                <label className="form-label">Are you really want to remove <mark><code>{pName}</code></mark> ?</label>
             </Modal.Body>
             {/* End:: Modal body */}
 
@@ -42,8 +42,8 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
                     type="button"   
                     className="btn btn-danger"
                     autoFocus
-                    disabled = { loading }
-                    ref = { inputRef } >
+                    disabled={loading}
+                    ref={inputRef}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -52,15 +52,15 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading || error }
-                    onClick = { handleSave } >
+                    disabled={loading || error}
+                    onClick={handleSave}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
-                        </> }
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -83,11 +83,11 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const EmployeeDelete = forwardRef(( props, ref ) => {
+const EmployeeDelete = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${props.pId}`
     });
 
@@ -113,9 +113,7 @@ const EmployeeDelete = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -125,9 +123,7 @@ const EmployeeDelete = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
@@ -154,17 +150,17 @@ const EmployeeDelete = forwardRef(( props, ref ) => {
             { data &&
                 <Modal 
                     size="sm"
-                    show = { showModal } >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Delete employee</Modal.Title>
+                        <Modal.Title>Delete</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = { handleCloseModal } >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -172,10 +168,10 @@ const EmployeeDelete = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pId = { props.pId } 
-                        pName = { data.name }
-                        onSubmited = { handleSave } 
-                        onClosed = { handleCloseModal } />
+                        pId={props.pId} 
+                        pName={data.name}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
             </Modal>}
             {/* End:: Delete modal */}

@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
-const Form = ({ pId, pNo, onSubmited, onClosed }) => {
+const Form = ({pId, pNo, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const { loading, error, doDelete } = useFetchWithAuth({
+    const {loading, error, doDelete} = useFetchWithAuth({
         url: `${contextValues.tableAPI}/${hotelId}/${pId}`
     });
 
@@ -40,8 +40,8 @@ const Form = ({ pId, pNo, onSubmited, onClosed }) => {
                     type="button"   
                     className="btn btn-danger"
                     autoFocus
-                    disabled = { loading }
-                    onClick = { onClosed } >
+                    disabled={loading}
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -50,15 +50,15 @@ const Form = ({ pId, pNo, onSubmited, onClosed }) => {
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading || error }
-                    onClick = { handleSave } >
+                    disabled={loading || error}
+                    onClick={handleSave}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
-                        </> }
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -81,11 +81,11 @@ const Form = ({ pId, pNo, onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const TableDelete = forwardRef(( props, ref ) => {
+const TableDelete = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.tableAPI}/${hotelId}/${props.pId}`
     });
 
@@ -111,9 +111,7 @@ const TableDelete = forwardRef(( props, ref ) => {
     
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -123,9 +121,7 @@ const TableDelete = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -149,15 +145,15 @@ const TableDelete = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            { data &&
+            {data &&
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Delete table</Modal.Title>
+                        <Modal.Title>Delete</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
@@ -173,7 +169,7 @@ const TableDelete = forwardRef(( props, ref ) => {
                         pId={props.pId} 
                         pNo={data.no}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
             </Modal>}
             {/* End:: Delete modal */}

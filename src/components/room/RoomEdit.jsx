@@ -1,22 +1,22 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import RoomCategorySelect from '../common/RoomCategorySelect';
-import { roomSchema } from "../../schemas";
+import {roomSchema} from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubmited, onClosed }) => {
+const Form = ({pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const { loading, error, doUpdate } = useFetchWithAuth({
+    const {loading, error, doUpdate} = useFetchWithAuth({
         url: `${contextValues.roomAPI}/${hotelId}/${pId}`
     });
 
@@ -34,12 +34,12 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
         validateOnChange,
         onSubmit: async (values, action) => {
             const payload = {   
-                                'no': values.keyInputNo.toUpperCase(), 
-                                'categoryId': values.keyInputCategoryId,
-                                'tariff': parseFloat(Number.isNaN(values.keyInputTariff) ? 0 : values.keyInputTariff, 10), 
-                                'maxDiscount': parseFloat(Number.isNaN(values.keyInputDiscount) ? 0 : values.keyInputDiscount, 10), 
-                                'extraBedTariff': parseFloat(Number.isNaN(values.keyInputBed) ? 0 : values.keyInputBed, 10), 
-                                'extraPersonTariff': parseFloat(Number.isNaN(values.keyInputPerson) ? 0 : values.keyInputPerson, 10)
+                                no: values.keyInputNo.toUpperCase(), 
+                                categoryId: values.keyInputCategoryId,
+                                tariff: parseFloat(Number.isNaN(values.keyInputTariff) ? 0 : values.keyInputTariff, 10), 
+                                maxDiscount: parseFloat(Number.isNaN(values.keyInputDiscount) ? 0 : values.keyInputDiscount, 10), 
+                                extraBedTariff: parseFloat(Number.isNaN(values.keyInputBed) ? 0 : values.keyInputBed, 10), 
+                                extraPersonTariff: parseFloat(Number.isNaN(values.keyInputPerson) ? 0 : values.keyInputPerson, 10)
                             };
 
             await doUpdate(payload);
@@ -70,14 +70,14 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
+                <div className="row">
 
                     {/* Start:: Column no */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputNo">Room No.</label>
+                            htmlFor="keyInputNo"><b>Room No.</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -86,23 +86,23 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                             placeholder='Room no.' 
                             className='form-control'
                             disabled={true}
-                            value={values.keyInputNo} />
+                            value={values.keyInputNo}/>
                     </div>
                     {/* End:: Column no */}
 
                     {/* Start:: Column room category */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputCategoryName">Category</label>
+                            htmlFor="keyInputCategoryName"><b>Category</b></label>
                         
                         {/* Input element select */}
                         <RoomCategorySelect
-                            name = {"keyInputCategoryName"}
-                            value = { values.keyInputCategoryId } 
-                            disabled = { true } 
-                            onChange = { (value) => {setFieldValue('keyInputCategoryId', value)} } />
+                            name={"keyInputCategoryName"}
+                            value={values.keyInputCategoryId} 
+                            disabled={true} 
+                            onChange={(value) => {setFieldValue('keyInputCategoryId', value)}}/>
                     </div>
                     {/* End:: Column room category */}
 
@@ -110,14 +110,14 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                 <div className="row mb-2">
+                 <div className="row">
 
                     {/* Start:: Column tariff */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputTariff">Tariff</label>
+                            htmlFor="keyInputTariff"><b>Tariff</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -127,7 +127,7 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                             className="form-control"
                             disabled={loading || error !== null}
                             value={values.keyInputTariff} 
-                            onChange={handleChange} />
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputTariff && 
@@ -138,11 +138,11 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                     {/* End:: Column tariff */}
 
                     {/* Start:: Column max. discount */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputDiscount">Maximum discount</label>
+                            htmlFor="keyInputDiscount"><b>Maximum discount</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -152,7 +152,7 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                             className="form-control"
                             disabled={loading || error !== null}
                             value={values.keyInputDiscount} 
-                            onChange={handleChange} />
+                            onChange={handleChange}/>
                         
                         {/* Validation message */}
                         {errors.keyInputDiscount && 
@@ -166,14 +166,14 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
+                <div className="row">
 
                     {/* Start:: Column ext. bed tariff */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputBed">Extra bed tariff</label>
+                            htmlFor="keyInputBed"><b>Extra bed tariff</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -183,7 +183,7 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                             className="form-control"
                             disabled={loading || error !== null}
                             value={values.keyInputBed} 
-                            onChange={handleChange} />
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputBed && 
@@ -194,11 +194,11 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                     {/* End:: Column ext. bed tariff */}
 
                     {/* Start:: Column ext. person tariff */}
-                    <div className="col-xs-12 col-md-6">
+                    <div className="col-xs-12 col-md-6 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputPerson">Extra person tariff</label>
+                            htmlFor="keyInputPerson"><b>Extra person tariff</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -208,7 +208,7 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                             className="form-control"
                             disabled={loading || error !== null}
                             value={values.keyInputPerson} 
-                            onChange={handleChange} />
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputPerson && 
@@ -231,8 +231,8 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                 <button
                     type="button"
                     className="btn btn-danger"
-                    disabled = { loading }
-                    onClick = { handleClose } >
+                    disabled={loading}
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -241,15 +241,15 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading } 
-                    onClick = { handleSubmit } >
+                    disabled={loading} 
+                    onClick={handleSubmit}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                                 <>
                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     Working
-                                </> }
+                                </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -272,7 +272,7 @@ const Form = ({ pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubm
 
 // useImperativeHandle
 // handleShowModal
-const RoomEdit = forwardRef(( props, ref ) => {    
+const RoomEdit = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -302,9 +302,7 @@ const RoomEdit = forwardRef(( props, ref ) => {
     
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -314,9 +312,7 @@ const RoomEdit = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -340,19 +336,19 @@ const RoomEdit = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            { data &&
+            {data &&
                 <Modal 
-                    show = { showModal } >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Edit room</Modal.Title>
+                        <Modal.Title>Edit</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = { handleCloseModal } >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -360,15 +356,15 @@ const RoomEdit = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pId = { data._id }
-                        pNo = { data.no }
-                        pCategoryId = { data.categoryId }
-                        pTariff = { parseFloat(data.tariff, 10).toFixed(2) }
-                        pDiscount = { parseFloat(data.maxDiscount, 10).toFixed(2) }
-                        pBed = { parseFloat(data.extraBedTariff, 10).toFixed(2) }
-                        pPerson = { parseFloat(data.extraPersonTariff, 10).toFixed(2) }
-                        onSubmited = { handleSave } 
-                        onClosed = { handleCloseModal } />
+                        pId={data._id}
+                        pNo={data.no}
+                        pCategoryId={data.categoryId}
+                        pTariff={parseFloat(data.tariff, 10).toFixed(2)}
+                        pDiscount={parseFloat(data.maxDiscount, 10).toFixed(2)}
+                        pBed={parseFloat(data.extraBedTariff, 10).toFixed(2)}
+                        pPerson={parseFloat(data.extraPersonTariff, 10).toFixed(2)}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>}

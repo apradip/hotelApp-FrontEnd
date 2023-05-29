@@ -310,7 +310,7 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.name = true
             attribute.show.search = true
             attribute.show.add = true
-            attribute.show.edit = true
+            attribute.show.edit = false
             attribute.show.delete = true
 
             break
@@ -325,7 +325,18 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.delete = true
 
             break
-        
+
+        case 'guestservices':
+            attribute.name = 'Services'
+            attribute.dynamic = true
+            attribute.show.name = true 
+            attribute.show.search = true
+            attribute.show.add = true
+            attribute.show.edit = false
+            attribute.show.delete = true
+
+            break
+                
         case 'guestmiscellaneous':
             attribute.name = 'Miscellaneous'
             attribute.dynamic = true

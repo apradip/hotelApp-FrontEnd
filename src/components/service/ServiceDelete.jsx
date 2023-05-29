@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
-const Form = ({ pId, pName, onSubmited, onClosed }) => {
+const Form = ({pId, pName, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const { loading, error, doDelete } = useFetchWithAuth({
+    const {loading, error, doDelete} = useFetchWithAuth({
         url: `${contextValues.serviceAPI}/${hotelId}/${pId}`
     });
 
@@ -41,7 +41,7 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
                     className="btn btn-danger"
                     autoFocus
                     disabled={loading}
-                    onClick={onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -81,7 +81,7 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const ServiceDelete = forwardRef(( props, ref ) => {
+const ServiceDelete = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -111,9 +111,7 @@ const ServiceDelete = forwardRef(( props, ref ) => {
     
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -123,9 +121,7 @@ const ServiceDelete = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -149,15 +145,15 @@ const ServiceDelete = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            { data &&
+            {data &&
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Delete service</Modal.Title>
+                        <Modal.Title>Delete</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
@@ -173,7 +169,7 @@ const ServiceDelete = forwardRef(( props, ref ) => {
                         pId={props.pId} 
                         pName={data.name}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
             </Modal>}
             {/* End:: Delete modal */}

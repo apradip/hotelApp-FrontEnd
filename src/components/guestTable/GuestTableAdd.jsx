@@ -1,38 +1,26 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
 import DatePicker from "react-datepicker";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { guestTableSchema } from "../../schemas";
-import { formatYYYYMMDD, formatHHMM } from "../common/Common";
-// import TableBookingGrid from "./TableBookingGrid";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {guestSmallSchema} from "../../schemas";
+import {formatYYYYMMDD, formatHHMM} from "../common/Common";
 import TableSelect from "../common/TableSelect";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ onSubmited, onClosed }) => {
+const Form = ({onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    
-    const [tableData, setTableData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
-    // const [defaultRowData, setDefaultRowData] = useState([
-    //     {rowId: 1, table: "Select table", tableId: ""},
-    //     {rowId: 2, table: "Select table", tableId: ""}
-    // ]);
-
     const {loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.guestTableAPI}/${hotelId}`
+        url: `${contextValues.guestAPI}/${hotelId}`
     });
-
-    // const handelChangeTableData = (tableData) => {
-    //     setTableData(tableData);
-    // } 
 
     // Start:: Form validate and save data
     const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
@@ -43,23 +31,24 @@ const Form = ({ onSubmited, onClosed }) => {
             keyInputCorporateName: "",
             keyInputCorporateAddress: "",
             keyInputGST: "",
-            keyInputTables: "",
-            keyInputCheckInDate: new Date(),
-            keyInputCheckInTime: new Date()
+            // keyInputTables: "",
+            // keyInputCheckInDate: new Date(),
+            // keyInputCheckInTime: new Date()
         },
-        validationSchema: guestTableSchema,
+        validationSchema: guestSmallSchema,
         validateOnChange,
         onSubmit: async (values) => {
             const payload = {   
-                "name": values.keyInputName.toUpperCase(), 
-                "mobile": parseInt(values.keyInputMobile),
-                "guestCount": parseInt(values.keyInputGuestCount),
-                "corporateName": values.keyInputCorporateName,
-                "corporateAddress": values.keyInputCorporateAddress,
-                "gstNo": values.keyInputGST,
-                "tables": values.keyInputTables,
-                "checkInDate": formatYYYYMMDD(values.keyInputCheckInDate),
-                "checkInTime": formatHHMM(values.keyInputCheckInTime),
+                option: 'S',
+                name: values.keyInputName.toUpperCase(), 
+                mobile: parseInt(values.keyInputMobile),
+                guestCount: parseInt(values.keyInputGuestCount),
+                corporateName: values.keyInputCorporateName,
+                corporateAddress: values.keyInputCorporateAddress,
+                gstNo: values.keyInputGST,
+                // tables: values.keyInputTables,
+                // checkInDate: formatYYYYMMDD(values.keyInputCheckInDate),
+                // checkInTime: formatHHMM(values.keyInputCheckInTime)
             }
 
             await doInsert(payload);
@@ -90,14 +79,14 @@ const Form = ({ onSubmited, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column name */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputName"}>Name</label>
+                            htmlFor={"keyInputName"}><b>Name</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -121,17 +110,17 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column name */}
 
                     {/* Start:: Column mobile */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputMobile"}>Mobile</label>
+                            htmlFor={"keyInputMobile"}><b>Mobile No.</b></label>
 
                         {/* Input element text*/}
                         <input 
                             type="text" 
                             name="keyInputMobile"
-                            placeholder="Mobile"
+                            placeholder="Mobile No."
                             className="form-control"
                             autoComplete="off"
                             maxLength={100}
@@ -149,11 +138,11 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column mobile */}
 
                     {/* Start:: Column no of guest */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputGuestCount"}>Guest count</label>
+                            htmlFor={"keyInputGuestCount"}><b>Guest count</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -180,14 +169,14 @@ const Form = ({ onSubmited, onClosed }) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column corporate name */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputCorporateName"}>Corporate name</label>
+                            htmlFor={"keyInputCorporateName"}><b>Corporate name</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -196,10 +185,10 @@ const Form = ({ onSubmited, onClosed }) => {
                             placeholder="Corporate name"
                             className="form-control"
                             autoComplete="off"
-                            maxLength={100}
-                            disabled={loading} 
-                            value={values.keyInputCorporateName} 
-                            onChange={handleChange}/>
+                            maxLength = {100}
+                            disabled = {loading} 
+                            value = {values.keyInputCorporateName} 
+                            onChange = {handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputCorporateName && 
@@ -211,11 +200,11 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column corporate name */}
 
                     {/* Start:: Column coroprate address */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputCorporateAddress"}>Corporate address</label>
+                            htmlFor={"keyInputCorporateAddress"}><b>Corporate address</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -239,11 +228,11 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column coroprate address */}
 
                     {/* Start:: Column gst no */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputGST"}>GST No.</label>
+                            htmlFor={"keyInputGST"}><b>GST No.</b></label>
 
                         {/* Input element select*/}
                         <input 
@@ -270,14 +259,14 @@ const Form = ({ onSubmited, onClosed }) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column table */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputTables"}>Tables</label>
+                            htmlFor={"keyInputTables"}><b>Tables</b></label>
 
                         {/* Input element select*/}
                         <TableSelect 
@@ -294,11 +283,11 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column table */}
 
                     {/* Start:: Column check in date */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputCheckInDate"}>Check in date</label>
+                            htmlFor={"keyInputCheckInDate"}><b>Check in date</b></label>
 
                         {/* Input element text*/}
                         <DatePicker
@@ -322,11 +311,11 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column check in date */}
 
                     {/* Start:: Column check in time */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputCheckInTime"}>Check in time</label>
+                            htmlFor={"keyInputCheckInTime"}><b>Check in time</b></label>
 
                         {/* Input element text*/}
                         <DatePicker
@@ -354,24 +343,6 @@ const Form = ({ onSubmited, onClosed }) => {
                 </div>
                 {/* End:: Row */}
 
-                {/* Start:: Row */}
-                <div className="row">
-
-                    {/* Start:: Column food detail */}
-                    <div className="col-12">
-                        
-                        {/* Label element */}
-                        <label className="form-label">Food detail</label>
-
-                        {/* <TableBookingGrid
-                            pState="ADD"
-                            pDefaultRowData={defaultRowData}
-                            onChange={handelChangeTableData}/> */}
-                    </div>                
-                    {/* End:: Column food detail */}
-
-                </div>
-                {/* End:: Row */}
 
             </Modal.Body>
             {/* End:: Modal body */}
@@ -472,12 +443,12 @@ const GuestTableAdd = forwardRef(( props, ref ) => {
         <>
             {/* Start:: Add modal */}
             <Modal size="lg"
-                show={showModal}>
+                show={showModal} >
 
                 {/* Start:: Modal header */}
                 <Modal.Header>
                     {/* Header text */}
-                    <Modal.Title>Add guest table</Modal.Title>
+                    <Modal.Title>New guest</Modal.Title>
 
                     {/* Close button */}
                     <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>
@@ -489,7 +460,7 @@ const GuestTableAdd = forwardRef(( props, ref ) => {
                 {/* Start:: Form component */}
                 <Form
                     onSubmited={handleSave} 
-                    onClosed={handleCloseModal}/>
+                    onClosed={handleCloseModal} />
                 {/* End:: Form component */}
 
             </Modal>

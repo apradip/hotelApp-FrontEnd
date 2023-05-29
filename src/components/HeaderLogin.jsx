@@ -3,7 +3,7 @@ import {Nav, Navbar, OverlayTrigger, Tooltip} from "react-bootstrap";
 import Dropdown from 'react-bootstrap/Dropdown';
 import {useNavigate, NavLink} from "react-router-dom";
 import {toast} from "react-toastify";
-import {Menu, Paperclip, Edit3, Scissors, AtSign, ChevronDown} from "react-feather";
+import {Menu, Paperclip, Edit3, Scissors, User, MoreVertical} from "react-feather";
 
 import {HotelId} from "../App";
 import {useStateContext} from "../contexts/ContextProvider";
@@ -60,6 +60,7 @@ const HeaderLogin = forwardRef((props, ref) => {
     };
 
     const handleClose = () => {
+        console.log("close");
     };
     
     const handleChangeProfileSuccess = async () => {
@@ -171,7 +172,6 @@ const HeaderLogin = forwardRef((props, ref) => {
                 <div className="input-group input-group-sm">
                     {selectedPage &&
                         <div className="navbar-collapse collapse">
-                            {/* <Navbar.Brand className="d-none d-lg-block d-xl-block">{getPageAttribute(selectedPage).name}</Navbar.Brand> */}
                             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                             <Navbar.Collapse id="basic-navbar-nav">
                                 <Nav className="me-auto">
@@ -228,12 +228,12 @@ const HeaderLogin = forwardRef((props, ref) => {
                 <li className="nav-item dropdown">
                     <Dropdown>
                         <Dropdown.Toggle as={CustomToggle}>
-                            <AtSign size={20} className="d-none d-sm-inline-block"/>
+                            <User size={20} className="d-none d-sm-inline-block"/>
                             <span className="mx-1 d-none d-sm-inline-block">                                 
                                 {data && getFirstName(data.name)}
                                 {!data && getFirstName(props.pEmployeeName)}
                             </span>
-                            <ChevronDown size={16}/>
+                            <MoreVertical size={16}/>
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>

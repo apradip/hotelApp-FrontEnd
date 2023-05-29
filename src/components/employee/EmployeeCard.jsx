@@ -1,11 +1,11 @@
 import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
 import {NavLink, Card, Stack, Dropdown} from "react-bootstrap";
 
-import {ChevronDown, Edit3, Scissors} from "react-feather";
+import {MoreVertical, Edit3, Scissors} from "react-feather";
 import {subStr, getAccessLevel} from "../common/Common";
-import EmployeeView from "./EmployeeView";
-import EmployeeEdit from "./EmployeeEdit";
-import EmployeeDelete from "./EmployeeDelete";
+import View from "./EmployeeView";
+import Edit from "./EmployeeEdit";
+import Delete from "./EmployeeDelete";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown" ref={ref} 
@@ -29,7 +29,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
-const EmployeeCard = forwardRef(( props, ref ) => {
+const EmployeeCard = forwardRef((props, ref) => {
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
@@ -69,9 +69,7 @@ const EmployeeCard = forwardRef(( props, ref ) => {
     
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleDeSelect, handelOpenEdit, handelOpenDelete
-        }
+        return {handleDeSelect, handelOpenEdit, handelOpenDelete}
     });
     // Edit:: forward reff de-select, show edit/delete modal function
 
@@ -88,28 +86,28 @@ const EmployeeCard = forwardRef(( props, ref ) => {
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
-                                        if (e.detail === 1) {
-                                            setActive(!active) 
-                                            props.onActivated(props.pIndex)
-                                        }    
-                                        else if (e.detail === 2) {
-                                            handelOpenView()
-                                        }  
-                                   }}>
+                                    if (e.detail === 1) {
+                                        setActive(!active)
+                                        props.onActivated(props.pIndex)
+                                    }    
+                                    else if (e.detail === 2) {
+                                        handelOpenView()
+                                    }  
+                                }}> 
 
                 <Card.Body className="text-sm p-1">
                     <Stack gap={0}>
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-10 text-left">
-                                <h4>{subStr(props.pName, 20)}</h4>
+                            <span className="col-11 text-left pl-1">
+                                <b>{subStr(props.pName, 20)}</b>
                             </span>
 
                             {/* Start:: Column menu */}
-                            <span className="col-2 text-right">
+                            <span className="col-1 text-right p-0">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>
-                                        <ChevronDown size={16}/>
+                                        <MoreVertical size={16}/>
                                     </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
@@ -131,30 +129,21 @@ const EmployeeCard = forwardRef(( props, ref ) => {
                         </Stack>
 
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-3 text-left">Role</span>
-                                
-                            <span className="col-9 text-right">
+                            <span className="col-3 text-left pl-1">Role</span>
+                            <span className="col-9 text-right p-0 pr-1">
                                 {subStr(getAccessLevel(props.pAccessLevels), 25)}</span>
                         </Stack>
 
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-4 text-left">Mobile no.</span>
-                                
-                            <span className="col-8 text-right">
+                            <span className="col-3 text-left pl-1">Mobile no.</span>
+                            <span className="col-9 text-right p-0 pr-1">
                                 {props.pMobile}</span>
                         </Stack>
 
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-3 text-left">Email</span>
-                                
-                            <span className="col-9 text-right">
+                            <span className="col-3 text-left pl-1">Email</span>
+                            <span className="col-9 text-right p-0 pr-1">
                                 {props.pEmail}</span>
-                        </Stack>
-
-                        <Stack gap={0}>
-                            <div className="col-12">
-                                {subStr(props.pAddress, 45)}
-                            </div>
                         </Stack>
                     </Stack>
                 </Card.Body>
@@ -162,26 +151,26 @@ const EmployeeCard = forwardRef(( props, ref ) => {
             {/* End :: card component */}
 
             {/* Start :: view employee component */}
-            <EmployeeView
-                ref = { viewRef }
-                pId = { props.pId } 
-                onClosed = { handleClose } />
+            <View
+                ref={viewRef}
+                pId={props.pId} 
+                onClosed={handleClose}/>
             {/* End :: view employee component */}
 
             {/* Start :: edit employee component */}
-            <EmployeeEdit 
-                ref = { editRef }
-                pId = { props.pId } 
-                onEdited = { props.onEdited } 
-                onClosed = { handleClose } />
+            <Edit 
+                ref={editRef}
+                pId={props.pId} 
+                onEdited={props.onEdited} 
+                onClosed={handleClose}/>
             {/* End :: edit employee component */}
 
             {/* Start :: delete employee component */}
-            <EmployeeDelete 
-                ref = { deleteRef }
-                pId = { props.pId } 
-                onDeleted = { props.onDeleted } 
-                onClosed = { handleClose } />
+            <Delete 
+                ref={deleteRef}
+                pId={props.pId} 
+                onDeleted={props.onDeleted} 
+                onClosed={handleClose}/>
             {/* End :: delete employee component */}
         </>
     );

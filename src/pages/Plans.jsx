@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Breadcrumb } from "react-bootstrap";
-import { toast } from "react-toastify";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Breadcrumb} from "react-bootstrap";
+import {toast} from "react-toastify";
 
-import { HotelId } from "../App";
-import { useStateContext } from "../contexts/ContextProvider";
+import {HotelId} from "../App";
+import {useStateContext} from "../contexts/ContextProvider";
 import Add from "../components/plan/PlanAdd";
 import Card from "../components/plan/PlanCard";
 import Paging from "../components/Paging";
@@ -21,7 +21,7 @@ import useFetchWithAuth from "../components/common/useFetchWithAuth";
 // openEdit 
 // openDelete
 // close
-const Plans = forwardRef(( props, ref ) => {
+const Plans = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const itemPerRow = contextValues.itemPerRow;
@@ -60,9 +60,10 @@ const Plans = forwardRef(( props, ref ) => {
         if (selectedCardIndex !== null) {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
-                    if (selectedCardIndex === idx)
+                    if (selectedCardIndex === idx) {
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
-                });
+                    }
+                })
             } else {
                 toast.warning("Nothing selected to edit");
             }
@@ -75,8 +76,9 @@ const Plans = forwardRef(( props, ref ) => {
         if (selectedCardIndex !== null) {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
-                    if (selectedCardIndex === idx)
+                    if (selectedCardIndex === idx) {
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
+                    }
                 });
             } else {
                 toast.warning("Nothing selected to delete");
@@ -123,8 +125,9 @@ const Plans = forwardRef(( props, ref ) => {
             setSelectedCardIndex(index);
 
             cardRefs.current && cardRefs.current.forEach((item, idx) => {
-                if (index !== idx)
+                if (index !== idx) {
                     cardRefs.current[idx] && cardRefs.current[idx].handleDeSelect();
+                }
             });
     };
     // End:: change selection of card element    
@@ -164,7 +167,7 @@ const Plans = forwardRef(( props, ref ) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className="row m-0 p-0" key={rowKey}>
+            <div className="row" key={rowKey}>
                 {
                     pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
@@ -178,26 +181,24 @@ const Plans = forwardRef(( props, ref ) => {
         const colKey = `col_${pData._id}`;
 
         return (
-            <div className="col-xl-4 col-md-4 m-0" key={colKey}>
+            <div className="col-xl-4 col-md-4" key={colKey}>
                 <Card 
-                    ref = { (el) => cardRefs.current[itemIdx] = el }
-                    pIndex = { itemIdx }
-                    pId = { pData._id } 
-                    pName = { pData.name }
-                    pDescription = { pData.description }
-                    onEdited = { () => {handleSuccess("edit")} }
-                    onDeleted = { () => handleSuccess("delete") } 
-                    onClosed = { close } 
-                    onActivated = { handleActivated } />                
+                    ref={(el) => cardRefs.current[itemIdx] = el}
+                    pIndex={itemIdx}
+                    pId={pData._id} 
+                    pName={pData.name}
+                    pDescription={pData.description}
+                    onEdited={() => {handleSuccess("edit")}}
+                    onDeleted={() => handleSuccess("delete")} 
+                    onClosed={close} 
+                    onActivated={handleActivated} />                
             </div>);
     };
     // End:: show all data in card format
 
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
-        return {
-            changeSearch, openAdd, openEdit, openDelete, close
-        }
+        return {changeSearch, openAdd, openEdit, openDelete, close}
     });
     // End:: forward reff change search and open add/edit/delete modal
 
@@ -251,7 +252,7 @@ const Plans = forwardRef(( props, ref ) => {
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
                             {/* Start :: Display data count */}
-                            <div className="col-12 text-danger">
+                            <div className="col-12 text-danger p-0">
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -261,30 +262,30 @@ const Plans = forwardRef(( props, ref ) => {
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body">
-                            { loading &&
+                        <div className="card-body py-0">
+                            {loading &&
                                 <div className="d-flex justify-content-center">
                                     <div className="spinner-border text-primary" role="status"/>
-                                </div> }
+                                </div>}
 
-                            { !loading && 
+                            {!loading && 
                                 data && 
-                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem)) }
+                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
                         </div>
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer ">
+                        <div className="card-footer py-0">
                             <div className="row">
                                 {/* Start :: Pagination */}
                                 <div className="col-12 d-flex justify-content-end">
                                     {!loading && 
                                             data && 
                                                 <Paging
-                                                    itemPerPage = { itemPerPage }
-                                                    totalItem = { data.length }
-                                                    selectedPage = { selectedPage }
-                                                    onPaging = { handlePaging } />}
+                                                    itemPerPage={itemPerPage}
+                                                    totalItem={data.length}
+                                                    selectedPage={selectedPage}
+                                                    onPaging={handlePaging} />}
                                 </div>
                                 {/* End :: Pagination */}
                             </div>
@@ -298,9 +299,9 @@ const Plans = forwardRef(( props, ref ) => {
 
             {/* Start :: add component */}
             <Add 
-                ref = { addRef }   
-                onAdded = { () => { handleSuccess("add") } }
-                onClosed = { close } />
+                ref={addRef}   
+                onAdded={() => {handleSuccess("add")}}
+                onClosed={close} />
             {/* End :: add component */}
 
         </div>

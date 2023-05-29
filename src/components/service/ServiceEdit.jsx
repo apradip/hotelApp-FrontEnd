@@ -11,7 +11,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
+const Form = ({pId, pName, pPrice, pDescription, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
@@ -20,7 +20,7 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
     });
 
     // Start:: Form validate and save data
-    const { values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm } = useFormik({
+    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputName: pName,
             keyInputPrice: pPrice,
@@ -30,9 +30,9 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
         validateOnChange,
         onSubmit: async (values, action) => {
             const payload = {   
-                                'name': values.keyInputName.toUpperCase(), 
-                                'price': parseFloat(Number.isNaN(values.keyInputPrice) ? 0 : values.keyInputPrice, 10),
-                                'description': values.keyInputDescription.trim()
+                                name: values.keyInputName.toUpperCase(), 
+                                price: parseFloat(Number.isNaN(values.keyInputPrice) ? 0 : values.keyInputPrice, 10),
+                                description: values.keyInputDescription.trim()
                             };
 
             await doUpdate(payload);
@@ -63,14 +63,14 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
+                <div className="row">
 
                     {/* Start:: Column name */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputName">Name</label>
+                            htmlFor="keyInputName"><b>Name</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -86,14 +86,14 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
                  </div>
                 {/* End:: Row */}
 
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column price */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                                htmlFor={"keyInputPrice"}>Price</label>
+                                htmlFor={"keyInputPrice"}><b>Price</b></label>
                         
                         {/* Input element text*/} 
                         <input 
@@ -108,24 +108,24 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
                             onChange={handleChange} />
 
                         {/* Validation message */}
-                        { errors.keyInputPrice && 
+                        {errors.keyInputPrice && 
                              touched.keyInputPrice ? 
                                  (<small className="text-danger">{errors.keyInputPrice}</small>) : 
-                                     null }
+                                     null}
                     </div>
                     {/* End:: Column price */}
 
                 </div>
 
                 {/* Start:: Row */}
-                 <div className="row mb-2">
+                 <div className="row">
 
                     {/* Start:: Column tariff */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputDescription">Description</label>
+                            htmlFor="keyInputDescription"><b>Description</b></label>
                         
                         {/* Input element text*/}
                         <textarea 
@@ -201,7 +201,7 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const ServiceEdit = forwardRef(( props, ref ) => {    
+const ServiceEdit = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -231,9 +231,7 @@ const ServiceEdit = forwardRef(( props, ref ) => {
     
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -243,9 +241,7 @@ const ServiceEdit = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -277,7 +273,7 @@ const ServiceEdit = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Edit service</Modal.Title>
+                        <Modal.Title>Edit</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 

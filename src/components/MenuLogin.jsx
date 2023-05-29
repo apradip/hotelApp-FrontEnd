@@ -1,6 +1,6 @@
-import React, {useState, useEffect, forwardRef, useRef} from "react";
+import React, {useState, useEffect, forwardRef} from "react";
 import {NavLink} from "react-router-dom";
-import SimpleBar from 'simplebar-react';
+import SimpleBar from "simplebar-react";
 import {Grid, Command, Feather, BookOpen, Link, ChevronLeft, ChevronDown} from "react-feather";
 
 import "simplebar-react/dist/simplebar.min.css";
@@ -176,10 +176,16 @@ const MenuLogin = forwardRef((props, ref) => {
                                                 <Link size={16}/> <p>Table</p>
                                             </NavLink>
                                         </li>
-                                        <li className={`nav-item ${menuSelected === 'guestfoods' ? 'active' : ''}`}
+                                        {/* {<li className={`nav-item ${menuSelected === 'guestfoods' ? 'active' : ''}`}
                                             onClick={() => {handelClickMenuItem('guestfoods')}}>
                                             <NavLink to="/guestfoods" className="nav-link">
                                                 <Link size={16}/> <p>Food</p>
+                                            </NavLink>
+                                        </li>} */}
+                                        <li className={`nav-item ${menuSelected === 'guestservices' ? 'active' : ''}`}
+                                            onClick={() => {handelClickMenuItem('guestservices')}}>
+                                            <NavLink to="/guestservices" className="nav-link">
+                                                <Link size={16}/> <p>Service</p>
                                             </NavLink>
                                         </li>
                                         <li className={`nav-item ${menuSelected === 'guestmiscellaneous' ? 'active' : ''}`}

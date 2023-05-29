@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -92,10 +92,10 @@ const FormError = ({pName, onClosed}) => {
 
                 {/* Start:: Close button */}
                 <button 
-                    type = "button"   
-                    className = "btn btn-danger"
+                    type="button"   
+                    className="btn btn-danger"
                     autoFocus
-                    onClick = {onClosed} >
+                    onClick={onClosed} >
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -208,7 +208,7 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal} >
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -244,7 +244,7 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal} >
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -252,8 +252,8 @@ const GuestMiscellaneousDelete = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <FormError 
-                        pName = {props.pName}
-                        onClosed = {handleCloseModal} />
+                        pName={props.pName}
+                        onClosed={handleCloseModal} />
                         {/* End:: Form component */}
             </Modal>}
             {/* End:: Delete modal */}

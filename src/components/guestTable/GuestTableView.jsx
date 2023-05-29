@@ -1,45 +1,40 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react"
+import {Modal, NavLink} from "react-bootstrap"
+import {X} from "react-feather"
+import {subStr} from "../common/Common"
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { formatDDMMYYYY } from "../common/Common";
-import GetPhotoIDName from "../common/GetPhotoIDName";
-import GetPlanName from "../common/GetPlanName";
-import GetBookingAgentName from "../common/GetBookingAgentName";
-import RoomBookingGrid from "./TableBookingGrid";
-import useFetchWithAuth from "../common/useFetchWithAuth";
-
+import {HotelId} from "../../App"
+import {useStateContext} from "../../contexts/ContextProvider"
+import OrderGrid from "./TableOrderGrid"
+import useFetchWithAuth from "../common/useFetchWithAuth"
 
 // Start:: form
-const Form = ({ pData, onClosed }) => {
-    const [defaultRowData, setDefaultRowData] = useState([]);
+const Form = ({pGuestId, pName, pMobile, pGuestCount, 
+               pCorporateName, pCorporateAddress, pGstNo, 
+               pData, onClosed}) => {
+                    
+    const [defaultRowData, setDefaultRowData] = useState([])
 
     useEffect(() => {
-        pData.roomDetails.forEach(element => {
+        pData.forEach(element => {
             const rowData = {
                             rowId: defaultRowData.length + 1, 
-                            occupancyDate: element.occupancyDate,
-                            room: element.roomNo, 
-                            extPerson: element.extraPersonCount, 
-                            extBed: element.extraBedCount, 
-                            discount: element.discount, 
-                            gst: element.gstAmount, 
-                            finalTariff: element.tariff, 
-                            roomId: element.roomId, 
-                            extraBedTariff: element.extraBedTariff, 
-                            extraPersonTariff: element.extraPersonTariff, 
-                            maxDiscount: element.maxDiscount, 
-                            tariff: element.price, 
-                            gstPercentage: element.gstPercentage
-                        };
+                            id: element.id,
+                            name: element.name, 
+                            unitPrice: element.unitPrice,
+                            quantity: element.quantity, 
+                            serviceChargePercentage: element.serviceChargePercentage, 
+                            serviceCharge: element.serviceCharge, 
+                            gstPercentage: element.gstPercentage, 
+                            gstCharge: element.gstCharge, 
+                            totalPrice: element.unitPrice * element.quantity
+                        }
     
-            defaultRowData.push(rowData);
-        });
+            defaultRowData.push(rowData)
+        })
 
-        setDefaultRowData(defaultRowData);
-    }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
+        setDefaultRowData(defaultRowData)
+    }, [pData])        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: Html
     return (
@@ -48,259 +43,66 @@ const Form = ({ pData, onClosed }) => {
             {/* Start:: Modal body */}
             <Modal.Body>
 
-                {/* <Accordion defaultActiveKey="0" flush>
-                    <Accordion.Item eventKey="0">   
-                        <Accordion.Header>Guest detail</Accordion.Header>
-                        <Accordion.Body> */}
+                {/* Start:: Row */}
+                <div className="row">
 
-                            <div>
-                                {/* Start:: Row */}
-                                <div className="row mb-3">
+                    {/* Start:: Column name / company */}
+                    {pCorporateName ? 
+                        <div className="col-5">
+                            <label className="form-label mr-2">Company :</label>
+                            <label className="text-muted">{subStr(pCorporateName, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-5">
+                            <label className="form-label mr-2">Name :</label>
+                            <label className="text-muted">{subStr(pName, 30)}</label>
+                        </div>
+                    }
+                    {/* End:: Column name / company */}
 
-                                    {/* Start:: Column document type */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Photo ID :</label>
-                                        <GetPhotoIDName pId={pData.idDocumentId} />
-                                    </div>
-                                    {/* End:: Column document type */}
+                    {/* Start:: Column mobile no / company address */}
+                    {pCorporateName ? 
+                        <div className="col-5">
+                            <label className="form-label mr-2">Address :</label>
+                            <label className="text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-5">
+                            <label className="form-label mr-2">Mobile :</label>
+                            <label className="text-muted">{pMobile}</label>
+                        </div>
+                    }
+                    {/* End:: Column mobile no / company address */}
 
-                                    {/* Start:: Column id no. */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">ID No. :</label>
-                                        <label className="form-label">{pData.idNo}</label>
-                                    </div>
-                                    {/* End:: Column id no. */}
+                    {/* Start:: Column mobile no / company address */}
+                    <div className="col-2">
+                        <label className="form-label mr-2">Guest count :</label>
+                        <label className="text-muted">{pGuestCount}</label>
+                    </div>
+                    {/* End:: Column mobile no / company address */}
 
-                                    {/* Start:: Column name */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Name :</label>
-                                        <label className="form-label">{pData.name}</label>
-                                    </div>
-                                    {/* End:: Column name */}
+                </div>
+                {/* End:: Row */}
 
-                                </div>
-                                {/* End:: Row */}
+                {/* Start:: Row */}
+                <div className="row">
 
-                                {/* Start:: Row */}
-                                <div className="row mb-3">
+                    <div className="col-12">
+                        {/* Label element */}
+                        <label className="text-muted">Items :</label>
+                    </div>                
 
-                                    {/* Start:: Column age */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Age :</label>
-                                        <label className="form-label">{pData.age}</label>
-                                    </div>
-                                    {/* End:: Column age */}
+                    {/* Start:: Column room detail */}
+                    <div className="col-12 ag-theme-alpine grid">
+                        <OrderGrid
+                            pState="VIEW"
+                            pDefaultRowData={defaultRowData}
+                            onChange={null} />
+                    </div>                
+                    {/* End:: Column room detail */}
 
-                                    {/* Start:: Column fathe'sname */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Father's name :</label>
-                                        <label className="form-label">{pData.fatherName}</label>
-                                    </div>
-                                    {/* End:: Column father'sname */}
-
-                                    {/* Start:: Column address */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Address :</label>
-                                        <label className="form-label">{pData.address}</label>
-                                    </div>
-                                    {/* End:: Column address */}
-
-                                </div>
-                                {/* End:: Row */}
-
-                                {/* Start:: Row */}
-                                <div className="row mb-3">
-
-                                    {/* Start:: Column city */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">City :</label>
-                                        <label className="form-label">{pData.city}</label>
-                                    </div>
-                                    {/* End:: Column city */}
-
-                                    {/* Start:: Column police station */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">P.S :</label>
-                                        <label className="form-label">{pData.policeStation}</label>
-                                    </div>
-                                    {/* End:: Column police station */}
-
-                                    {/* Start:: Column state */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">State :</label>
-                                        <label className="form-label">{pData.state}</label>
-                                    </div>
-                                    {/* End:: Column state */}
-
-                                </div>
-                                {/* End:: Row */}
-
-                                {/* Start:: Row */}
-                                <div className="row mb-3">
-
-                                    {/* Start:: Column pin */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">PIN :</label>
-                                        <label className="form-label">{pData.pin}</label>
-                                    </div>
-                                    {/* End:: Column pin */}
-
-                                    {/* Start:: Column phone */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Phone :</label>
-                                        <label className="form-label">{pData.phone}</label>
-                                    </div>
-                                    {/* End:: Column phone */}
-
-                                    {/* Start:: Column mobile */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Mobile :</label>
-                                        <label className="form-label">{pData.mobile}</label>
-                                    </div>
-                                    {/* End:: Column mobile */}
-
-                                </div>
-                                {/* End:: Row */}
-
-                                {/* Start:: Row */}
-                                <div className="row mb-3">
-
-                                    {/* Start:: Column email */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Email :</label>
-                                        <label className="form-label">{pData.email}</label>
-                                    </div>
-                                    {/* End:: Column email */}
-
-                                    {/* Start:: Column no of guest */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Guest count :</label>
-                                        <label className="form-label">{pData.guestCount}</label>
-                                    </div>
-                                    {/* End:: Column no of guest */}
-
-                                    {/* Start:: Column no of male guest */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Guest count (Male) :</label>
-                                        <label className="form-label">{pData.guestMaleCount}</label>
-                                    </div>
-                                    {/* End:: Column no of male guest */}
-
-                                </div>
-                                {/* End:: Row */}
-
-                                {/* Start:: Row */}
-                                <div className="row mb-3">
-
-                                    {/* Start:: Column no of female guest */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Guest count (Female) :</label>
-                                        <label className="form-label">{pData.guestFemaleCount}</label>
-                                    </div>
-                                    {/* End:: Column no of female guest */}
-
-                                    {/* Start:: Column no of day */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Day count :</label>
-                                        <label className="form-label">{pData.dayCount}</label>
-                                    </div>
-                                    {/* End:: Column no of day */}
-
-                                    {/* Start:: Column booking agent */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Agent :</label>
-                                        <GetBookingAgentName pId={pData.bookingAgentId} />
-                                    </div>
-                                    {/* End:: Column no of male guest */}
-
-                                </div>
-                                {/* End:: Row */}
-
-                                {/* Start:: Row */}
-                                <div className="row mb-3">
-
-                                    {/* Start:: Column plan */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Plan :</label>
-                                        <GetPlanName pId={pData.planId} />
-                                    </div>
-                                    {/* End:: Column plan */}
-
-                                    {/* Start:: Column corporate name */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Corporate name :</label>
-                                        <label className="form-label">{pData.corporateName}</label>
-                                    </div>
-                                    {/* End:: Column corporate name */}
-
-                                    {/* Start:: Column coroprate address */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Corporate address :</label>
-                                        <label className="form-label">{pData.corporateAddress}</label>
-                                    </div>
-                                    {/* End:: Column coroprate address */}
-
-                                </div>
-                                {/* End:: Row */}
-
-                                {/* Start:: Row */}
-                                <div className="row mb-3">
-
-                                    {/* Start:: Column gst no */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">GST No. :</label>
-                                        <label className="form-label">{pData.gstNo}</label>
-                                    </div>
-                                    {/* End:: Column gst no */}
-
-                                    {/* Start:: Column check in date */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Check in date :</label>
-                                        <label className="form-label">{formatDDMMYYYY(pData.checkInDate)}</label>
-                                    </div>
-                                    {/* End:: Column check in date */}
-
-                                    {/* Start:: Column check in time */}
-                                    <div className="col-4">
-                                        <label className="form-label mr-2">Check in time :</label>
-                                        <label className="form-label">{pData.checkInTime}</label>
-                                    </div>
-                                    {/* End:: Column check in time */}
-
-                                </div>
-                                {/* End:: Row */}
-                            </div>
-
-                        {/* </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="1">
-                        <Accordion.Header>Room detail</Accordion.Header>
-                        <Accordion.Body> */}
-
-                            {/* Start:: Row */}
-                            <div className="row mb-3">
-
-                                <div className="col-12">
-                                    {/* Label element */}
-                                    <label className="form-label">Room details :</label>
-                                </div>                
-
-                                {/* Start:: Column room detail */}
-                                <div className="col-12 ag-theme-alpine grid">
-                                    <RoomBookingGrid
-                                        pState="VIEW"
-                                        pDefaultRowData={defaultRowData}
-                                        pNoOfDay={pData.dayCount}
-                                        onChange={null} />
-                                </div>                
-                                {/* End:: Column room detail */}
-
-                            </div>
-                            {/* End:: Row */}
-
-                        {/* </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion> */}
+                </div>
+                {/* End:: Row */}
 
             </Modal.Body>
             {/* End:: Modal body */}
@@ -322,38 +124,41 @@ const Form = ({ pData, onClosed }) => {
             {/* End:: Modal footer */}
 
         </form> 
-    );
+    )
     // End:: Html
 
-};
+}
 // End:: form
 
 
 // Start:: Component
 // props parameters
-// pId
+// pGuestId
 // onClosed()
 
 // useImperativeHandle
 // handleShowModal
 const GuestTableView = forwardRef(( props, ref ) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
-    const [showModal, setShowModal] = useState(false);
+    const hotelId = useContext(HotelId)
+    const contextValues = useStateContext()
+    const [showModal, setShowModal] = useState(false)
     const {data, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pId}`
-    });
+        url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
+        params: {
+            option: 'A'
+        }
+    })
 
     // Start :: Show modal 
     const handleShowModal = () => {
-        setShowModal(true);
-    };
+        setShowModal(true)
+    }
     // End :: Show modal 
 
     // Start :: Close modal 
     const handleCloseModal = () => {
-        setShowModal(false);
-    };
+        setShowModal(false)
+    }
     // End :: Close modal 
 
     // Start:: forward reff show modal function
@@ -361,31 +166,29 @@ const GuestTableView = forwardRef(( props, ref ) => {
         return {
             handleShowModal
         }
-    });
+    })
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal();
-        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') handleCloseModal()
+        })
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+        return () => {document.removeEventListener('keydown', handleCloseModal)}
+    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
             try {
-                showModal && await doFetch();
+                showModal && await doFetch()
             } catch (err) {
-              console.log('Error occured when fetching data');
+              console.log('Error occured when fetching data')
             }
-          })();
-    }, [showModal]);         // eslint-disable-line react-hooks/exhaustive-deps
+          })()
+    }, [showModal])         // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Html
@@ -399,12 +202,12 @@ const GuestTableView = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View guest room</Modal.Title>
+                        <Modal.Title>View</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal}>
+                            onClick={handleCloseModal} >
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -412,18 +215,25 @@ const GuestTableView = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
+                        pGuestId={props.pGuestId}
+                        pName={props.pName}
+                        pMobile={props.pMobile}
+                        pGuestCount={props.pGuestCount}
+                        pCorporateName={props.pCorporateName}
+                        pCorporateAddress={props.pCorporateAddress}
+                        pGstNo={props.pGstNo}
                         pData={data}
                         onClosed={handleCloseModal} />
                     {/* End:: Form component */}
                     
-                </Modal> }
+                </Modal>}
             {/* End:: View modal */}
         </>
-    );
+    )
     // End:: Html
 
-});
+})
 // End:: Component
 
 
-export default GuestTableView;
+export default GuestTableView

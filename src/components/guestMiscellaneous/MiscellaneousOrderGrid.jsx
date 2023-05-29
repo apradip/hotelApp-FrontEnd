@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState, useRef, useMemo, useCallback } from "react";
-import { AgGridReact } from "ag-grid-react";
+import React, {useContext, useEffect, useState, useRef, useMemo, useCallback} from "react";
+import {AgGridReact} from "ag-grid-react";
 
-import { HotelId } from "../../App";
-import { formatINR } from "../common/Common";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {formatINR} from "../common/Common";
+import {useStateContext} from "../../contexts/ContextProvider";
 import MiscellaneousItemSelector from "../common/MiscellaneousEditor";
 import QuantityEditor from "../common/QuantityEditor";
 import useFetchWithAuth from "../common/useFetchWithAuth";
@@ -288,15 +288,15 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 	return (
         <div className="ag-theme-alpine grid">
             <AgGridReact	
-                ref = {gridRef}
-                columnDefs = {columnDefs}
-                defaultColDef = {defaultColDef}
-                rowData = {null}
-                rowSelection = {'single'}
-                onGridReady = {handleGridReady}
-                onFirstDataRendered = {handleFirstDataRendered}
-                onSelectionChanged = {handleSelectionChanged}
-                onCellValueChanged = {handleCellValueChanged} />
+                ref={gridRef}
+                columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
+                rowData={null}
+                rowSelection={'single'}
+                onGridReady={handleGridReady}
+                onFirstDataRendered={handleFirstDataRendered}
+                onSelectionChanged={handleSelectionChanged}
+                onCellValueChanged={handleCellValueChanged} />
         </div>
     );
 }

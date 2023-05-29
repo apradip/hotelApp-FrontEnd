@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Modal, NavLink } from "react-bootstrap"
-import { toast } from "react-toastify"
-import { X } from "react-feather"
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react"
+import {Modal, NavLink} from "react-bootstrap"
+import {toast} from "react-toastify"
+import {X} from "react-feather"
 
-import { HotelId } from "../../App"
-import { useStateContext } from "../../contexts/ContextProvider"
+import {HotelId} from "../../App"
+import {useStateContext} from "../../contexts/ContextProvider"
 import useFetchWithAuth from "../common/useFetchWithAuth"
 
 
 // Start:: form
 const Form = ({pGuestId, pName, pCorporateName, onSubmited, onClosed}) => {
-    const hotelId = useContext(HotelId)
-    const contextValues = useStateContext()
-    const inputRef = useRef(null)
+    const hotelId=useContext(HotelId)
+    const contextValues=useStateContext()
+    const inputRef=useRef(null)
     const {loading, error, doDelete} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}`
     })
@@ -39,29 +39,29 @@ const Form = ({pGuestId, pName, pCorporateName, onSubmited, onClosed}) => {
 
                 {/* Start:: Close button */}
                 <button 
-                    type = "button"   
-                    className = "btn btn-danger"
+                    type="button"   
+                    className="btn btn-danger"
                     autoFocus
-                    disabled = {loading}
-                    ref = {inputRef} 
-                    onClick = {onClosed} >
+                    disabled={loading}
+                    ref={inputRef} 
+                    onClick={onClosed} >
                     Close
                 </button>
                 {/* End:: Close button */}
 
                 {/* Start:: Save button */}
                 <button 
-                    type = "button"
-                    className = "btn btn-success"
-                    disabled = {loading || error}
-                    onClick = {handleSave} >
+                    type="button"
+                    className="btn btn-success"
+                    disabled={loading || error}
+                    onClick={handleSave} >
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
-                        </> }
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -93,10 +93,10 @@ const FormError = ({pName, pCorporateName, onClosed}) => {
 
                 {/* Start:: Close button */}
                 <button 
-                    type = "button"   
-                    className = "btn btn-danger"
+                    type="button"   
+                    className="btn btn-danger"
                     autoFocus
-                    onClick = {onClosed} >
+                    onClick={onClosed} >
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -186,7 +186,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            { data && 
+            {data && 
                 data.balance === 0 && 
                 <Modal 
                     size="sm"
@@ -200,7 +200,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal} >
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -210,7 +210,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
                     <Form 
                         pGuestId={props.pGuestId} 
                         pName={props.pName}
-                        pCorporateName = {props.pCorporateName}
+                        pCorporateName={props.pCorporateName}
                         onSubmited={handleSave} 
                         onClosed={handleCloseModal} />
                         {/* End:: Form component */}
@@ -232,7 +232,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal} >
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -240,9 +240,9 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <FormError 
-                        pName = {props.pName}
-                        pCorporateName = {props.pCorporateName}
-                        onClosed = {handleCloseModal} />
+                        pName={props.pName}
+                        pCorporateName={props.pCorporateName}
+                        onClosed={handleCloseModal} />
                         {/* End:: Form component */}
                 </Modal>}
             {/* End:: Delete modal */}

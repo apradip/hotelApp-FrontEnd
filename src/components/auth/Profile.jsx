@@ -13,7 +13,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited, onClosed }) => {
+const Form = ({pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
@@ -21,7 +21,7 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
         url: `${contextValues.employeeAPI}/${hotelId}/${pId}`
     });
     
-    const { values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm } = useFormik({
+    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputAccessLevels: pAccessLevels,
             keyInputName: pName,
@@ -33,11 +33,11 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
         validateOnChange,
         onSubmit: async (values) => {
             const payload = {   
-                "accessLevels": values.keyInputAccessLevels,
-                "name": values.keyInputName.toUpperCase(), 
-                "address": values.keyInputAddress.toUpperCase(), 
-                "mobile": values.keyInputMobile.toString(), 
-                "email": values.keyInputEmail.toLowerCase()
+                accessLevels: values.keyInputAccessLevels,
+                name: values.keyInputName.toUpperCase(), 
+                address: values.keyInputAddress.toUpperCase(), 
+                mobile: values.keyInputMobile.toString(), 
+                email: values.keyInputEmail.toLowerCase()
             }
                         
             await doUpdate(payload);
@@ -74,7 +74,7 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputName">Name</label>
+                            htmlFor="keyInputName"><b>Name</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -83,8 +83,8 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
                             placeholder="Name" 
                             className="form-control"
                             autoFocus
-                            value ={ values.keyInputName } 
-                            onChange = { handleChange } />
+                            value={values.keyInputName} 
+                            onChange={handleChange} />
 
                         {/* Validation message */}
                         {errors.keyInputName && 
@@ -105,14 +105,14 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputAccessLevelName">Role</label>
+                            htmlFor="keyInputAccessLevelName"><b>Role</b></label>
 
                         {/* Input element multi select */}
                         <AccessLevelSelect
-                            name = { 'keyInputAccessLevels' }
-                            value = { values.keyInputAccessLevels } 
-                            disabled = { true } 
-                            onChange={ (value) => { setFieldValue('keyInputAccessLevels', value) } }/>
+                            name={"keyInputAccessLevels"}
+                            value={values.keyInputAccessLevels} 
+                            disabled={true} 
+                            onChange={(value) => {setFieldValue('keyInputAccessLevels', value)}} />
 
                         {/* Validation message */}
                         {errors.keyInputAccessLevelId && 
@@ -133,17 +133,17 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputAddress">Address</label>
+                            htmlFor="keyInputAddress"><b>Address</b></label>
 
                         {/* Input element text*/}
                         <textarea 
                             id="keyInputAddress"
                             placeholder="Address"
                             className="form-control"
-                            rows = { "5" }
-                            disabled = { loading || error !== null }
-                            value = { values.keyInputAddress } 
-                            onChange = { handleChange } />
+                            rows={"5"}
+                            disabled={loading || error !== null}
+                            value={values.keyInputAddress} 
+                            onChange={handleChange} />
 
                         {/* Validation message */}
                         {errors.keyInputAddress && 
@@ -165,7 +165,7 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputBed">Mobile no.</label>
+                            htmlFor="keyInputBed"><b>Mobile no.</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -173,9 +173,9 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
                             id="keyInputMobile"
                             placeholder="Mobile no." 
                             className="form-control"
-                            disabled = { loading || error !== null }
-                            value = { values.keyInputMobile } 
-                            onChange = { handleChange } />
+                            disabled={loading || error !== null}
+                            value={values.keyInputMobile} 
+                            onChange={handleChange} />
 
                         {/* Validation message */}
                         {errors.keyInputMobile && 
@@ -190,7 +190,7 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputEmail">Email</label>
+                            htmlFor="keyInputEmail"><b>Email</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -198,9 +198,9 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
                             id="keyInputEmail"
                             placeholder="Email" 
                             className="form-control"
-                            disabled = { loading || error !== null }
-                            value = { values.keyInputEmail } 
-                            onChange = { handleChange } />
+                            disabled={loading || error !== null}
+                            value={values.keyInputEmail} 
+                            onChange={handleChange} />
 
                         {/* Validation message */}
                         {errors.keyInputEmail && 
@@ -223,8 +223,8 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
                 <button
                     type="button"
                     className="btn btn-danger"
-                    disabled = { loading }
-                    onClick = { handleClose } >
+                    disabled={loading}
+                    onClick={handleClose} >
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -233,8 +233,8 @@ const Form = ({ pId, pAccessLevels, pName, pAddress, pMobile, pEmail, onSubmited
                 <button 
                     className="btn btn-success"
                     type="button"
-                    disabled = { loading } 
-                    onClick = { handleSubmit } >
+                    disabled={loading} 
+                    onClick={handleSubmit} >
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -306,7 +306,8 @@ const Profile = ({pEmployeeId, onEdited, onClosed}) => {
               console.log("Error occured when fetching data");
             }
           })();
-    }, [pEmployeeId, showModal, doFetch]);
+    }, [showModal]);
+    // }, [pEmployeeId, showModal, doFetch]);
     // End:: fetch id wise detail from api
 
     useEffect(() => {
@@ -345,14 +346,14 @@ const Profile = ({pEmployeeId, onEdited, onClosed}) => {
                 {/* Start:: Form component */}
                 { data && 
                     <Form 
-                        pId = { pEmployeeId }    
+                        pId={pEmployeeId}    
                         pAccessLevels = { data.accessLevels }
                         pName = { data.name }
                         pAddress = { data.address }
                         pMobile = { data.mobile }
                         pEmail = { data.email }
                         onSubmited = { handleSave } 
-                        onClosed = { handleCloseModal } /> }
+                        onClosed={handleCloseModal} /> }
                         {/* End:: Form component */}                        
 
             </Modal>

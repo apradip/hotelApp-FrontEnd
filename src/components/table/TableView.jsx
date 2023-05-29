@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
-const Form = ({ pNo, pDescription, onClosed }) => {
+const Form = ({pNo, pDescription, onClosed}) => {
     const buttonRef = useRef(null);
 
     // Start:: Html
@@ -18,31 +18,27 @@ const Form = ({ pNo, pDescription, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
-
-                    {/* Start:: Column no */}
-                    <div className="col-xs-12 col-md-12">
-                        
+                <div className="row">
+                    {/* Start:: Column name */}
+                    <div className="col-12 mb-3">
                         {/* Label element */}
-                        <label className="form-label mr-2">Table No. :</label>
-                        <label className="form-label">{ pNo }</label>
+                        <label className="col-12 form-label"><b>No.</b></label>
+                        <label className="col-12 text-muted">{pNo}</label>
                     </div>
-                    {/* End:: Column no */}
-
-                 </div>
+                    {/* Start:: Column name */}
+                </div>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                 <div className="row mb-2">
-
-                    {/* Start:: Column tariff */}
-                    <div className="col-xs-12 col-md-12">
-
+                <div className="row">
+                    {/* Start:: Column description */}
+                    <div className="col-12 mb-3">
                         {/* Label element */}
-                        <label className="form-label mr-2">Description :</label>
-                        <label className="form-label">{pDescription}</label>
+                        <label className="col-12 form-label"><b>Description</b></label>
+                        <label className="col-12 text-muted">{pDescription}</label>
                     </div>
-                    {/* End:: Column tariff */}
+                    {/* End:: Column description */}
+
                 </div>
                 {/* End:: Row */}
 
@@ -54,10 +50,10 @@ const Form = ({ pNo, pDescription, onClosed }) => {
 
                 {/* Start:: Close button */}
                 <button
-                    ref = { buttonRef }
-                    type = "button"
-                    className = "btn btn-danger"
-                    onClick = { onClosed } >
+                    ref={buttonRef}
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -81,11 +77,11 @@ const Form = ({ pNo, pDescription, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const TableView = forwardRef(( props, ref ) => {    
+const TableView = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.tableAPI}/${hotelId}/${props.pId}`
     });
 
@@ -104,9 +100,7 @@ const TableView = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -116,9 +110,7 @@ const TableView = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -142,7 +134,7 @@ const TableView = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: View modal */}
-            { data &&
+            {data &&
                 <Modal 
                     size="sm"
                     show={showModal}>
@@ -150,12 +142,12 @@ const TableView = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View table</Modal.Title>
+                        <Modal.Title>Detail</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = { handleCloseModal } >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -164,11 +156,11 @@ const TableView = forwardRef(( props, ref ) => {
                     {/* Start:: Form component */}
                     <Form 
                         pNo={data.no}
-                        pDescription = { data.description }
+                        pDescription={data.description}
                         onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
                     
-                </Modal> }
+                </Modal>}
             {/* End:: View modal */}
         </>
     );

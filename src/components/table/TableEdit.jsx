@@ -1,26 +1,26 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { tableSchema } from "../../schemas";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {tableSchema} from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pId, pNo, pDescription, onSubmited, onClosed }) => {
+const Form = ({pId, pNo, pDescription, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const { loading, error, doUpdate } = useFetchWithAuth({
+    const {loading, error, doUpdate} = useFetchWithAuth({
         url: `${contextValues.tableAPI}/${hotelId}/${pId}`
     });
 
     // Start:: Form validate and save data
-    const { values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm } = useFormik({
+    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputNo: pNo,
             keyInputDescription: pDescription
@@ -29,8 +29,8 @@ const Form = ({ pId, pNo, pDescription, onSubmited, onClosed }) => {
         validateOnChange,
         onSubmit: async (values, action) => {
             const payload = {   
-                                'no': values.keyInputNo.toUpperCase(), 
-                                'description': values.keyInputDescription.trim()
+                                no: values.keyInputNo.toUpperCase(), 
+                                description: values.keyInputDescription.trim()
                             };
 
             await doUpdate(payload);
@@ -61,23 +61,23 @@ const Form = ({ pId, pNo, pDescription, onSubmited, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
+                <div className="row">
 
                     {/* Start:: Column no */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputNo">Table No.</label>
+                            htmlFor="keyInputNo">No.</label>
 
                         {/* Input element text*/}
                         <input 
-                            type='text' 
-                            id='keyInputNo'
-                            placeholder='table no.' 
-                            className='form-control'
+                            type="text"
+                            id="keyInputNo"
+                            placeholder="table no." 
+                            className="form-control"
                             disabled={true}
-                            value={values.keyInputNo} />
+                            value={values.keyInputNo}/>
                     </div>
                     {/* End:: Column no */}
 
@@ -85,14 +85,14 @@ const Form = ({ pId, pNo, pDescription, onSubmited, onClosed }) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                 <div className="row mb-2">
+                <div className="row">
 
                     {/* Start:: Column tariff */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputDescription">Description</label>
+                            htmlFor="keyInputDescription"><b>Description</b></label>
                         
                         {/* Input element text*/}
                         <textarea 
@@ -100,11 +100,11 @@ const Form = ({ pId, pNo, pDescription, onSubmited, onClosed }) => {
                             placeholder="Description"
                             className="form-control"
                             autoFocus
-                            rows = { "5" }
-                            maxLength = { "256" }
-                            disabled = { loading || error !== null }
-                            value = { values.keyInputDescription } 
-                            onChange = { handleChange } />
+                            rows={"5"}
+                            maxLength={"256"}
+                            disabled={loading || error !== null}
+                            value={values.keyInputDescription} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputDescription && 
@@ -127,8 +127,8 @@ const Form = ({ pId, pNo, pDescription, onSubmited, onClosed }) => {
                 <button
                     type="button"
                     className="btn btn-danger"
-                    disabled = { loading }
-                    onClick = { handleClose } >
+                    disabled={loading}
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -137,15 +137,15 @@ const Form = ({ pId, pNo, pDescription, onSubmited, onClosed }) => {
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading } 
-                    onClick = { handleSubmit } >
+                    disabled={loading} 
+                    onClick={handleSubmit}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                                 <>
                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     Working
-                                </> }
+                                </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -168,7 +168,7 @@ const Form = ({ pId, pNo, pDescription, onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const TableEdit = forwardRef(( props, ref ) => {    
+const TableEdit = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -198,9 +198,7 @@ const TableEdit = forwardRef(( props, ref ) => {
     
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -210,9 +208,7 @@ const TableEdit = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -236,20 +232,20 @@ const TableEdit = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            { data &&
+            {data &&
                 <Modal
                     size="sm" 
-                    show = { showModal } >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Edit table</Modal.Title>
+                        <Modal.Title>Edit</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -261,7 +257,7 @@ const TableEdit = forwardRef(( props, ref ) => {
                         pNo={data.no}
                         pDescription={data.description}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>}

@@ -1,8 +1,8 @@
 import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
 import {NavLink, Card, Stack, Dropdown} from "react-bootstrap";
-import {ChevronDown, Edit3, Scissors} from "react-feather";
+import {MoreVertical, Edit3, Scissors} from "react-feather";
 
-import { subStr } from "../common/Common";
+import {subStr, formatINR} from "../common/Common";
 import View from "./ServiceView";
 import Edit from "./ServiceEdit";
 import Delete from "./ServiceDelete";
@@ -27,7 +27,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
-const ServiceCard = forwardRef(( props, ref ) => {
+const ServiceCard = forwardRef((props, ref) => {
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
@@ -67,9 +67,7 @@ const ServiceCard = forwardRef(( props, ref ) => {
     
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleDeSelect, handelOpenEdit, handelOpenDelete
-        }
+        return {handleDeSelect, handelOpenEdit, handelOpenDelete}
     });
     // Edit:: forward reff de-select, show edit/delete modal function
 
@@ -86,57 +84,53 @@ const ServiceCard = forwardRef(( props, ref ) => {
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
-                                        if (e.detail === 1) {
-                                            setActive(!active) 
-                                            props.onActivated(props.pIndex)
-                                        }    
-                                        else if (e.detail === 2) {
-                                            handelOpenView()
-                                        }  
-                                   }}>
+                                    if (e.detail === 1) {
+                                        setActive(!active)
+                                        props.onActivated(props.pIndex)
+                                    }    
+                                    else if (e.detail === 2) {
+                                        handelOpenView()
+                                    }  
+                                }}> 
 
                 <Card.Body className="text-sm p-1">
-                <Stack gap={0}>
+                    <Stack gap={0}>
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-10 text-left">
-                                <h4>{subStr(props.pName, 20)}</h4>
+                            <span className="col-7 text-left pl-1">
+                                <b>{subStr(props.pName, 25)}</b>
                             </span>
 
-                            {/* Start:: Column menu */}
-                            <span className="col-2 text-right">
+                            <span className="col-4 text-right text-danger p-0">
+                                <b>{formatINR(props.pPrice)}</b>
+                            </span>
+
+                            <span className="col-1 text-right p-0">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>
-                                        <ChevronDown size={16}/>
+                                        <MoreVertical size={16} />
                                     </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
                                         <Dropdown.Item eventKey="1" 
                                             onClick = {handelOpenEdit}>
-                                            <Edit3 className="feather-16 mr-3"/>Edit
+                                            <Edit3 className="feather-16 mr-3" />Edit
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="2"
                                             onClick = {handelOpenDelete}>
-                                            <Scissors className="feather-16 mr-3"/>Delete
+                                            <Scissors className="feather-16 mr-3" />Delete
                                         </Dropdown.Item>
-
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 {/* End:: operational menu */}
                             </span>
-                            {/* End:: Column menu */}
-                        </Stack>
-
-                        <Stack direction="horizontal" gap={0}>
-                            <span className="col-4 text-left">Price</span>
-                                
-                            <span className="col-8 text-right">
-                                {`₹ ${props.pPrice}`}</span>
                         </Stack>
 
                         <Stack gap={0}>
-                            <span className="col-12 text-left">{subStr(props.pDescription, 20)}</span>
+                            <span className="col-12 text-left px-1">
+                                {subStr(props.pDescription, 40)}
+                            </span>
                         </Stack>
                     </Stack>   
                 </Card.Body>

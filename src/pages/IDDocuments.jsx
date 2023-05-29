@@ -162,7 +162,7 @@ const IDDocuments = forwardRef(( props, ref ) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className="row m-0 p-0" key={rowKey}>
+            <div className="row" key={rowKey}>
                 {
                     pData.map((item, idx) => {
                         const itemIdx=(rowIdx * itemPerRow) + idx;
@@ -176,7 +176,7 @@ const IDDocuments = forwardRef(( props, ref ) => {
         const colKey = `col_${pData._id}`;
 
         return (
-            <div className="col-xl-4 col-md-4 m-0" key={colKey}>
+            <div className="col-xl-4 col-md-4" key={colKey}>
                 <Card 
                     ref={(el) => cardRefs.current[itemIdx] = el}
                     pIndex={itemIdx}
@@ -193,9 +193,7 @@ const IDDocuments = forwardRef(( props, ref ) => {
 
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
-        return {
-            changeSearch, openAdd, openEdit, openDelete, close
-        }
+        return {changeSearch, openAdd, openEdit, openDelete, close}
     });
     // End:: forward reff change search and open add/edit/delete modal
 
@@ -247,7 +245,7 @@ const IDDocuments = forwardRef(( props, ref ) => {
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
                             {/* Start :: Display data count */}
-                            <div className="col-12 text-danger">
+                            <div className="col-12 text-danger p-0">
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -257,7 +255,7 @@ const IDDocuments = forwardRef(( props, ref ) => {
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body">
+                        <div className="card-body py-0">
                             {loading &&
                                 <div className="d-flex justify-content-center">
                                     <div className="spinner-border text-primary" 
@@ -271,7 +269,7 @@ const IDDocuments = forwardRef(( props, ref ) => {
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer">
+                        <div className="card-footer py-0">
                             <div className="row">
                                 {/* Start :: Pagination */}
                                 <div className="col-12 d-flex justify-content-end">

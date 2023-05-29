@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { foodSchema } from "../../schemas";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {foodSchema} from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
+const Form = ({pId, pName, pPrice, pDescription, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
@@ -20,7 +20,7 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
     });
 
     // Start:: Form validate and save data
-    const { values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm } = useFormik({
+    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputName: pName,
             keyInputPrice: pPrice,
@@ -30,9 +30,9 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
         validateOnChange,
         onSubmit: async (values, action) => {
             const payload = {   
-                                'name': values.keyInputName.toUpperCase(), 
-                                'price': parseFloat(Number.isNaN(values.keyInputPrice) ? 0 : values.keyInputPrice, 10),
-                                'description': values.keyInputDescription.trim()
+                                name: values.keyInputName.toUpperCase(), 
+                                price: parseFloat(Number.isNaN(values.keyInputPrice) ? 0 : values.keyInputPrice, 10),
+                                description: values.keyInputDescription.trim()
                             };
 
             await doUpdate(payload);
@@ -63,37 +63,35 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
-
+                <div className="row">
                     {/* Start:: Column name */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputName">Name</label>
+                            htmlFor="keyInputName"><b>Name</b></label>
 
                         {/* Input element text*/}
                         <input 
-                            type='text' 
-                            id='keyInputName'
-                            placeholder='Name' 
-                            className='form-control'
+                            type="text" 
+                            id="keyInputName"
+                            placeholder="Name" 
+                            className="form-control"
                             disabled={true}
                             value={values.keyInputName} />
                     </div>
                     {/* End:: Column name */}
-
                  </div>
                 {/* End:: Row */}
 
-                <div className="row mb-3">
-
+                {/* Start:: Row */}
+                <div className="row">
                     {/* Start:: Column price */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                                htmlFor={"keyInputPrice"}>Price</label>
+                                htmlFor={"keyInputPrice"}><b>Price</b></label>
                         
                         {/* Input element text*/} 
                         <input 
@@ -114,18 +112,17 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
                                      null }
                     </div>
                     {/* End:: Column price */}
-
                 </div>
+                {/* End:: Row */}
 
                 {/* Start:: Row */}
-                 <div className="row mb-2">
-
+                <div className="row">
                     {/* Start:: Column tariff */}
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputDescription">Description</label>
+                            htmlFor="keyInputDescription"><b>Description</b></label>
                         
                         {/* Input element text*/}
                         <textarea 
@@ -146,7 +143,6 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
                                      null}
                     </div>
                     {/* End:: Column tariff */}
-
                 </div>
                 {/* End:: Row */}
 
@@ -161,7 +157,7 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
                     type="button"
                     className="btn btn-danger"
                     disabled={loading}
-                    onClick={handleClose} >
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -171,14 +167,14 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
                     type="button"
                     className="btn btn-success"
                     disabled={loading} 
-                    onClick={handleSubmit} >
+                    onClick={handleSubmit}>
 
                     {!loading && "Confirm"}
                     {loading && 
                                 <>
                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     Working
-                                </> }
+                                </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -201,7 +197,7 @@ const Form = ({ pId, pName, pPrice, pDescription, onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const FoodEdit = forwardRef(( props, ref ) => {    
+const FoodEdit = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -231,9 +227,7 @@ const FoodEdit = forwardRef(( props, ref ) => {
     
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -243,9 +237,7 @@ const FoodEdit = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -269,15 +261,15 @@ const FoodEdit = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            { data &&
+            {data &&
                 <Modal
                     size="sm" 
-                    show = { showModal } >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Edit food</Modal.Title>
+                        <Modal.Title>Edit</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
@@ -295,7 +287,7 @@ const FoodEdit = forwardRef(( props, ref ) => {
                         pPrice={data.price}
                         pDescription={data.description}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>}

@@ -1,14 +1,15 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
+import {formatINR} from "../common/Common";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
-const Form = ({ pName, pPrice, pDescription, onClosed }) => {
+const Form = ({pName, pPrice, pDescription, onClosed}) => {
     const buttonRef = useRef(null);
 
     // Start:: Html
@@ -18,40 +19,35 @@ const Form = ({ pName, pPrice, pDescription, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
+                <div className="row">
 
-                    {/* Start:: Column no */}
-                    <div className="col-xs-12 col-md-6">
-                        
-                        {/* Label element */}
-                        <label className="form-label mr-2">Name :</label>
-                        <label className="form-label">{ pName }</label>
+                    {/* Start:: Column name */}
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-8 mb-3">
+                        <label className="col-12 form-label"><b>Name</b></label>
+                        <label className="col-12 text-muted">{pName}</label>
                     </div>
-                    {/* End:: Column no */}
+                    {/* End:: Column name */}
 
-                    {/* Start:: Column no */}
-                    <div className="col-xs-12 col-md-6">
-                        
-                        {/* Label element */}
-                        <label className="form-label mr-2">Price :</label>
-                        <label className="form-label">{pPrice}</label>
+                    {/* Start:: Column price */}
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-4">
+                        <label className="col-12 form-label"><b>Price</b></label>
+                        <label className="col-12 text-muted">{formatINR(pPrice)}</label>
                     </div>
-                    {/* End:: Column no */}
+                    {/* End:: Column price */}
 
                  </div>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                 <div className="row mb-2">
+                 <div className="row">
 
-                    {/* Start:: Column tariff */}
-                    <div className="col-xs-12 col-md-12">
-
-                        {/* Label element */}
-                        <label className="form-label mr-2">Description :</label>
-                        <label className="form-label">{pDescription}</label>
+                    {/* Start:: Column description */}
+                    <div className="col-12 mb-4">
+                        <label className="col-12 form-label"><b>Description</b></label>
+                        <label className="col-12 text-muted">{pDescription}</label>
                     </div>
-                    {/* End:: Column tariff */}
+                    {/* End:: Column description */}
+
                 </div>
                 {/* End:: Row */}
 
@@ -90,11 +86,11 @@ const Form = ({ pName, pPrice, pDescription, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const FoodView = forwardRef(( props, ref ) => {    
+const FoodView = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.foodAPI}/${hotelId}/${props.pId}`
     });
 
@@ -113,9 +109,7 @@ const FoodView = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -125,9 +119,7 @@ const FoodView = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -151,7 +143,7 @@ const FoodView = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: View modal */}
-            { data &&
+            {data &&
                 <Modal 
                     size="sm"
                     show={showModal}>
@@ -159,12 +151,12 @@ const FoodView = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View food</Modal.Title>
+                        <Modal.Title>Detail</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -178,7 +170,7 @@ const FoodView = forwardRef(( props, ref ) => {
                         onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
                     
-                </Modal> }
+                </Modal>}
             {/* End:: View modal */}
         </>
     );

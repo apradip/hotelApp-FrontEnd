@@ -1,15 +1,15 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { NavLink, Card, Stack, Dropdown } from "react-bootstrap";
+import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {NavLink, Card, Stack, Dropdown} from "react-bootstrap";
 
-import { ChevronDown, Edit3, Scissors } from "react-feather";
-import { subStr } from "../common/Common";
+import {MoreVertical, Edit3, Scissors} from "react-feather";
+import {subStr} from "../common/Common";
 import View from "./PlanView";
 import Edit from "./PlanEdit";
 import Delete from "./PlanDelete";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown" ref={ref} 
-        onClick={(e) => {e.preventDefault(); onClick(e);}}>
+        onClick={(e) => {e.preventDefault(); onClick(e);}} >
       {children}
     </NavLink>
 ));
@@ -26,7 +26,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
-const PlanCard = forwardRef(( props, ref ) => {
+const PlanCard = forwardRef((props, ref) => {
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
@@ -66,9 +66,7 @@ const PlanCard = forwardRef(( props, ref ) => {
     
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleDeSelect, handelOpenEdit, handelOpenDelete
-        }
+        return {handleDeSelect, handelOpenEdit, handelOpenDelete}
     });
     // Edit:: forward reff de-select, show edit/delete modal function
 
@@ -92,31 +90,31 @@ const PlanCard = forwardRef(( props, ref ) => {
                                     else if (e.detail === 2) {
                                         handelOpenView()
                                     }  
-                                }}> 
+                                }}>
 
-                <Card.Body className="text-sm p-1"> 
-                    <Stack gap={1}>
+                <Card.Body className="text-sm p-1">
+                    <Stack gap={0}>
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-10 text-left">
-                                <h4>{subStr(props.pName, 20)}</h4>
+                            <span className="col-11 text-left pl-1">
+                                <b>{subStr(props.pName, 25)}</b>
                             </span>
 
                             {/* Start:: Column menu */}
-                            <span className="col-2 text-right">
+                            <span className="col-1 text-right p-0">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>
-                                        <ChevronDown size={16}/>
+                                        <MoreVertical size={16} />
                                     </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
                                         <Dropdown.Item eventKey="1" 
-                                            onClick = {handelOpenEdit}>
+                                            onClick={handelOpenEdit}>
                                             <Edit3 className="feather-16 mr-3"/>Edit
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="2"
-                                            onClick = {handelOpenDelete}>
+                                            onClick={handelOpenDelete}>
                                             <Scissors className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>
 
@@ -128,9 +126,9 @@ const PlanCard = forwardRef(( props, ref ) => {
                         </Stack>
 
                         <Stack gap={0}>
-                            <div className="col-12">
+                            <span className="col-12 text-left px-1">
                                 {subStr(props.pDescription, 40)}
-                            </div>
+                            </span>
                         </Stack>
                     </Stack>
                 </Card.Body>
@@ -139,25 +137,25 @@ const PlanCard = forwardRef(( props, ref ) => {
 
             {/* Start :: view employee component */}
             <View
-                ref = { viewRef }
-                pId = { props.pId } 
-                onClosed = { handleClose } />
+                ref={viewRef}
+                pId={props.pId} 
+                onClosed={handleClose}/>
             {/* End :: view employee component */}
 
             {/* Start :: edit employee component */}
             <Edit 
-                ref = { editRef }
-                pId = { props.pId } 
-                onEdited = { props.onEdited } 
-                onClosed = { handleClose } />
+                ref={editRef}
+                pId={props.pId} 
+                onEdited={props.onEdited} 
+                onClosed={handleClose}/>
             {/* End :: edit employee component */}
 
             {/* Start :: delete employee component */}
             <Delete 
-                ref = { deleteRef }
-                pId = { props.pId } 
-                onDeleted = { props.onDeleted } 
-                onClosed = { handleClose } />
+                ref={deleteRef}
+                pId={props.pId} 
+                onDeleted={props.onDeleted} 
+                onClosed={handleClose}/>
             {/* End :: delete employee component */}
         </>
     );

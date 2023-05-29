@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { AgGridReact } from "ag-grid-react"; 
+import React, {useState, useEffect, useRef, useMemo} from "react";
+import {AgGridReact} from "ag-grid-react"; 
 
-import { formatBillNo, formatDDMMYYYY, formatTime12Hour, formatINR } from "../common/Common";
+import {formatBillNo, formatDDMMYYYY, formatTime12Hour, formatINR} from "../common/Common";
 import Bill from "./GuestMiscellaneousBill";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
@@ -10,13 +10,13 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount, 
                                        pCorporateName, pCorporateAddress, pGstNo, pData}) => {    
 
-    const gridRef = useRef()
-    const billRef = useRef(null)
-    const [rowData, setRowData] = useState([])
-    const [transactionId, setTransactionId] = useState()
-    const [transactionNo, setTransactionNo] = useState()
-    const [transactionDate, setTransactionDate] = useState()
-    const [transactionTime, setTransactionTime] = useState()
+    const gridRef = useRef();
+    const billRef = useRef(null);
+    const [rowData, setRowData] = useState(undefined);
+    const [transactionId, setTransactionId] = useState();
+    const [transactionNo, setTransactionNo] = useState();
+    const [transactionDate, setTransactionDate] = useState();
+    const [transactionTime, setTransactionTime] = useState();
 
     const defaultColDef = useMemo(() => {
         return {
@@ -73,34 +73,34 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
-        gridRef.current.api.setRowData(rowData)
-        gridRef.current.api.refreshCells()
-        gridRef.current.api.redrawRows()
-        gridRef.current.api.sizeColumnsToFit()
+        gridRef.current.api.setRowData(rowData);
+        gridRef.current.api.refreshCells();
+        gridRef.current.api.redrawRows();
+        gridRef.current.api.sizeColumnsToFit();
     };
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = (params) => {
-        gridRef.current.api.refreshCells()
-        gridRef.current.api.redrawRows()
-        gridRef.current.api.sizeColumnsToFit()
+        gridRef.current.api.refreshCells();
+        gridRef.current.api.redrawRows();
+        gridRef.current.api.sizeColumnsToFit();
     };
     // End:: load empty data to grid
     
     // Start:: on row selection change set selected 
     const handleOpenBill = (event) => {
-        setTransactionId(event.api.getSelectedNodes()[0].data.id)
-        setTransactionNo(event.api.getSelectedNodes()[0].data.no)
-        setTransactionDate(event.api.getSelectedNodes()[0].data.date)
-        setTransactionTime(event.api.getSelectedNodes()[0].data.time)
+        setTransactionId(event.api.getSelectedNodes()[0].data.id);
+        setTransactionNo(event.api.getSelectedNodes()[0].data.no);
+        setTransactionDate(event.api.getSelectedNodes()[0].data.date);
+        setTransactionTime(event.api.getSelectedNodes()[0].data.time);
 
-        billRef && billRef.current.handleShowModal()
+        billRef && billRef.current.handleShowModal();
     };
     // End:: on row selection change set selected 
 
     useEffect(() => {
-        let rows = []
+        let rows = [];
 
         pData.forEach(element => {
             const row = {
@@ -110,42 +110,42 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
                             date: element.expensesPaymentsDetail.transactionDate, 
                             time: element.expensesPaymentsDetail.transactionTime,
                             amount: element.expensesPaymentsDetail.expenseAmount
-                        }
+                        };
     
-            rows.push(row)
+            rows.push(row);
         });
 
-        setRowData(rows)
+        setRowData(rows);
     }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
         <>
             <div className="ag-theme-alpine grid">
                 <AgGridReact	
-                    ref = {gridRef}
-                    columnDefs = {columnDefs}
-                    defaultColDef = {defaultColDef}
-                    rowData = {null}
-                    rowSelection = {'single'}
-                    onGridReady = {handleGridReady}
-                    onFirstDataRendered = {handleFirstDataRendered}
-                    onRowDoubleClicked = {handleOpenBill} />
+                    ref={gridRef}
+                    columnDefs={columnDefs}
+                    defaultColDef={defaultColDef}
+                    rowData={rowData}
+                    rowSelection={'single'}
+                    onGridReady={handleGridReady}
+                    onFirstDataRendered={handleFirstDataRendered}
+                    onRowDoubleClicked={handleOpenBill} />
             </div>
 
             {/* Start :: bill component */}
             <Bill
-                ref = {billRef}
-                pGuestId = {pGuestId} 
-                pName = {pName}
-                pMobile = {pMobile}
-                pGuestCount = {pGuestCount}
-                pCorporateName = {pCorporateName}
-                pCorporateAddress = {pCorporateAddress}
-                pGstNo = {pGstNo}
-                pTransactionId = {transactionId}
-                pTransactionNo = {transactionNo}
-                pTransactionDate = {transactionDate}
-                pTransactionTime = {transactionTime} />
+                ref={billRef}
+                pGuestId={pGuestId} 
+                pName={pName}
+                pMobile={pMobile}
+                pGuestCount={pGuestCount}
+                pCorporateName={pCorporateName}
+                pCorporateAddress={pCorporateAddress}
+                pGstNo={pGstNo}
+                pTransactionId={transactionId}
+                pTransactionNo={transactionNo}
+                pTransactionDate={transactionDate}
+                pTransactionTime={transactionTime} />
             {/* End :: bill component */}
 
         </>

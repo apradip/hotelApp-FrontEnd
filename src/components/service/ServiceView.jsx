@@ -1,14 +1,15 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
+import {formatINR} from "../common/Common";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
-const Form = ({ pName, pPrice, pDescription, onClosed }) => {
+const Form = ({pName, pPrice, pDescription, onClosed}) => {
     const buttonRef = useRef(null);
 
     // Start:: Html
@@ -18,23 +19,21 @@ const Form = ({ pName, pPrice, pDescription, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-2">
+                <div className="row">
 
                     {/* Start:: Column no */}
-                    <div className="col-xs-12 col-md-6">
-                        
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-8 mb-3">
                         {/* Label element */}
-                        <label className="form-label mr-2">Name :</label>
-                        <label className="form-label">{ pName }</label>
+                        <label className="col-12 form-label"><b>Name</b></label>
+                        <label className="col-12 text-muted">{pName}</label>
                     </div>
                     {/* End:: Column no */}
 
                     {/* Start:: Column no */}
-                    <div className="col-xs-12 col-md-6">
-                        
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-4">
                         {/* Label element */}
-                        <label className="form-label mr-2">Price :</label>
-                        <label className="form-label">{pPrice}</label>
+                        <label className="col-12 form-label"><b>Price</b></label>
+                        <label className="col-12 text-muted">{formatINR(pPrice)}</label>
                     </div>
                     {/* End:: Column no */}
 
@@ -42,14 +41,13 @@ const Form = ({ pName, pPrice, pDescription, onClosed }) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                 <div className="row mb-2">
+                 <div className="row">
 
                     {/* Start:: Column tariff */}
-                    <div className="col-xs-12 col-md-12">
-
+                    <div className="col-12 mb-3">
                         {/* Label element */}
-                        <label className="form-label mr-2">Description :</label>
-                        <label className="form-label">{pDescription}</label>
+                        <label className="col-12 form-label"><b>Description</b></label>
+                        <label className="col-12 text-muted">{pDescription}</label>
                     </div>
                     {/* End:: Column tariff */}
                 </div>
@@ -90,7 +88,7 @@ const Form = ({ pName, pPrice, pDescription, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const ServiceView = forwardRef(( props, ref ) => {    
+const ServiceView = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -159,7 +157,7 @@ const ServiceView = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View service</Modal.Title>
+                        <Modal.Title>Detail</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
@@ -175,7 +173,7 @@ const ServiceView = forwardRef(( props, ref ) => {
                         pName={data.name}
                         pPrice={data.price}
                         pDescription={data.description}
-                        onClosed={handleCloseModal}/>
+                        onClosed={handleCloseModal} />
                     {/* End:: Form component */}
                     
                 </Modal> }

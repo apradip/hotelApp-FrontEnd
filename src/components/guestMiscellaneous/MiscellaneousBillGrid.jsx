@@ -154,14 +154,14 @@ const MiscellaneousBillGrid = ({pData}) => {
 	return (
         <div className="ag-theme-alpine grid-height-400">
             <AgGridReact	
-                ref = {gridRef}
-                columnDefs = {columnDefs}
-                defaultColDef = {defaultColDef}
-                rowData = {null}
-                rowSelection = {"single"}
-                rowClassRules = {rowClassRules}
-                onGridReady = {handleGridReady}
-                onFirstDataRendered = {handleFirstDataRendered} />
+                ref={gridRef}
+                columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
+                rowData={rowData}
+                rowSelection={"single"}
+                rowClassRules={rowClassRules}
+                onGridReady={handleGridReady}
+                onFirstDataRendered={handleFirstDataRendered} />
         </div>
     );
 }

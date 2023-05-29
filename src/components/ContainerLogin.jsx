@@ -22,6 +22,7 @@ import Services from "../pages/Services";
 import GuestRooms from "../pages/GuestRooms";
 import GuestTables from "../pages/GuestTables";
 import GuestFoods from "../pages/GuestFoods";
+import GuestServices from "../pages/GuestServices";
 import GuestMiscellaneouses from "../pages/GuestMiscellaneouses";
 import GuestPayments from "../pages/GuestPayments";
 import Support from "../pages/Support";
@@ -62,6 +63,7 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
   const guestRoomRef = useRef(null);
   const guestTableRef = useRef(null);
   const guestFoodRef = useRef(null);
+  const guestServiceRef = useRef(null);
   const guestMiscellaneousRef = useRef(null);
   const guestPaymentRef = useRef(null);
 
@@ -147,6 +149,10 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
         guestFoodRef && guestFoodRef.current.changeSearch(text);
         break;
 
+      case "guestservices":
+        guestServiceRef && guestServiceRef.current.changeSearch(text);
+        break;
+  
       case "guestmiscellaneous":
         guestMiscellaneousRef && guestMiscellaneousRef.current.changeSearch(text);
         break;
@@ -161,8 +167,6 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
   };
 
   const handleAdd = () => {
-    console.log(menuSelected);
-
     switch (menuSelected) {
       case "accesslevels":
         accessLevelRef && accessLevelRef.current.openAdd();
@@ -220,6 +224,10 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
         guestFoodRef && guestFoodRef.current.openAdd();
         break;
 
+      case "guestservices":
+        guestServiceRef && guestServiceRef.current.openAdd();
+        break;
+  
       case "guestmiscellaneous":
         guestMiscellaneousRef && guestMiscellaneousRef.current.openAdd();
         break;
@@ -234,8 +242,6 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
   };
 
   const handleEdit = () => {
-    console.log(menuSelected);
-
     switch (menuSelected) {
       case "accesslevels":
         accessLevelRef && accessLevelRef.current.openEdit();
@@ -293,6 +299,10 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
         guestFoodRef && guestFoodRef.current.openEdit();
         break;
 
+      // case "guestservices":
+      //   guestServiceRef && guestServiceRef.current.openEdit();
+      //   break;
+
       // case "guestmiscellaneous":
       //   guestMiscellaneousRef && guestMiscellaneousRef.current.openEdit();
       //   break;
@@ -307,8 +317,6 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
   };
 
   const handleDel = () => {
-    console.log(menuSelected);
-
     switch (menuSelected) {
       case "accesslevels":
         accessLevelRef && accessLevelRef.current.openDelete();
@@ -366,6 +374,10 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
         guestFoodRef && guestFoodRef.current.openDelete();
         break;
 
+      case "guestservices":
+        guestServiceRef && guestServiceRef.current.openDelete();
+        break;
+  
       case "guestmiscellaneous":
         guestMiscellaneousRef && guestMiscellaneousRef.current.openDelete();
         break;
@@ -497,6 +509,11 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
 
               <Route exact path="/guestfoods" element={<GuestFoods
                                                         ref={guestFoodRef} 
+                                                        onSuccess={handleSuccess}
+                                                        onClose={handleClose} />}/>
+
+              <Route exact path="/guestservices" element={<GuestServices
+                                                        ref={guestServiceRef} 
                                                         onSuccess={handleSuccess}
                                                         onClose={handleClose} />}/>
 

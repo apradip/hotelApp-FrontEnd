@@ -163,7 +163,7 @@ const Rooms = forwardRef(( props, ref ) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className="row m-0 p-0" key={rowKey}>
+            <div className="row" key={rowKey}>
                 {
                     pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
@@ -177,30 +177,28 @@ const Rooms = forwardRef(( props, ref ) => {
         const colKey = `col_${pData._id}`;
 
         return (
-            <div className="col-xl-4 col-md-4 m-0" key = { colKey } >
+            <div className="col-xl-4 col-md-4" key={colKey}>
                 <Card 
-                    ref = { (el) => cardRefs.current[itemIdx] = el }
-                    pIndex = { itemIdx }
-                    pId = { pData._id }
-                    pCategoryId = { pData.categoryId } 
-                    pNo = { pData.no }
-                    pTariff = { parseFloat(pData.tariff, 10).toFixed(2) }
-                    pDiscount = { parseFloat(pData.maxDiscount, 10).toFixed(2) }
-                    pBed = { parseFloat(pData.extraBedTariff, 10).toFixed(2) }
-                    pPerson = { parseFloat(pData.extraPersonTariff, 10).toFixed(2) }
-                    onEdited = { () => { handleSuccess("edit") } }
-                    onDeleted = { () => { handleSuccess("delete") } } 
-                    onClosed = { close } 
-                    onActivated = { handleActivated } />                
+                    ref={(el) => cardRefs.current[itemIdx] = el}
+                    pIndex={itemIdx}
+                    pId={pData._id}
+                    pCategoryId={pData.categoryId} 
+                    pNo={pData.no}
+                    pTariff={parseFloat(pData.tariff, 10).toFixed(2)}
+                    pDiscount={parseFloat(pData.maxDiscount, 10).toFixed(2)}
+                    pBed={parseFloat(pData.extraBedTariff, 10).toFixed(2)}
+                    pPerson={parseFloat(pData.extraPersonTariff, 10).toFixed(2)}
+                    onEdited={() => {handleSuccess("edit")}}
+                    onDeleted={() => {handleSuccess("delete")}} 
+                    onClosed={close} 
+                    onActivated={handleActivated}/>                
             </div>);
     };
     // End:: show all data in card format
 
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
-        return {
-            changeSearch, openAdd, openEdit, openDelete, close
-        }
+        return {changeSearch, openAdd, openEdit, openDelete, close}
     });
     // End:: forward reff change search and open add/edit/delete modal
     
@@ -253,7 +251,7 @@ const Rooms = forwardRef(( props, ref ) => {
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
                             {/* Start :: Display data count */}
-                            <div className="col-12 text-danger">
+                            <div className="col-12 text-danger p-0">
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -263,7 +261,7 @@ const Rooms = forwardRef(( props, ref ) => {
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body">
+                        <div className="card-body py-0">
                             {loading &&
                                 <div className="d-flex justify-content-center">
                                     <div className="spinner-border text-primary" role="status"/>
@@ -276,7 +274,7 @@ const Rooms = forwardRef(( props, ref ) => {
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer">
+                        <div className="card-footer py-0">
                             <div className="row">
                                 {/* Start :: Pagination */}
                                 <div className="col-12 d-flex justify-content-end">

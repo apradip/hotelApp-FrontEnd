@@ -1,15 +1,15 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { useStateContext } from "../../contexts/ContextProvider";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
-const Form = ({ pId, pName, onSubmited, onClosed }) => {
+const Form = ({pId, pName, onSubmited, onClosed}) => {
     const contextValues = useStateContext();
-    const { loading, error, doDelete } = useFetchWithAuth({
+    const {loading, error, doDelete} = useFetchWithAuth({
         url: `${contextValues.bookingAgentAPI}/${pId}`
     });
 
@@ -38,8 +38,8 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
                     type="button"   
                     className="btn btn-danger"
                     autoFocus
-                    disabled = { loading }
-                    onClick = { onClosed } >
+                    disabled={loading}
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -48,15 +48,15 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading || error }
-                    onClick = { handleSave } >
+                    disabled={loading || error}
+                    onClick={handleSave}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
-                        </> }
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -79,10 +79,10 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const BookingAgentDelete = forwardRef(( props, ref ) => {
+const BookingAgentDelete = forwardRef((props, ref) => {
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.bookingAgentAPI}/${props.pId}`
     });
 
@@ -108,9 +108,7 @@ const BookingAgentDelete = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -120,9 +118,7 @@ const BookingAgentDelete = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -146,20 +142,20 @@ const BookingAgentDelete = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            { data &&
+            {data &&
                 <Modal 
                     size="sm"
-                    show = { showModal } >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Delete booking agent</Modal.Title>
+                        <Modal.Title>Delete</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = { handleCloseModal } >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -167,10 +163,10 @@ const BookingAgentDelete = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pId = { props.pId } 
-                        pName = { data.name }
-                        onSubmited = { handleSave } 
-                        onClosed = { handleCloseModal } />
+                        pId={props.pId} 
+                        pName={data.name}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
             </Modal>}
             {/* End:: Delete modal */}

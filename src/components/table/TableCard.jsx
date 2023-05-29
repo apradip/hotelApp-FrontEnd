@@ -1,11 +1,10 @@
-import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import React, {useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle} from "react";
 import {NavLink, Card, Stack, Dropdown} from "react-bootstrap";
-import {ChevronDown, Edit3, Scissors} from "react-feather";
+import {MoreVertical, Edit3, Scissors} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { subStr } from "../common/Common";
-// import useFetchWithAuth from "../common/useFetchWithAuth";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {subStr} from "../common/Common";
 import View from "./TableView";
 import Edit from "./TableEdit";
 import Delete from "./TableDelete";
@@ -33,7 +32,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
-const TableCard = forwardRef(( props, ref ) => {
+const TableCard = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [categoryName, setCategoryName] = useState("");
@@ -76,9 +75,7 @@ const TableCard = forwardRef(( props, ref ) => {
     
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleDeSelect, handelOpenEdit, handelOpenDelete
-        }
+        return {handleDeSelect, handelOpenEdit, handelOpenDelete}
     });
     // Edit:: forward reff de-select, show edit/delete modal function
 
@@ -95,28 +92,28 @@ const TableCard = forwardRef(( props, ref ) => {
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
-                                        if (e.detail === 1) {
-                                            setActive(!active) 
-                                            props.onActivated(props.pIndex)
-                                        }    
-                                        else if (e.detail === 2) {
-                                            handelOpenView()
-                                        }  
-                                   }}>
+                                    if (e.detail === 1) {
+                                        setActive(!active)
+                                        props.onActivated(props.pIndex)
+                                    }    
+                                    else if (e.detail === 2) {
+                                        handelOpenView()
+                                    }  
+                                }}>
 
                 <Card.Body className="text-sm p-1">
-                    <Stack gap={1}>
+                    <Stack gap={0}>
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-10 text-left">
-                                <h4>{ subStr(props.pNo, 20) }</h4>
+                            <span className="col-11 text-left pl-1">
+                                <b>{subStr(props.pNo, 25)}</b>
                             </span>
 
                             {/* Start:: Column menu */}
-                            <span className="col-2 text-right">
+                            <span className="col-1 text-right p-0">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>
-                                        <ChevronDown size={16}/>
+                                        <MoreVertical size={16} />
                                     </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
@@ -138,9 +135,9 @@ const TableCard = forwardRef(( props, ref ) => {
                         </Stack>
 
                         <Stack gap={0}>
-                            <div className="col-12">
+                            <span className="col-12 text-left px-1">
                                 {subStr(props.pDescription, 40)}
-                            </div>
+                            </span>
                         </Stack>
                     </Stack>
                 </Card.Body>
@@ -151,7 +148,7 @@ const TableCard = forwardRef(( props, ref ) => {
             <View
                 ref={viewRef}
                 pId={ props.pId} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: view component */}
 
             {/* Start :: edit component */}
@@ -159,7 +156,7 @@ const TableCard = forwardRef(( props, ref ) => {
                 ref={editRef}
                 pId={props.pId} 
                 onEdited={props.onEdited} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: edit component */}
 
             {/* Start :: delete component */}
@@ -167,7 +164,7 @@ const TableCard = forwardRef(( props, ref ) => {
                 ref={deleteRef}
                 pId={props.pId} 
                 onDeleted={props.onDeleted} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: delete component */}
         </>
     );

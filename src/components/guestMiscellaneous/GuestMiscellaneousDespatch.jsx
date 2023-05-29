@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
-import { subStr } from "../common/Common";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
+import {subStr} from "../common/Common";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { guestMiscellaneousSchema } from "../../schemas";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {guestMiscellaneousSchema} from "../../schemas";
 import MiscellaneousOrderGrid from "./MiscellaneousOrderGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
@@ -18,7 +18,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                pTransactionId, pData, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    // const [miscellaneousData, setMiscellaneousData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const [defaultRowData, setDefaultRowData] = useState(pData);
     const { loading, error, doUpdate } = useFetchWithAuth({
@@ -26,7 +25,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     })
 
     const handelChangeMiscellaneousData = (miscellaneousData) => {
-        console.log(miscellaneousData);
+        //console.log(miscellaneousData);
         // let miscData = [];
         
         // for(const row of miscellaneousData) {
@@ -111,36 +110,36 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-5">
-                            <label className="form-label mr-2">Company :</label>
-                            <label className="text-muted">{subStr(pCorporateName, 30)}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                            <label className="col-12 form-label"><b>Company</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
                         </div>
                     :
-                        <div className="col-5">
-                            <label className="form-label mr-2">Name :</label>
-                            <label className="text-muted">{subStr(pName, 30)}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                            <label className="col-12 form-label"><b>Name</b></label>
+                            <label className="col-12 text-muted">{subStr(pName, 30)}</label>
                         </div>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-5">
-                            <label className="form-label mr-2">Address :</label>
-                            <label className="text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                            <label className="col-12 form-label"><b>Address</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </div>
                     :
-                        <div className="col-5">
-                            <label className="form-label mr-2">Mobile :</label>
-                            <label className="text-muted">{pMobile}</label>
+                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                            <label className="col-12 form-label"><b>Mobile</b></label>
+                            <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column mobile no / company address */}
-                    <div className="col-2">
-                        <label className="form-label mr-2">Guest count :</label>
-                        <label className="text-muted">{pGuestCount}</label>
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 mb-3">
+                        <label className="col-12 form-label"><b>Guest count</b></label>
+                        <label className="col-12 text-muted">{pGuestCount} No.</label>
                     </div>
                     {/* End:: Column mobile no / company address */}
 
@@ -154,13 +153,13 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     <div className="col-12">
 
                         {/* Label element */}
-                        <label className="form-label">Items :</label>
+                        <label className="form-label"><b>Items</b></label>
 
                         {/* Start:: Column miscellaneous detail */}
                         <MiscellaneousOrderGrid
-                            pState = "VIEW"
-                            pDefaultRowData = {defaultRowData}
-                            onChange = {handelChangeMiscellaneousData} />
+                            pState="VIEW"
+                            pDefaultRowData={defaultRowData}
+                            onChange={handelChangeMiscellaneousData} />
                         {/* End:: Column miscellaneous detail */}
 
                     </div>                
@@ -177,20 +176,20 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                 {/* Start:: Close button */}
                 <button
-                    type = "button"
-                    className = "btn btn-danger"
-                    disabled = {loading}
-                    onClick = {handleClose} >
+                    type="button"
+                    className="btn btn-danger"
+                    disabled={loading}
+                    onClick={handleClose} >
                     Close
                 </button>
                 {/* End:: Close button */}
                 
                 {/* Start:: Save button */}
                 <button 
-                    type = "button"
-                    className = "btn btn-success"
-                    disabled = {loading} 
-                    onClick = {handleSubmit} >
+                    type="button"
+                    className="btn btn-success"
+                    disabled={loading} 
+                    onClick={handleSubmit} >
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -243,7 +242,7 @@ const FormError = ({onClosed}) => {
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick = { handleClose } >
+                    onClick={handleClose} >
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -356,24 +355,24 @@ const GuestMiscellaneousDespatch = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pGuestId = {props.pGuestId}
-                        pName = {props.pName}
-                        pMobile = {props.pMobile}
-                        pGuestCount = {props.pGuestCount}
-                        pCorporateName = {props.pCorporateName}
-                        pCorporateAddress = {props.pCorporateAddress}
-                        pGstNo = {props.pGstNo}
-                        pTransactionId = {data[0].transactionId}
-                        pData = {data}
-                        onSubmited = {handleSave} 
-                        onClosed = {handleCloseModal} />
+                        pGuestId={props.pGuestId}
+                        pName={props.pName}
+                        pMobile={props.pMobile}
+                        pGuestCount={props.pGuestCount}
+                        pCorporateName={props.pCorporateName}
+                        pCorporateAddress={props.pCorporateAddress}
+                        pGstNo={props.pGstNo}
+                        pTransactionId={data[0].transactionId}
+                        pData={data}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal} />
                         {/* End:: Form component */}
                     
                 </Modal>
             :
                 <Modal 
                     size="sm"
-                    show = {showModal} >
+                    show={showModal} >
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -391,7 +390,7 @@ const GuestMiscellaneousDespatch = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <FormError 
-                        onClosed = {handleCloseModal} />
+                        onClosed={handleCloseModal} />
                         {/* End:: Form component */}
                 </Modal>
             }

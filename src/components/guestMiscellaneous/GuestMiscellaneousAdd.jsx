@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { guestSmallSchema } from "../../schemas";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {guestSmallSchema} from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ onSubmited, onClosed }) => {
+const Form = ({onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
@@ -70,14 +70,14 @@ const Form = ({ onSubmited, onClosed }) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column name */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputName"}>Name</label>
+                            htmlFor={"keyInputName"}><b>Name</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -101,17 +101,17 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column name */}
 
                     {/* Start:: Column mobile */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputMobile"}>Mobile</label>
+                            htmlFor={"keyInputMobile"}><b>Mobile No.</b></label>
 
                         {/* Input element text*/}
                         <input 
                             type="text" 
                             name="keyInputMobile"
-                            placeholder="Mobile"
+                            placeholder="Mobile No."
                             className="form-control"
                             autoComplete="off"
                             maxLength={100}
@@ -129,11 +129,11 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column mobile */}
 
                     {/* Start:: Column no of guest */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputGuestCount"}>Guest count</label>
+                            htmlFor={"keyInputGuestCount"}><b>Guest count</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -160,14 +160,14 @@ const Form = ({ onSubmited, onClosed }) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row mb-3">
+                <div className="row">
 
                     {/* Start:: Column corporate name */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputCorporateName"}>Corporate name</label>
+                            htmlFor={"keyInputCorporateName"}><b>Corporate name</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -176,10 +176,10 @@ const Form = ({ onSubmited, onClosed }) => {
                             placeholder="Corporate name"
                             className="form-control"
                             autoComplete="off"
-                            maxLength = {100}
-                            disabled = {loading} 
-                            value = {values.keyInputCorporateName} 
-                            onChange = {handleChange}/>
+                            maxLength={100}
+                            disabled={loading} 
+                            value={values.keyInputCorporateName} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputCorporateName && 
@@ -191,11 +191,11 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column corporate name */}
 
                     {/* Start:: Column coroprate address */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputCorporateAddress"}>Corporate address</label>
+                            htmlFor={"keyInputCorporateAddress"}><b>Corporate address</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -219,11 +219,11 @@ const Form = ({ onSubmited, onClosed }) => {
                     {/* End:: Column coroprate address */}
 
                     {/* Start:: Column gst no */}
-                    <div className="col-4">
+                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputGST"}>GST No.</label>
+                            htmlFor={"keyInputGST"}><b>GST No.</b></label>
 
                         {/* Input element select*/}
                         <input 
@@ -258,20 +258,20 @@ const Form = ({ onSubmited, onClosed }) => {
                 
                 {/* Start:: Close button */}
                 <button 
-                    type = "button"
-                    className = "btn btn-danger"
-                    disabled = {loading}
-                    onClick = {handleClose} >
+                    type="button"
+                    className="btn btn-danger"
+                    disabled={loading}
+                    onClick={handleClose} >
                     Close
                 </button>
                 {/* End:: Close button */}
 
                 {/* Start:: Save button */}
                 <button 
-                    type = "button"
-                    className = "btn btn-success"
-                    disabled = {loading} 
-                    onClick = {handleSubmit} >
+                    type="button"
+                    className="btn btn-success"
+                    disabled={loading} 
+                    onClick={handleSubmit} >
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -300,7 +300,7 @@ const Form = ({ onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const GuestMiscellaneousAdd = forwardRef(( props, ref ) => {
+const GuestMiscellaneousAdd = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
 
     // Start:: Show modal
@@ -353,7 +353,7 @@ const GuestMiscellaneousAdd = forwardRef(( props, ref ) => {
                 {/* Start:: Modal header */}
                 <Modal.Header>
                     {/* Header text */}
-                    <Modal.Title>Add guest</Modal.Title>
+                    <Modal.Title>New guest</Modal.Title>
 
                     {/* Close button */}
                     <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>

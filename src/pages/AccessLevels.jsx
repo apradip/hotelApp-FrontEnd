@@ -161,7 +161,7 @@ const AccessLevels = forwardRef(( props, ref ) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className="row m-0 p-0" key={rowKey}>
+            <div className="row" key={rowKey}>
                 {
                     pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
@@ -175,26 +175,24 @@ const AccessLevels = forwardRef(( props, ref ) => {
         const colKey = `col_${pData._id}`;
 
         return (
-            <div className="col-xl-4 col-md-4 m-0" key={colKey}>
+            <div className="col-xl-4 col-md-4" key={colKey}>
                 <Card 
-                    ref = { (el) => cardRefs.current[itemIdx] = el }
-                    pIndex = { itemIdx }
-                    pId = { pData._id } 
-                    pName = { pData.name }
-                    pDescription = { pData.description }
-                    onEdited = {() => {handleSuccess("edit")} }
-                    onDeleted = {() => handleSuccess("delete") } 
-                    onClosed = { close } 
-                    onActivated = { handleActivated } />                
+                    ref={(el) => cardRefs.current[itemIdx] = el}
+                    pIndex={itemIdx}
+                    pId={pData._id} 
+                    pName={pData.name}
+                    pDescription={pData.description}
+                    onEdited={() => {handleSuccess("edit")}}
+                    onDeleted={() => handleSuccess("delete")} 
+                    onClosed={close} 
+                    onActivated={handleActivated}/>                
             </div>);
     };
     // End:: show all data in card format
 
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
-        return {
-            changeSearch, openAdd, openEdit, openDelete, close
-        }
+        return {changeSearch, openAdd, openEdit, openDelete, close}
     });
     // End:: forward reff change search and open add/edit/delete modal
 
@@ -247,7 +245,7 @@ const AccessLevels = forwardRef(( props, ref ) => {
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
                             {/* Start :: Display data count */}
-                            <div className="col-12 text-danger">
+                            <div className="col-12 text-danger p-0">
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -270,17 +268,16 @@ const AccessLevels = forwardRef(( props, ref ) => {
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer ">
+                        <div className="card-footer py-0">
                             <div className="row">
                                 {/* Start :: Pagination */}
                                 <div className="col-12 d-flex justify-content-end">
-                                    {
-                                            data && 
-                                                <Paging
-                                                    itemPerPage = { itemPerPage }
-                                                    totalItem = { data.length }
-                                                    selectedPage = { selectedPage }
-                                                    onPaging = { handlePaging } />}
+                                    {data && 
+                                            <Paging
+                                                itemPerPage={itemPerPage}
+                                                totalItem={data.length}
+                                                selectedPage={selectedPage}
+                                                onPaging={handlePaging}/>}
                                 </div>
                                 {/* End :: Pagination */}
                             </div>

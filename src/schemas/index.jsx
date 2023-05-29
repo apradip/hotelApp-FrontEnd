@@ -17,7 +17,6 @@ export const forgetPasswordSchema = Yup.object({
 });
 
 export const changePasswordSchema = Yup.object({
-    //keyInputOldPassword: Yup.string().required("Old password can't be empty!").min(4, "Invalid old password!"),
     keyInputNewPassword: Yup.string().required("New password can't be empty!").min(4, "Invalid new password!"),
     keyInputReEnterNewPassword: Yup.string().required("Re enter new password can't be empty!").min(4, "Invalid re enter new password!")
         .test({
@@ -220,16 +219,11 @@ export const guestRoomSchema = Yup.object({
         }),
     keyInputCheckInDate: Yup.string().required("Check In date can't be empty!"),
     keyInputCheckInTime: Yup.string().required("Check In time can't be empty!"),
-    // keyInputRooms: Yup.array(),
 });
 
 export const guestTableSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(5, "Invalid name!"),
     keyInputMobile: Yup.string().required("Mobile can't be empty!").matches(phoneRegExp, "Invalid mobile no!"),
-    keyInputEmail: Yup.string().required("Email can't be empty!").email("Invalid email!"),
-    keyInputAddress: Yup.string().required("Address can't be empty!").min(6, "Invalid name!"),
-    keyInputCity: Yup.string().required("City can't be empty!").min(2, "Invalid city!"),
-    keyInputState: Yup.string().required("State can't be empty!").min(2, "Invalid state!"),
     keyInputGuestCount: Yup.number().required("No of guest can't be empty!").positive("Invalid guest count!").min(1, "Invalid guest count!"),
     keyInputCorporateName: Yup.string(),
     keyInputCorporateAddress: Yup.string()
@@ -282,6 +276,52 @@ export const guestPaymentSchema = Yup.object({
     keyInputNarration: Yup.string().required("Narration can't be empty!").min(5, "Invalid narration!"),
     // keyInputTransactionDate: Yup.string().required("Transaction date can't be empty!"),
     // keyInputTransactionTime: Yup.string().required("Transaction time can't be empty!"),
+});
+
+export const guestServiceSchema = Yup.object({
+    keyInputName: Yup.string().required("Name can't be empty!").min(5, "Invalid name!"),
+    keyInputMobile: Yup.string().required("Mobile can't be empty!").matches(phoneRegExp, "Invalid mobile no!"),
+    keyInputCorporateName: Yup.string(),
+    keyInputCorporateAddress: Yup.string()
+        .test({
+            params: { },
+            message: 'Invalid corporate address!',
+            test: function (value) {
+                if (this.parent.keyInputCorporateName === "") {
+                    if (value === "") {
+                        return true
+                    } else {
+                        return false
+                    }
+                } else {
+                    if (value === "") {
+                        return false
+                    } else {
+                        return true
+                    }
+                }
+            }
+        }),
+    keyInputGSTNo: Yup.string()
+        .test({
+            params: { },
+            message: 'Invalid gst no!',
+            test: function (value) {
+                if (this.parent.keyInputCorporateName === "") {
+                    if (value === "") {
+                        return true
+                    } else {
+                        return false
+                    }
+                } else {
+                    if (value === "") {
+                        return false
+                    } else {
+                        return true
+                    }
+                }
+            }
+        }),
 });
 
 export const guestMiscellaneousSchema = Yup.object({

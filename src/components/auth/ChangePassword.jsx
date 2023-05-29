@@ -68,7 +68,7 @@ const Form = ({ pId, onSubmited, onClosed }) => {
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputOldPassword">Old password</label>
+                            htmlFor="keyInputOldPassword"><b>Old password</b></label>
                         
                         {/* Input element text*/}
                         <input
@@ -78,15 +78,15 @@ const Form = ({ pId, onSubmited, onClosed }) => {
                             className="form-control"
                             autoComplete="off"
                             autoFocus
-                            maxLength = { 100 }
-                            disabled = { loading }
-                            value = { values.keyInputOldPassword }
-                            onChange = { handleChange } />
+                            maxLength={100}
+                            disabled={loading}
+                            value={values.keyInputOldPassword}
+                            onChange={handleChange} />
 
                         {/* Validation message */}
                         {errors.keyInputOldPassword && 
                             touched.keyInputOldPassword ? 
-                                (<small className="text-danger">{ errors.keyInputOldPassword }</small>) : 
+                                (<small className="text-danger">{errors.keyInputOldPassword}</small>) : 
                                     null}
                     </div>
                     {/* End:: Column old password */}
@@ -102,7 +102,7 @@ const Form = ({ pId, onSubmited, onClosed }) => {
 
                         {/* Label element */}
                         <label className="form-label" 
-                                htmlFor={"keyInputNewPassword"}>New password</label>
+                                htmlFor={"keyInputNewPassword"}><b>New password</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -111,10 +111,10 @@ const Form = ({ pId, onSubmited, onClosed }) => {
                             placeholder="new password"
                             className="form-control"
                             autoComplete="off"
-                            maxLength = { 100 }
-                            disabled = { loading }
-                            value = { values.keyInputNewPassword } 
-                            onChange = { handleChange } />
+                            maxLength={100}
+                            disabled={loading}
+                            value={values.keyInputNewPassword} 
+                            onChange={handleChange} />
 
                         {/* Validation message */}
                         {errors.keyInputNewPassword && 
@@ -136,7 +136,7 @@ const Form = ({ pId, onSubmited, onClosed }) => {
 
                         {/* Label element */}
                         <label className="form-label" 
-                                htmlFor={"keyInputReEnterNewPassword"}>Re enter new password</label>
+                                htmlFor={"keyInputReEnterNewPassword"}><b>Re enter new password</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -172,8 +172,8 @@ const Form = ({ pId, onSubmited, onClosed }) => {
                 <button 
                     type="reset"
                     className="btn btn-danger"
-                    disabled = { loading }
-                    onClick = { handleClose } >
+                    disabled={loading}
+                    onClick={handleClose} >
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -182,8 +182,8 @@ const Form = ({ pId, onSubmited, onClosed }) => {
                 <button 
                     className="btn btn-success"
                     type="button"
-                    disabled = { loading } 
-                    onClick = { handleSubmit } >
+                    disabled={loading} 
+                    onClick={handleSubmit} >
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -268,9 +268,9 @@ const ChangePassword = ({ pEmployeeId, onEdited, onClosed }) => {
 
                 {/* Start:: Form component */}
                 <Form
-                    pId = { pEmployeeId }
-                    onSubmited = { handleSave } 
-                    onClosed = { handleCloseModal } />
+                    pId={pEmployeeId}
+                    onSubmited={handleSave} 
+                    onClosed={handleCloseModal} />
                 {/* End:: Form component */}                                            
 
             </Modal>
