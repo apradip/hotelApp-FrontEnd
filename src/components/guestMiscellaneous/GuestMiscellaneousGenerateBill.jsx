@@ -106,7 +106,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={handleClose} >
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -153,7 +153,7 @@ const FormError = ({onClosed}) => {
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={handleClose} >
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -247,7 +247,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -263,8 +263,8 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                         pCorporateAddress={props.pCorporateAddress}
                         pGstNo={props.pGstNo}
                         pData={data}
-                        onClosed={handleCloseModal} />
-                        {/* End:: Form component */}
+                        onClosed={handleCloseModal}/>
+                    {/* End:: Form component */}
                     
                 </Modal>
             :
@@ -280,7 +280,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -288,7 +288,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <FormError 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                 </Modal>
             }

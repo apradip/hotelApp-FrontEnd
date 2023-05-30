@@ -153,7 +153,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     <div className="col-12">
 
                         {/* Label element */}
-                        <label className="form-label"><b>Items</b></label>
+                        <label className="col-12 form-label"><b>Items</b></label>
 
                         {/* Start:: Column miscellaneous detail */}
                         <MiscellaneousOrderGrid

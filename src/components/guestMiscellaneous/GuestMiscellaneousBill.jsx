@@ -105,11 +105,15 @@ const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTim
                 {/* Start:: Row */}
                 <div className="row">
 
-                    {/* Start:: Column miscellaneous detail */}
-                    <BillGrid
-                        pData={pData}/>
-                    {/* End:: Column miscellaneous detail */}
-
+                    <div className="col-12">
+                        <label className="col-12 form-label"><b>Items</b></label>
+                    
+                        {/* Start:: Column miscellaneous detail */}
+                        <BillGrid
+                            pData={pData}/>
+                        {/* End:: Column miscellaneous detail */}
+                    </div>
+                    
                 </div>
                 {/* End:: Row */}
 
