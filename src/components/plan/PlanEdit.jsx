@@ -30,7 +30,7 @@ const Form = ({pId, pName, pDescription, onSubmited, onClosed}) => {
         onSubmit: async (values) => {
             const payload = {   
                 name: values.keyInputName.toUpperCase(), 
-                address: values.keyInputDescription
+                description: values.keyInputDescription
             }
 
             await doUpdate(payload);

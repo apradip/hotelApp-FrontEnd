@@ -6,9 +6,9 @@ import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {subStr, formatINR} from "../common/Common";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import RoomView from "./RoomView";
-import RoomEdit from "./RoomEdit";
-import RoomDelete from "./RoomDelete";
+import View from "./RoomView";
+import Edit from "./RoomEdit";
+import Delete from "./RoomDelete";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown" ref={ref} 
@@ -186,14 +186,14 @@ const RoomCard = forwardRef(( props, ref ) => {
             {/* End :: card component */}
 
             {/* Start :: view component */}
-            <RoomView
+            <View
                 ref = { viewRef }
                 pId = { props.pId } 
                 onClosed = { handleClose } />
             {/* End :: view component */}
 
             {/* Start :: edit component */}
-            <RoomEdit 
+            <Edit 
                 ref = { editRef }
                 pId = { props.pId } 
                 onEdited = { props.onEdited } 
@@ -201,7 +201,7 @@ const RoomCard = forwardRef(( props, ref ) => {
             {/* End :: edit component */}
 
             {/* Start :: delete component */}
-            <RoomDelete 
+            <Delete 
                 ref = { deleteRef }
                 pId = { props.pId } 
                 onDeleted = { props.onDeleted } 

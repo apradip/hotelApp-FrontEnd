@@ -30,17 +30,20 @@ export const changePasswordSchema = Yup.object({
 
 export const accessLevelSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
-    keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
+    keyInputDescription: Yup.string()
+    //keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
 });
 
 export const idDocumentSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
-    keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
+    keyInputDescription: Yup.string()
+    // keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
 });
 
 export const bookingAgentSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
-    keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
+    keyInputDescription: Yup.string()
+    // keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
 });
 
 export const employeeSchema = Yup.object({
@@ -59,12 +62,13 @@ export const employeeSchema = Yup.object({
 });
 
 export const planSchema = Yup.object({
-    keyInputName: Yup.string().required("Name can't be empty!").min(6, "Invalid name!"),
-    keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
+    keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
+    keyInputDescription: Yup.string()
+    // keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
 });
 
 export const roomCategorySchema = Yup.object({
-    keyInputName: Yup.string().required("Name can't be empty!").min(5, "Invalid name!"),
+    keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
     keyInputTariff: Yup.number().required("Tariff can't be empty!").positive("Invalid tariff!").min(3, "Invalid tariff!"),
     keyInputDiscount: Yup.number().required("Maximum Discount can't be empty!").min(0, "Invalid maximum discount!")
         .test({
@@ -136,25 +140,29 @@ export const roomSchema = Yup.object({
 
 export const tableSchema = Yup.object({
     keyInputNo: Yup.string().required("No can't be empty!").min(1, "Invalid no!"),
-    keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
+    keyInputDescription: Yup.string()
+    // keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
 export const foodSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(1, "Invalid name!"),
     keyInputPrice: Yup.number().required("Price can't be empty!").positive("Invalid price!").min(3, "Invalid price!"),
-    keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
+    keyInputDescription: Yup.string()
+    // keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
 export const miscellaneousSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(1, "Invalid name!"),
     keyInputPrice: Yup.number().required("Price can't be empty!").positive("Invalid price!").min(3, "Invalid price!"),
-    keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
+    keyInputDescription: Yup.string()
+    // keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
 export const serviceSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(1, "Invalid name!"),
     keyInputPrice: Yup.number().required("Price can't be empty!").positive("Invalid price!").min(3, "Invalid price!"),
-    keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
+    keyInputDescription: Yup.string()
+    // keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
 export const guestRoomSchema = Yup.object({

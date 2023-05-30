@@ -146,14 +146,14 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
 
                 {/* Start:: card body */}
                 <Card.Body className="text-sm p-1"> 
-                    <Stack gap={0}>
+                    <Stack gap={1}>
                         <Stack direction="horizontal" gap={0}>
                             <span className="col-9 text-left pl-1">
                                 <b>{props.pCorporateName ? subStr(props.pCorporateName, 40): subStr(props.pName, 40)}</b>
                             </span>
 
                             <span className="col-3 text-right text-danger pr-1">
-                                <b>{props.pGuestCount} No.</b>
+                                <b>{formatINR(props.pTotalBalance)}</b>
                             </span>
                         </Stack>
 
@@ -169,8 +169,8 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                         </Stack>        
 
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-6 text-left text-danger pl-1">
-                                {formatINR(props.pTotalBalance)}
+                            <span className="col-6 text-left pl-1">
+                                {props.pGuestCount} no of guest(s) 
                             </span>
 
                             <span className="col-5 text-right p-0">

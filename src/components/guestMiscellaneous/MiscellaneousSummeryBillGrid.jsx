@@ -8,7 +8,8 @@ import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount, 
-                                       pCorporateName, pCorporateAddress, pGstNo, pData}) => {    
+                                       pCorporateName, pCorporateAddress, pGstNo, 
+                                       pData}) => {    
 
     const gridRef = useRef();
     const billRef = useRef(null);
@@ -120,16 +121,16 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
 
 	return (
         <>
-            <div className="ag-theme-alpine grid">
+            <div className="col-12 ag-theme-alpine grid-height-400">
                 <AgGridReact	
                     ref={gridRef}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
                     rowData={rowData}
-                    rowSelection={'single'}
+                    rowSelection={"single"}
                     onGridReady={handleGridReady}
                     onFirstDataRendered={handleFirstDataRendered}
-                    onRowDoubleClicked={handleOpenBill} />
+                    onRowDoubleClicked={handleOpenBill}/>
             </div>
 
             {/* Start :: bill component */}
@@ -145,7 +146,7 @@ const MiscellaneousSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
                 pTransactionId={transactionId}
                 pTransactionNo={transactionNo}
                 pTransactionDate={transactionDate}
-                pTransactionTime={transactionTime} />
+                pTransactionTime={transactionTime}/>
             {/* End :: bill component */}
 
         </>

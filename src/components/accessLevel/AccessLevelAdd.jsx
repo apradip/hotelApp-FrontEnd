@@ -13,7 +13,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 const Form = ({onSubmited, onClosed}) => {
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const { loading, error, doInsert } = useFetchWithAuth({
+    const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.accessLevelAPI}`
     });
 
@@ -27,8 +27,8 @@ const Form = ({onSubmited, onClosed}) => {
         validateOnChange,
         onSubmit: async (values) => {
             const payload = {   
-                name: values.keyInputName.toUpperCase(), 
-                description: values.keyInputDescription
+                "name": values.keyInputName.toUpperCase(), 
+                "description": values.keyInputDescription
             }
 
             await doInsert(payload);

@@ -28,7 +28,7 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
 
             {/* Start:: Modal body */}
             <Modal.Body>
-                <label className="form-label">Are you really want to remove <mark><code>{ pName }</code></mark> ?</label>
+                <label className="form-label">Are you really want to delete <mark><code>{pName}</code></mark> ?</label>
             </Modal.Body>
             {/* End:: Modal body */}
 

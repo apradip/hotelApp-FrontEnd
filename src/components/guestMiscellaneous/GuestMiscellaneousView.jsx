@@ -202,7 +202,7 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>All ordered items</Modal.Title>
+                        <Modal.Title>Orders</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
@@ -223,7 +223,7 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
                         pCorporateAddress={props.pCorporateAddress}
                         pGstNo={props.pGstNo}
                         pData={data}
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
                     
                 </Modal> }

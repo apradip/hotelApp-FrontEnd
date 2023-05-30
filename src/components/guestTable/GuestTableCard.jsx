@@ -147,38 +147,38 @@ const GuestTableCard = forwardRef((props, ref) => {
                 {/* Start:: card body */}
                 <Card.Body className="text-sm p-1"> 
                     <Stack gap={1}>
-                        <Stack direction="horizontal" gap={0} style={{border: "solid 0px red"}}>
-                            <span className="col-9 text-left" style={{border: "solid 0px red"}}>
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-9 text-left pl-1">
                                 <b>{props.pCorporateName ? subStr(props.pCorporateName, 40): subStr(props.pName, 40)}</b>
                             </span>
 
-                            <span className="col-3 text-right text-danger pr-1" style={{border: "solid 0px red"}}>
-                                <b>{props.pGuestCount} No.</b>
+                            <span className="col-3 text-right text-danger pr-1">
+                                <b>{formatINR(props.pTotalBalance)}</b>
                             </span>
                         </Stack>
 
-                        <Stack gap={0} style={{border: "solid 0px red"}}>
+                        <Stack gap={0}>
                             {props.pCorporateName ?
-                                <span className="col-12">{subStr(props.pCorporateAddress, 40)}</span>
+                                <span className="col-12 px-1">{subStr(props.pCorporateAddress, 40)}</span>
                                 :
                                 <Stack direction="horizontal" gap={0}>
-                                    <span className="col-12 text-left">
+                                    <span className="col-12 text-left px-1">
                                         Mobile No. {props.pMobile}</span>
                                 </Stack> 
                             }
                         </Stack>        
 
-                        <Stack direction="horizontal" gap={0} style={{border: "solid 0px red"}}>
-                            <span className="col-6 text-left text-danger" style={{border: "solid 0px red"}}>
-                                {formatINR(props.pTotalBalance)}</span>
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left pl-1">
+                                {props.pGuestCount} no of guest(s)</span>
 
-                            <span className="col-5 text-right pr-0" style={{border: "solid 0px red"}}>
+                            <span className="col-5 text-right pr-0">
                                 <TimeElapsed
-                                    pInDate = {props.pIndate}
-                                    pInTime = {props.pInTime} />
+                                    pInDate={props.pIndate}
+                                    pInTime={props.pInTime}/>
                             </span>
 
-                            <span className="col-1 text-right pr-1" style={{border: "solid 0px red"}}>
+                            <span className="col-1 text-right pr-1">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>
@@ -253,7 +253,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
                 onSaved={props.onOrdered} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: order component */}
 
             {/* Start :: despatch component */}
@@ -267,7 +267,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
                 onSaved={props.onDespatched} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: despatch component */}
 
             {/* Start :: generate & display summery bill component */}
@@ -280,9 +280,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                onSaved={props.onBillGenerated} 
-                // onClosed = {handleClose} 
-                />
+                onSaved={props.onBillGenerated}/>
             {/* End :: generate & display summery bill component */}
 
             {/* Start :: add payment component */}
@@ -295,7 +293,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pCorporateAddress={props.pCorporateAddress}
                 pBalance={props.pTotalBalance}    
                 onSaved={props.onPaymentAdded}
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: add payment component */}
 
             {/* Start :: checkout component */}
@@ -305,7 +303,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pName={props.pName}
                 pCorporateName={props.pCorporateName}
                 onSaved={props.onCheckedout} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: checkout component */}
 
             {/* Start :: delete employee component */}
@@ -314,7 +312,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pId={props.pGuestId} 
                 pName={props.pName}
                 onDeleted={props.onDeleted} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: delete employee component */}
 
         </>

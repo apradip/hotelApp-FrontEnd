@@ -170,7 +170,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <MiscellaneousOrderGrid
                             pState="MOD"
                             pDefaultRowData={defaultRowData}
-                            onChange={handelChangeMiscellaneousData} />
+                            onChange={handelChangeMiscellaneousData}/>
                         {/* End:: Column miscellaneous detail */}
 
                     </div>                
@@ -190,7 +190,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     type="button"
                     className="btn btn-danger"
                     disabled={loading}
-                    onClick={handleClose} >
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -200,7 +200,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     type="button"
                     className="btn btn-success"
                     disabled={loading} 
-                    onClick={handleSubmit} >
+                    onClick={handleSubmit}>
 
                     {!loading && "Confirm"}
                     {loading && 

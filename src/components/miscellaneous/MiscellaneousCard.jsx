@@ -107,8 +107,8 @@ const MiscellaneousCard = forwardRef((props, ref) => {
                             <span className="col-1 text-right p-0">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
-                                    <Dropdown.Toggle as={CustomToggle} >
-                                        <MoreVertical size={16} />
+                                    <Dropdown.Toggle as={CustomToggle}>
+                                        <MoreVertical size={16}/>
                                     </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>

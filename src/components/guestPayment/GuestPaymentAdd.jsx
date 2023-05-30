@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
-import { subStr } from "../common/Common";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {useFormik} from "formik";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
+import {subStr} from "../common/Common";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { guestPaymentSchema } from "../../schemas";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {guestPaymentSchema} from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -50,9 +50,9 @@ const Form = ({pGuestId, pName, pMobile,
 
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false)
-        resetForm()
-        onClosed()
+        setValidateOnChange(false);
+        resetForm();
+        onClosed();
     }
     // End:: close form    
     
@@ -65,30 +65,31 @@ const Form = ({pGuestId, pName, pMobile,
 
                 {/* Start:: Row */}
                 <div className="row">
+
                     {/* End:: Column name / corporate name */}
                     {pCorporateName ?
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+                        <div className="col-xs-12 col-md-6 mb-3">
                             <label className="col-12 form-label"><b>Company</b></label>
-                            <label className="col-12 form-label">{subStr(pCorporateName, 20)}</label>
+                            <label className="col-12 text-muted">{subStr(pCorporateName, 20)}</label>
                         </div>
                     :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+                        <div className="col-sx-12 col-md-6 mb-3">
                             <label className="col-12 form-label"><b>Name</b></label>
-                            <label className="col-12 form-label">{subStr(pName, 20)}</label>
+                            <label className="col-12 text-muted">{subStr(pName, 20)}</label>
                         </div>
                     }
                     {/* End:: Column name / corporate name */}
 
                     {/* Start:: Column mobile no. / corporate address */}
                     {pCorporateName ?
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+                        <div className="col-sx-12 col-md-6 mb-3">
                             <label className="col-12 form-label"><b>Address</b></label>
-                            <label className="col-12 form-label">{subStr(pCorporateAddress, 20)}</label>
+                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 20)}</label>
                         </div>
                         :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+                        <div className="col-sx-12 col-md-6 mb-3">
                             <label className="col-12 form-label"><b>Mobile</b></label>
-                            <label className="col-12 form-label">{pMobile}</label>
+                            <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
                     {/* End:: Column mobile no. / corporate address */}
@@ -103,28 +104,30 @@ const Form = ({pGuestId, pName, pMobile,
                     <div className="col-12 mb-3">
 
                         {/* Label element */}
-                        <label className="form-label" 
+                        <label className="col-12 form-label" 
                             htmlFor={"keyInputPaymentAmount"}><b>Amount</b></label>
 
-                        {/* Input element text*/}
-                        <input 
-                            type="text" 
-                            name="keyInputPaymentAmount"
-                            placeholder="Payment amount"
-                            className="form-control"
-                            autoComplete="off"
-                            autoFocus
-                            maxLength={10}
-                            disabled={loading} 
-                            value={values.keyInputPaymentAmount} 
-                            onChange={handleChange} />
+                        <div className="col-12">
 
-                        {/* Validation message */}
-                        {errors.keyInputPaymentAmount && 
-                            touched.keyInputPaymentAmount ? 
-                                (<small className="text-danger">{errors.keyInputPaymentAmount}</small>) : 
-                                    null}
-                    
+                            {/* Input element select*/}
+                            <input 
+                                type="text" 
+                                name="keyInputPaymentAmount"
+                                placeholder="Payment amount"
+                                className="col-12 form-control"
+                                autoComplete="off"
+                                autoFocus
+                                maxLength={10}
+                                disabled={loading} 
+                                value={values.keyInputPaymentAmount} 
+                                onChange={handleChange}/>
+                        
+                            {/* Validation message */}
+                            {errors.keyInputPaymentAmount && 
+                                touched.keyInputPaymentAmount ? 
+                                    (<small className="text-danger">{errors.keyInputPaymentAmount}</small>) : 
+                                        null}
+                        </div>
                     </div>
                     {/* End:: Column payment amount */}
 
@@ -138,27 +141,29 @@ const Form = ({pGuestId, pName, pMobile,
                     <div className="col-12 mb-3">
 
                         {/* Label element */}
-                        <label className="form-label" 
+                        <label className="col-12 form-label" 
                             htmlFor={"keyInputGST"}><b>Narration</b></label>
 
-                        {/* Input element select*/}
-                        <textarea
-                            name={"keyInputNarration"}
-                            rows={"5"}
-                            placeholder="Narration"
-                            className="form-control"
-                            autoComplete="off"
-                            maxLength={1000}
-                            disabled={loading}
-                            value={values.keyInputNarration} 
-                            onChange={handleChange} />
+                        <div className="col-12">
 
-                        {/* Validation message */}
-                        {errors.keyInputNarration && 
-                            touched.keyInputNarration ? 
-                                (<small className="text-danger">{errors.keyInputNarration}</small>) : 
-                                    null}
-                    
+                            {/* Input element select*/}
+                            <textarea
+                                name={"keyInputNarration"}
+                                rows={"5"}
+                                placeholder="Narration"
+                                className="form-control"
+                                autoComplete="off"
+                                maxLength={1000}
+                                disabled={loading}
+                                value={values.keyInputNarration} 
+                                onChange={handleChange}/>
+
+                            {/* Validation message */}
+                            {errors.keyInputNarration && 
+                                touched.keyInputNarration ? 
+                                    (<small className="text-danger">{errors.keyInputNarration}</small>) : 
+                                        null}
+                        </div>
                     </div>
                     {/* End:: Column narration */}
 

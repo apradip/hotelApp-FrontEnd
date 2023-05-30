@@ -12,7 +12,6 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 const Form = ({pId, pName, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const inputRef = useRef(null);
     const {loading, error, doDelete} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${pId}`
     });
@@ -30,7 +29,7 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
 
             {/* Start:: Modal body */}
             <Modal.Body>
-                <label className="form-label">Are you really want to remove <mark><code>{pName}</code></mark> ?</label>
+                <label className="form-label">Are you really want to delete <mark><code>{pName}</code></mark> ?</label>
             </Modal.Body>
             {/* End:: Modal body */}
 
@@ -43,7 +42,7 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
                     className="btn btn-danger"
                     autoFocus
                     disabled={loading}
-                    ref={inputRef}>
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}

@@ -353,7 +353,7 @@ const GuestMiscellaneousAdd = forwardRef((props, ref) => {
                 {/* Start:: Modal header */}
                 <Modal.Header>
                     {/* Header text */}
-                    <Modal.Title>New guest</Modal.Title>
+                    <Modal.Title>New</Modal.Title>
 
                     {/* Close button */}
                     <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>

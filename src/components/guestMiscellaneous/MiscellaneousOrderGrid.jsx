@@ -286,7 +286,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     
 	return (
-        <div className="ag-theme-alpine grid">
+        <div className="col-12 ag-theme-alpine grid-height-400">
             <AgGridReact	
                 ref={gridRef}
                 columnDefs={columnDefs}

@@ -135,7 +135,7 @@ const Form = ({onSubmited, onClosed}) => {
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputDiscount"}><b>Maximum discount</b></label>
+                            htmlFor={"keyInputDiscount"}><b>Max. discount</b></label>
 
                         {/* Input element text*/}
                         <input 
@@ -168,7 +168,7 @@ const Form = ({onSubmited, onClosed}) => {
                         
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputBed"}><b>Extra bed tariff</b></label>
+                            htmlFor={"keyInputBed"}><b>Ext. bed tariff</b></label>
                         
                         {/* Input element text*/}
                         <input
@@ -195,7 +195,7 @@ const Form = ({onSubmited, onClosed}) => {
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputPerson"}><b>Extra person tariff</b></label>
+                            htmlFor={"keyInputPerson"}><b>Ext. person tariff</b></label>
                         
                         {/* Input element text*/}
                         <input 
@@ -230,8 +230,8 @@ const Form = ({onSubmited, onClosed}) => {
                 <button 
                     type="button"
                     className="btn btn-danger"
-                    disabled = { loading }
-                    onClick = { handleClose } >
+                    disabled={loading}
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -240,11 +240,11 @@ const Form = ({onSubmited, onClosed}) => {
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading } 
-                    onClick = { handleSubmit } >
+                    disabled={loading} 
+                    onClick={handleSubmit}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
@@ -270,7 +270,7 @@ const Form = ({onSubmited, onClosed}) => {
 
 // useImperativeHandle
 // handleShowModal
-const RoomCategoryAdd = forwardRef(( props, ref ) => {
+const RoomCategoryAdd = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
 
     // Start:: Show modal
@@ -295,9 +295,7 @@ const RoomCategoryAdd = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -307,9 +305,7 @@ const RoomCategoryAdd = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
@@ -318,15 +314,15 @@ const RoomCategoryAdd = forwardRef(( props, ref ) => {
         <>
             {/* Start:: Add modal */}
             <Modal 
-                show = { showModal } >
+                show={showModal}>
 
                 {/* Start:: Modal header */}
                 <Modal.Header>
                     {/* Header text */}
-                    <Modal.Title>Add room category</Modal.Title>
+                    <Modal.Title>New</Modal.Title>
 
                     {/* Close button */}
-                    <NavLink className="nav-icon" href="#" onClick = { handleCloseModal } >
+                    <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>
                         <i className="align-middle"><X/></i>
                     </NavLink>
                 </Modal.Header>
@@ -334,8 +330,8 @@ const RoomCategoryAdd = forwardRef(( props, ref ) => {
 
                 {/* Start:: Form component */}
                 <Form
-                    onSubmited = { handleSave } 
-                    onClosed = { handleCloseModal } />
+                    onSubmited={handleSave} 
+                    onClosed={handleCloseModal}/>
                 {/* End:: Form component */}
 
             </Modal>

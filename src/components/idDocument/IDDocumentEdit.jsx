@@ -14,7 +14,7 @@ const Form = ({pId, pName, pDescription, onSubmited, onClosed}) => {
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doUpdate} = useFetchWithAuth({
-        url: `${contextValues.accessLevelAPI}/${pId}`
+        url: `${contextValues.idDocumentAPI}/${pId}`
     })
 
     // Start:: Form validate and save data

@@ -147,38 +147,38 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 {/* Start:: card body */}
                 <Card.Body className="text-sm p-1"> 
                     <Stack gap={1}>
-                        <Stack direction="horizontal" gap={0} style={{border: "solid 0px red"}}>
-                            <span className="col-9 text-left" style={{border: "solid 0px red"}}>
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-9 text-left pl-1">
                                 <b>{props.pCorporateName ? subStr(props.pCorporateName, 40): subStr(props.pName, 40)}</b>
                             </span>
 
-                            <span className="col-3 text-right text-danger pr-1" style={{border: "solid 0px red"}}>
-                                <b>{props.pGuestCount} No.</b>
+                            <span className="col-3 text-right text-danger pr-1">
+                                <b>{formatINR(props.pTotalBalance)}</b>
                             </span>
                         </Stack>
 
-                        <Stack gap={0} style={{border: "solid 0px red"}}>
+                        <Stack gap={0}>
                             {props.pCorporateName ?
-                                <span className="col-12">{subStr(props.pCorporateAddress, 40)}</span>
+                                <span className="col-12 px-1">{subStr(props.pCorporateAddress, 40)}</span>
                                 :
                                 <Stack direction="horizontal" gap={0}>
-                                    <span className="col-12 text-left">
+                                    <span className="col-12 text-left px-1">
                                         Mobile No. {props.pMobile}</span>
                                 </Stack> 
                             }
                         </Stack>        
 
-                        <Stack direction="horizontal" gap={0} style={{border: "solid 0px red"}}>
-                            <span className="col-6 text-left text-danger" style={{border: "solid 0px red"}}>
-                                {formatINR(props.pTotalBalance)}</span>
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left pl-1">
+                                {props.pGuestCount} no of guest(s)</span>
 
-                            <span className="col-5 text-right pr-0" style={{border: "solid 0px red"}}>
+                            <span className="col-5 text-right pr-0">
                                 <TimeElapsed
                                     pInDate = {props.pIndate}
                                     pInTime = {props.pInTime} />
                             </span>
 
-                            <span className="col-1 text-right pr-1" style={{border: "solid 0px red"}}>
+                            <span className="col-1 text-right pr-1">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>

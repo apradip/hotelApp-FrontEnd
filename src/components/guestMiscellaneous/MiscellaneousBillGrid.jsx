@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
-import { AgGridReact } from "ag-grid-react"; 
+import React, {useEffect, useState, useRef, useMemo} from "react";
+import {AgGridReact} from "ag-grid-react"; 
 
-import { formatINR } from "../common/Common";
+import {formatINR} from "../common/Common";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
@@ -84,10 +84,10 @@ const MiscellaneousBillGrid = ({pData}) => {
     ]);
 
     const pinnedRowData = [
-        {rowId: 'Sum', price: 0},
-        {rowId: 'Service tax', price: 0},
-        {rowId: 'GST', price: 0},
-        {rowId: 'Total', price: 0}
+        {rowId: "Sum", price: 0},
+        {rowId: "Service tax", price: 0},
+        {rowId: "GST", price: 0},
+        {rowId: "Total", price: 0}
     ];
 
     // Start:: load empty data to grid
@@ -152,7 +152,7 @@ const MiscellaneousBillGrid = ({pData}) => {
     // End:: format data as grid
 
 	return (
-        <div className="ag-theme-alpine grid-height-400">
+        <div className="col-12 ag-theme-alpine grid-height-400">
             <AgGridReact	
                 ref={gridRef}
                 columnDefs={columnDefs}
