@@ -31,43 +31,43 @@ const ServiceSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
 
     const [columnDefs] = useState([
         {
-            headerName: '#', 
-            field: 'rowId', 
+            headerName: "#", 
+            field: "rowId", 
             width: 20,
             hide: false,
             editable: (params) => {return false},
             valueFormatter: (params) => {return `${params.value}.`}
         },
         {
-            headerName: 'Bill No.', 
-            field: 'no', 
+            headerName: "Bill No.", 
+            field: "no", 
             width: 50,
             hide: false,
             valueFormatter: (params) => {return `${formatBillNo(params.value)}`}
         },
         {
-            headerName: 'Date', 
-            field: 'date', 
+            headerName: "Date", 
+            field: "date", 
             width: 50,
             hide: false,
             valueFormatter: (params) => {return `${formatDDMMYYYY(params.value)}`}
         },
         {
-            headerName: 'Time',
-            field: 'time',
+            headerName: "Time",
+            field: "time",
             width: 45,
             hide: false,
             valueFormatter: (params) => {return `${formatTime12Hour(params.value)}`}
         },
         {
-            headerName: 'Amount',
-            field: 'amount', 
+            headerName: "Amount",
+            field: "amount", 
             hide: false,
-            type: 'rightAligned',
+            type: "rightAligned",
             valueFormatter: (params) => {return `${formatINR(params.value)}`}
         },
         {
-            field: 'id'
+            field: "id"
         }
     ]);
 
@@ -120,16 +120,16 @@ const ServiceSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
 
 	return (
         <>
-            <div className="ag-theme-alpine grid">
+            <div className="col-12 ag-theme-alpine grid-height-400">
                 <AgGridReact	
                     ref={gridRef}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
                     rowData={rowData}
-                    rowSelection={'single'}
+                    rowSelection={"single"}
                     onGridReady={handleGridReady}
                     onFirstDataRendered={handleFirstDataRendered}
-                    onRowDoubleClicked={handleOpenBill} />
+                    onRowDoubleClicked={handleOpenBill}/>
             </div>
 
             {/* Start :: bill component */}
@@ -145,7 +145,7 @@ const ServiceSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount,
                 pTransactionId={transactionId}
                 pTransactionNo={transactionNo}
                 pTransactionDate={transactionDate}
-                pTransactionTime={transactionTime} />
+                pTransactionTime={transactionTime}/>
             {/* End :: bill component */}
 
         </>

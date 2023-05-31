@@ -35,23 +35,23 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     }, []);
     const [columnDefs] = useState([
         {
-            headerName: '#', 
-            field: 'rowId', 
+            headerName: "#", 
+            field: "rowId", 
             width: 20,
             hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : 'Total'},
         },
         {
-            headerName: 'Item', 
-            field: 'name', 
+            headerName: "Item", 
+            field: "name", 
             hide: false,
             cellEditor: ServiceItemSelector, 
-            editable: (params) => {return params.node.rowPinned ? false : pState === 'ADD' ? true : pState === 'MOD' ? true : pState === 'VIEW' ? false : true},
+            editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},
             cellRenderer: (params) => {return params.value},
             valueGetter: (params) => {return params.data.name},
             valueSetter: (params) => {
-                params.data.name = 'Select item';
-                params.data.serviceId = '';
+                params.data.name = "Select item";
+                params.data.serviceId = "";
                 params.data.unitPrice = 0;
 
                 if (params.newValue) {
@@ -68,31 +68,26 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            headerName: 'Unit price',
-            field: 'unitPrice',
-            type: 'rightAligned',
+            headerName: "Unit price",
+            field: "unitPrice",
+            type: "rightAligned",
             width: 50,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ''},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
             valueGetter: (params) => {return params.data.unitPrice}
         },
         {
-            headerName: 'Quantity',
-            field: 'quantity', 
-            type: 'rightAligned',
+            headerName: "Quantity",
+            field: "quantity", 
+            type: "rightAligned",
             width: 50,
             hide: false,
             cellEditor: QuantityEditor,
-            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === 'ADD' ? true : pState === 'MOD' ? true : pState === 'VIEW' ? false : true : false},
+            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
             valueGetter: (params) => {return params.data.quantity},
             valueSetter: (params) => {
                 params.data.quantity = params.newValue;
-
-                // calculate price with gst and service charge
-                // const totalPrice = (params.newValue * params.data.unitPrice) + 
-                //                ((params.newValue * params.data.unitPrice) * (params.data.serviceChargePercentage / 100)) + 
-                //                ((params.newValue * params.data.unitPrice) * (params.data.gstPercentage / 100));
 
                 params.data.serviceCharge = ((params.newValue * params.data.unitPrice) * (params.data.serviceChargePercentage / 100));
                 params.data.gstCharge = ((params.newValue * params.data.unitPrice) * (params.data.gstPercentage / 100));
@@ -106,9 +101,9 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            headerName: 'Price',
-            field: 'totalPrice',
-            type: 'rightAligned',
+            headerName: "Price",
+            field: "totalPrice",
+            type: "rightAligned",
             width: 50,
             hide: false,
             valueFormatter: (params) => {return `${formatINR(params.value)}`},
@@ -120,23 +115,23 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            field: 'serviceId'
+            field: "serviceId"
         },
         {
-            field: 'serviceChargePercentage'
+            field: "serviceChargePercentage"
         },
         {
-            field: 'serviceCharge'
+            field: "serviceCharge"
         },
         {
-            field: 'gstPercentage'
+            field: "gstPercentage"
         },
         {
-            field: 'gstCharge'
+            field: "gstCharge"
         }
     ]);
     const pinnedRowData = [
-        {rowId: 'Total', totalPrice: 0}
+        {rowId: "Total", totalPrice: 0}
     ];
 
     // Start:: load empty data to grid
@@ -191,7 +186,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         let dataRows = [];    
 
         gridRef.current.api.forEachNode((gridRow) => {
-            if ((gridRow.data.name !== 'Select item') && ((gridRow.data.quantity !== 0))) {
+            if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
                 dataRows.push({
                             serviceId: gridRow.data.serviceId, 
                             name: gridRow.data.name,
@@ -216,7 +211,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             try {
                 await doFetch();
             } catch (err) {
-                console.log('Error occured when fetching data');
+                // console.log('Error occured when fetching data');
             }
           })();
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
@@ -228,7 +223,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     // Start:: set add empty row grid
     useEffect(() => {
-        if (pState !== 'VIEW') {
+        if (pState !== "VIEW") {
             data && addRow();
         } 
     }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
@@ -250,7 +245,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode) => {
-            if (rowNode.data.name === 'Select item') {
+            if (rowNode.data.name === "Select item") {
                 emptyCount ++;
             }
         });
@@ -265,8 +260,8 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
             emptyRow.push({
                         rowId: emptyRow.length + 1, 
-                        serviceId: '', 
-                        name: 'Select item', 
+                        serviceId: "", 
+                        name: "Select item", 
                         unitPrice: 0,
                         quantity: 0,
                         serviceChargePercentage: data.serviceChargePercentage,
@@ -286,17 +281,17 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     
 	return (
-        <div className="ag-theme-alpine grid">
+        <div className="col-12 ag-theme-alpine grid-height-400">
             <AgGridReact	
-                ref = {gridRef}
-                columnDefs = {columnDefs}
-                defaultColDef = {defaultColDef}
-                rowData = {null}
-                rowSelection = {'single'}
-                onGridReady = {handleGridReady}
-                onFirstDataRendered = {handleFirstDataRendered}
-                onSelectionChanged = {handleSelectionChanged}
-                onCellValueChanged = {handleCellValueChanged} />
+                ref={gridRef}
+                columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
+                rowData={null}
+                rowSelection={"single"}
+                onGridReady={handleGridReady}
+                onFirstDataRendered={handleFirstDataRendered}
+                onSelectionChanged={handleSelectionChanged}
+                onCellValueChanged={handleCellValueChanged}/>
         </div>
     );
 }

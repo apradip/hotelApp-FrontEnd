@@ -30,7 +30,7 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
 
             {/* Start:: Modal body */}
             <Modal.Body>
-                <label className="form-label">Are you really want to remove <mark><code>{ pName }</code></mark> ?</label>
+                <label className="form-label">Are you really want to delete <mark><code>{ pName }</code></mark> ?</label>
             </Modal.Body>
             {/* End:: Modal body */}
 
@@ -44,7 +44,7 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
                     autoFocus
                     disabled={loading}
                     ref={inputRef} 
-                    onClick={onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -53,15 +53,15 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading || error }
-                    onClick = { handleSave } >
+                    disabled={loading || error}
+                    onClick={handleSave}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
-                        </> }
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -92,10 +92,10 @@ const FormError = ({pName, onClosed}) => {
 
                 {/* Start:: Close button */}
                 <button 
-                    type = "button"   
-                    className = "btn btn-danger"
+                    type="button"   
+                    className="btn btn-danger"
                     autoFocus
-                    onClick = {onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -151,9 +151,7 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -163,9 +161,7 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
@@ -189,7 +185,7 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            { data && 
+            {data && 
                 (data.balance === 0 && 
                 data.roomsDetail.length === 0 && 
                 data.tablesDetail.length === 0 && 
@@ -203,12 +199,12 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Delete guest</Modal.Title>
+                        <Modal.Title>Delete</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -219,13 +215,13 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
                         pId={props.pId} 
                         pName={props.pName}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
-            </Modal> }
+            </Modal>}
             {/* End:: Delete modal */}
 
             {/* Start:: Delete modal */}
-            { data && 
+            {data && 
                 (data.balance !== 0 || 
                 data.roomsDetail.length !== 0 ||
                 data.tablesDetail.length !== 0 ||
@@ -234,17 +230,17 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
                 data.expensesPaymentsDetail.length !== 0) && 
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Delete guest error</Modal.Title>
+                        <Modal.Title>Error</Modal.Title>
 
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -252,8 +248,8 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <FormError 
-                        pName = {props.pName}
-                        onClosed = {handleCloseModal} />
+                        pName={props.pName}
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
             </Modal>}
             {/* End:: Delete modal */}

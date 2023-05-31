@@ -27,9 +27,9 @@ const ServiceBillGrid = ({pData}) => {
 
     const rowClassRules = useMemo(() => {
         return {
-            'ag-row-pinned_other': (params) => { return params.node.rowPinned === 'bottom' && params.data.rowId !== "Total"; },
+            "ag-row-pinned_other": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId !== "Total"; },
         
-            'ag-row-pinned_total': (params) => { return params.node.rowPinned === 'bottom' && params.data.rowId === "Total"; },
+            "ag-row-pinned_total": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId === "Total"; },
         };
     }, []);  
 
@@ -84,10 +84,10 @@ const ServiceBillGrid = ({pData}) => {
     ]);
 
     const pinnedRowData = [
-        {rowId: 'Sum', price: 0},
-        {rowId: 'Service tax', price: 0},
-        {rowId: 'GST', price: 0},
-        {rowId: 'Total', price: 0}
+        {rowId: "Sum", price: 0},
+        {rowId: "Service tax", price: 0},
+        {rowId: "GST", price: 0},
+        {rowId: "Total", price: 0}
     ];
 
     // Start:: load empty data to grid
@@ -152,16 +152,16 @@ const ServiceBillGrid = ({pData}) => {
     // End:: format data as grid
 
 	return (
-        <div className="ag-theme-alpine grid-height-400">
+        <div className="col-12 ag-theme-alpine grid-height-400">
             <AgGridReact	
-                ref = {gridRef}
-                columnDefs = {columnDefs}
-                defaultColDef = {defaultColDef}
-                rowData = {rowData}
-                rowSelection = {"single"}
-                rowClassRules = {rowClassRules}
-                onGridReady = {handleGridReady}
-                onFirstDataRendered = {handleFirstDataRendered} />
+                ref={gridRef}
+                columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
+                rowData={rowData}
+                rowSelection={"single"}
+                rowClassRules={rowClassRules}
+                onGridReady={handleGridReady}
+                onFirstDataRendered={handleFirstDataRendered}/>
         </div>
     );
 }

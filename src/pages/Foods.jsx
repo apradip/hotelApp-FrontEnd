@@ -164,12 +164,10 @@ const Foods = forwardRef(( props, ref ) => {
 
         return (
             <div className="row" key={rowKey}>
-                {
-                    pData.map((item, idx) => {
+                {pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
                         return createCol(item, itemIdx);
-                    })
-                }
+                    })}
             </div>);
     };
 

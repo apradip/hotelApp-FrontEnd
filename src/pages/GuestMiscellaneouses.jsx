@@ -199,12 +199,10 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
         return (
             <div className="row" key={rowKey}>
-                {
-                    pData.map((item, idx) => {
+                {pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
                         return createCol(item, itemIdx);
-                    })
-                }
+                    })}
             </div>)
     };
 
@@ -213,28 +211,28 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
         return (
             <div className="col-xl-4 col-md-4" key={colKey}>
-                <Card className='border'
-                    ref = {(el) => cardRefs.current[itemIdx] = el}
-                    pIndex = {itemIdx}
-                    pGuestId = {pData.id} 
-                    pName = {pData.name}
-                    pMobile = {pData.mobile}
-                    pGuestCount = {pData.guestCount}
-                    pCorporateName = {pData.corporateName}
-                    pCorporateAddress = {pData.corporateAddress}
-                    pGstNo = {pData.gstNo}
-                    pTotalExpense = {pData.totalExpense}
-                    pTotalBalance = {pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
-                    pIndate = {pData.inDate}
-                    pInTime = {pData.inTime}
-                    onOrdered = {() => {handleSuccess(Operation.Order)}}
-                    onDespatched = {() => {handleSuccess(Operation.Despatch)}}
-                    onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
-                    onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
-                    onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
-                    onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
-                    onClosed = {close} 
-                    onActivated = {handleActivated} />                
+                <Card className="border"
+                    ref={(el) => cardRefs.current[itemIdx] = el}
+                    pIndex={itemIdx}
+                    pGuestId={pData.id} 
+                    pName={pData.name}
+                    pMobile={pData.mobile}
+                    pGuestCount={pData.guestCount}
+                    pCorporateName={pData.corporateName}
+                    pCorporateAddress={pData.corporateAddress}
+                    pGstNo={pData.gstNo}
+                    pTotalExpense={pData.totalExpense}
+                    pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
+                    pIndate={pData.inDate}
+                    pInTime={pData.inTime}
+                    onOrdered={() => {handleSuccess(Operation.Order)}}
+                    onDespatched={() => {handleSuccess(Operation.Despatch)}}
+                    onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
+                    onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
+                    onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
+                    onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
+                    onClosed={close} 
+                    onActivated={handleActivated}/>                
             </div>)
     };
     // End:: show all data in card format
@@ -318,17 +316,19 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         
                         {/* Start :: Footer & operational panel */}
                         <div className="card-footer py-0">
-                            {/* Start :: Pagination */}
-                            <div className="col-12 d-flex justify-content-end">
-                                {!loading && 
-                                        data && 
-                                            <Paging
-                                                itemPerPage = {itemPerPage}
-                                                totalItem = {data.length}
-                                                selectedPage = {selectedPage}
-                                                onPaging = {handlePaging} />}
+                            <div className="row">
+                                {/* Start :: Pagination */}
+                                <div className="col-12 d-flex justify-content-end">
+                                    {!loading && 
+                                            data && 
+                                                <Paging
+                                                    itemPerPage={itemPerPage}
+                                                    totalItem={data.length}
+                                                    selectedPage={selectedPage}
+                                                    onPaging={handlePaging}/>}
+                                </div>
+                                {/* End :: Pagination */}
                             </div>
-                            {/* End :: Pagination */}
                         </div>
                         {/* End :: Footer & operational panel */}
 
@@ -339,9 +339,9 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
             {/* Start :: add component */}
             <Add 
-                ref = {addRef}   
-                onAdded = {() => {handleSuccess(Operation.GuestAdd)}}
-                onClosed = {close} />
+                ref={addRef}   
+                onAdded={() => {handleSuccess(Operation.GuestAdd)}}
+                onClosed={close}/>
             {/* End :: add component */}
 
         </div>
