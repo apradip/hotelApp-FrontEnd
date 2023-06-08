@@ -21,7 +21,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     const [miscellaneousData, setMiscellaneousData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const [defaultRowData, setDefaultRowData] = useState(pData);
-    const { loading, error, doInsert } = useFetchWithAuth({
+    const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}`
     });
 
@@ -29,11 +29,11 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         let miscData = [];
         
         for(const row of miscellaneousData) {
-            let operation = 'A';
+            let operation = "A";
 
             for(const od of pData) {
                 if (od.miscellaneousId === row.miscellaneousId) {
-                    operation = 'M';
+                    operation = "M";
                 }
             }
 
@@ -55,7 +55,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             if (!found) {
                 const md = {id: od.miscellaneousId, 
                             quantity: od.quantity, 
-                            operation: 'R'};
+                            operation: "R"};
                 miscData.push(md);
             }
         }
@@ -240,10 +240,10 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, doFetch } = useFetchWithAuth({
+    const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
         params: {
-            option: 'N'
+            option: "N"
         }
     });
 
@@ -311,7 +311,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>

@@ -94,7 +94,8 @@ const useFetchWithAuth = (params) => {
         if (payload) {
             await axiosPrivate.put(`${params.url}`, payload)
                 .then(response => {
-                    if (!response.ok) {
+                    if (response.status !== 200) {
+                        console.log("Could not update data");
                         throw Error("Could not update data");
                     } else {
                         setData(response.data);

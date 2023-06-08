@@ -187,20 +187,20 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                 {/* Start:: Close button */}
                 <button
-                    type = "button"
-                    className = "btn btn-danger"
-                    disabled = {loading}
-                    onClick = {handleClose} >
+                    type="button"
+                    className="btn btn-danger"
+                    disabled={loading}
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
                 
                 {/* Start:: Save button */}
                 <button 
-                    type = "button"
-                    className = "btn btn-success"
-                    disabled = {loading} 
-                    onClick = {handleSubmit} >
+                    type="button"
+                    className="btn btn-success"
+                    disabled={loading} 
+                    onClick={handleSubmit}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -240,10 +240,10 @@ const GuestServiceOrder = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, doFetch } = useFetchWithAuth({
+    const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
         params: {
-            option: 'N'
+            option: "N"
         }
     });
 
@@ -299,9 +299,9 @@ const GuestServiceOrder = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            { data &&
-                <Modal size = "lg"
-                    show = {showModal} >
+            {data &&
+                <Modal size="lg"
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -310,8 +310,8 @@ const GuestServiceOrder = forwardRef((props, ref) => {
                         
                         {/* Close button */}
                         <NavLink 
-                            className = "nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            className="nav-icon" href="#" 
+                            onClick={handleCloseModal}>
                             <i className = "align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -328,7 +328,7 @@ const GuestServiceOrder = forwardRef((props, ref) => {
                         pGstNo={props.pGstNo}
                         pData={data}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>}

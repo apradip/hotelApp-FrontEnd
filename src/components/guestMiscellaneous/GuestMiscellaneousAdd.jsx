@@ -33,7 +33,7 @@ const Form = ({onSubmited, onClosed}) => {
         validateOnChange,
         onSubmit: async (values) => {
             const payload = {   
-                option: 'S',
+                option: "M",
                 name: values.keyInputName.toUpperCase(), 
                 mobile: parseInt(values.keyInputMobile),
                 guestCount: parseInt(values.keyInputGuestCount),

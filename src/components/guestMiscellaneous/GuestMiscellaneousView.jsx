@@ -48,12 +48,12 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Company</b></label>
                             <label className="col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
                         </div>
                     :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Name</b></label>
                             <label className="col-12 text-muted">{subStr(pName, 30)}</label>
                         </div>
@@ -62,12 +62,12 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Address</b></label>
                             <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </div>
                     :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Guest count</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
@@ -75,9 +75,9 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column guest count */}
-                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 mb-3">
+                    <div className="col-sx-12 col-md-2 mb-3">
                         <label className="col-12 form-label"><b>Guest count</b></label>
-                        <label className="col-12 text-muted">{pGuestCount}</label>
+                        <label className="col-12 text-muted">{pGuestCount} No.</label>
                     </div>
                     {/* End:: Column guest count */}
 
@@ -86,21 +86,17 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                 {/* Start:: Row */}
                 <div className="row">
-
                     <div className="col-12">
                         {/* Label element */}
                         <label className="col-12 form-label"><b>Items</b></label>
-                    </div>                
 
-                    {/* Start:: Column room detail */}
-                    <div className="col-12 ag-theme-alpine grid">
+                        {/* Start:: Column room detail */}
                         <OrderGrid
                             pState="VIEW"
                             pDefaultRowData={defaultRowData}
-                            onChange={null} />
-                    </div>                
-                    {/* End:: Column room detail */}
-
+                            onChange={null}/>
+                        {/* End:: Column room detail */}
+                    </div>
                 </div>
                 {/* End:: Row */}
 
@@ -115,7 +111,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     type="button"
                     className="btn btn-danger"
                     autoFocus
-                    onClick={onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}

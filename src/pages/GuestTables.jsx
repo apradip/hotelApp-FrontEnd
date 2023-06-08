@@ -35,7 +35,7 @@ const GuestTables = forwardRef((props, ref) => {
     const contextValues = useStateContext();
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState("");
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -88,7 +88,7 @@ const GuestTables = forwardRef((props, ref) => {
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
                 })
             } else {
-                toast.warning('Nothing selected to delete');
+                toast.warning("Nothing selected to delete");
             }
         }
     };
@@ -104,25 +104,25 @@ const GuestTables = forwardRef((props, ref) => {
     const handleSuccess = (operation) => {
         switch (operation) {
             case Operation.GuestAdd:
-                toast.success('Guest successfully added');
+                toast.success("Guest successfully added");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
 
             case Operation.GuestDel:
-                toast.success('Guest successfully deleted');
+                toast.success("Guest successfully deleted");
                 setDataChanged(true);
                 props.onSuccess();
                 break;               
     
             case Operation.Order:
-                toast.success('Item successfully ordered');
+                toast.success("Item successfully ordered");
                 setDataChanged(true);
                 props.onSuccess();
                 break;               
 
             case Operation.Despatch:
-                toast.success('Item successfully despatched');
+                toast.success("Item successfully despatched");
                 setDataChanged(true);
                 props.onSuccess();
                 break;                
@@ -134,13 +134,13 @@ const GuestTables = forwardRef((props, ref) => {
                 break;                
                     
             case Operation.PaymentAdd:
-                toast.success('Payment successfully added');
+                toast.success("Payment successfully done");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
 
             case Operation.Checkout:
-                toast.success('Guest successfully checked out');
+                toast.success("Guest successfully checked out");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
@@ -214,27 +214,29 @@ const GuestTables = forwardRef((props, ref) => {
         return (
             <div className="col-xl-4 col-md-4" key={colKey}>
                 <Card 
-                    ref = {(el) => cardRefs.current[itemIdx] = el}
-                    pIndex = {itemIdx}
-                    pGuestId = {pData.id} 
-                    pName = {pData.name}
-                    pMobile = {pData.mobile}
-                    pGuestCount = {pData.guestCount}
-                    pCorporateName = {pData.corporateName}
-                    pCorporateAddress = {pData.corporateAddress}
-                    pGstNo = {pData.gstNo}
-                    pTotalExpense = {pData.totalExpense}
-                    pTotalBalance = {pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
-                    pIndate = {pData.inDate}
-                    pInTime = {pData.inTime}
-                    onOrdered = {() => {handleSuccess(Operation.Order)}}
-                    onDespatched = {() => {handleSuccess(Operation.Despatch)}}
-                    onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
-                    onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
-                    onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
-                    onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
-                    onClosed = {close} 
-                    onActivated = {handleActivated} />                
+                    ref={(el) => cardRefs.current[itemIdx] = el}
+                    pIndex={itemIdx}
+                    pGuestId={pData.id} 
+                    pName={pData.name}
+                    pMobile={pData.mobile}
+                    pGuestCount={pData.guestCount}
+                    pCorporateName={pData.corporateName}
+                    pCorporateAddress={pData.corporateAddress}
+                    pGstNo={pData.gstNo}
+                    pTransactionId={pData.transactionId}
+                    pTables={pData.tables}
+                    pIndate={pData.inDate}
+                    pInTime={pData.inTime}
+                    pTotalExpense={pData.totalExpense}
+                    pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
+                    onOrdered={() => {handleSuccess(Operation.Order)}}
+                    onDespatched={() => {handleSuccess(Operation.Despatch)}}
+                    onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
+                    onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
+                    onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
+                    onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
+                    onClosed={close} 
+                    onActivated={handleActivated}/>                
             </div>)
     };
     // End:: show all data in card format
@@ -252,7 +254,7 @@ const GuestTables = forwardRef((props, ref) => {
               await doFetch();
               setDataChanged(false);
             } catch (err) {
-              console.log('Error occured when fetching data');
+              console.log("Error occured when fetching data");
             }
           })();
     }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
@@ -271,14 +273,14 @@ const GuestTables = forwardRef((props, ref) => {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-sm-4 m-0">
-                            <h1 className="text-dark">Service</h1>
+                            <h1 className="text-dark">Table</h1>
                         </div>
 
                         <div className="col-sm-8">
                             <Breadcrumb className="breadcrumb float-sm-right">
                                 <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
                                 <Breadcrumb.Item href = "/">Transaction</Breadcrumb.Item>
-                                <Breadcrumb.Item active>Service</Breadcrumb.Item>
+                                <Breadcrumb.Item active>Table</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
                     </div>
@@ -323,10 +325,10 @@ const GuestTables = forwardRef((props, ref) => {
                                 {!loading && 
                                         data && 
                                             <Paging
-                                                itemPerPage = {itemPerPage}
-                                                totalItem = {data.length}
-                                                selectedPage = {selectedPage}
-                                                onPaging = {handlePaging} />}
+                                                itemPerPage={itemPerPage}
+                                                totalItem={data.length}
+                                                selectedPage={selectedPage}
+                                                onPaging={handlePaging}/>}
                             </div>
                             {/* End :: Pagination */}
                         </div>
@@ -339,9 +341,9 @@ const GuestTables = forwardRef((props, ref) => {
 
             {/* Start :: add component */}
             <Add 
-                ref = {addRef}   
-                onAdded = {() => {handleSuccess(Operation.GuestAdd)}}
-                onClosed = {close} />
+                ref={addRef}   
+                onAdded={() => {handleSuccess(Operation.GuestAdd)}}
+                onClosed={close} />
             {/* End :: add component */}
 
         </div>

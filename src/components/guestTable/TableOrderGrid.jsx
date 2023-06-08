@@ -35,23 +35,23 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     }, []);
     const [columnDefs] = useState([
         {
-            headerName: '#', 
-            field: 'rowId', 
+            headerName: "#", 
+            field: "rowId", 
             width: 20,
             hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : 'Total'},
         },
         {
-            headerName: 'Item', 
-            field: 'name', 
+            headerName: "Item", 
+            field: "name", 
             hide: false,
             cellEditor: FoodItemSelector, 
-            editable: (params) => {return params.node.rowPinned ? false : pState === 'ADD' ? true : pState === 'MOD' ? true : pState === 'VIEW' ? false : true},
+            editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},
             cellRenderer: (params) => {return params.value},
             valueGetter: (params) => {return params.data.name},
             valueSetter: (params) => {
-                params.data.name = 'Select item';
-                params.data.foodId = '';
+                params.data.name = "Select item";
+                params.data.foodId = "";
                 params.data.unitPrice = 0;
 
                 if (params.newValue) {
@@ -68,18 +68,18 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            headerName: 'Unit price',
-            field: 'unitPrice',
-            type: 'rightAligned',
+            headerName: "Unit price",
+            field: "unitPrice",
+            type: "rightAligned",
             width: 50,
             hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ''},
             valueGetter: (params) => {return params.data.unitPrice}
         },
         {
-            headerName: 'Quantity',
-            field: 'quantity', 
-            type: 'rightAligned',
+            headerName: "Quantity",
+            field: "quantity", 
+            type: "rightAligned",
             width: 50,
             hide: false,
             cellEditor: QuantityEditor,
@@ -100,9 +100,9 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            headerName: 'Price',
-            field: 'totalPrice',
-            type: 'rightAligned',
+            headerName: "Price",
+            field: "totalPrice",
+            type: "rightAligned",
             width: 50,
             hide: false,
             valueFormatter: (params) => {return `${formatINR(params.value)}`},
@@ -114,23 +114,23 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            field: 'foodId'
+            field: "foodId"
         },
         {
-            field: 'serviceChargePercentage'
+            field: "serviceChargePercentage"
         },
         {
-            field: 'serviceCharge'
+            field: "serviceCharge"
         },
         {
-            field: 'gstPercentage'
+            field: "gstPercentage"
         },
         {
-            field: 'gstCharge'
+            field: "gstCharge"
         }
     ]);
     const pinnedRowData = [
-        {rowId: 'Total', totalPrice: 0}
+        {rowId: "Total", totalPrice: 0}
     ];
 
     // Start:: load empty data to grid
@@ -185,7 +185,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         let dataRows = [];    
 
         gridRef.current.api.forEachNode((gridRow) => {
-            if ((gridRow.data.name !== 'Select item') && ((gridRow.data.quantity !== 0))) {
+            if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
                 dataRows.push({
                             foodId: gridRow.data.foodId, 
                             name: gridRow.data.name,
@@ -210,7 +210,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             try {
                 await doFetch();
             } catch (err) {
-                console.log('Error occured when fetching data');
+                console.log("Error occured when fetching data");
             }
           })();
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
@@ -222,7 +222,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     // Start:: set add empty row grid
     useEffect(() => {
-        if (pState !== 'VIEW') {
+        if (pState !== "VIEW") {
             data && addRow();
         } 
     }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
@@ -244,7 +244,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode) => {
-            if (rowNode.data.name === 'Select item') {
+            if (rowNode.data.name === "Select item") {
                 emptyCount ++;
             }
         });
@@ -259,8 +259,8 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
             emptyRow.push({
                         rowId: emptyRow.length + 1, 
-                        foodId: '', 
-                        name: 'Select item', 
+                        foodId: "", 
+                        name: "Select item", 
                         unitPrice: 0,
                         quantity: 0,
                         serviceChargePercentage: data.serviceChargePercentage,
@@ -280,17 +280,17 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     
 	return (
-        <div className="ag-theme-alpine grid">
+        <div className="col-12 ag-theme-alpine grid-height-400">
             <AgGridReact	
                 ref={gridRef}
                 columnDefs={columnDefs}
                 defaultColDef={defaultColDef}
                 rowData={null}
-                rowSelection={'single'}
+                rowSelection={"single"}
                 onGridReady={handleGridReady}
                 onFirstDataRendered={handleFirstDataRendered}
                 onSelectionChanged={handleSelectionChanged}
-                onCellValueChanged={handleCellValueChanged} />
+                onCellValueChanged={handleCellValueChanged}/>
         </div>
     );
 }

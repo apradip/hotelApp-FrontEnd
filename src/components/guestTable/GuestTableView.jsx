@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react"
 import {Modal, NavLink} from "react-bootstrap"
 import {X} from "react-feather"
-import {subStr} from "../common/Common"
+import {subStr, getTables} from "../common/Common"
 
 import {HotelId} from "../../App"
 import {useStateContext} from "../../contexts/ContextProvider"
@@ -11,7 +11,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth"
 // Start:: form
 const Form = ({pGuestId, pName, pMobile, pGuestCount, 
                pCorporateName, pCorporateAddress, pGstNo, 
-               pData, onClosed}) => {
+               pTables, pData, onClosed}) => {
                     
     const [defaultRowData, setDefaultRowData] = useState([])
 
@@ -48,36 +48,36 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-5">
-                            <label className="form-label mr-2">Company :</label>
-                            <label className="text-muted">{subStr(pCorporateName, 30)}</label>
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Company</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
                         </div>
                     :
-                        <div className="col-5">
-                            <label className="form-label mr-2">Name :</label>
-                            <label className="text-muted">{subStr(pName, 30)}</label>
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Name</b></label>
+                            <label className="col-12 text-muted">{subStr(pName, 30)}</label>
                         </div>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-5">
-                            <label className="form-label mr-2">Address :</label>
-                            <label className="text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Address</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </div>
                     :
-                        <div className="col-5">
-                            <label className="form-label mr-2">Mobile :</label>
-                            <label className="text-muted">{pMobile}</label>
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Mobile</b></label>
+                            <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column mobile no / company address */}
-                    <div className="col-2">
-                        <label className="form-label mr-2">Guest count :</label>
-                        <label className="text-muted">{pGuestCount}</label>
+                    <div className="col-sx-12 col-md-2 mb-3">
+                        <label className="col-12 form-label"><b>Guest</b></label>
+                        <label className="col-12 text-muted">{pGuestCount} No.</label>
                     </div>
                     {/* End:: Column mobile no / company address */}
 
@@ -89,18 +89,16 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     <div className="col-12">
                         {/* Label element */}
-                        <label className="text-muted">Items :</label>
-                    </div>                
+                        <label className="col-12 text-muted"><b>Items</b></label>
 
-                    {/* Start:: Column room detail */}
-                    <div className="col-12 ag-theme-alpine grid">
+                        {/* Start:: Column room detail */}
                         <OrderGrid
                             pState="VIEW"
                             pDefaultRowData={defaultRowData}
-                            onChange={null} />
-                    </div>                
-                    {/* End:: Column room detail */}
+                            onChange={null}/>
+                        {/* End:: Column room detail */}
 
+                    </div>                
                 </div>
                 {/* End:: Row */}
 
@@ -115,7 +113,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     type="button"
                     className="btn btn-danger"
                     autoFocus
-                    onClick={onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -138,14 +136,14 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
 // useImperativeHandle
 // handleShowModal
-const GuestTableView = forwardRef(( props, ref ) => {    
+const GuestTableView = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId)
     const contextValues = useStateContext()
     const [showModal, setShowModal] = useState(false)
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
         params: {
-            option: 'A'
+            option: "A"
         }
     })
 
@@ -163,9 +161,7 @@ const GuestTableView = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     })
     // End:: forward reff show modal function
 
@@ -185,7 +181,7 @@ const GuestTableView = forwardRef(( props, ref ) => {
             try {
                 showModal && await doFetch()
             } catch (err) {
-              console.log('Error occured when fetching data')
+              console.log("Error occured when fetching data")
             }
           })()
     }, [showModal])         // eslint-disable-line react-hooks/exhaustive-deps
@@ -202,8 +198,7 @@ const GuestTableView = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View</Modal.Title>
-                        
+                        <Modal.Title>View - [{getTables(props.pTables)}]</Modal.Title>
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
@@ -222,8 +217,9 @@ const GuestTableView = forwardRef(( props, ref ) => {
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
                         pGstNo={props.pGstNo}
+                        pTables={props.pTables}
                         pData={data}
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
                     
                 </Modal>}

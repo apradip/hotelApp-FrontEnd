@@ -27,9 +27,9 @@ const TableBillGrid = ({pData}) => {
 
     const rowClassRules = useMemo(() => {
         return {
-            'ag-row-pinned_other': (params) => { return params.node.rowPinned === 'bottom' && params.data.rowId !== "Total"; },
+            "ag-row-pinned_other": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId !== "Total";},
         
-            'ag-row-pinned_total': (params) => { return params.node.rowPinned === 'bottom' && params.data.rowId === "Total"; },
+            "ag-row-pinned_total": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId === "Total";},
         };
     }, []);  
 
@@ -84,10 +84,10 @@ const TableBillGrid = ({pData}) => {
     ]);
 
     const pinnedRowData = [
-        {rowId: 'Sum', price: 0},
-        {rowId: 'Service tax', price: 0},
-        {rowId: 'GST', price: 0},
-        {rowId: 'Total', price: 0}
+        {rowId: "Sum", price: 0},
+        {rowId: "Service tax", price: 0},
+        {rowId: "GST", price: 0},
+        {rowId: "Total", price: 0}
     ];
 
     // Start:: load empty data to grid
@@ -122,7 +122,7 @@ const TableBillGrid = ({pData}) => {
         let rows = [];
 
         pData.forEach(element => {
-            const elm = element.servicesDetail.services; 
+            const elm = element.tablesDetail.foods; 
 
             const row = {
                             rowId: rows.length + 1, 
@@ -152,7 +152,7 @@ const TableBillGrid = ({pData}) => {
     // End:: format data as grid
 
 	return (
-        <div className="ag-theme-alpine grid-height-400">
+        <div className="col-12 ag-theme-alpine grid-height-400">
             <AgGridReact	
                 ref={gridRef}
                 columnDefs={columnDefs}
@@ -161,7 +161,7 @@ const TableBillGrid = ({pData}) => {
                 rowSelection={"single"}
                 rowClassRules={rowClassRules}
                 onGridReady={handleGridReady}
-                onFirstDataRendered={handleFirstDataRendered} />
+                onFirstDataRendered={handleFirstDataRendered}/>
         </div>
     );
 }

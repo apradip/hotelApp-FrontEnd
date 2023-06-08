@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from "moment";
 
 export const subStr = (text, len) => {
     let t = ''
@@ -368,11 +368,11 @@ export const getPageAttribute = (selectedCompont) => {
 }
 
 export const getAccessLevel = (accessLevelArray) => {
-    let names = ''
+    let names = "";
 
     if (accessLevelArray !== null) {
         for (const item of accessLevelArray) {
-            names === '' ? names = item.name : names = names + ', ' + item.name
+            names === "" ? names = item.name : names = names + ", " + item.name
         }
     }
 
@@ -380,12 +380,12 @@ export const getAccessLevel = (accessLevelArray) => {
 }
 
 export const getRooms = (roomList) => {
-    let rooms = ''
-    const roomArr = roomList && roomList.split(',')
+    let rooms = "";
+    const roomArr = roomList && roomList.split(",");
 
-    if (roomArr !== 'undefined') {
+    if (roomArr !== "undefined") {
         for (const item of roomArr) {
-            rooms === '' ? rooms = item.no : rooms = rooms + ', ' + item.no
+            rooms === "" ? rooms = item.no : rooms = rooms + ", " + item.no;
         }
     }
 
@@ -394,24 +394,24 @@ export const getRooms = (roomList) => {
 
 export const formatYYYYMMDD = (longDateTime) => {
     let dt = new Date(longDateTime),
-      mon = ('0' + (dt.getMonth() + 1)).slice(-2),
-      day = ('0' + dt.getDate()).slice(-2)
+      mon = ("0" + (dt.getMonth() + 1)).slice(-2),
+      day = ("0" + dt.getDate()).slice(-2);
     
-    return [dt.getFullYear(), mon, day].join('-')
+    return [dt.getFullYear(), mon, day].join("-");
 }
 
 export const formatDDMMYYYY = (longDateTime) => {
     let dt = new Date(longDateTime),
-      mon = ('0' + (dt.getMonth() + 1)).slice(-2),
-      day = ('0' + dt.getDate()).slice(-2)
+      mon = ("0" + (dt.getMonth() + 1)).slice(-2),
+      day = ("0" + dt.getDate()).slice(-2);
     
-    return [day, mon, dt.getFullYear()].join('/')
+    return [day, mon, dt.getFullYear()].join("/");
 }
 
 export const formatHHMM = (longDateTime) => {
     const tim = new Date(longDateTime);
-    const moment = moment(tim);
-    return moment.format('HH:mm');
+    const moment = moment(tim).format();
+    return moment.format("HH:mm");
 }
 
 export const formatTime12Hour = (time) => {
@@ -443,3 +443,13 @@ export const getFirstName = (name) => {
     const names = name.split(" ");
     return names.length > 0 ? names[0] : name;
 };
+
+export const getTables = (tableObject) => {
+    let tables = "";
+
+    tableObject.map((table) => (
+        tables.length > 0 ? tables = tables + ", " + table.no : tables = table.no
+    ))
+
+    return tables;
+}

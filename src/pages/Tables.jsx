@@ -37,6 +37,7 @@ const Tables = forwardRef(( props, ref ) => {
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.tableAPI}/${hotelId}`,
         params: {
+            option: "A",
             search: search
         }
     });
@@ -206,7 +207,7 @@ const Tables = forwardRef(( props, ref ) => {
                 await doFetch();
                 setDataChanged(false);
             } catch (err) {
-                console.log("Error occured when fetching data");
+                // console.log("Error occured when fetching data");
             }
         })();
     }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps

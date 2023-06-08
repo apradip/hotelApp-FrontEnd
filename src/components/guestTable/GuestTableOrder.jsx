@@ -3,7 +3,7 @@ import {Modal, NavLink} from "react-bootstrap";
 import {useFormik} from "formik";
 import {toast} from "react-toastify";
 import {X} from "react-feather";
-import {subStr} from "../common/Common";
+import {subStr, getTables} from "../common/Common";
 
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
@@ -15,52 +15,53 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 // Start:: form
 const Form = ({pGuestId, pName, pMobile, pGuestCount, 
                 pCorporateName, pCorporateAddress, pGstNo, 
+                pTransactionId, pTables, pIndate, pInTime,
                 pData, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const [tableData, setTableData] = useState(null);
+    const [foodData, setFoodData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const [defaultRowData, setDefaultRowData] = useState(pData);
-    const { loading, error, doInsert } = useFetchWithAuth({
-        url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}`
+    const {loading, error, doInsert} = useFetchWithAuth({
+        url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     });
 
-    const handelChangeTableData = (tableData) => {
-        let miscData = [];
+    const handelChangeFoodData = (foodData) => {
+        let fodData = [];
         
-        for(const row of tableData) {
-            let operation = 'A';
+        for(const row of foodData) {
+            let operation = "A";
 
             for(const od of pData) {
-                if (od.tableId === row.tableId) {
-                    operation = 'M';
+                if (od.foodId === row.foodId) {
+                    operation = "M";
                 }
             }
 
-            const md = {id: row.tableId, 
+            const md = {id: row.foodId, 
                         quantity: row.quantity, 
                         operation: operation};
-            miscData.push(md);
+            fodData.push(md);
         }
 
         for(const od of pData) {
             let found = false;
 
-            for (const e of miscData) {
-                if (e.id === od.tableId) {
+            for (const e of foodData) {
+                if (e.id === od.foodId) {
                     found = true;
                 }
             }
 
             if (!found) {
-                const md = {id: od.tableId, 
+                const md = {id: od.foodId, 
                             quantity: od.quantity, 
-                            operation: 'R'};
-                miscData.push(md);
+                            operation: "R"};
+                fodData.push(md);
             }
         }
 
-        setTableData(miscData);
+        setFoodData(fodData);
     }; 
 
     // Start:: Form validate and save data
@@ -71,7 +72,10 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             keyInputGuestCount: pGuestCount,
             keyInputCorporateName: pCorporateName,
             keyInputCorporateAddress: pCorporateAddress,
-            keyInputGstNo: pGstNo
+            keyInputGstNo: pGstNo,
+            keyInputTables: pTables
+            // keyInputCheckInDate: pIndate,
+            // keyInputCheckInTime: pInTime
         },
         validationSchema: guestTableSchema,
         validateOnChange,
@@ -81,15 +85,15 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             if (pData.length > 0) {
                 payload = {   
                     transactionId: pData[0].transactionId,
-                    tables: tableData
+                    foods: foodData
                 };
             } else {
                 payload = {   
-                    tables: tableData
+                    foods: foodData
                 };
             }
 
-            tableData && await doInsert(payload);
+            foodData && await doInsert(payload);
         
             if (error === null) {
                 resetForm();
@@ -121,12 +125,12 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Company</b></label>
                             <label className="col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
                         </div>
                     :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Name</b></label>
                             <label className="col-12 text-muted">{subStr(pName, 30)}</label>
                         </div>
@@ -135,12 +139,12 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Address</b></label>
                             <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </div>
                     :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Mobile No.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
@@ -148,7 +152,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column guest count */}
-                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 mb-3">
+                    <div className="col-sx-12 col-md-2 mb-3">
                         <label className="col-12 form-label"><b>Guest count</b></label>
                         <label className="col-12 text-muted">{pGuestCount} No.</label>
                     </div>
@@ -170,7 +174,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <TableOrderGrid
                             pState="MOD"
                             pDefaultRowData={defaultRowData}
-                            onChange={handelChangeTableData} />
+                            onChange={handelChangeFoodData}/>
                         {/* End:: Column service detail */}
 
                     </div>                
@@ -190,7 +194,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     type="button"
                     className="btn btn-danger"
                     disabled={loading}
-                    onClick={handleClose} >
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -200,7 +204,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     type="button"
                     className="btn btn-success"
                     disabled={loading} 
-                    onClick={handleSubmit} >
+                    onClick={handleSubmit}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -240,10 +244,10 @@ const GuestTableOrder = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, doFetch } = useFetchWithAuth({
+    const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
         params: {
-            option: 'N'
+            option: "N"
         }
     });
 
@@ -299,19 +303,19 @@ const GuestTableOrder = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            { data &&
-                <Modal size = "lg"
-                    show = {showModal} >
+            {data &&
+                <Modal size="lg"
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Order</Modal.Title>
-                        
+                        <Modal.Title>Order - [{getTables(props.pTables)}]</Modal.Title>
+                       
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -326,9 +330,13 @@ const GuestTableOrder = forwardRef((props, ref) => {
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
                         pGstNo={props.pGstNo}
+                        pTransactionId={props.pTransactionId}
+                        pTables={props.pTables}
+                        pIndate={props.pIndate}
+                        pInTime={props.pInTime}
                         pData={data}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>}

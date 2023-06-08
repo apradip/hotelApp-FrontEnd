@@ -12,7 +12,7 @@ import {formatDDMMYYYY, formatTime12Hour, formatBillNo} from "../common/Common";
 // Start:: form
 const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTime, 
                pGuestId, pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pGstNo, 
+               pCorporateName, pCorporateAddress, pGstNo, pTables,
                pData, onClosed}) => {
 
     // Strat:: close form    
@@ -38,21 +38,21 @@ const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTim
                 <div className="row">
 
                     {/* Start:: Column transaction date */}
-                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                    <div className="col-sx-12 col-md-5 mb-3">
                         <label className="col-12 form-label"><b>Bill No.</b></label>
                         <label className="col-12 form-label">{formatBillNo(pTransactionNo)}</label>
                     </div>
                     {/* End:: Column transaction date */}
 
                     {/* Start:: Column transaction date */}
-                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                    <div className="col-sx-12 col-md-5 mb-3">
                         <label className="col-12 form-label"><b>Date</b></label>
                         <label className="col-12 text-muted">{formatDDMMYYYY(pTransactionDate)}</label>
                     </div>
                     {/* End:: Column transaction date */}
 
                     {/* Start:: Column transaction time */}
-                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 mb-3">
+                    <div className="col-sx-12 col-md-2 mb-3">
                         <label className="col-12 form-label"><b>Time</b></label>
                         <label className="col-12 text-muted">{formatTime12Hour(pTransactionTime)}</label>
                     </div>
@@ -66,12 +66,12 @@ const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTim
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Company</b></label>
                             <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
                         </div>
                     :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Name</b></label>
                             <label className="col-12 text-muted">{subStr(pName, 30)}</label>
                         </div>
@@ -80,12 +80,12 @@ const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTim
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Address</b></label>
                             <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </div>
                     :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Mobile</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
@@ -93,7 +93,7 @@ const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTim
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column mobile no / company address */}
-                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 mb-3">
+                    <div className="col-sx-12 col-md-2 mb-3">
                         <label className="col-12 form-label"><b>Guest count</b></label>
                         <label className="col-12 text-muted">{pGuestCount} No.</label>
                     </div>
@@ -110,7 +110,7 @@ const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTim
 
                         {/* Start:: Column service detail */}
                         <BillGrid
-                            pData={pData} />
+                            pData={pData}/>
                         {/* End:: Column service detail */}
 
                     </div>                
@@ -129,7 +129,7 @@ const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTim
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={handleClose} >
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -138,7 +138,7 @@ const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTim
                 <button 
                     type="button"
                     className="btn btn-success"
-                    onClick={handlePrint} >
+                    onClick={handlePrint}>
                     Print    
                 </button>
                 {/* End:: Print button */}
@@ -185,7 +185,7 @@ const FormError = ({onClosed}) => {
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={handleClose} >
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -246,7 +246,7 @@ const GuestTableBill = forwardRef((props, ref) => {
     useEffect(() => {
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape") handleCloseModal();
-        })
+        });
 
         return () => {document.removeEventListener("keydown", handleCloseModal)};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
@@ -268,9 +268,9 @@ const GuestTableBill = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            { data && data.length ? 
+            {data && data.length ? 
                 <Modal size="lg"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -280,7 +280,7 @@ const GuestTableBill = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -299,15 +299,16 @@ const GuestTableBill = forwardRef((props, ref) => {
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
                         pGstNo={props.pGstNo}
+                        pTables={props.pTables}
                         pData={data}
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>
             :
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -317,7 +318,7 @@ const GuestTableBill = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={ handleCloseModal } >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -325,7 +326,7 @@ const GuestTableBill = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <FormError 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
 
                 </Modal>

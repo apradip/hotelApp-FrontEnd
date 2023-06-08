@@ -72,7 +72,7 @@ const Form = ({onSubmited, onClosed}) => {
                         <input 
                              type="text" 
                              name={"keyInputNo"}
-                             placeholder="Room no."
+                             placeholder="Table no."
                              className="form-control"
                              autoComplete="off"
                              autoFocus

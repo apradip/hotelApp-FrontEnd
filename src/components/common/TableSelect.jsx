@@ -5,13 +5,16 @@ import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
-const TableSelect = ({ onChange, name, value, disabled = false }) => {
+const TableSelect = ({onChange, name, value, disabled = false}) => {
 	const hotelId = useContext(HotelId);
 	const contextValues = useStateContext();
 	const [tableList, setTableList] = useState([]);
 	const [selectedList, setSelectedList] = useState(value);
     const { data, loading, error, doFetch } = useFetchWithAuth({
-        url: `${contextValues.tableAPI}/${hotelId}`
+        url: `${contextValues.tableAPI}/${hotelId}`,
+		params: {
+            option: "E"
+        }
     });
 	let defaultList = [];
 
@@ -30,13 +33,11 @@ const TableSelect = ({ onChange, name, value, disabled = false }) => {
             try {
                 await doFetch();
             } catch (err) {
-              console.log("Error occured when fetching data");
+            //   console.log("Error occured when fetching data");
             }
 
 			value &&
-				value.map((item) => {
-					return defaultList.push({value: item.id, label: item.no});
-				})
+				value.map((item) => {return defaultList.push({value: item.id, label: item.no});})
           })();
     }, [value]);		// eslint-disable-line react-hooks/exhaustive-deps
 
@@ -45,7 +46,7 @@ const TableSelect = ({ onChange, name, value, disabled = false }) => {
 
 		data &&
 			data.map((item) => {
-				return list.push({ value: item._id, label: item.no })
+				return list.push({value: item._id, label: item.no})
 			});
 
 		setTableList(list);
@@ -62,7 +63,7 @@ const TableSelect = ({ onChange, name, value, disabled = false }) => {
 			defaultValue={defaultList}
 			isDisabled={disabled}
 			onChange={onSelect}
-			isMulti={true} />
+			isMulti={true}/>
     )
 }
  

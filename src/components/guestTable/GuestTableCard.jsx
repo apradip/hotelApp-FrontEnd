@@ -3,7 +3,7 @@ import {Card, Dropdown, Stack} from "react-bootstrap";
 import TimeElapsed from "../common/TimeElapsed";
 import {NavLink} from "react-router-dom";
 import {PenTool, ShoppingBag, FileText, CreditCard, LogOut, Scissors, MoreVertical} from "react-feather";
-import {subStr, formatINR} from "../common/Common";
+import {subStr, formatINR, getTables} from "../common/Common";
 
 import View from "./GuestTableView";
 import Order from "./GuestTableOrder";
@@ -158,14 +158,19 @@ const GuestTableCard = forwardRef((props, ref) => {
                         </Stack>
 
                         <Stack gap={0}>
-                            {props.pCorporateName ?
+                            {/* {props.pCorporateName ?
                                 <span className="col-12 px-1">{subStr(props.pCorporateAddress, 40)}</span>
                                 :
                                 <Stack direction="horizontal" gap={0}>
                                     <span className="col-12 text-left px-1">
-                                        Mobile No. {props.pMobile}</span>
+                                        Mobile: {props.pMobile}</span>
+
+                                    <span className="col-12 text-left px-1">
+                                        Tables: {props.pTables}</span>
                                 </Stack> 
-                            }
+                            } */}
+                            <span className="col-12 text-left px-1">
+                                    Table(s): {getTables(props.pTables)}</span>
                         </Stack>        
 
                         <Stack direction="horizontal" gap={0}>
@@ -239,7 +244,8 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                onClosed={handleClose} />
+                pTables={props.pTables}
+                onClosed={handleClose}/>
             {/* End :: view component */}
 
             {/* Start :: order component */}
@@ -252,6 +258,10 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
+                pTransactionId={props.pTransactionId}
+                pTables={props.pTables}
+                pIndate={props.inDate}
+                pInTime={props.inTime}
                 onSaved={props.onOrdered} 
                 onClosed={handleClose}/>
             {/* End :: order component */}
@@ -266,6 +276,10 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
+                pTransactionId={props.pTransactionId}
+                pTables={props.pTables}
+                pIndate={props.inDate}
+                pInTime={props.inTime}
                 onSaved={props.onDespatched} 
                 onClosed={handleClose}/>
             {/* End :: despatch component */}
@@ -280,7 +294,12 @@ const GuestTableCard = forwardRef((props, ref) => {
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                onSaved={props.onBillGenerated}/>
+                pTransactionId={props.pTransactionId}
+                pTables={props.pTables}
+                pIndate={props.inDate}
+                pInTime={props.inTime}
+                onSaved={props.onBillGenerated}
+                onClosed={handleClose}/>
             {/* End :: generate & display summery bill component */}
 
             {/* Start :: add payment component */}
@@ -309,7 +328,7 @@ const GuestTableCard = forwardRef((props, ref) => {
             {/* Start :: delete employee component */}
             <Delete 
                 ref={deleteRef}
-                pId={props.pGuestId} 
+                pGuestId={props.pGuestId} 
                 pName={props.pName}
                 onDeleted={props.onDeleted} 
                 onClosed={handleClose}/>

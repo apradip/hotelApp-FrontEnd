@@ -10,12 +10,12 @@ import useFetchWithAuth from "../common/useFetchWithAuth"
 
 // Start:: form
 const Form = ({pGuestId, pName, pCorporateName, onSubmited, onClosed}) => {
-    const hotelId = useContext(HotelId)
-    const contextValues = useStateContext()
-    const inputRef = useRef(null)
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+    const inputRef = useRef(null);
     const {loading, error, doDelete} = useFetchWithAuth({
-        url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}`
-    })
+        url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}`
+    });
 
     // Start:: Call delete api
     const handleSave = async () => {
@@ -44,7 +44,7 @@ const Form = ({pGuestId, pName, pCorporateName, onSubmited, onClosed}) => {
                     autoFocus
                     disabled={loading}
                     ref={inputRef} 
-                    onClick={onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -54,14 +54,14 @@ const Form = ({pGuestId, pName, pCorporateName, onSubmited, onClosed}) => {
                     type="button"
                     className="btn btn-success"
                     disabled={loading || error}
-                    onClick={handleSave} >
+                    onClick={handleSave}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
-                        </> }
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -96,7 +96,7 @@ const FormError = ({pName, pCorporateName, onClosed}) => {
                     type="button"   
                     className="btn btn-danger"
                     autoFocus
-                    onClick={onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -136,23 +136,21 @@ const GuestTableCheckout = forwardRef((props, ref) => {
 
     // Start :: Close modal 
     const handleCloseModal = () => {
-        setShowModal(false)
-        props.onClosed()
+        setShowModal(false);
+        props.onClosed();
     }
     // End :: Close modal 
 
     // Start :: Save 
     const handleSave = () => {
-        setShowModal(false)
-        props.onSaved()
+        setShowModal(false);
+        props.onSaved();
     }
     // End :: Save 
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal};
     })
     // End:: forward reff show modal function
 
@@ -162,7 +160,7 @@ const GuestTableCheckout = forwardRef((props, ref) => {
             if (event.key === "Escape") handleCloseModal()
         })
 
-        return () => {document.removeEventListener("keydown", handleCloseModal)}
+        return () => {document.removeEventListener("keydown", handleCloseModal)};
     }, [])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
@@ -170,9 +168,9 @@ const GuestTableCheckout = forwardRef((props, ref) => {
     useEffect(() => {
         (async () => {
             try {
-                showModal && await doFetch()
+                showModal && await doFetch();
             } catch (err) {
-              console.log("Error occured when fetching data")
+              console.log("Error occured when fetching data");
             }
           })()
     }, [showModal])        // eslint-disable-line react-hooks/exhaustive-deps
@@ -186,11 +184,11 @@ const GuestTableCheckout = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            { data && 
+            {data && 
                 data.balance === 0 && 
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -200,7 +198,7 @@ const GuestTableCheckout = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -212,17 +210,17 @@ const GuestTableCheckout = forwardRef((props, ref) => {
                         pName={props.pName}
                         pCorporateName = {props.pCorporateName}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
-                </Modal> }
+                </Modal>}
             {/* End:: Delete modal */}
 
             {/* Start:: Delete modal */}
-            { data && 
+            {data && 
                 data.balance !== 0 && 
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -232,7 +230,7 @@ const GuestTableCheckout = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -242,7 +240,7 @@ const GuestTableCheckout = forwardRef((props, ref) => {
                     <FormError 
                         pName={props.pName}
                         pCorporateName={props.pCorporateName}
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                 </Modal>}
             {/* End:: Delete modal */}

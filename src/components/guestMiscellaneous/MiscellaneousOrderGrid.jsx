@@ -292,11 +292,11 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 columnDefs={columnDefs}
                 defaultColDef={defaultColDef}
                 rowData={null}
-                rowSelection={'single'}
+                rowSelection={"single"}
                 onGridReady={handleGridReady}
                 onFirstDataRendered={handleFirstDataRendered}
                 onSelectionChanged={handleSelectionChanged}
-                onCellValueChanged={handleCellValueChanged} />
+                onCellValueChanged={handleCellValueChanged}/>
         </div>
     );
 }
