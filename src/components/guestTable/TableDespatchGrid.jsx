@@ -36,7 +36,8 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
         },
         {
             headerName: "Item", 
-            field: "name", 
+            field: "name",
+            width: 100, 
             hide: false,
             cellRenderer: (params) => {return params.value},
             valueGetter: (params) => {return params.data.name},
@@ -45,7 +46,7 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
             headerName: "Quantity",
             field: "quantity", 
             type: "rightAligned",
-            width: 50,
+            width: 40, 
             hide: false,
             valueFormatter: (params) => {return `${Number(params.value)}`},
             valueGetter: (params) => {return params.data.quantity},
