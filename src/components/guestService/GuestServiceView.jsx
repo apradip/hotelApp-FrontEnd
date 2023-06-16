@@ -48,36 +48,36 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-5">
-                            <label className="form-label mr-2">Company :</label>
-                            <label className="text-muted">{subStr(pCorporateName, 30)}</label>
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Company</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
                         </div>
                     :
-                        <div className="col-5">
-                            <label className="form-label mr-2">Name :</label>
-                            <label className="text-muted">{subStr(pName, 30)}</label>
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Name</b></label>
+                            <label className="col-12 text-muted">{subStr(pName, 30)}</label>
                         </div>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-5">
-                            <label className="form-label mr-2">Address :</label>
-                            <label className="text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Address</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </div>
                     :
-                        <div className="col-5">
-                            <label className="form-label mr-2">Mobile :</label>
-                            <label className="text-muted">{pMobile}</label>
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
+                            <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column mobile no / company address */}
-                    <div className="col-2">
-                        <label className="form-label mr-2">Guest count :</label>
-                        <label className="text-muted">{pGuestCount}</label>
+                    <div className="col-sx-12 col-md-2 mb-3">
+                        <label className="col-12 form-label"><b>Guest count</b></label>
+                        <label className="col-12 text-muted">{pGuestCount} No.</label>
                     </div>
                     {/* End:: Column mobile no / company address */}
 
@@ -89,18 +89,15 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     <div className="col-12">
                         {/* Label element */}
-                        <label className="text-muted">Items :</label>
-                    </div>                
+                        <label className="col-12 text-muted"><b>Items</b></label>
 
-                    {/* Start:: Column room detail */}
-                    <div className="col-12 ag-theme-alpine grid">
+                        {/* Start:: Column room detail */}
                         <OrderGrid
-                            pState = "VIEW"
-                            pDefaultRowData = {defaultRowData}
-                            onChange = {null} />
+                            pState="VIEW"
+                            pDefaultRowData={defaultRowData}
+                            onChange={null}/>
+                        {/* End:: Column room detail */}
                     </div>                
-                    {/* End:: Column room detail */}
-
                 </div>
                 {/* End:: Row */}
 
@@ -202,7 +199,7 @@ const GuestServiceView = forwardRef(( props, ref ) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View</Modal.Title>
+                        <Modal.Title>Service list</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 

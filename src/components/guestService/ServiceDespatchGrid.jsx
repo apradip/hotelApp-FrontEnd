@@ -1,17 +1,21 @@
-import React, {useContext, useEffect, useState, useCallback, useRef, useMemo} from "react";
+import React, {useContext, useEffect, useState, useRef, useMemo, useCallback} from "react";
 import {AgGridReact} from "ag-grid-react";
 
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {    
+const ServiceDespatchGrid = ({pState, pDefaultRowData, onChange}) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const gridRef = useRef();
     const [rowData, setRowData] = useState();
+    const {data, doFetch} = useFetchWithAuth({
+        url: `${contextValues.hotelAPI}/${hotelId}`
+    });
 
     const defaultColDef = useMemo(() => {
         return {
@@ -23,7 +27,6 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
           hide: true,
         }
     }, []);
-
     const [columnDefs] = useState([
         {
             headerName: "", 
@@ -36,8 +39,7 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
         },
         {
             headerName: "Item", 
-            field: "name",
-            width: 100, 
+            field: "name", 
             hide: false,
             cellRenderer: (params) => {return params.value},
             valueGetter: (params) => {return params.data.name},
@@ -46,16 +48,16 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
             headerName: "Quantity",
             field: "quantity", 
             type: "rightAligned",
-            width: 40, 
+            width: 40,
             hide: false,
             valueFormatter: (params) => {return `${Number(params.value)}`},
             valueGetter: (params) => {return params.data.quantity},
         },
         {
-            field: "id"
+            field: "serviceId"
         },
         {
-            field: "foodTransactionId"
+            field: "serviceTransactionId"
         }
     ]);
 
@@ -72,10 +74,10 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
         pDefaultRowData.forEach(element => {
             const data = {
                             rowId: row.length + 1, 
-                            id: element.id,
+                            serviceId: element.serviceId,
                             name: element.name, 
                             quantity: element.quantity,
-                            foodTransactionId: element.foodTransactionId
+                            serviceTransactionId: element.serviceTransactionId
                         };
     
             row.push(data);
@@ -98,11 +100,22 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
     };
     // End:: load empty data to grid
 
-
     const onSelectionChanged = useCallback(() => {
         const dataRows = gridRef.current.api.getSelectedRows();
         onChange(dataRows);
     }, []);
+
+    // Start:: fetch hotel detail from api
+    useEffect(() => {
+        (async () => {
+            try {
+                await doFetch();
+            } catch (err) {
+                // console.log('Error occured when fetching data');
+            }
+          })();
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch hotel detail from api
 
     
 	return (
@@ -120,4 +133,4 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
     );
 }
  
-export default TableDespatchGrid;
+export default ServiceDespatchGrid;

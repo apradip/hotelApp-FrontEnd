@@ -192,27 +192,32 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="2"
+                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
                                             onClick = {handelOpenDespatch}>
                                             <ShoppingBag className="feather-16 mr-3"/>Despatch
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="3" 
+                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
                                             onClick = {handelOpenGenerateBill}>
                                             <FileText className="feather-16 mr-3"/>Bill
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="4"
+                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
                                             onClick = {handelOpenPayment}>
                                             <CreditCard className="feather-16 mr-3"/>Payment
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="5"
+                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
                                             onClick = {handelOpenCheckout}>
                                             <LogOut className="feather-16 mr-3"/>Check out
                                         </Dropdown.Item>
 
-                                        <Dropdown.Item eventKey="6"
-                                            onClick = {handelOpenDelete}>
+                                        <Dropdown.Item eventKey="6" 
+                                            disabled={props.pTransactionId === 'undefined' ? false : true}
+                                            onClick={handelOpenDelete}>
                                             <Scissors className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>
 
@@ -239,13 +244,14 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: view component */}
 
             {/* Start :: order component */}
             <Order 
                 ref={orderRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pGuestCount={props.pGuestCount}
@@ -253,13 +259,14 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
                 onSaved={props.onOrdered} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: order component */}
 
             {/* Start :: despatch component */}
             <Despatch
                 ref={despatchRef}
-                pGuestId={props.pGuestId} 
+                pGuestId={props.pGuestId}
+                pTransactionId={props.pTransactionId} 
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pGuestCount={props.pGuestCount}
@@ -267,13 +274,14 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
                 onSaved={props.onDespatched} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: despatch component */}
 
             {/* Start :: generate & display summery bill component */}
             <GenerateBill 
                 ref={generateBillRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pGuestCount={props.pGuestCount}
@@ -281,31 +289,32 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
                 onSaved={props.onBillGenerated} 
-                // onClosed = {handleClose} 
-                />
-            {/* End :: generate & display summery bill component */}
+                onClosed={handleClose}/>
+            {/* End :: generate & display bill component */}
 
             {/* Start :: add payment component */}
             <AddPayment 
                 ref={addPaymentRef}
                 pGuestId={props.pGuestId}    
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pBalance={props.pTotalBalance}    
                 onSaved={props.onPaymentAdded}
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: add payment component */}
 
             {/* Start :: checkout component */}
             <Checkout
                 ref={checkoutRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pCorporateName={props.pCorporateName}
                 onSaved={props.onCheckedout} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: checkout component */}
 
             {/* Start :: delete employee component */}
@@ -314,7 +323,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 pId={props.pGuestId} 
                 pName={props.pName}
                 onDeleted={props.onDeleted} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: delete employee component */}
 
         </>

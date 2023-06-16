@@ -306,7 +306,7 @@ const Form = ({onSubmited, onClosed}) => {
 
 // useImperativeHandle
 // handleShowModal
-const GuestServiceAdd = forwardRef(( props, ref ) => {
+const GuestServiceAdd = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
 
     // Start:: Show modal

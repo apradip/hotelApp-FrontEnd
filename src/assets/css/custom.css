@@ -55,11 +55,11 @@ label:not(.form-check-label):not(.custom-file-label) {
 }
 
 .border-primary {
-  border-color: #47b9c1 !important;
+  border-color: #bcdffb !important;
 }
 
 .border-info {
-  border-color: #47b9c1 !important;
+  border-color: #2396f0 !important;
 }
 
 .header-text {
@@ -87,20 +87,6 @@ label:not(.form-check-label):not(.custom-file-label) {
   --ag-border-radius: 4px !important;
 }
 
-/* .a6-theme-alpine .ag-header-row {
-  height: 32px !important;
-  min-height: 32px !important;
-} */
-
-/* .ag-theme-alpine .ag-row {
-  height: 40px !important;
-  min-height: 40px !important;
-} */
-
-/* .ag-theme-alpine .ag-cell {
-  height: 40px  !important;
-  min-height: 40px !important;
-} */
 
 .ag-lock-pinned {
   background: #ddd;
@@ -130,48 +116,3 @@ label:not(.form-check-label):not(.custom-file-label) {
   color: #ff5622 !important;
   font-weight:600;
 }
-
-/* .right{
-  text-align: right;
-}
-
-a {
-  color: #8b8887;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #8b8887;
-  text-decoration: none;
-}
-
-.brand{
-  font-weight: 400;
-  font-size: 1.15rem;
-  display: block;
-  color: rgba(0,0,0,.9);
-}  */
-
-/* .sidebar {
-  background-color: #354052 !important;
-  height: 100% !important;
-  min-height: 100% !important;
-  display: block !important;
-  border: solid 1px green;
-} */
-
-/* .sidebar-content {
-  background-color: #354052 !important;
-  height: 100% !important;
-  min-height: 100% !important;
-  display: block !important;
-  border: solid 0px red;
-} */
-
-/* .sidebar-link:hover {
-  background-color: #1070c0 !important;
-}
-
-.sidebar-item .active {
-  background-color: #1070c0 !important;
-} */

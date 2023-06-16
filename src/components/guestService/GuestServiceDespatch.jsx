@@ -8,7 +8,7 @@ import {subStr} from "../common/Common";
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {guestServiceSchema} from "../../schemas";
-import ServiceOrderGrid from "./ServiceOrderGrid";
+import ServiceDespatchGrid from "./ServiceDespatchGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -18,6 +18,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                pTransactionId, pData, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
+    const [serviceData, setServiceData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const [defaultRowData, setDefaultRowData] = useState(pData);
     const { loading, error, doUpdate } = useFetchWithAuth({
@@ -25,42 +26,14 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     })
 
     const handelChangeServiceData = (serviceData) => {
-        //console.log(serviceData);
-        // let miscData = [];
+        let serData = [];
         
-        // for(const row of serviceData) {
-        //     let operation = 'A';
+        for(const row of serviceData) {
+            const md = {serviceTransactionId: row.serviceTransactionId};
+            serData.push(md);
+        }
 
-        //     for(const od of pData) {
-        //         if (od.serviceId === row.serviceId) {
-        //             operation = 'M';
-        //         }
-        //     }
-
-        //     const md = {id: row.serviceId, 
-        //                 quantity: row.quantity, 
-        //                 operation: operation};
-        //     miscData.push(md);
-        // }
-
-        // for(const od of pData) {
-        //     let found = false;
-
-        //     for (const e of miscData) {
-        //         if (e.id === od.serviceId) {
-        //             found = true;
-        //         }
-        //     }
-
-        //     if (!found) {
-        //         const md = {id: od.serviceId, 
-        //                     quantity: od.quantity, 
-        //                     operation: 'R'};
-        //         miscData.push(md);
-        //     }
-        // }
-
-        // setServiceData(miscData);
+        setServiceData(serData);
     }; 
 
     // Start:: Form validate and save data
@@ -76,16 +49,26 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         validationSchema: guestServiceSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            if (pData.length > 0) {
-                await doUpdate();
-        
-                if (error === null) {
-                    resetForm();
-                    onSubmited();
-                } else {
-                    toast.error(error);
-                }
+            const payload = {services: serviceData};
+            serviceData && await doUpdate(payload);
+
+            if (error === null) {
+                resetForm();
+                onSubmited();
+            } else {
+                toast.error(error);
             }
+
+            // if (pData.length > 0) {
+            //     await doUpdate();
+        
+            //     if (error === null) {
+            //         resetForm();
+            //         onSubmited();
+            //     } else {
+            //         toast.error(error);
+            //     }
+            // }
         }
     });
     // End:: Form validate and save data
@@ -156,7 +139,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <label className="col-12 form-label"><b>Items</b></label>
 
                         {/* Start:: Column service detail */}
-                        <ServiceOrderGrid
+                        <ServiceDespatchGrid
                             pState="VIEW"
                             pDefaultRowData={defaultRowData}
                             onChange={handelChangeServiceData}/>
@@ -279,7 +262,7 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
         params: {
-            option: 'N'
+            option: "N"
         }
     });
 
@@ -335,9 +318,9 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            { data && data.length ? 
+            {data && data.length ? 
                 <Modal size="lg"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -365,14 +348,14 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
                         pTransactionId = {data[0].transactionId}
                         pData = {data}
                         onSubmited = {handleSave} 
-                        onClosed = {handleCloseModal} />
+                        onClosed = {handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>
             :
                 <Modal 
                     size="sm"
-                    show = {showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -382,7 +365,7 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = { handleCloseModal } >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -390,7 +373,7 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <FormError 
-                        onClosed = {handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                 </Modal>
             }

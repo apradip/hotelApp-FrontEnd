@@ -13,7 +13,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
+const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
                 pCorporateName, pCorporateAddress, pGstNo, 
                 pData, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
@@ -21,8 +21,8 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     const [serviceData, setServiceData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const [defaultRowData, setDefaultRowData] = useState(pData);
-    const { loading, error, doInsert } = useFetchWithAuth({
-        url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}`
+    const {loading, error, doInsert} = useFetchWithAuth({
+        url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     });
 
     const handelChangeServiceData = (serviceData) => {
@@ -76,19 +76,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         validationSchema: guestServiceSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            let payload;
-
-            if (pData.length > 0) {
-                payload = {   
-                    transactionId: pData[0].transactionId,
-                    services: serviceData
-                };
-            } else {
-                payload = {   
-                    services: serviceData
-                };
-            }
-
+            const payload = {services: serviceData};
             serviceData && await doInsert(payload);
         
             if (error === null) {
@@ -141,7 +129,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         </div>
                     :
                         <div className="col-sx-12 col-md-5 mb-3">
-                            <label className="col-12 form-label"><b>Mobile No.</b></label>
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
@@ -320,6 +308,7 @@ const GuestServiceOrder = forwardRef((props, ref) => {
                     {/* Start:: Form component */}
                     <Form 
                         pGuestId={props.pGuestId}
+                        pTransactionId={props.pTransactionId}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}

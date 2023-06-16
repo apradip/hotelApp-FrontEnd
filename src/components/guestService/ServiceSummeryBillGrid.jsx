@@ -7,8 +7,9 @@ import Bill from "./GuestServiceBill";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const ServiceSummeryBillGrid = ({pGuestId, pName, pMobile, pGuestCount, 
-                                       pCorporateName, pCorporateAddress, pGstNo, pData}) => {    
+const ServiceSummeryBillGrid = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
+                                pCorporateName, pCorporateAddress, pGstNo, 
+                                pData}) => {    
 
     const gridRef = useRef();
     const billRef = useRef(null);

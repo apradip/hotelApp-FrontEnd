@@ -33,12 +33,12 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             let operation = "A";
 
             for(const od of pData) {
-                if (od.foodId === row.foodId) {
+                if (od.id === row.id) {
                     operation = "M";
                 }
             }
 
-            const md = {id: row.foodId, 
+            const md = {id: row.id, 
                         quantity: row.quantity, 
                         operation: operation};
             fodData.push(md);
@@ -48,13 +48,13 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             let found = false;
 
             for (const e of foodData) {
-                if (e.id === od.foodId) {
+                if (e.id === od.id) {
                     found = true;
                 }
             }
 
             if (!found) {
-                const md = {id: od.foodId, 
+                const md = {id: od.id, 
                             quantity: od.quantity, 
                             operation: "R"};
                 fodData.push(md);
@@ -145,7 +145,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         </div>
                     :
                         <div className="col-sx-12 col-md-5 mb-3">
-                            <label className="col-12 form-label"><b>Mobile No.</b></label>
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }

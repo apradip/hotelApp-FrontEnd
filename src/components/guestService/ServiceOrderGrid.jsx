@@ -130,9 +130,9 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "gstCharge"
         }
     ]);
-    const pinnedRowData = [
-        {rowId: "Total", totalPrice: 0}
-    ];
+    // const pinnedRowData = [
+    //     {rowId: "Total", totalPrice: 0}
+    // ];
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
@@ -166,7 +166,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = (params) => {
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+        // gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
@@ -239,9 +239,9 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             totalPrice += rowNode.data.totalPrice;
         });
     
-        pinnedRowData[0].totalPrice = totalPrice;
+        // pinnedRowData[0].totalPrice = totalPrice;
         
-        gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+        // gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
 
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode) => {

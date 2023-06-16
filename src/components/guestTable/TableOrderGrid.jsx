@@ -19,7 +19,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [rowData, setRowData] = useState();
     const [emptyRowCount, setEmptyRowCount] = useState();
-    const { data, doFetch } = useFetchWithAuth({
+    const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
     });
 
@@ -51,14 +51,14 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             valueGetter: (params) => {return params.data.name},
             valueSetter: (params) => {
                 params.data.name = "Select item";
-                params.data.foodId = "";
+                params.data.id = "";
                 params.data.unitPrice = 0;
 
                 if (params.newValue) {
                     const selectedItem = params.newValue[0];
 
                     // find selected table details
-                    params.data.foodId = selectedItem._id;
+                    params.data.id = selectedItem._id;
                     params.data.name = selectedItem.name;
                     params.data.unitPrice = selectedItem.price;
                     params.data.quantity = 0;
@@ -113,7 +113,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            field: "foodId"
+            field: "id"
         },
         {
             field: "serviceChargePercentage"
@@ -139,7 +139,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         pDefaultRowData.forEach(element => {
             const data = {
                             rowId: row.length + 1, 
-                            foodId: element.foodId,
+                            id: element.id,
                             name: element.name, 
                             unitPrice: element.unitPrice,
                             quantity: element.quantity, 
@@ -186,7 +186,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         gridRef.current.api.forEachNode((gridRow) => {
             if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
                 dataRows.push({
-                            foodId: gridRow.data.foodId, 
+                            id: gridRow.data.id, 
                             name: gridRow.data.name,
                             unitPrice: gridRow.data.unitPrice,
                             quantity: gridRow.data.quantity,
@@ -257,7 +257,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
             emptyRow.push({
                         rowId: emptyRow.length + 1, 
-                        foodId: "", 
+                        id: "", 
                         name: "Select item", 
                         unitPrice: 0,
                         quantity: 0,

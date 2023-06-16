@@ -158,17 +158,6 @@ const GuestTableCard = forwardRef((props, ref) => {
                         </Stack>
 
                         <Stack gap={0}>
-                            {/* {props.pCorporateName ?
-                                <span className="col-12 px-1">{subStr(props.pCorporateAddress, 40)}</span>
-                                :
-                                <Stack direction="horizontal" gap={0}>
-                                    <span className="col-12 text-left px-1">
-                                        Mobile: {props.pMobile}</span>
-
-                                    <span className="col-12 text-left px-1">
-                                        Tables: {props.pTables}</span>
-                                </Stack> 
-                            } */}
                             <span className="col-12 text-left px-1">
                                     Table(s): {getTables(props.pTables)}</span>
                         </Stack>        

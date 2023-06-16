@@ -68,7 +68,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         </div>
                     :
                         <div className="col-sx-12 col-md-5 mb-3">
-                            <label className="col-12 form-label"><b>Mobile</b></label>
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
@@ -76,7 +76,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column mobile no / company address */}
                     <div className="col-sx-12 col-md-2 mb-3">
-                        <label className="col-12 form-label"><b>Guest</b></label>
+                        <label className="col-12 form-label"><b>Guest count</b></label>
                         <label className="col-12 text-muted">{pGuestCount} No.</label>
                     </div>
                     {/* End:: Column mobile no / company address */}
@@ -198,7 +198,7 @@ const GuestTableView = forwardRef((props, ref) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>View - [{getTables(props.pTables)}]</Modal.Title>
+                        <Modal.Title>Food list - [{getTables(props.pTables)}]</Modal.Title>
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 

@@ -222,7 +222,7 @@ const GuestServiceBill = forwardRef((props, ref) => {
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const {data, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}/${props.pTransactionId}`
+        url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}/${props.pTransactionId}/v`
     });
 
     // Start:: Show modal
