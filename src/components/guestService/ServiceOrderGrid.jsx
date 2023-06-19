@@ -4,7 +4,7 @@ import {AgGridReact} from "ag-grid-react";
 import {HotelId} from "../../App";
 import {formatINR} from "../common/Common";
 import {useStateContext} from "../../contexts/ContextProvider";
-import ServiceItemSelector from "../common/ServiceEditor";
+import ItemSelector from "../common/ServiceEditor";
 import QuantityEditor from "../common/QuantityEditor";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
@@ -15,11 +15,11 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const gridRef = useRef();
-	const [selectedRowNode, setSelectedRowNode] = useState();
-    const [totalPrice, setTotalPrice] = useState(0);
+	// const [selectedRowNode, setSelectedRowNode] = useState();
+    // const [totalPrice, setTotalPrice] = useState(0);
     const [rowData, setRowData] = useState();
     const [emptyRowCount, setEmptyRowCount] = useState();
-    const { data, doFetch } = useFetchWithAuth({
+    const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
     });
 
@@ -39,13 +39,13 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "rowId", 
             width: 20,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : 'Total'},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : "Total"}
         },
         {
             headerName: "Item", 
             field: "name", 
             hide: false,
-            cellEditor: ServiceItemSelector, 
+            cellEditor: ItemSelector, 
             editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},
             cellRenderer: (params) => {return params.value},
             valueGetter: (params) => {return params.data.name},
@@ -95,7 +95,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 params.data.totalPrice = totalPrice;                                    
 
                 // set tariff to get the gst percentage
-                setTotalPrice(totalPrice);
+                // setTotalPrice(totalPrice);
 
                 return true;
             }
@@ -130,12 +130,9 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "gstCharge"
         }
     ]);
-    // const pinnedRowData = [
-    //     {rowId: "Total", totalPrice: 0}
-    // ];
 
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
+    const handleGridReady = () => {
         let row = [];
         
         pDefaultRowData.forEach(element => {
@@ -166,7 +163,6 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = (params) => {
-        // gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
@@ -175,14 +171,14 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     };
     // End:: load empty data to grid
 
-    // Start:: on row selection change set selected 
-    const handleSelectionChanged = (event) => {
-		setSelectedRowNode(event.api.getSelectedNodes()[0]);		
-    };
-    // End:: on row selection change set selected 
+    // // Start:: on row selection change set selected 
+    // const handleSelectionChanged = (event) => {
+	// 	setSelectedRowNode(event.api.getSelectedNodes()[0]);		
+    // };
+    // // End:: on row selection change set selected 
 
     // set grid data to a parent component
-    const handleCellValueChanged = (event) => {
+    const handleCellValueChanged = () => {
         let dataRows = [];    
 
         gridRef.current.api.forEachNode((gridRow) => {
@@ -208,11 +204,11 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
-            try {
+            // try {
                 await doFetch();
-            } catch (err) {
+            // } catch (err) {
                 // console.log('Error occured when fetching data');
-            }
+            // }
           })();
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
@@ -231,17 +227,13 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     // Start:: calculate sum on change tariff
     const calculateSum = useCallback (() => {
-        let totalPrice = 0;
+        // let totalPrice = 0;
         let emptyCount = 0;
 
-        // calculate total expance
-        gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
-            totalPrice += rowNode.data.totalPrice;
-        });
-    
-        // pinnedRowData[0].totalPrice = totalPrice;
-        
-        // gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+        // // calculate total expance
+        // gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+        //     totalPrice += rowNode.data.totalPrice;
+        // });
 
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode) => {
@@ -290,7 +282,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 rowSelection={"single"}
                 onGridReady={handleGridReady}
                 onFirstDataRendered={handleFirstDataRendered}
-                onSelectionChanged={handleSelectionChanged}
+                // onSelectionChanged={handleSelectionChanged}
                 onCellValueChanged={handleCellValueChanged}/>
         </div>
     );

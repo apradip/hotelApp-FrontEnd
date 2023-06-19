@@ -13,7 +13,7 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const inputRef = useRef(null);
-    const { loading, error, doDelete } = useFetchWithAuth({
+    const {loading, error, doDelete} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${pId}`
     });
 
@@ -111,8 +111,6 @@ const FormError = ({pName, onClosed}) => {
 // End:: form
 
 
-
-
 // Start:: Component
 // props parameters
 // pId
@@ -125,7 +123,7 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pId}`
     });
 
@@ -189,7 +187,7 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
                 (data.balance === 0 && 
                 data.roomsDetail.length === 0 && 
                 data.tablesDetail.length === 0 && 
-                data.miscellaneousesDetail.length === 0 && 
+                data.miscellaneaDetail.length === 0 && 
                 data.servicesDetail.length === 0 && 
                 data.expensesPaymentsDetail.length === 0) && 
                 <Modal 
@@ -225,7 +223,7 @@ const GuestServiceDelete = forwardRef(( props, ref ) => {
                 (data.balance !== 0 || 
                 data.roomsDetail.length !== 0 ||
                 data.tablesDetail.length !== 0 ||
-                data.miscellaneousesDetail.length !== 0 ||
+                data.miscellaneaDetail.length !== 0 ||
                 data.servicesDetail.length !== 0 ||
                 data.expensesPaymentsDetail.length !== 0) && 
                 <Modal 

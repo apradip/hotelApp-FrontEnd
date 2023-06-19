@@ -9,12 +9,12 @@ import useFetchWithAuth from "../common/useFetchWithAuth"
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pCorporateName, onSubmited, onClosed}) => {
+const Form = ({pGuestId, pTransactionId, pName, pCorporateName, onSubmited, onClosed}) => {
     const hotelId=useContext(HotelId)
     const contextValues=useStateContext()
     const inputRef=useRef(null)
     const {loading, error, doDelete} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}`
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     })
 
     // Start:: Call delete api
@@ -39,12 +39,12 @@ const Form = ({pGuestId, pName, pCorporateName, onSubmited, onClosed}) => {
 
                 {/* Start:: Close button */}
                 <button 
+                    autoFocus
                     type="button"   
                     className="btn btn-danger"
-                    autoFocus
                     disabled={loading}
                     ref={inputRef} 
-                    onClick={onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -54,7 +54,7 @@ const Form = ({pGuestId, pName, pCorporateName, onSubmited, onClosed}) => {
                     type="button"
                     className="btn btn-success"
                     disabled={loading || error}
-                    onClick={handleSave} >
+                    onClick={handleSave}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -96,7 +96,7 @@ const FormError = ({pName, pCorporateName, onClosed}) => {
                     type="button"   
                     className="btn btn-danger"
                     autoFocus
-                    onClick={onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -150,9 +150,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     })
     // End:: forward reff show modal function
 
@@ -172,7 +170,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
             try {
                 showModal && await doFetch()
             } catch (err) {
-              console.log("Error occured when fetching data")
+            //   console.log("Error occured when fetching data")
             }
           })()
     }, [showModal])        // eslint-disable-line react-hooks/exhaustive-deps
@@ -190,7 +188,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
                 data.balance === 0 && 
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -200,7 +198,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -209,20 +207,21 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
                     {/* Start:: Form component */}
                     <Form 
                         pGuestId={props.pGuestId} 
+                        pTransactionId={props.pTransactionId}
                         pName={props.pName}
                         pCorporateName={props.pCorporateName}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
-                </Modal> }
+                </Modal>}
             {/* End:: Delete modal */}
 
             {/* Start:: Delete modal */}
-            { data && 
+            {data && 
                 data.balance !== 0 && 
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -232,7 +231,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -242,7 +241,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
                     <FormError 
                         pName={props.pName}
                         pCorporateName={props.pCorporateName}
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                 </Modal>}
             {/* End:: Delete modal */}

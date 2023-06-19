@@ -4,7 +4,7 @@ import {AgGridReact} from "ag-grid-react";
 import {HotelId} from "../../App";
 import {formatINR} from "../common/Common";
 import {useStateContext} from "../../contexts/ContextProvider";
-import MiscellaneousItemSelector from "../common/MiscellaneousEditor";
+import ItemSelector from "../common/MiscellaneousEditor";
 import QuantityEditor from "../common/QuantityEditor";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
@@ -15,11 +15,11 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const gridRef = useRef();
-	const [selectedRowNode, setSelectedRowNode] = useState();
-    const [totalPrice, setTotalPrice] = useState(0);
+	// const [selectedRowNode, setSelectedRowNode] = useState();
+    // const [totalPrice, setTotalPrice] = useState(0);
     const [rowData, setRowData] = useState();
     const [emptyRowCount, setEmptyRowCount] = useState();
-    const { data, doFetch } = useFetchWithAuth({
+    const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
     });
 
@@ -35,23 +35,23 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     }, []);
     const [columnDefs] = useState([
         {
-            headerName: '#', 
-            field: 'rowId', 
+            headerName: "#", 
+            field: "rowId", 
             width: 20,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : 'Total'},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : "Total"}
         },
         {
-            headerName: 'Item', 
-            field: 'name', 
+            headerName: "Item", 
+            field: "name", 
             hide: false,
-            cellEditor: MiscellaneousItemSelector, 
-            editable: (params) => {return params.node.rowPinned ? false : pState === 'ADD' ? true : pState === 'MOD' ? true : pState === 'VIEW' ? false : true},
+            cellEditor: ItemSelector, 
+            editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},
             cellRenderer: (params) => {return params.value},
             valueGetter: (params) => {return params.data.name},
             valueSetter: (params) => {
-                params.data.name = 'Select item';
-                params.data.miscellaneousId = '';
+                params.data.name = "Select item";
+                params.data.miscellaneousId = "";
                 params.data.unitPrice = 0;
 
                 if (params.newValue) {
@@ -68,18 +68,18 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            headerName: 'Unit price',
-            field: 'unitPrice',
-            type: 'rightAligned',
+            headerName: "Unit price",
+            field: "unitPrice",
+            type: "rightAligned",
             width: 50,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ''},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
             valueGetter: (params) => {return params.data.unitPrice}
         },
         {
-            headerName: 'Quantity',
-            field: 'quantity', 
-            type: 'rightAligned',
+            headerName: "Quantity",
+            field: "quantity", 
+            type: "rightAligned",
             width: 50,
             hide: false,
             cellEditor: QuantityEditor,
@@ -89,26 +89,21 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             valueSetter: (params) => {
                 params.data.quantity = params.newValue;
 
-                // calculate price with gst and service charge
-                // const totalPrice = (params.newValue * params.data.unitPrice) + 
-                //                ((params.newValue * params.data.unitPrice) * (params.data.serviceChargePercentage / 100)) + 
-                //                ((params.newValue * params.data.unitPrice) * (params.data.gstPercentage / 100));
-
                 params.data.serviceCharge = ((params.newValue * params.data.unitPrice) * (params.data.serviceChargePercentage / 100));
                 params.data.gstCharge = ((params.newValue * params.data.unitPrice) * (params.data.gstPercentage / 100));
                 const totalPrice = (params.newValue * params.data.unitPrice);
                 params.data.totalPrice = totalPrice;                                    
 
                 // set tariff to get the gst percentage
-                setTotalPrice(totalPrice);
+                // setTotalPrice(totalPrice);
 
                 return true;
             }
         },
         {
-            headerName: 'Price',
-            field: 'totalPrice',
-            type: 'rightAligned',
+            headerName: "Price",
+            field: "totalPrice",
+            type: "rightAligned",
             width: 50,
             hide: false,
             valueFormatter: (params) => {return `${formatINR(params.value)}`},
@@ -120,27 +115,24 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            field: 'miscellaneousId'
+            field: "miscellaneousId"
         },
         {
-            field: 'serviceChargePercentage'
+            field: "serviceChargePercentage"
         },
         {
-            field: 'serviceCharge'
+            field: "serviceCharge"
         },
         {
-            field: 'gstPercentage'
+            field: "gstPercentage"
         },
         {
-            field: 'gstCharge'
+            field: "gstCharge"
         }
     ]);
-    const pinnedRowData = [
-        {rowId: 'Total', totalPrice: 0}
-    ];
 
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
+    const handleGridReady = () => {
         let row = [];
         
         pDefaultRowData.forEach(element => {
@@ -171,7 +163,6 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = (params) => {
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
@@ -180,18 +171,18 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     };
     // End:: load empty data to grid
 
-    // Start:: on row selection change set selected 
-    const handleSelectionChanged = (event) => {
-		setSelectedRowNode(event.api.getSelectedNodes()[0]);		
-    };
-    // End:: on row selection change set selected 
+    // // Start:: on row selection change set selected 
+    // const handleSelectionChanged = (event) => {
+	// 	setSelectedRowNode(event.api.getSelectedNodes()[0]);		
+    // };
+    // // End:: on row selection change set selected 
 
     // set grid data to a parent component
-    const handleCellValueChanged = (event) => {
+    const handleCellValueChanged = () => {
         let dataRows = [];    
 
         gridRef.current.api.forEachNode((gridRow) => {
-            if ((gridRow.data.name !== 'Select item') && ((gridRow.data.quantity !== 0))) {
+            if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
                 dataRows.push({
                             miscellaneousId: gridRow.data.miscellaneousId, 
                             name: gridRow.data.name,
@@ -213,11 +204,11 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
-            try {
+            // try {
                 await doFetch();
-            } catch (err) {
-                console.log('Error occured when fetching data');
-            }
+            // } catch (err) {
+                // console.log('Error occured when fetching data');
+            // }
           })();
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
@@ -228,7 +219,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     // Start:: set add empty row grid
     useEffect(() => {
-        if (pState !== 'VIEW') {
+        if (pState !== "VIEW") {
             data && addRow();
         } 
     }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
@@ -243,14 +234,10 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
             totalPrice += rowNode.data.totalPrice;
         });
-    
-        pinnedRowData[0].totalPrice = totalPrice;
-        
-        gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
 
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode) => {
-            if (rowNode.data.name === 'Select item') {
+            if (rowNode.data.name === "Select item") {
                 emptyCount ++;
             }
         });
@@ -265,8 +252,8 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
             emptyRow.push({
                         rowId: emptyRow.length + 1, 
-                        miscellaneousId: '', 
-                        name: 'Select item', 
+                        miscellaneousId: "", 
+                        name: "Select item", 
                         unitPrice: 0,
                         quantity: 0,
                         serviceChargePercentage: data.serviceChargePercentage,
@@ -295,7 +282,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 rowSelection={"single"}
                 onGridReady={handleGridReady}
                 onFirstDataRendered={handleFirstDataRendered}
-                onSelectionChanged={handleSelectionChanged}
+                // onSelectionChanged={handleSelectionChanged}
                 onCellValueChanged={handleCellValueChanged}/>
         </div>
     );

@@ -8,27 +8,27 @@ import {subStr} from "../common/Common";
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {guestServiceSchema} from "../../schemas";
-import ServiceOrderGrid from "./ServiceOrderGrid";
+import OrderGrid from "./ServiceOrderGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
 const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
-                pCorporateName, pCorporateAddress, pGstNo, 
-                pData, onSubmited, onClosed}) => {
+                pCorporateName, pCorporateAddress, pGstNo, pData, 
+                onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const [serviceData, setServiceData] = useState(null);
+    const [orderData, setOrderData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const [defaultRowData, setDefaultRowData] = useState(pData);
     const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     });
 
-    const handelChangeServiceData = (serviceData) => {
-        let miscData = [];
+    const handelChangeData = (gridData) => {
+        let dataList = [];
         
-        for(const row of serviceData) {
+        for(const row of gridData) {
             let operation = "A";
 
             for(const od of pData) {
@@ -37,30 +37,28 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                 }
             }
 
-            const md = {id: row.serviceId, 
-                        quantity: row.quantity, 
-                        operation: operation};
-            miscData.push(md);
+            dataList.push({id: row.serviceId, 
+                quantity: row.quantity, 
+                operation: operation});
         }
 
         for(const od of pData) {
             let found = false;
 
-            for (const e of miscData) {
+            for (const e of dataList) {
                 if (e.id === od.serviceId) {
                     found = true;
                 }
             }
 
             if (!found) {
-                const md = {id: od.serviceId, 
-                            quantity: od.quantity, 
-                            operation: "R"};
-                miscData.push(md);
+                dataList.push({id: od.serviceId, 
+                    quantity: od.quantity, 
+                    operation: "R"});
             }
         }
 
-        setServiceData(miscData);
+        setOrderData(dataList);
     }; 
 
     // Start:: Form validate and save data
@@ -76,8 +74,8 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
         validationSchema: guestServiceSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            const payload = {services: serviceData};
-            serviceData && await doInsert(payload);
+            const payload = {orders: orderData};
+            orderData && await doInsert(payload);
         
             if (error === null) {
                 resetForm();
@@ -155,10 +153,10 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                         <label className="col-12 form-label"><b>Items</b></label>
 
                         {/* Start:: Column service detail */}
-                        <ServiceOrderGrid
+                        <OrderGrid
                             pState="MOD"
                             pDefaultRowData={defaultRowData}
-                            onChange={handelChangeServiceData}/>
+                            onChange={handelChangeData}/>
                         {/* End:: Column service detail */}
 
                     </div>                

@@ -122,24 +122,22 @@ const MiscellaneousBillGrid = ({pData}) => {
         let rows = [];
 
         pData.forEach(element => {
-            const elm = element.miscellaneousesDetail.miscellaneouses; 
-
             const row = {
                             rowId: rows.length + 1, 
-                            id: elm.id,
-                            name: elm.name, 
-                            unitPrice: elm.unitPrice,
-                            quantity: elm.quantity,
-                            price: elm.unitPrice * elm.quantity,
-                            serviceCharge: elm.serviceCharge,
-                            gstCharge: elm.gstCharge
+                            id: element.id,
+                            name: element.name, 
+                            unitPrice: element.unitPrice,
+                            quantity: element.quantity,
+                            price: element.unitPrice * element.quantity,
+                            serviceCharge: element.serviceCharge,
+                            gstCharge: element.gstCharge
                         };
     
             rows.push(row);
 
-            totalPrice += elm.unitPrice * elm.quantity;
-            totalService += elm.serviceCharge;
-            totalGst += elm.gstCharge;
+            totalPrice += element.unitPrice * element.quantity;
+            totalService += element.serviceCharge;
+            totalGst += element.gstCharge;
         });
         
         setTotalItemPrice(totalPrice);

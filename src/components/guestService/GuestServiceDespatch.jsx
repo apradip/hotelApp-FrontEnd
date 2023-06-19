@@ -8,7 +8,7 @@ import {subStr} from "../common/Common";
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {guestServiceSchema} from "../../schemas";
-import ServiceDespatchGrid from "./ServiceDespatchGrid";
+import DespatchGrid from "./ServiceDespatchGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -18,22 +18,20 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                pTransactionId, pData, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const [serviceData, setServiceData] = useState(null);
+    const [despatchData, setDespatchData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const [defaultRowData, setDefaultRowData] = useState(pData);
-    const { loading, error, doUpdate } = useFetchWithAuth({
+    const {loading, error, doUpdate} = useFetchWithAuth({
         url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     })
 
-    const handelChangeServiceData = (serviceData) => {
-        let serData = [];
+    const handelChangeData = (gridData) => {
+        let listData = [];
         
-        for(const row of serviceData) {
-            const md = {serviceTransactionId: row.serviceTransactionId};
-            serData.push(md);
+        for(const row of gridData) {
+            listData.push({itemTransactionId: row.itemTransactionId});
         }
 
-        setServiceData(serData);
+        setDespatchData(listData);
     }; 
 
     // Start:: Form validate and save data
@@ -49,8 +47,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         validationSchema: guestServiceSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            const payload = {services: serviceData};
-            serviceData && await doUpdate(payload);
+            despatchData && await doUpdate({deliveries: despatchData});
 
             if (error === null) {
                 resetForm();
@@ -58,17 +55,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             } else {
                 toast.error(error);
             }
-
-            // if (pData.length > 0) {
-            //     await doUpdate();
-        
-            //     if (error === null) {
-            //         resetForm();
-            //         onSubmited();
-            //     } else {
-            //         toast.error(error);
-            //     }
-            // }
         }
     });
     // End:: Form validate and save data
@@ -139,10 +125,9 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <label className="col-12 form-label"><b>Items</b></label>
 
                         {/* Start:: Column service detail */}
-                        <ServiceDespatchGrid
-                            pState="VIEW"
-                            pDefaultRowData={defaultRowData}
-                            onChange={handelChangeServiceData}/>
+                        <DespatchGrid
+                            pDefaultRowData={pData}
+                            onChange={handelChangeData}/>
                         {/* End:: Column service detail */}
 
                     </div>                
@@ -159,20 +144,20 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                 {/* Start:: Close button */}
                 <button
-                    type = "button"
-                    className = "btn btn-danger"
-                    disabled = {loading}
-                    onClick = {handleClose} >
+                    type="button"
+                    className="btn btn-danger"
+                    disabled={loading}
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
                 
                 {/* Start:: Save button */}
                 <button 
-                    type = "button"
-                    className = "btn btn-success"
-                    disabled = {loading} 
-                    onClick = {handleSubmit} >
+                    type="button"
+                    className="btn btn-success"
+                    disabled={loading} 
+                    onClick={handleSubmit}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -225,7 +210,7 @@ const FormError = ({onClosed}) => {
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick = { handleClose } >
+                    onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -305,11 +290,7 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
+            showModal && await doFetch();
           })();
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
@@ -317,8 +298,7 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
     // Start:: Html
     return (
         <>
-            {/* Start:: Edit modal */}
-            {data && data.length ? 
+            {data && data.length > 0 ? 
                 <Modal size="lg"
                     show={showModal}>
 
@@ -338,17 +318,17 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pGuestId = {props.pGuestId}
-                        pName = {props.pName}
-                        pMobile = {props.pMobile}
-                        pGuestCount = {props.pGuestCount}
-                        pCorporateName = {props.pCorporateName}
-                        pCorporateAddress = {props.pCorporateAddress}
-                        pGstNo = {props.pGstNo}
-                        pTransactionId = {data[0].transactionId}
-                        pData = {data}
-                        onSubmited = {handleSave} 
-                        onClosed = {handleCloseModal}/>
+                        pGuestId={props.pGuestId}
+                        pName={props.pName}
+                        pMobile={props.pMobile}
+                        pGuestCount={props.pGuestCount}
+                        pCorporateName={props.pCorporateName}
+                        pCorporateAddress={props.pCorporateAddress}
+                        pGstNo={props.pGstNo}
+                        pTransactionId={data[0].transactionId}
+                        pData={data}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>
@@ -375,9 +355,7 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
                     <FormError 
                         onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
-                </Modal>
-            }
-            {/* End:: Edit modal */}
+                </Modal>}
         </>
     );
     // End:: Html

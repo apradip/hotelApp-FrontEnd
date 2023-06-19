@@ -39,9 +39,9 @@ const Form = ({pGuestId, pTransactionId, pName, pCorporateName, onSubmited, onCl
 
                 {/* Start:: Close button */}
                 <button 
-                    type = "button"   
-                    className = "btn btn-danger"
                     autoFocus
+                    type="button"   
+                    className="btn btn-danger"
                     disabled={loading}
                     ref={inputRef} 
                     onClick={onClosed}>
@@ -150,9 +150,7 @@ const GuestServiceCheckout = forwardRef((props, ref) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     })
     // End:: forward reff show modal function
 
@@ -172,7 +170,7 @@ const GuestServiceCheckout = forwardRef((props, ref) => {
             try {
                 showModal && await doFetch()
             } catch (err) {
-              console.log("Error occured when fetching data")
+            //   console.log("Error occured when fetching data")
             }
           })()
     }, [showModal])        // eslint-disable-line react-hooks/exhaustive-deps
@@ -190,7 +188,7 @@ const GuestServiceCheckout = forwardRef((props, ref) => {
                 data.balance === 0 && 
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -211,7 +209,7 @@ const GuestServiceCheckout = forwardRef((props, ref) => {
                         pGuestId={props.pGuestId} 
                         pTransactionId={props.pTransactionId}
                         pName={props.pName}
-                        pCorporateName = {props.pCorporateName}
+                        pCorporateName={props.pCorporateName}
                         onSubmited={handleSave} 
                         onClosed={handleCloseModal}/>
                         {/* End:: Form component */}

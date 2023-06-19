@@ -9,7 +9,7 @@ import OrderGrid from "./ServiceOrderGrid"
 import useFetchWithAuth from "../common/useFetchWithAuth"
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
+const Form = ({pName, pMobile, pGuestCount, 
                pCorporateName, pCorporateAddress, pGstNo, 
                pData, onClosed}) => {
                     
@@ -109,10 +109,10 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                 {/* Start:: Close button */}
                 <button
+                    autoFocus
                     type="button"
                     className="btn btn-danger"
-                    autoFocus
-                    onClick = {onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -135,14 +135,14 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
 // useImperativeHandle
 // handleShowModal
-const GuestServiceView = forwardRef(( props, ref ) => {    
+const GuestServiceView = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId)
     const contextValues = useStateContext()
     const [showModal, setShowModal] = useState(false)
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
         params: {
-            option: 'A'
+            option: "A"
         }
     })
 
@@ -160,30 +160,28 @@ const GuestServiceView = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     })
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') handleCloseModal()
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") handleCloseModal()
         })
 
-        return () => {document.removeEventListener('keydown', handleCloseModal)}
+        return () => {document.removeEventListener("keydown", handleCloseModal)}
     }, [])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            try {
+            // try {
                 showModal && await doFetch()
-            } catch (err) {
-              console.log('Error occured when fetching data')
-            }
+            // } catch (err) {
+            //   console.log('Error occured when fetching data')
+            // }
           })()
     }, [showModal])         // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
@@ -204,7 +202,7 @@ const GuestServiceView = forwardRef(( props, ref ) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = {handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -212,7 +210,6 @@ const GuestServiceView = forwardRef(( props, ref ) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pGuestId={props.pGuestId}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
@@ -220,10 +217,10 @@ const GuestServiceView = forwardRef(( props, ref ) => {
                         pCorporateAddress={props.pCorporateAddress}
                         pGstNo={props.pGstNo}
                         pData={data}
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
                     
-                </Modal> }
+                </Modal>}
             {/* End:: View modal */}
         </>
     )

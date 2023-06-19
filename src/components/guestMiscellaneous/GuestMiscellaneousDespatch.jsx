@@ -8,7 +8,7 @@ import {subStr} from "../common/Common";
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {guestMiscellaneousSchema} from "../../schemas";
-import MiscellaneousOrderGrid from "./MiscellaneousOrderGrid";
+import DespatchGrid from "./MiscellaneousDespatchGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -18,49 +18,20 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                pTransactionId, pData, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
+    const [despatchData, setDespatchData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const [defaultRowData, setDefaultRowData] = useState(pData);
-    const { loading, error, doUpdate } = useFetchWithAuth({
+    const {loading, error, doUpdate} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     })
 
-    const handelChangeMiscellaneousData = (miscellaneousData) => {
-        //console.log(miscellaneousData);
-        // let miscData = [];
+    const handelChangeData = (gridData) => {
+        let listData = [];
         
-        // for(const row of miscellaneousData) {
-        //     let operation = 'A';
+        for(const row of gridData) {
+            listData.push({itemTransactionId: row.itemTransactionId});
+        }
 
-        //     for(const od of pData) {
-        //         if (od.miscellaneousId === row.miscellaneousId) {
-        //             operation = 'M';
-        //         }
-        //     }
-
-        //     const md = {id: row.miscellaneousId, 
-        //                 quantity: row.quantity, 
-        //                 operation: operation};
-        //     miscData.push(md);
-        // }
-
-        // for(const od of pData) {
-        //     let found = false;
-
-        //     for (const e of miscData) {
-        //         if (e.id === od.miscellaneousId) {
-        //             found = true;
-        //         }
-        //     }
-
-        //     if (!found) {
-        //         const md = {id: od.miscellaneousId, 
-        //                     quantity: od.quantity, 
-        //                     operation: 'R'};
-        //         miscData.push(md);
-        //     }
-        // }
-
-        // setMiscellaneousData(miscData);
+        setDespatchData(listData);
     }; 
 
     // Start:: Form validate and save data
@@ -76,15 +47,13 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         validationSchema: guestMiscellaneousSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            if (pData.length > 0) {
-                await doUpdate();
-        
-                if (error === null) {
-                    resetForm();
-                    onSubmited();
-                } else {
-                    toast.error(error);
-                }
+            despatchData && await doUpdate({deliveries: despatchData});
+
+            if (error === null) {
+                resetForm();
+                onSubmited();
+            } else {
+                toast.error(error);
             }
         }
     });
@@ -156,10 +125,9 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <label className="col-12 form-label"><b>Items</b></label>
 
                         {/* Start:: Column miscellaneous detail */}
-                        <MiscellaneousOrderGrid
-                            pState="VIEW"
-                            pDefaultRowData={defaultRowData}
-                            onChange={handelChangeMiscellaneousData} />
+                        <DespatchGrid
+                            pDefaultRowData={pData}
+                            onChange={handelChangeData}/>
                         {/* End:: Column miscellaneous detail */}
 
                     </div>                
@@ -279,7 +247,7 @@ const GuestMiscellaneousDespatch = forwardRef((props, ref) => {
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
         params: {
-            option: 'N'
+            option: "N"
         }
     });
 
@@ -322,11 +290,7 @@ const GuestMiscellaneousDespatch = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
+            showModal && await doFetch();
           })();
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
@@ -392,8 +356,7 @@ const GuestMiscellaneousDespatch = forwardRef((props, ref) => {
                     <FormError 
                         onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
-                </Modal>
-            }
+                </Modal>}
             {/* End:: Edit modal */}
         </>
     );

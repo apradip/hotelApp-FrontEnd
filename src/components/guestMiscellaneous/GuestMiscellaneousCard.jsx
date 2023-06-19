@@ -127,11 +127,11 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
         <>
             {/* Start :: card component */}
             <Card 
+                ref={ref}
                 key={props.pIndex}
                 index={props.pIndex}
                 className={"border"}
                 border={active ? "info" : focus ? "primary" : ""}  
-                ref={ref}
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
@@ -176,7 +176,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                             <span className="col-5 text-right p-0">
                                 <TimeElapsed
                                     pInDate={props.pIndate}
-                                    pInTime={props.pInTime} />
+                                    pInTime={props.pInTime}/>
                             </span>
 
                             <span className="col-1 text-right pr-1">
@@ -193,30 +193,34 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="2"
+                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
                                             onClick={handelOpenDespatch}>
                                             <ShoppingBag className="feather-16 mr-3"/>Despatch
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="3" 
+                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
                                             onClick={handelOpenGenerateBill}>
                                             <FileText className="feather-16 mr-3"/>Bill
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="4"
+                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
                                             onClick={handelOpenPayment}>
                                             <CreditCard className="feather-16 mr-3"/>Payment
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="5"
+                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
                                             onClick={handelOpenCheckout}>
                                             <LogOut className="feather-16 mr-3"/>Check out
                                         </Dropdown.Item>
 
-                                        <Dropdown.Item eventKey="6"
+                                        <Dropdown.Item eventKey="6" 
+                                            disabled={props.pTransactionId === 'undefined' ? false : true}
                                             onClick={handelOpenDelete}>
                                             <Scissors className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>
-
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 {/* End:: operational menu */}
@@ -246,6 +250,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
             <Order 
                 ref={orderRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pGuestCount={props.pGuestCount}
@@ -253,13 +258,14 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
                 onSaved={props.onOrdered} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: order component */}
 
             {/* Start :: despatch component */}
             <Despatch
                 ref={despatchRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId} 
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pGuestCount={props.pGuestCount}
@@ -267,26 +273,28 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
                 onSaved={props.onDespatched} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: despatch component */}
 
             {/* Start :: generate & display summery bill component */}
             <GenerateBill 
                 ref={generateBillRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pGuestCount={props.pGuestCount}
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                onSaved={props.onBillGenerated} />
+                onSaved={props.onBillGenerated}/>
             {/* End :: generate & display summery bill component */}
 
             {/* Start :: add payment component */}
             <AddPayment 
                 ref={addPaymentRef}
                 pGuestId={props.pGuestId}    
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pCorporateName={props.pCorporateName}
@@ -300,10 +308,11 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
             <Checkout
                 ref={checkoutRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pCorporateName={props.pCorporateName}
                 onSaved={props.onCheckedout} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: checkout component */}
 
             {/* Start :: delete employee component */}
@@ -312,7 +321,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 pId={props.pGuestId} 
                 pName={props.pName}
                 onDeleted={props.onDeleted} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: delete employee component */}
 
         </>

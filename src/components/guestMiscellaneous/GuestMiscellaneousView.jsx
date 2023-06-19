@@ -9,7 +9,7 @@ import OrderGrid from "./MiscellaneousOrderGrid"
 import useFetchWithAuth from "../common/useFetchWithAuth"
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
+const Form = ({pName, pMobile, pGuestCount, 
                pCorporateName, pCorporateAddress, pGstNo, 
                pData, onClosed}) => {
                     
@@ -50,7 +50,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     {pCorporateName ? 
                         <div className="col-sx-12 col-md-5 mb-3">
                             <label className="col-12 form-label"><b>Company</b></label>
-                            <label className="col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
+                            <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
                         </div>
                     :
                         <div className="col-sx-12 col-md-5 mb-3">
@@ -68,18 +68,18 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         </div>
                     :
                         <div className="col-sx-12 col-md-5 mb-3">
-                            <label className="col-12 form-label"><b>Guest count</b></label>
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
                     {/* End:: Column mobile no / company address */}
 
-                    {/* Start:: Column guest count */}
+                    {/* Start:: Column mobile no / company address */}
                     <div className="col-sx-12 col-md-2 mb-3">
                         <label className="col-12 form-label"><b>Guest count</b></label>
                         <label className="col-12 text-muted">{pGuestCount} No.</label>
                     </div>
-                    {/* End:: Column guest count */}
+                    {/* End:: Column mobile no / company address */}
 
                 </div>
                 {/* End:: Row */}
@@ -141,7 +141,7 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
         params: {
-            option: 'A'
+            option: "A"
         }
     })
 
@@ -159,9 +159,7 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     })
     // End:: forward reff show modal function
 
@@ -178,11 +176,11 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            try {
+            // try {
                 showModal && await doFetch()
-            } catch (err) {
-              console.log('Error occured when fetching data')
-            }
+            // } catch (err) {
+            //   console.log('Error occured when fetching data')
+            // }
           })()
     }, [showModal])         // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
@@ -203,7 +201,7 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -211,7 +209,6 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pGuestId={props.pGuestId}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
@@ -222,7 +219,7 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
                         onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
                     
-                </Modal> }
+                </Modal>}
             {/* End:: View modal */}
         </>
     )

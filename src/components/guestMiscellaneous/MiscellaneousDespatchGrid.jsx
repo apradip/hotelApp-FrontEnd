@@ -8,7 +8,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {    
+const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const gridRef = useRef();
@@ -54,10 +54,10 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
             valueGetter: (params) => {return params.data.quantity},
         },
         {
-            field: "id"
+            field: 'id'
         },
         {
-            field: "itemTransactionId"
+            field: 'itemTransactionId'
         }
     ]);
 
@@ -68,7 +68,7 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
     }    
 
     // Start:: load empty data to grid
-    const handleGridReady = () => {
+    const handleGridReady = (params) => {
         let row = [];
         
         pDefaultRowData.forEach(element => {
@@ -76,7 +76,7 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
                             rowId: row.length + 1, 
                             id: element.id,
                             name: element.name, 
-                            quantity: element.quantity,
+                            quantity: element.quantity, 
                             itemTransactionId: element.itemTransactionId
                         };
     
@@ -100,9 +100,11 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
     };
     // End:: load empty data to grid
 
+    // Start:: on row selection change set selected 
     const onSelectionChanged = useCallback(() => {
         onChange(gridRef.current.api.getSelectedRows());
     }, []);
+    // End:: on row selection change set selected 
 
     // Start:: fetch hotel detail from api
     useEffect(() => {
@@ -111,7 +113,6 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
           })();
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
-
     
 	return (
         <div className="col-12 ag-theme-alpine grid-height-400">
@@ -128,4 +129,4 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
     );
 }
  
-export default ServiceDespatchGrid;
+export default MiscellaneousDespatchGrid;

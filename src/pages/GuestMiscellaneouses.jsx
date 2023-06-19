@@ -170,6 +170,29 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     };
     // End:: handle page change
 
+    // Start:: forward reff change search and open add/edit/delete modal
+    useImperativeHandle(ref, () => {
+        return {changeSearch, openAdd, openEdit, openDelete, close};
+    });
+    // End:: forward reff change search and open add/edit/delete modal
+
+    // Start:: fetch data list from api
+    useEffect(() => {
+        (async () => {
+            try {
+              await doFetch();
+              setDataChanged(false);
+            } catch (err) {
+              console.log('Error occured when fetching data');
+            }
+          })();
+    }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch data list from api
+
+    useEffect(() => {
+        error && toast.error(error);
+    }, [data, error, loading]);
+
     // Start:: show all data in card format
     const displayData = (pData = []) => {
         let rowIdx = 0;
@@ -215,6 +238,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                     ref={(el) => cardRefs.current[itemIdx] = el}
                     pIndex={itemIdx}
                     pGuestId={pData.id} 
+                    pTransactionId={pData.transactionId}
                     pName={pData.name}
                     pMobile={pData.mobile}
                     pGuestCount={pData.guestCount}
@@ -236,29 +260,6 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             </div>)
     };
     // End:: show all data in card format
-
-    // Start:: forward reff change search and open add/edit/delete modal
-    useImperativeHandle(ref, () => {
-        return {changeSearch, openAdd, openEdit, openDelete, close};
-    });
-    // End:: forward reff change search and open add/edit/delete modal
-
-    // Start:: fetch data list from api
-    useEffect(() => {
-        (async () => {
-            try {
-              await doFetch();
-              setDataChanged(false);
-            } catch (err) {
-              console.log('Error occured when fetching data');
-            }
-          })();
-    }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch data list from api
-
-    useEffect(() => {
-        error && toast.error(error);
-    }, [data, error, loading]);
 
     // Start:: Html
     return ( 

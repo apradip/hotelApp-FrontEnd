@@ -5,12 +5,14 @@ import {subStr} from "../common/Common";
 
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
-import SummeryBillGrid from "./MiscellaneousSummeryBillGrid";
+import BillGrid from "./MiscellaneousBillGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
+import {formatDDMMYYYY, formatTime12Hour, formatBillNo} from "../common/Common";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
+const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTime, 
+               pGuestId, pName, pMobile, pGuestCount, 
                pCorporateName, pCorporateAddress, pGstNo, 
                pData, onClosed}) => {
 
@@ -20,12 +22,44 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     }
     // End:: close form    
 
+    // Strat:: print form    
+    const handlePrint = () => {
+        // onPrinted()
+    };
+    // End:: print form    
+    
     // Start:: Html
     return (
         <form>
 
             {/* Start:: Modal body */}
             <Modal.Body>
+
+                {/* Start:: Row */}
+                <div className="row">
+                    {/* Start:: Column bill no */}
+                    <div className="col-sx-12 col-md-5 mb-3">
+                        <label className="col-12 form-label"><b>Bill No.</b></label>
+                        <label className="col-12 form-label">{formatBillNo(pTransactionNo)}</label>
+                    </div>
+                    {/* End:: Column bill no */}
+
+                    {/* Start:: Column transaction date */}
+                    <div className="col-sx-12 col-md-5 mb-3">
+                        <label className="col-12 form-label"><b>Date</b></label>
+                        <label className="col-12 text-muted">{formatDDMMYYYY(pTransactionDate)}</label>
+                    </div>
+                    {/* End:: Column transaction date */}
+
+                    {/* Start:: Column transaction time */}
+                    <div className="col-sx-12 col-md-2 mb-3">
+                        <label className="col-12 form-label"><b>Time</b></label>
+                        <label className="col-12 text-muted">{formatTime12Hour(pTransactionTime)}</label>
+                    </div>
+                    {/* End:: Column transaction time */}
+
+                </div>
+                {/* End:: Row */}
 
                 {/* Start:: Row */}
                 <div className="row">
@@ -75,19 +109,11 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     <div className="col-12">
 
                         {/* Label element */}
-                        <label className="col-12 form-label"><b>Bills</b></label>
+                        <label className="col-12 form-label"><b>Items</b></label>
                         
                         {/* Start:: Column miscellaneous detail */}
-                        <SummeryBillGrid
-                            pGuestId={pGuestId}
-                            pName={pName}
-                            pMobile={pMobile}
-                            pGuestCount={pGuestCount}
-                            pCorporateName={pCorporateName}
-                            pCorporateAddress={pCorporateAddress}
-                            pGstNo={pGstNo}
-                            pData={pData} 
-                            onClosed={handleClose} />
+                        <BillGrid
+                            pData={pData}/>
                         {/* End:: Column miscellaneous detail */}
 
                     </div>                
@@ -110,6 +136,15 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     Close
                 </button>
                 {/* End:: Close button */}
+
+                {/* Start:: Print button */}
+                <button 
+                    type="button"
+                    className="btn btn-success"
+                    onClick={handlePrint} >
+                    Print    
+                </button>
+                {/* End:: Print button */}
 
             </Modal.Footer>
             {/* End:: Modal footer */}
@@ -186,8 +221,8 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const {data, doUpdate} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`
+    const {data, doFetch} = useFetchWithAuth({
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}/${props.pTransactionId}`
     });
 
     // Start:: Show modal
@@ -223,9 +258,9 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
     useEffect(() => {
         (async () => {
             try {
-                showModal && await doUpdate();
+                showModal && await doFetch();
             } catch (err) {
-                console.log("Error occured when fetching data");
+                // console.log("Error occured when fetching data");
             }
           })()
     }, [showModal]);      // eslint-disable-line react-hooks/exhaustive-deps
@@ -242,7 +277,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Bill summery</Modal.Title>
+                        <Modal.Title>Bill detail</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 
@@ -254,7 +289,11 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                     {/* End:: Modal header */}
 
                     {/* Start:: Form component */}
-                    <Form 
+                    <Form
+                        pTransactionId={props.pTransactionId} 
+                        pTransactionNo={data[0].expensesPaymentsDetail.billNo} 
+                        pTransactionDate={data[0].expensesPaymentsDetail.transactionDate}
+                        pTransactionTime={data[0].expensesPaymentsDetail.transactionTime}
                         pGuestId={props.pGuestId}
                         pName={props.pName}
                         pMobile={props.pMobile}
@@ -262,8 +301,8 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
                         pGstNo={props.pGstNo}
-                        pData={data}
-                        onClosed={handleCloseModal}/>
+                        pData={data[0].miscellaneaDetail.miscellanea}
+                        onClosed={handleCloseModal}/>                        
                     {/* End:: Form component */}
                     
                 </Modal>

@@ -8,27 +8,27 @@ import {subStr} from "../common/Common";
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {guestMiscellaneousSchema} from "../../schemas";
-import MiscellaneousOrderGrid from "./MiscellaneousOrderGrid";
+import OrderGrid from "./MiscellaneousOrderGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
-                pCorporateName, pCorporateAddress, pGstNo, 
-                pData, onSubmited, onClosed}) => {
+const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
+                pCorporateName, pCorporateAddress, pGstNo, pData, 
+                onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const [miscellaneousData, setMiscellaneousData] = useState(null);
+    const [orderData, setOrderData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const [defaultRowData, setDefaultRowData] = useState(pData);
     const {loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}`
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     });
 
-    const handelChangeMiscellaneousData = (miscellaneousData) => {
-        let miscData = [];
+    const handelChangeData = (gridData) => {
+        let dataList = [];
         
-        for(const row of miscellaneousData) {
+        for(const row of gridData) {
             let operation = "A";
 
             for(const od of pData) {
@@ -37,30 +37,28 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 }
             }
 
-            const md = {id: row.miscellaneousId, 
-                        quantity: row.quantity, 
-                        operation: operation};
-            miscData.push(md);
+            dataList.push({id: row.miscellaneousId, 
+                quantity: row.quantity, 
+                operation: operation});
         }
 
         for(const od of pData) {
             let found = false;
 
-            for (const e of miscData) {
+            for (const e of dataList) {
                 if (e.id === od.miscellaneousId) {
                     found = true;
                 }
             }
 
             if (!found) {
-                const md = {id: od.miscellaneousId, 
-                            quantity: od.quantity, 
-                            operation: "R"};
-                miscData.push(md);
+                dataList.push({id: od.miscellaneousId, 
+                    quantity: od.quantity, 
+                    operation: "R"});
             }
         }
 
-        setMiscellaneousData(miscData);
+        setOrderData(dataList);
     }; 
 
     // Start:: Form validate and save data
@@ -76,20 +74,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         validationSchema: guestMiscellaneousSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            let payload;
-
-            if (pData.length > 0) {
-                payload = {   
-                    transactionId: pData[0].transactionId,
-                    miscellaneouses: miscellaneousData
-                };
-            } else {
-                payload = {   
-                    miscellaneouses: miscellaneousData
-                };
-            }
-
-            miscellaneousData && await doInsert(payload);
+            orderData && await doInsert({orders: orderData});
         
             if (error === null) {
                 resetForm();
@@ -167,10 +152,10 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <label className="col-12 form-label"><b>Items</b></label>
 
                         {/* Start:: Column miscellaneous detail */}
-                        <MiscellaneousOrderGrid
+                        <OrderGrid
                             pState="MOD"
                             pDefaultRowData={defaultRowData}
-                            onChange={handelChangeMiscellaneousData}/>
+                            onChange={handelChangeData}/>
                         {/* End:: Column miscellaneous detail */}
 
                     </div>                
@@ -286,11 +271,11 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            try {
+            // try {
                 showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
+            // } catch (err) {
+                // console.log("Error occured when fetching data");
+            // }
           })();
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
@@ -299,9 +284,9 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            { data &&
+            {data &&
                 <Modal size="lg"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -320,6 +305,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
                     {/* Start:: Form component */}
                     <Form 
                         pGuestId={props.pGuestId}
+                        pTransactionId={props.pTransactionId}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
@@ -328,7 +314,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
                         pGstNo={props.pGstNo}
                         pData={data}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
                     
                 </Modal>}

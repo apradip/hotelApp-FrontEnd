@@ -127,11 +127,11 @@ const GuestServiceCard = forwardRef((props, ref) => {
         <>
             {/* Start :: card component */}
             <Card 
+                ref={ref}
                 key={props.pIndex}
                 index={props.pIndex}
                 className={"border"}
                 border={active ? "info" : focus ? "primary" : ""}  
-                ref={ref}
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
@@ -174,8 +174,8 @@ const GuestServiceCard = forwardRef((props, ref) => {
 
                             <span className="col-5 text-right pr-0">
                                 <TimeElapsed
-                                    pInDate = {props.pIndate}
-                                    pInTime = {props.pInTime} />
+                                    pInDate={props.pIndate}
+                                    pInTime={props.pInTime}/>
                             </span>
 
                             <span className="col-1 text-right pr-1">
@@ -187,31 +187,31 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                     
                                     <Dropdown.Menu>
                                         <Dropdown.Item eventKey="1" 
-                                            onClick = {handelOpenOrder}>
+                                            onClick={handelOpenOrder}>
                                             <PenTool className="feather-16 mr-3" />Order
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="2"
                                             disabled={props.pTransactionId !== 'undefined' ? false : true}
-                                            onClick = {handelOpenDespatch}>
+                                            onClick={handelOpenDespatch}>
                                             <ShoppingBag className="feather-16 mr-3"/>Despatch
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="3" 
                                             disabled={props.pTransactionId !== 'undefined' ? false : true}
-                                            onClick = {handelOpenGenerateBill}>
+                                            onClick={handelOpenGenerateBill}>
                                             <FileText className="feather-16 mr-3"/>Bill
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="4"
                                             disabled={props.pTransactionId !== 'undefined' ? false : true}
-                                            onClick = {handelOpenPayment}>
+                                            onClick={handelOpenPayment}>
                                             <CreditCard className="feather-16 mr-3"/>Payment
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="5"
                                             disabled={props.pTransactionId !== 'undefined' ? false : true}
-                                            onClick = {handelOpenCheckout}>
+                                            onClick={handelOpenCheckout}>
                                             <LogOut className="feather-16 mr-3"/>Check out
                                         </Dropdown.Item>
 

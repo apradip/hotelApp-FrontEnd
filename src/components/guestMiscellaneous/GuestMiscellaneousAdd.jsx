@@ -332,9 +332,7 @@ const GuestMiscellaneousAdd = forwardRef((props, ref) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -344,9 +342,7 @@ const GuestMiscellaneousAdd = forwardRef((props, ref) => {
             if (event.key === "Escape") handleCloseModal();
         });
 
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
