@@ -5,15 +5,16 @@ import {subStr} from "../common/Common";
 
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
-import SummeryBillGrid from "./TableSummeryBillGrid";
+import BillGrid from "./TableBillGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
+import {formatDDMMYYYY, formatTime12Hour, formatBillNo} from "../common/Common";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pGstNo, 
-               pTransactionId, pTables, pIndate, pInTime,
-               pData, onSubmited, onClosed}) => {
+const Form = ({pTransactionNo, pTransactionDate, pTransactionTime, 
+                pName, pMobile, pGuestCount, 
+                pCorporateName, pCorporateAddress, pData, 
+                onClosed}) => {
 
     // Strat:: close form    
     const handleClose = () => {
@@ -21,12 +22,45 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     }
     // End:: close form    
 
+    // Strat:: print form    
+    const handlePrint = () => {
+        // onPrinted()
+    };
+    // End:: print form    
+
     // Start:: Html
     return (
         <form>
 
             {/* Start:: Modal body */}
             <Modal.Body>
+
+                {/* Start:: Row */}
+                <div className="row">
+
+                    {/* Start:: Column bill no */}
+                    <div className="col-sx-12 col-md-5 mb-3">
+                        <label className="col-12 form-label"><b>Bill No.</b></label>
+                        <label className="col-12 form-label">{formatBillNo(pTransactionNo)}</label>
+                    </div>
+                    {/* End:: Column bill no */}
+
+                    {/* Start:: Column transaction date */}
+                    <div className="col-sx-12 col-md-5 mb-3">
+                        <label className="col-12 form-label"><b>Date</b></label>
+                        <label className="col-12 text-muted">{formatDDMMYYYY(pTransactionDate)}</label>
+                    </div>
+                    {/* End:: Column transaction date */}
+
+                    {/* Start:: Column transaction time */}
+                    <div className="col-sx-12 col-md-2 mb-3">
+                        <label className="col-12 form-label"><b>Time</b></label>
+                        <label className="col-12 text-muted">{formatTime12Hour(pTransactionTime)}</label>
+                    </div>
+                    {/* End:: Column transaction time */}
+
+                </div>
+                {/* End:: Row */}
 
                 {/* Start:: Row */}
                 <div className="row">
@@ -79,16 +113,8 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <label className="col-12 form-label"><b>Bills</b></label>
 
                         {/* Start:: Column service detail */}
-                        <SummeryBillGrid
-                            pGuestId={pGuestId}
-                            pName={pName}
-                            pMobile={pMobile}
-                            pGuestCount={pGuestCount}
-                            pCorporateName={pCorporateName}
-                            pCorporateAddress={pCorporateAddress}
-                            pGstNo={pGstNo}
-                            pData={pData} 
-                            onClosed={handleClose}/>
+                        <BillGrid
+                            pData={pData}/>
                         {/* End:: Column service detail */}
 
                     </div>                
@@ -111,6 +137,15 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     Close
                 </button>
                 {/* End:: Close button */}
+
+                {/* Start:: Print button */}
+                <button 
+                    type="button"
+                    className="btn btn-success"
+                    onClick={handlePrint} >
+                    Print    
+                </button>
+                {/* End:: Print button */}
 
             </Modal.Footer>
             {/* End:: Modal footer */}
@@ -187,8 +222,8 @@ const GuestTableGenerateBill = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const {data, doUpdate} = useFetchWithAuth({
-        url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`
+    const {data, doFetch} = useFetchWithAuth({
+        url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}/${props.pTransactionId}`
     });
 
     // Start:: Show modal
@@ -223,12 +258,7 @@ const GuestTableGenerateBill = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            try {
-                const payload = {transactionId: props.pTransactionId};
-                showModal && await doUpdate(payload);
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
+            showModal && await doFetch();
           })()
     }, [showModal]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
@@ -256,18 +286,18 @@ const GuestTableGenerateBill = forwardRef((props, ref) => {
                     {/* End:: Modal header */}
 
                     {/* Start:: Form component */}
-                    <Form 
-                        pGuestId={props.pGuestId}
+                    <Form
+                        pTransactionNo={data[0].expensesPaymentsDetail.billNo} 
+                        pTransactionDate={data[0].expensesPaymentsDetail.transactionDate}
+                        pTransactionTime={data[0].expensesPaymentsDetail.transactionTime}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
-                        pGstNo={props.pGstNo}
-                        pTables={props.pTables}
-                        pData={data}
-                        onClosed={handleCloseModal}/>
-                        {/* End:: Form component */}
+                        pData={data[0].tablesDetail.foods}
+                        onClosed={handleCloseModal}/>                        
+                    {/* End:: Form component */}
                     
                 </Modal>
             :

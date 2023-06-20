@@ -73,7 +73,7 @@ const GuestTables = forwardRef((props, ref) => {
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
                 })
             } else {
-                toast.warning('Nothing selected to edit');
+                toast.warning("Nothing selected to edit");
             }
         }
     };
@@ -170,77 +170,6 @@ const GuestTables = forwardRef((props, ref) => {
     };
     // End:: handle page change
 
-    // Start:: show all data in card format
-    const displayData = (pData = []) => {
-        let rowIdx = 0;
-        let colIdx = 0;
-        let rowData = [];
-
-        return pData.map((item) => {
-            rowData.push(item);
-            colIdx++;
-
-            if ((rowData.length === itemPerRow) || (pData.length === colIdx)) {
-                const r = rowIdx;
-                const d = rowData;
-
-                rowIdx++;
-                rowData = [];
-
-                return createRow(d, r);
-            } else { 
-                return null;
-            }
-        });
-    };
-
-    const createRow = ( pData, rowIdx ) => {
-        const rowKey=`row_${rowIdx}`;
-
-        return (
-            <div className="row" key={rowKey}>
-                {
-                    pData.map((item, idx) => {
-                        const itemIdx = (rowIdx * itemPerRow) + idx;
-                        return createCol(item, itemIdx);
-                    })
-                }
-            </div>)
-    };
-
-    const createCol = (pData = undefined, itemIdx) => {
-        const colKey = `col_${pData.id}`;
-
-        return (
-            <div className="col-xl-4 col-md-4" key={colKey}>
-                <Card 
-                    ref={(el) => cardRefs.current[itemIdx] = el}
-                    pIndex={itemIdx}
-                    pGuestId={pData.id} 
-                    pName={pData.name}
-                    pMobile={pData.mobile}
-                    pGuestCount={pData.guestCount}
-                    pCorporateName={pData.corporateName}
-                    pCorporateAddress={pData.corporateAddress}
-                    pGstNo={pData.gstNo}
-                    pTransactionId={pData.transactionId}
-                    pTables={pData.tables}
-                    pIndate={pData.inDate}
-                    pInTime={pData.inTime}
-                    pTotalExpense={pData.totalExpense}
-                    pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
-                    onOrdered={() => {handleSuccess(Operation.Order)}}
-                    onDespatched={() => {handleSuccess(Operation.Despatch)}}
-                    onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
-                    onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
-                    onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
-                    onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
-                    onClosed={close} 
-                    onActivated={handleActivated}/>                
-            </div>)
-    };
-    // End:: show all data in card format
-
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
         return {changeSearch, openAdd, openEdit, openDelete, close};
@@ -264,6 +193,77 @@ const GuestTables = forwardRef((props, ref) => {
         error && toast.error(error);
     }, [data, error, loading]);
 
+    // Start:: show all data in card format
+    const displayData = (pData = []) => {
+        let rowIdx = 0;
+        let colIdx = 0;
+        let rowData = [];
+
+        return pData.map((item) => {
+            rowData.push(item);
+            colIdx++;
+
+            if ((rowData.length === itemPerRow) || (pData.length === colIdx)) {
+                const r = rowIdx;
+                const d = rowData;
+
+                rowIdx++;
+                rowData = [];
+
+                return createRow(d, r);
+            } else { 
+                return null;
+            }
+        });
+    };
+    
+    const createRow = ( pData, rowIdx ) => {
+        const rowKey=`row_${rowIdx}`;
+
+        return (
+            <div className="row" key={rowKey}>
+                {
+                    pData.map((item, idx) => {
+                        const itemIdx = (rowIdx * itemPerRow) + idx;
+                        return createCol(item, itemIdx);
+                    })
+                }
+            </div>)
+    };
+    
+    const createCol = (pData = undefined, itemIdx) => {
+        const colKey = `col_${pData.id}`;
+
+        return (
+            <div className="col-xl-4 col-md-4" key={colKey}>
+                <Card 
+                    ref={(el) => cardRefs.current[itemIdx] = el}
+                    pIndex={itemIdx}
+                    pGuestId={pData.id} 
+                    pTransactionId={pData.transactionId}
+                    pName={pData.name}
+                    pMobile={pData.mobile}
+                    pGuestCount={pData.guestCount}
+                    pCorporateName={pData.corporateName}
+                    pCorporateAddress={pData.corporateAddress}
+                    pGstNo={pData.gstNo}
+                    pTables={pData.tables}
+                    pIndate={pData.inDate}
+                    pInTime={pData.inTime}
+                    pTotalExpense={pData.totalExpense}
+                    pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
+                    onOrdered={() => {handleSuccess(Operation.Order)}}
+                    onDespatched={() => {handleSuccess(Operation.Despatch)}}
+                    onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
+                    onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
+                    onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
+                    onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
+                    onClosed={close} 
+                    onActivated={handleActivated}/>                
+            </div>)
+    };
+    // End:: show all data in card format
+    
     // Start:: Html
     return ( 
         <div className="content-wrapper">
@@ -343,7 +343,7 @@ const GuestTables = forwardRef((props, ref) => {
             <Add 
                 ref={addRef}   
                 onAdded={() => {handleSuccess(Operation.GuestAdd)}}
-                onClosed={close} />
+                onClosed={close}/>
             {/* End :: add component */}
 
         </div>

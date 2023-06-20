@@ -33,18 +33,12 @@ const FoodEditor = forwardRef((props, ref) => {
     };
 
 	useImperativeHandle(ref, () => {
-        return {
-            getValue
-        }
+        return {getValue}
     });
 
 	useEffect(() => {
         (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-              console.log("Error occured when fetching data");
-            }
+			await doFetch();
           })();
     }, []);		// eslint-disable-line react-hooks/exhaustive-deps
 
@@ -61,7 +55,7 @@ const FoodEditor = forwardRef((props, ref) => {
 				multiple={false}
 				value={defaultItem}
 				onChange={handleChange}
-				style={{border: "none", height: "99%", width: "100%"}} >
+				style={{border: "none", height: "99%", width: "100%"}}>
 
 				{listItem && listItem.map((item) => {
 					return(<option key={item._id} value={item._id}>{item.name}</option>)

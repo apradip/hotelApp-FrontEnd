@@ -20,7 +20,6 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
     const contextValues = useStateContext();
     const [orderData, setOrderData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const [defaultRowData, setDefaultRowData] = useState(pData);
     const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     });
@@ -154,7 +153,7 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                         {/* Start:: Column miscellaneous detail */}
                         <OrderGrid
                             pState="MOD"
-                            pDefaultRowData={defaultRowData}
+                            pDefaultRowData={pData}
                             onChange={handelChangeData}/>
                         {/* End:: Column miscellaneous detail */}
 

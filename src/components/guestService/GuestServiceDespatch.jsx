@@ -13,9 +13,9 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pGstNo, 
-               pTransactionId, pData, onSubmited, onClosed}) => {
+const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
+               pCorporateName, pCorporateAddress, pGstNo, pData, 
+               onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [despatchData, setDespatchData] = useState(null);
@@ -319,13 +319,13 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
                     {/* Start:: Form component */}
                     <Form 
                         pGuestId={props.pGuestId}
+                        pTransactionId={data[0].transactionId}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
                         pGstNo={props.pGstNo}
-                        pTransactionId={data[0].transactionId}
                         pData={data}
                         onSubmited={handleSave} 
                         onClosed={handleCloseModal}/>

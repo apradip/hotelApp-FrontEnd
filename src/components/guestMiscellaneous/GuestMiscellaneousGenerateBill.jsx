@@ -11,10 +11,10 @@ import {formatDDMMYYYY, formatTime12Hour, formatBillNo} from "../common/Common";
 
 
 // Start:: form
-const Form = ({pTransactionId, pTransactionNo, pTransactionDate, pTransactionTime, 
-               pGuestId, pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pGstNo, 
-               pData, onClosed}) => {
+const Form = ({pTransactionNo, pTransactionDate, pTransactionTime, 
+               pName, pMobile, pGuestCount, 
+               pCorporateName, pCorporateAddress, pData, 
+               onClosed}) => {
 
     // Strat:: close form    
     const handleClose = () => {
@@ -290,17 +290,14 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <Form
-                        pTransactionId={props.pTransactionId} 
                         pTransactionNo={data[0].expensesPaymentsDetail.billNo} 
                         pTransactionDate={data[0].expensesPaymentsDetail.transactionDate}
                         pTransactionTime={data[0].expensesPaymentsDetail.transactionTime}
-                        pGuestId={props.pGuestId}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
-                        pGstNo={props.pGstNo}
                         pData={data[0].miscellaneaDetail.miscellanea}
                         onClosed={handleCloseModal}/>                        
                     {/* End:: Form component */}

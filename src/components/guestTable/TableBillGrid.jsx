@@ -91,7 +91,7 @@ const TableBillGrid = ({pData}) => {
     ];
 
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
+    const handleGridReady = () => {
         gridRef.current.api.setRowData(rowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
@@ -100,7 +100,7 @@ const TableBillGrid = ({pData}) => {
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
-    const handleFirstDataRendered = (params) => {
+    const handleFirstDataRendered = () => {
         // set pinned data
         pinnedRowData[0].price = totalItemPrice;
         pinnedRowData[1].price = totalServiceCharge;
@@ -122,24 +122,24 @@ const TableBillGrid = ({pData}) => {
         let rows = [];
 
         pData.forEach(element => {
-            const elm = element.tablesDetail.foods; 
+            // const elm = element.tablesDetail.foods; 
 
             const row = {
                             rowId: rows.length + 1, 
-                            id: elm.id,
-                            name: elm.name, 
-                            unitPrice: elm.unitPrice,
-                            quantity: elm.quantity,
-                            price: elm.unitPrice * elm.quantity,
-                            serviceCharge: elm.serviceCharge,
-                            gstCharge: elm.gstCharge
+                            id: element.id,
+                            name: element.name, 
+                            unitPrice: element.unitPrice,
+                            quantity: element.quantity,
+                            price: element.unitPrice * element.quantity,
+                            serviceCharge: element.serviceCharge,
+                            gstCharge: element.gstCharge
                         };
     
             rows.push(row);
 
-            totalPrice += elm.unitPrice * elm.quantity;
-            totalService += elm.serviceCharge;
-            totalGst += elm.gstCharge;
+            totalPrice += element.unitPrice * element.quantity;
+            totalService += element.serviceCharge;
+            totalGst += element.gstCharge;
         });
         
         setTotalItemPrice(totalPrice);

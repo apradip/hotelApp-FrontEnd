@@ -9,7 +9,8 @@ import useFetchWithAuth from "../common/useFetchWithAuth"
 
 
 // Start:: form
-const Form = ({pGuestId, pTransactionId, pName, pCorporateName, onSubmited, onClosed}) => {
+const Form = ({pGuestId, pTransactionId, pName, pCorporateName, 
+                onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId)
     const contextValues = useStateContext()
     const inputRef = useRef(null)

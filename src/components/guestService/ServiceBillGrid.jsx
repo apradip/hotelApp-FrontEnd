@@ -91,7 +91,7 @@ const ServiceBillGrid = ({pData}) => {
     ];
 
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
+    const handleGridReady = () => {
         gridRef.current.api.setRowData(rowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
@@ -100,7 +100,7 @@ const ServiceBillGrid = ({pData}) => {
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
-    const handleFirstDataRendered = (params) => {
+    const handleFirstDataRendered = () => {
         // set pinned data
         pinnedRowData[0].price = totalItemPrice;
         pinnedRowData[1].price = totalServiceCharge;

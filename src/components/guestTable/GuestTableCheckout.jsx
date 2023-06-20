@@ -9,12 +9,13 @@ import useFetchWithAuth from "../common/useFetchWithAuth"
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pCorporateName, onSubmited, onClosed}) => {
+const Form = ({pGuestId, pTransactionId, pName, pCorporateName, 
+            onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const inputRef = useRef(null);
     const {loading, error, doDelete} = useFetchWithAuth({
-        url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}`
+        url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     });
 
     // Start:: Call delete api
@@ -207,8 +208,9 @@ const GuestTableCheckout = forwardRef((props, ref) => {
                     {/* Start:: Form component */}
                     <Form 
                         pGuestId={props.pGuestId} 
+                        pTransactionId={props.pTransactionId}
                         pName={props.pName}
-                        pCorporateName = {props.pCorporateName}
+                        pCorporateName={props.pCorporateName}
                         onSubmited={handleSave} 
                         onClosed={handleCloseModal}/>
                         {/* End:: Form component */}

@@ -8,33 +8,30 @@ import {subStr, getTables} from "../common/Common";
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {guestTableSchema} from "../../schemas";
-import TableDespatchGrid from "./TableDespatchGrid";
+import DespatchGrid from "./TableDespatchGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pGstNo, 
-               pTransactionId, pTables, pIndate, pInTime,
-               pData, onSubmited, onClosed}) => {
+const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
+               pCorporateName, pCorporateAddress, pGstNo, pTables, pData, 
+               onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const [foodData, setFoodData] = useState(null);
+    const [despatchData, setDespatchData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const [defaultRowData, setDefaultRowData] = useState(pData);
     const {loading, error, doUpdate} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     })
 
-    const handelChangeFoodData = (foodData) => {
-        let fodData = [];
+    const handelChangeData = (gridData) => {
+        let listData = [];
         
-        for(const row of foodData) {
-            const md = {foodTransactionId: row.foodTransactionId};
-            fodData.push(md);
+        for(const row of gridData) {
+            listData.push({itemTransactionId: row.itemTransactionId});
         }
 
-        setFoodData(fodData);
+        setDespatchData(listData);
     }; 
 
     // Start:: Form validate and save data
@@ -51,8 +48,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         validationSchema: guestTableSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            const payload = {foods: foodData};
-            foodData && await doUpdate(payload);
+            despatchData && await doUpdate({deliveries: despatchData});
         
             if (error === null) {
                 resetForm();
@@ -130,10 +126,9 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <label className="col-12 form-label"><b>Items</b></label>
 
                         {/* Start:: Column service detail */}
-                        <TableDespatchGrid
-                            pState="VIEW"
-                            pDefaultRowData={defaultRowData}
-                            onChange={handelChangeFoodData}/>
+                        <DespatchGrid
+                            pDefaultRowData={pData}
+                            onChange={handelChangeData}/>
                         {/* End:: Column service detail */}
 
                     </div>                
@@ -296,11 +291,7 @@ const GuestTableDespatch = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
+            showModal && await doFetch();
           })();
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
@@ -330,13 +321,13 @@ const GuestTableDespatch = forwardRef((props, ref) => {
                     {/* Start:: Form component */}
                     <Form 
                         pGuestId={props.pGuestId}
+                        pTransactionId={props.pTransactionId}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
                         pGstNo={props.pGstNo}
-                        pTransactionId={props.pTransactionId}
                         pTables={props.pTables}
                         pData={data}
                         onSubmited={handleSave} 

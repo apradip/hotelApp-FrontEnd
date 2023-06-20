@@ -186,26 +186,31 @@ const GuestTableCard = forwardRef((props, ref) => {
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="2"
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
                                             onClick = {handelOpenDespatch}>
                                             <ShoppingBag className="feather-16 mr-3"/>Despatch
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="3" 
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
                                             onClick = {handelOpenGenerateBill}>
                                             <FileText className="feather-16 mr-3"/>Bill
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="4"
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
                                             onClick = {handelOpenPayment}>
                                             <CreditCard className="feather-16 mr-3"/>Payment
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="5"
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
                                             onClick = {handelOpenCheckout}>
                                             <LogOut className="feather-16 mr-3"/>Check out
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="6"
+                                            disabled={props.pTransactionId === "undefined" ? false : true}
                                             onClick = {handelOpenDelete}>
                                             <Scissors className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>
@@ -213,7 +218,6 @@ const GuestTableCard = forwardRef((props, ref) => {
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 {/* End:: operational menu */}
-
                                     
                             </span>
                         </Stack>
@@ -241,13 +245,13 @@ const GuestTableCard = forwardRef((props, ref) => {
             <Order 
                 ref={orderRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pGuestCount={props.pGuestCount}
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                pTransactionId={props.pTransactionId}
                 pTables={props.pTables}
                 pIndate={props.inDate}
                 pInTime={props.inTime}
@@ -259,13 +263,13 @@ const GuestTableCard = forwardRef((props, ref) => {
             <Despatch
                 ref={despatchRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pGuestCount={props.pGuestCount}
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                pTransactionId={props.pTransactionId}
                 pTables={props.pTables}
                 pIndate={props.inDate}
                 pInTime={props.inTime}
@@ -277,13 +281,13 @@ const GuestTableCard = forwardRef((props, ref) => {
             <GenerateBill 
                 ref={generateBillRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pGuestCount={props.pGuestCount}
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                pTransactionId={props.pTransactionId}
                 pTables={props.pTables}
                 pIndate={props.inDate}
                 pInTime={props.inTime}
@@ -295,6 +299,7 @@ const GuestTableCard = forwardRef((props, ref) => {
             <AddPayment 
                 ref={addPaymentRef}
                 pGuestId={props.pGuestId}    
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
                 pCorporateName={props.pCorporateName}
@@ -308,6 +313,7 @@ const GuestTableCard = forwardRef((props, ref) => {
             <Checkout
                 ref={checkoutRef}
                 pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pCorporateName={props.pCorporateName}
                 onSaved={props.onCheckedout} 

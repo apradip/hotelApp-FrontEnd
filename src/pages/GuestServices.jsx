@@ -73,7 +73,7 @@ const GuestServices = forwardRef((props, ref) => {
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
                 })
             } else {
-                toast.warning('Nothing selected to edit');
+                toast.warning("Nothing selected to edit");
             }
         }
     };
@@ -88,7 +88,7 @@ const GuestServices = forwardRef((props, ref) => {
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
                 })
             } else {
-                toast.warning('Nothing selected to delete');
+                toast.warning("Nothing selected to delete");
             }
         }
     };
@@ -104,25 +104,25 @@ const GuestServices = forwardRef((props, ref) => {
     const handleSuccess = (operation) => {
         switch (operation) {
             case Operation.GuestAdd:
-                toast.success('Guest successfully added');
+                toast.success("Guest successfully added");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
 
             case Operation.GuestDel:
-                toast.success('Guest successfully deleted');
+                toast.success("Guest successfully deleted");
                 setDataChanged(true);
                 props.onSuccess();
                 break;               
     
             case Operation.Order:
-                toast.success('Item successfully ordered');
+                toast.success("Item successfully ordered");
                 setDataChanged(true);
                 props.onSuccess();
                 break;               
 
             case Operation.Despatch:
-                toast.success('Item successfully despatched');
+                toast.success("Item successfully despatched");
                 setDataChanged(true);
                 props.onSuccess();
                 break;                
@@ -134,13 +134,13 @@ const GuestServices = forwardRef((props, ref) => {
                 break;                
                     
             case Operation.PaymentAdd:
-                toast.success('Payment successfully added');
+                toast.success("Payment successfully added");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
 
             case Operation.Checkout:
-                toast.success('Guest successfully checked out');
+                toast.success("Guest successfully checked out");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
@@ -183,7 +183,7 @@ const GuestServices = forwardRef((props, ref) => {
               await doFetch();
               setDataChanged(false);
             } catch (err) {
-              console.log('Error occured when fetching data');
+              console.log("Error occured when fetching data");
             }
           })();
     }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps

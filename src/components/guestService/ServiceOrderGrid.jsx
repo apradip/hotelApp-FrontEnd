@@ -15,8 +15,6 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const gridRef = useRef();
-	// const [selectedRowNode, setSelectedRowNode] = useState();
-    // const [totalPrice, setTotalPrice] = useState(0);
     const [rowData, setRowData] = useState();
     const [emptyRowCount, setEmptyRowCount] = useState();
     const {data, doFetch} = useFetchWithAuth({
@@ -88,14 +86,9 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             valueGetter: (params) => {return params.data.quantity},
             valueSetter: (params) => {
                 params.data.quantity = params.newValue;
-
                 params.data.serviceCharge = ((params.newValue * params.data.unitPrice) * (params.data.serviceChargePercentage / 100));
                 params.data.gstCharge = ((params.newValue * params.data.unitPrice) * (params.data.gstPercentage / 100));
-                const totalPrice = (params.newValue * params.data.unitPrice);
-                params.data.totalPrice = totalPrice;                                    
-
-                // set tariff to get the gst percentage
-                // setTotalPrice(totalPrice);
+                params.data.totalPrice = (params.newValue * params.data.unitPrice);
 
                 return true;
             }
@@ -171,12 +164,6 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     };
     // End:: load empty data to grid
 
-    // // Start:: on row selection change set selected 
-    // const handleSelectionChanged = (event) => {
-	// 	setSelectedRowNode(event.api.getSelectedNodes()[0]);		
-    // };
-    // // End:: on row selection change set selected 
-
     // set grid data to a parent component
     const handleCellValueChanged = () => {
         let dataRows = [];    
@@ -204,11 +191,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
-            // try {
-                await doFetch();
-            // } catch (err) {
-                // console.log('Error occured when fetching data');
-            // }
+            await doFetch();
           })();
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
@@ -229,11 +212,6 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const calculateSum = useCallback (() => {
         // let totalPrice = 0;
         let emptyCount = 0;
-
-        // // calculate total expance
-        // gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
-        //     totalPrice += rowNode.data.totalPrice;
-        // });
 
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode) => {
@@ -282,7 +260,6 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 rowSelection={"single"}
                 onGridReady={handleGridReady}
                 onFirstDataRendered={handleFirstDataRendered}
-                // onSelectionChanged={handleSelectionChanged}
                 onCellValueChanged={handleCellValueChanged}/>
         </div>
     );

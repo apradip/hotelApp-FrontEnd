@@ -192,31 +192,31 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="2"
-                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
                                             onClick={handelOpenDespatch}>
                                             <ShoppingBag className="feather-16 mr-3"/>Despatch
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="3" 
-                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
                                             onClick={handelOpenGenerateBill}>
                                             <FileText className="feather-16 mr-3"/>Bill
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="4"
-                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
                                             onClick={handelOpenPayment}>
                                             <CreditCard className="feather-16 mr-3"/>Payment
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="5"
-                                            disabled={props.pTransactionId !== 'undefined' ? false : true}
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
                                             onClick={handelOpenCheckout}>
                                             <LogOut className="feather-16 mr-3"/>Check out
                                         </Dropdown.Item>
 
                                         <Dropdown.Item eventKey="6" 
-                                            disabled={props.pTransactionId === 'undefined' ? false : true}
+                                            disabled={props.pTransactionId === "undefined" ? false : true}
                                             onClick={handelOpenDelete}>
                                             <Scissors className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>

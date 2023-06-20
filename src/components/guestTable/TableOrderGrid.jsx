@@ -15,8 +15,6 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const gridRef = useRef();
-	const [selectedRowNode, setSelectedRowNode] = useState();
-    const [totalPrice, setTotalPrice] = useState(0);
     const [rowData, setRowData] = useState();
     const [emptyRowCount, setEmptyRowCount] = useState();
     const {data, doFetch} = useFetchWithAuth({
@@ -39,7 +37,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "rowId", 
             width: 20,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : 'Total'},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : "Total"},
         },
         {
             headerName: "Item", 
@@ -73,7 +71,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             type: "rightAligned",
             width: 50,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ''},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
             valueGetter: (params) => {return params.data.unitPrice}
         },
         {
@@ -90,11 +88,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 params.data.quantity = params.newValue;
                 params.data.serviceCharge = ((params.newValue * params.data.unitPrice) * (params.data.serviceChargePercentage / 100));
                 params.data.gstCharge = ((params.newValue * params.data.unitPrice) * (params.data.gstPercentage / 100));
-                const totalPrice = (params.newValue * params.data.unitPrice);
-                params.data.totalPrice = totalPrice;                                    
-
-                // set tariff to get the gst percentage
-                setTotalPrice(totalPrice);
+                params.data.totalPrice = (params.newValue * params.data.unitPrice);
 
                 return true;
             }
@@ -128,12 +122,9 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "gstCharge"
         }
     ]);
-    // const pinnedRowData = [
-    //     {rowId: "Total", totalPrice: 0}
-    // ];
 
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
+    const handleGridReady = () => {
         let row = [];
         
         pDefaultRowData.forEach(element => {
@@ -164,7 +155,6 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = (params) => {
-        // gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
@@ -173,14 +163,8 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     };
     // End:: load empty data to grid
 
-    // Start:: on row selection change set selected 
-    const handleSelectionChanged = (event) => {
-		setSelectedRowNode(event.api.getSelectedNodes()[0]);		
-    };
-    // End:: on row selection change set selected 
-
     // set grid data to a parent component
-    const handleCellValueChanged = (event) => {
+    const handleCellValueChanged = () => {
         let dataRows = [];    
 
         gridRef.current.api.forEachNode((gridRow) => {
@@ -236,9 +220,6 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
             totalPrice += rowNode.data.totalPrice;
         });
-    
-        // pinnedRowData[0].totalPrice = totalPrice;
-        // gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
 
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode) => {
@@ -287,7 +268,6 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 rowSelection={"single"}
                 onGridReady={handleGridReady}
                 onFirstDataRendered={handleFirstDataRendered}
-                onSelectionChanged={handleSelectionChanged}
                 onCellValueChanged={handleCellValueChanged}/>
         </div>
     );

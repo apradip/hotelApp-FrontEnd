@@ -1,17 +1,17 @@
-import React, {useContext, useEffect, useState, useCallback, useRef, useMemo} from "react";
+import React, {useState, useCallback, useRef, useMemo} from "react";
 import {AgGridReact} from "ag-grid-react";
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
+// import {HotelId} from "../../App";
+// import {useStateContext} from "../../contexts/ContextProvider";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
+const TableDespatchGrid = ({pDefaultRowData, onChange}) => {    
+    // const hotelId = useContext(HotelId);
+    // const contextValues = useStateContext();
     const gridRef = useRef();
-    const [rowData, setRowData] = useState();
+    // const [rowData, setRowData] = useState();
 
     const defaultColDef = useMemo(() => {
         return {
@@ -55,7 +55,7 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "id"
         },
         {
-            field: "foodTransactionId"
+            field: "itemTransactionId"
         }
     ]);
 
@@ -75,13 +75,13 @@ const TableDespatchGrid = ({pState, pDefaultRowData, onChange}) => {
                             id: element.id,
                             name: element.name, 
                             quantity: element.quantity,
-                            foodTransactionId: element.foodTransactionId
+                            itemTransactionId: element.itemTransactionId
                         };
     
             row.push(data);
         });
 
-        setRowData(row);
+        // setRowData(row);
 
         gridRef.current.api.setRowData(row);
         gridRef.current.api.refreshCells();
