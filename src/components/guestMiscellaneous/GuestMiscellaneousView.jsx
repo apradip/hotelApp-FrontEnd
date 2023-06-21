@@ -5,14 +5,13 @@ import {subStr} from "../common/Common"
 
 import {HotelId} from "../../App"
 import {useStateContext} from "../../contexts/ContextProvider"
-import OrderGrid from "./MiscellaneousOrderGrid"
+import ViewGrid from "./MiscellaneousViewGrid"
 import useFetchWithAuth from "../common/useFetchWithAuth"
 
 // Start:: form
 const Form = ({pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pGstNo, 
-               pData, onClosed}) => {
-                    
+               pCorporateName, pCorporateAddress, pData,
+               onClosed}) => {
     const [defaultRowData, setDefaultRowData] = useState([])
 
     useEffect(() => {
@@ -27,7 +26,8 @@ const Form = ({pName, pMobile, pGuestCount,
                             serviceCharge: element.serviceCharge, 
                             gstPercentage: element.gstPercentage, 
                             gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity
+                            totalPrice: element.unitPrice * element.quantity,
+                            despatchDate: element.despatchDate
                         }
     
             defaultRowData.push(rowData)
@@ -91,10 +91,8 @@ const Form = ({pName, pMobile, pGuestCount,
                         <label className="col-12 form-label"><b>Items</b></label>
 
                         {/* Start:: Column room detail */}
-                        <OrderGrid
-                            pState="VIEW"
-                            pDefaultRowData={defaultRowData}
-                            onChange={null}/>
+                        <ViewGrid
+                            pDefaultRowData={defaultRowData}/>
                         {/* End:: Column room detail */}
                     </div>
                 </div>
@@ -176,11 +174,7 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            // try {
-                showModal && await doFetch()
-            // } catch (err) {
-            //   console.log('Error occured when fetching data')
-            // }
+            showModal && await doFetch()
           })()
     }, [showModal])         // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
@@ -214,7 +208,6 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
-                        pGstNo={props.pGstNo}
                         pData={data}
                         onClosed={handleCloseModal}/>
                     {/* End:: Form component */}

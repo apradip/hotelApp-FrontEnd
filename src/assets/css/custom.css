@@ -116,3 +116,11 @@ label:not(.form-check-label):not(.custom-file-label) {
   color: #ff5622 !important;
   font-weight:600;
 }
+
+.ag-row-order {
+  background-color: rgb(250, 206, 206) !important;
+}
+
+.ag-row-delivery {
+  background-color: rgb(206, 247, 175) !important;
+}

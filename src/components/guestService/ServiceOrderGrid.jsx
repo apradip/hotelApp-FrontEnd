@@ -49,14 +49,14 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             valueGetter: (params) => {return params.data.name},
             valueSetter: (params) => {
                 params.data.name = "Select item";
-                params.data.serviceId = "";
+                params.data.id = "";
                 params.data.unitPrice = 0;
 
                 if (params.newValue) {
                     const selectedItem = params.newValue[0];
 
                     // find selected table details
-                    params.data.serviceId = selectedItem._id;
+                    params.data.id = selectedItem._id;
                     params.data.name = selectedItem.name;
                     params.data.unitPrice = selectedItem.price;
                     params.data.quantity = 0;
@@ -108,7 +108,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            field: "serviceId"
+            field: "id"
         },
         {
             field: "serviceChargePercentage"
@@ -121,6 +121,9 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         },
         {
             field: "gstCharge"
+        },
+        {
+            field: "despatchDate"
         }
     ]);
 
@@ -131,7 +134,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         pDefaultRowData.forEach(element => {
             const data = {
                             rowId: row.length + 1, 
-                            serviceId: element.serviceId,
+                            id: element.id,
                             name: element.name, 
                             unitPrice: element.unitPrice,
                             quantity: element.quantity, 
@@ -139,7 +142,8 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                             serviceCharge: element.serviceCharge, 
                             gstPercentage: element.gstPercentage, 
                             gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity
+                            totalPrice: element.unitPrice * element.quantity,
+                            despatchDate: element.despatchDate
                         };
     
             row.push(data);
@@ -171,7 +175,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         gridRef.current.api.forEachNode((gridRow) => {
             if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
                 dataRows.push({
-                            serviceId: gridRow.data.serviceId, 
+                            id: gridRow.data.id, 
                             name: gridRow.data.name,
                             unitPrice: gridRow.data.unitPrice,
                             quantity: gridRow.data.quantity,
@@ -179,7 +183,8 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                             serviceCharge: gridRow.data.serviceCharge,
                             gstPercentage: gridRow.data.gstPercentage,
                             gstCharge: gridRow.data.gstCharge,
-                            totalPrice: gridRow.data.totalPrice
+                            totalPrice: gridRow.data.totalPrice,
+                            despatchDate: undefined
                         });
             }
         });
@@ -228,18 +233,17 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         if (emptyRowCount <= 0) {
             let emptyRow = rowData;
 
-            emptyRow.push({
-                        rowId: emptyRow.length + 1, 
-                        serviceId: "", 
-                        name: "Select item", 
-                        unitPrice: 0,
-                        quantity: 0,
-                        serviceChargePercentage: data.serviceChargePercentage,
-                        serviceCharge: 0,
-                        gstPercentage: data.foodGstPercentage,
-                        gstCharge: 0,
-                        totalPrice: 0
-                    });
+            emptyRow.push({rowId: emptyRow.length + 1, 
+                            id: "", 
+                            name: "Select item", 
+                            unitPrice: 0,
+                            quantity: 0,
+                            serviceChargePercentage: data.serviceChargePercentage,
+                            serviceCharge: 0,
+                            gstPercentage: data.foodGstPercentage,
+                            gstCharge: 0,
+                            totalPrice: 0,
+                            despatchDate: undefined});
 
             setRowData(emptyRow);
             gridRef.current.api.setRowData(rowData);

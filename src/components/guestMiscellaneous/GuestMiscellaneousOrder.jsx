@@ -31,12 +31,12 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
             let operation = "A";
 
             for(const od of pData) {
-                if (od.miscellaneousId === row.miscellaneousId) {
+                if (od.id === row.id) {
                     operation = "M";
                 }
             }
 
-            dataList.push({id: row.miscellaneousId, 
+            dataList.push({id: row.id, 
                 quantity: row.quantity, 
                 operation: operation});
         }
@@ -45,13 +45,13 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
             let found = false;
 
             for (const e of dataList) {
-                if (e.id === od.miscellaneousId) {
+                if (e.id === od.id) {
                     found = true;
                 }
             }
 
             if (!found) {
-                dataList.push({id: od.miscellaneousId, 
+                dataList.push({id: od.id, 
                     quantity: od.quantity, 
                     operation: "R"});
             }

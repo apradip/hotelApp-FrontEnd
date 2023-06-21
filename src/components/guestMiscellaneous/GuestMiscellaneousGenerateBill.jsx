@@ -290,15 +290,15 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <Form
-                        pTransactionNo={data[0].expensesPaymentsDetail.billNo} 
-                        pTransactionDate={data[0].expensesPaymentsDetail.transactionDate}
-                        pTransactionTime={data[0].expensesPaymentsDetail.transactionTime}
+                        pTransactionNo={data[0].expensesPaymentsDetail[0].billNo} 
+                        pTransactionDate={data[0].expensesPaymentsDetail[0].transactionDate}
+                        pTransactionTime={data[0].expensesPaymentsDetail[0].transactionTime}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
-                        pData={data[0].miscellaneaDetail.miscellanea}
+                        pData={data[0].miscellanea}
                         onClosed={handleCloseModal}/>                        
                     {/* End:: Form component */}
                     

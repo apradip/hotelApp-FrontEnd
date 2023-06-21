@@ -31,12 +31,12 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
             let operation = "A";
 
             for(const od of pData) {
-                if (od.serviceId === row.serviceId) {
+                if (od.id === row.id) {
                     operation = "M";
                 }
             }
 
-            dataList.push({id: row.serviceId, 
+            dataList.push({id: row.id, 
                 quantity: row.quantity, 
                 operation: operation});
         }
@@ -45,13 +45,13 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
             let found = false;
 
             for (const e of dataList) {
-                if (e.id === od.serviceId) {
+                if (e.id === od.id) {
                     found = true;
                 }
             }
 
             if (!found) {
-                dataList.push({id: od.serviceId, 
+                dataList.push({id: od.id, 
                     quantity: od.quantity, 
                     operation: "R"});
             }
@@ -270,11 +270,7 @@ const GuestServiceOrder = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
+            showModal && await doFetch();
           })();
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api

@@ -5,16 +5,15 @@ import {subStr} from "../common/Common"
 
 import {HotelId} from "../../App"
 import {useStateContext} from "../../contexts/ContextProvider"
-import OrderGrid from "./ServiceOrderGrid"
+import ViewGrid from "./ServiceViewGrid"
 import useFetchWithAuth from "../common/useFetchWithAuth"
 
 // Start:: form
 const Form = ({pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pGstNo, 
-               pData, onClosed}) => {
-                    
+               pCorporateName, pCorporateAddress, pData, 
+               onClosed}) => {
     const [defaultRowData, setDefaultRowData] = useState([])
-
+                
     useEffect(() => {
         pData.forEach(element => {
             const rowData = {
@@ -27,7 +26,9 @@ const Form = ({pName, pMobile, pGuestCount,
                             serviceCharge: element.serviceCharge, 
                             gstPercentage: element.gstPercentage, 
                             gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity
+                            totalPrice: element.unitPrice * element.quantity,
+                            despatchDate: element.despatchDate, 
+                            despatchTime: element.despatchTime
                         }
     
             defaultRowData.push(rowData)
@@ -92,10 +93,8 @@ const Form = ({pName, pMobile, pGuestCount,
                         <label className="col-12 text-muted"><b>Items</b></label>
 
                         {/* Start:: Column room detail */}
-                        <OrderGrid
-                            pState="VIEW"
-                            pDefaultRowData={defaultRowData}
-                            onChange={null}/>
+                        <ViewGrid
+                            pDefaultRowData={defaultRowData}/>
                         {/* End:: Column room detail */}
                     </div>                
                 </div>
@@ -215,7 +214,6 @@ const GuestServiceView = forwardRef((props, ref) => {
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
-                        pGstNo={props.pGstNo}
                         pData={data}
                         onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
