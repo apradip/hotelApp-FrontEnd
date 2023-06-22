@@ -2,13 +2,13 @@ import React, {useState, useRef, useMemo} from "react";
 import {AgGridReact} from "ag-grid-react";
 
 import {formatINR} from "../common/Common";
-import ItemSelector from "../common/ServiceEditor";
+import FoodItemSelector from "../common/FoodEditor";
 import QuantityEditor from "../common/QuantityEditor";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const ServiceViewGrid = ({pDefaultRowData}) => {    
+const TableOrderGrid = ({pDefaultRowData}) => {    
     const gridRef = useRef();
 
     const defaultColDef = useMemo(() => {
@@ -32,16 +32,16 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
             field: "rowId", 
             width: 20,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : "Total"}
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : "Total"},
         },
         {
             headerName: "Item", 
             field: "name", 
             hide: false,
-            cellEditor: ItemSelector, 
+            cellEditor: FoodItemSelector, 
             editable: () => {return false},
             cellRenderer: (params) => {return params.value},
-            valueGetter: (params) => {return params.data.name}
+            valueGetter: (params) => {return params.data.name},
         },
         {
             headerName: "Unit price",
@@ -128,7 +128,6 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
         gridRef.current.api.sizeColumnsToFit();
     };
     // End:: load empty data to grid
-
     
 	return (
         <div className="col-12 ag-theme-alpine grid-height-400">
@@ -145,4 +144,4 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
     );
 }
  
-export default ServiceViewGrid;
+export default TableOrderGrid;

@@ -120,6 +120,9 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         },
         {
             field: "gstCharge"
+        },
+        {
+            field: "despatchDate"
         }
     ]);
 
@@ -138,7 +141,8 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                             serviceCharge: element.serviceCharge, 
                             gstPercentage: element.gstPercentage, 
                             gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity
+                            totalPrice: element.unitPrice * element.quantity,
+                            despatchDate: element.despatchDate
                         };
     
             row.push(data);
@@ -178,7 +182,8 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                             serviceCharge: gridRow.data.serviceCharge,
                             gstPercentage: gridRow.data.gstPercentage,
                             gstCharge: gridRow.data.gstCharge,
-                            totalPrice: gridRow.data.totalPrice
+                            totalPrice: gridRow.data.totalPrice,
+                            despatchDate: undefined
                         });
             }
         });
@@ -190,11 +195,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
+            await doFetch();
           })();
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
@@ -246,7 +247,8 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                         serviceCharge: 0,
                         gstPercentage: data.foodGstPercentage,
                         gstCharge: 0,
-                        totalPrice: 0
+                        totalPrice: 0,
+                        despatchDate: undefined
                     });
 
             setRowData(emptyRow);

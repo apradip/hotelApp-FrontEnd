@@ -5,13 +5,13 @@ import {subStr, getTables} from "../common/Common"
 
 import {HotelId} from "../../App"
 import {useStateContext} from "../../contexts/ContextProvider"
-import OrderGrid from "./TableOrderGrid"
+import ViewGrid from "./TableViewGrid"
 import useFetchWithAuth from "../common/useFetchWithAuth"
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pGstNo, 
-               pTables, pData, onClosed}) => {
+const Form = ({pName, pMobile, pGuestCount, 
+               pCorporateName, pCorporateAddress, pData, 
+               onClosed}) => {
                     
     const [defaultRowData, setDefaultRowData] = useState([])
 
@@ -27,7 +27,9 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             serviceCharge: element.serviceCharge, 
                             gstPercentage: element.gstPercentage, 
                             gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity
+                            totalPrice: element.unitPrice * element.quantity,
+                            despatchDate: element.despatchDate, 
+                            despatchTime: element.despatchTime
                         }
     
             defaultRowData.push(rowData)
@@ -92,10 +94,8 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <label className="col-12 text-muted"><b>Items</b></label>
 
                         {/* Start:: Column room detail */}
-                        <OrderGrid
-                            pState="VIEW"
-                            pDefaultRowData={defaultRowData}
-                            onChange={null}/>
+                        <ViewGrid
+                            pDefaultRowData={defaultRowData}/>
                         {/* End:: Column room detail */}
 
                     </div>                
@@ -210,14 +210,11 @@ const GuestTableView = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pGuestId={props.pGuestId}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
-                        pGstNo={props.pGstNo}
-                        pTables={props.pTables}
                         pData={data}
                         onClosed={handleCloseModal}/>
                     {/* End:: Form component */}

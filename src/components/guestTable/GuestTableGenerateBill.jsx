@@ -110,7 +110,7 @@ const Form = ({pTransactionNo, pTransactionDate, pTransactionTime,
                     <div className="col-12">
 
                         {/* Label element */}
-                        <label className="col-12 form-label"><b>Bills</b></label>
+                        <label className="col-12 form-label"><b>Items</b></label>
 
                         {/* Start:: Column service detail */}
                         <BillGrid
@@ -287,15 +287,15 @@ const GuestTableGenerateBill = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <Form
-                        pTransactionNo={data[0].expensesPaymentsDetail.billNo} 
-                        pTransactionDate={data[0].expensesPaymentsDetail.transactionDate}
-                        pTransactionTime={data[0].expensesPaymentsDetail.transactionTime}
+                        pTransactionNo={data[0].expensesPaymentsDetail[0].billNo} 
+                        pTransactionDate={data[0].expensesPaymentsDetail[0].transactionDate}
+                        pTransactionTime={data[0].expensesPaymentsDetail[0].transactionTime}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
-                        pData={data[0].tablesDetail.foods}
+                        pData={data[0].foods}
                         onClosed={handleCloseModal}/>                        
                     {/* End:: Form component */}
                     
