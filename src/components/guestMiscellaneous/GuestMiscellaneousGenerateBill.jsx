@@ -257,11 +257,8 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                // console.log("Error occured when fetching data");
-            }
+            showModal && await doFetch();
+            data && props.onSaved();
           })()
     }, [showModal]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api

@@ -128,7 +128,6 @@ const GuestServices = forwardRef((props, ref) => {
                 break;                
 
             case Operation.BillGenerate:
-                // toast.success("Bill successfully generated");
                 setDataChanged(true);
                 props.onSuccess();
                 break;                

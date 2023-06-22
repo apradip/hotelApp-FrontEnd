@@ -287,7 +287,8 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                onSaved={props.onBillGenerated}/>
+                onSaved={props.onBillGenerated}
+                onClosed={handleClose}/>
             {/* End :: generate & display summery bill component */}
 
             {/* Start :: add payment component */}

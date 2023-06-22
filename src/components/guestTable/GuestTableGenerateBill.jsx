@@ -259,6 +259,7 @@ const GuestTableGenerateBill = forwardRef((props, ref) => {
     useEffect(() => {
         (async () => {
             showModal && await doFetch();
+            data && props.onSaved();
           })()
     }, [showModal]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
