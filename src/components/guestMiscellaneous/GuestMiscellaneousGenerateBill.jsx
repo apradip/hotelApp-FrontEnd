@@ -86,7 +86,7 @@ const Form = ({pTransactionNo, pTransactionDate, pTransactionTime,
                         </div>
                     :
                         <div className="col-sx-12 col-md-5 mb-3">
-                            <label className="col-12 form-label"><b>Mobile</b></label>
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
@@ -267,7 +267,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            {data && data.length ? 
+            {data && data.length > 0 ? 
                 <Modal size="lg"
                     show={showModal} >
 

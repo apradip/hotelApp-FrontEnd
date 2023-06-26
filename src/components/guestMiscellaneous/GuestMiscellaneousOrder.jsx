@@ -125,7 +125,7 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                         </div>
                     :
                         <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
-                            <label className="col-12 form-label"><b>Mobile No.</b></label>
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
@@ -270,11 +270,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            // try {
-                showModal && await doFetch();
-            // } catch (err) {
-                // console.log("Error occured when fetching data");
-            // }
+            showModal && await doFetch();
           })();
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
@@ -290,7 +286,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
                     {/* Start:: Modal header */}
                     <Modal.Header>
                         {/* Header text */}
-                        <Modal.Title>Order</Modal.Title>
+                        <Modal.Title>Orders</Modal.Title>
                         
                         {/* Close button */}
                         <NavLink 

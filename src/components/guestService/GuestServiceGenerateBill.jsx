@@ -32,121 +32,120 @@ const Form = ({pTransactionNo, pTransactionDate, pTransactionTime,
     return (
         <form>
 
-        {/* Start:: Modal body */}
-        <Modal.Body>
+            {/* Start:: Modal body */}
+            <Modal.Body>
 
-            {/* Start:: Row */}
-            <div className="row">
+                {/* Start:: Row */}
+                <div className="row">
 
-                {/* Start:: Column bill no */}
-                <div className="col-sx-12 col-md-5 mb-3">
-                    <label className="col-12 form-label"><b>Bill No.</b></label>
-                    <label className="col-12 form-label">{formatBillNo(pTransactionNo)}</label>
-                </div>
-                {/* End:: Column bill no */}
-
-                {/* Start:: Column transaction date */}
-                <div className="col-sx-12 col-md-5 mb-3">
-                    <label className="col-12 form-label"><b>Date</b></label>
-                    <label className="col-12 text-muted">{formatDDMMYYYY(pTransactionDate)}</label>
-                </div>
-                {/* End:: Column transaction date */}
-
-                {/* Start:: Column transaction time */}
-                <div className="col-sx-12 col-md-2 mb-3">
-                    <label className="col-12 form-label"><b>Time</b></label>
-                    <label className="col-12 text-muted">{formatTime12Hour(pTransactionTime)}</label>
-                </div>
-                {/* End:: Column transaction time */}
-                
-            </div>
-            {/* End:: Row */}
-
-            {/* Start:: Row */}
-            <div className="row">
-
-                {/* Start:: Column name / company */}
-                {pCorporateName ? 
+                    {/* Start:: Column bill no */}
                     <div className="col-sx-12 col-md-5 mb-3">
-                        <label className="col-12 form-label"><b>Company</b></label>
-                        <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
+                        <label className="col-12 form-label"><b>Bill No.</b></label>
+                        <label className="col-12 form-label">{formatBillNo(pTransactionNo)}</label>
                     </div>
-                :
-                    <div className="col-sx-12 col-md-5 mb-3">
-                        <label className="col-12 form-label"><b>Name</b></label>
-                        <label className="col-12 text-muted">{subStr(pName, 30)}</label>
-                    </div>
-                }
-                {/* End:: Column name / company */}
+                    {/* End:: Column bill no */}
 
-                {/* Start:: Column mobile no / company address */}
-                {pCorporateName ? 
+                    {/* Start:: Column transaction date */}
                     <div className="col-sx-12 col-md-5 mb-3">
-                        <label className="col-12 form-label"><b>Address</b></label>
-                        <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        <label className="col-12 form-label"><b>Date</b></label>
+                        <label className="col-12 text-muted">{formatDDMMYYYY(pTransactionDate)}</label>
                     </div>
-                :
-                    <div className="col-sx-12 col-md-5 mb-3">
-                        <label className="col-12 form-label"><b>Mobile</b></label>
-                        <label className="col-12 text-muted">{pMobile}</label>
-                    </div>
-                }
-                {/* End:: Column mobile no / company address */}
+                    {/* End:: Column transaction date */}
 
-                {/* Start:: Column mobile no / company address */}
-                <div className="col-sx-12 col-md-2 mb-3">
-                    <label className="col-12 form-label"><b>Guest count</b></label>
-                    <label className="col-12 text-muted">{pGuestCount} No.</label>
+                    {/* Start:: Column transaction time */}
+                    <div className="col-sx-12 col-md-2 mb-3">
+                        <label className="col-12 form-label"><b>Time</b></label>
+                        <label className="col-12 text-muted">{formatTime12Hour(pTransactionTime)}</label>
+                    </div>
+                    {/* End:: Column transaction time */}
+                    
                 </div>
-                {/* End:: Column mobile no / company address */}
+                {/* End:: Row */}
 
-            </div>
-            {/* End:: Row */}
+                {/* Start:: Row */}
+                <div className="row">
 
-            {/* Start:: Row */}
-            <div className="row">
+                    {/* Start:: Column name / company */}
+                    {pCorporateName ? 
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Company</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Name</b></label>
+                            <label className="col-12 text-muted">{subStr(pName, 30)}</label>
+                        </div>
+                    }
+                    {/* End:: Column name / company */}
 
-                {/* Start:: Column service detail */}
-                <div className="col-12">
-                    <label className="col-12 form-label"><b>Items</b></label>
+                    {/* Start:: Column mobile no / company address */}
+                    {pCorporateName ? 
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Address</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        </div>
+                    :
+                        <div className="col-sx-12 col-md-5 mb-3">
+                            <label className="col-12 form-label"><b>Mobile</b></label>
+                            <label className="col-12 text-muted">{pMobile}</label>
+                        </div>
+                    }
+                    {/* End:: Column mobile no / company address */}
+
+                    {/* Start:: Column mobile no / company address */}
+                    <div className="col-sx-12 col-md-2 mb-3">
+                        <label className="col-12 form-label"><b>Guest count</b></label>
+                        <label className="col-12 text-muted">{pGuestCount} No.</label>
+                    </div>
+                    {/* End:: Column mobile no / company address */}
+
+                </div>
+                {/* End:: Row */}
+
+                {/* Start:: Row */}
+                <div className="row">
 
                     {/* Start:: Column service detail */}
-                    <BillGrid
-                        pData={pData}/>
+                    <div className="col-12">
+                        <label className="col-12 form-label"><b>Items</b></label>
+                        {/* Start:: Column service detail */}
+                        <BillGrid
+                            pData={pData}/>
+                        {/* End:: Column service detail */}
+
+                    </div>                
                     {/* End:: Column service detail */}
 
-                </div>                
-                {/* End:: Column service detail */}
+                </div>
+                {/* End:: Row */}
 
-            </div>
-            {/* End:: Row */}
+            </Modal.Body>
+            {/* End:: Modal body */}
 
-        </Modal.Body>
-        {/* End:: Modal body */}
+            {/* Start:: Modal footer */}
+            <Modal.Footer>
 
-        {/* Start:: Modal footer */}
-        <Modal.Footer>
+                {/* Start:: Close button */}
+                <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={handleClose}>
+                    Close
+                </button>
+                {/* End:: Close button */}
 
-            {/* Start:: Close button */}
-            <button
-                type="button"
-                className="btn btn-danger"
-                onClick={handleClose}>
-                Close
-            </button>
-            {/* End:: Close button */}
+                {/* Start:: Print button */}
+                <button 
+                    type="button"
+                    className="btn btn-success"
+                    onClick={handlePrint} >
+                    Print    
+                </button>
+                {/* End:: Print button */}
 
-            {/* Start:: Print button */}
-            <button 
-                type="button"
-                className="btn btn-success"
-                onClick={handlePrint} >
-                Print    
-            </button>
-            {/* End:: Print button */}
-
-        </Modal.Footer>
-        {/* End:: Modal footer */}
+            </Modal.Footer>
+            {/* End:: Modal footer */}
 
         </form> 
     );
@@ -267,7 +266,7 @@ const GuestServiceGenerateBill = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            {data && data.length ? 
+            {data && data.length > 0 ? 
                 <Modal size="lg"
                     show={showModal}>
 
@@ -287,15 +286,15 @@ const GuestServiceGenerateBill = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <Form
-                        pTransactionNo={data[0].expensesPaymentsDetail.billNo} 
-                        pTransactionDate={data[0].expensesPaymentsDetail.transactionDate}
-                        pTransactionTime={data[0].expensesPaymentsDetail.transactionTime}
+                        pTransactionNo={data[0].expensesPaymentsDetail[0].billNo} 
+                        pTransactionDate={data[0].expensesPaymentsDetail[0].transactionDate}
+                        pTransactionTime={data[0].expensesPaymentsDetail[0].transactionTime}
                         pName={props.pName}
                         pMobile={props.pMobile}
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
-                        pData={data[0].servicesDetail.services}
+                        pData={data[0].services}
                         onClosed={handleCloseModal}/>                        
                         {/* End:: Form component */}
                     

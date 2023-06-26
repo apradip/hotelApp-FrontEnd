@@ -106,7 +106,7 @@ const Form = ({onSubmited, onClosed}) => {
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
-                            htmlFor={"keyInputMobile"}><b>Mobile No.</b></label>
+                            htmlFor={"keyInputMobile"}><b>Mobile no.</b></label>
 
                         <div className="col-12">
                             {/* Input element text*/}
