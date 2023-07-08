@@ -77,7 +77,6 @@ const HeaderLogin = forwardRef((props, ref) => {
         (async () => {
             try {
                 await doLogout();
-
                 handleLogoutSuccess();
             } catch (err) {
               console.log("Error occured when fetching data");
@@ -91,7 +90,6 @@ const HeaderLogin = forwardRef((props, ref) => {
         (async () => {
             try {
                 await doLogout();
-
                 handleLogoutSuccess();
             } catch (err) {
               console.log("Error occured when fetching data");
@@ -146,9 +144,7 @@ const HeaderLogin = forwardRef((props, ref) => {
     };
     
     useImperativeHandle(ref, () => {
-        return {
-            changePage, success
-        }
+        return {changePage, success}
     });
     // End:: forward reff change page
 
@@ -161,7 +157,7 @@ const HeaderLogin = forwardRef((props, ref) => {
                 <li className="nav-item"
                     onClick = {handleToggleSideMenu}>
                     <NavLink to="#" className="nav-link">
-                        <Menu size={20} />
+                        <Menu size={20}/>
                     </NavLink>
                 </li>
             </ul>
@@ -177,31 +173,31 @@ const HeaderLogin = forwardRef((props, ref) => {
                                 <Nav className="me-auto">
                                     {getPageAttribute(selectedPage).show.search &&
                                         <Search 
-                                            onChange = {handleSearch}
-                                            ref = {searchRef}
-                                            currentPage = {selectedPage} />}
+                                            onChange={handleSearch}
+                                            ref={searchRef}
+                                            currentPage={selectedPage}/>}
 
                                     {getPageAttribute(selectedPage).show.add &&
                                         <OverlayTrigger
-                                            placement = "bottom"
-                                            overlay = {<Tooltip>new</Tooltip>}>
+                                            placement="bottom"
+                                            overlay={<Tooltip>new</Tooltip>}>
                                             <button 
-                                                className = "btn btn-success me-1" 
-                                                size = "md" 
-                                                onClick = {handleOpenAdd}>
-                                                <Paperclip className="feather-16" />
+                                                className="btn btn-success me-1" 
+                                                size="md" 
+                                                onClick={handleOpenAdd}>
+                                                <Paperclip className="feather-16"/>
                                             </button>
                                         </OverlayTrigger>}
 
                                     {getPageAttribute(selectedPage).show.edit &&
                                         <OverlayTrigger
-                                            placement = "bottom"
-                                            overlay = {<Tooltip>edit</Tooltip>}>
+                                            placemen ="bottom"
+                                            overlay={<Tooltip>edit</Tooltip>}>
                                             <button 
-                                                className = "btn btn-info me-1" 
-                                                size = "md" 
-                                                onClick = {handleOpenEdit}>
-                                                <Edit3 className="feather-16" />
+                                                className="btn btn-info me-1" 
+                                                size="md" 
+                                                onClick={handleOpenEdit}>
+                                                <Edit3 className="feather-16"/>
                                             </button>
                                         </OverlayTrigger>}
 
@@ -210,10 +206,10 @@ const HeaderLogin = forwardRef((props, ref) => {
                                             placement = "bottom"
                                             overlay = {<Tooltip>delete</Tooltip>}>
                                             <button 
-                                                className = "btn btn-danger mx-0" 
-                                                size = "md" 
-                                                onClick = {handleOpenDel}>
-                                                <Scissors className="feather-16" />
+                                                className="btn btn-danger mx-0" 
+                                                size="md" 
+                                                onClick={handleOpenDel}>
+                                                <Scissors className="feather-16"/>
                                             </button>
                                         </OverlayTrigger>}
                                 </Nav>
@@ -238,18 +234,18 @@ const HeaderLogin = forwardRef((props, ref) => {
 
                         <Dropdown.Menu>
                             <Profile 
-                                pEmployeeId = {props.pEmployeeId}
-                                onEdited = {handleChangeProfileSuccess} 
-                                onClosed = {handleClose} />
+                                pEmployeeId={props.pEmployeeId}
+                                onEdited={handleChangeProfileSuccess} 
+                                onClosed={handleClose}/>
 
                             <ChangePassword 
-                                pEmployeeId = {props.pEmployeeId}
-                                onEdited = {handleChangePasswordSuccess}
-                                onClosed = {handleClose} />
+                                pEmployeeId={props.pEmployeeId}
+                                onEdited={handleChangePasswordSuccess}
+                                onClosed={handleClose}/>
 
                             <Logout
-                                pEmployeeId = {props.pEmployeeId}
-                                onLogout = {handleLogoutSuccess} />                        
+                                pEmployeeId={props.pEmployeeId}
+                                onLogout={handleLogoutSuccess}/>                        
                         </Dropdown.Menu>
                     </Dropdown>
                 </li>

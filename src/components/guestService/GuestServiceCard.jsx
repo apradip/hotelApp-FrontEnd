@@ -224,8 +224,6 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 {/* End:: operational menu */}
-
-                                    
                             </span>
                         </Stack>
                     </Stack>

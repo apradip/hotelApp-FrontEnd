@@ -108,12 +108,6 @@ const GuestServices = forwardRef((props, ref) => {
                 setDataChanged(true);
                 props.onSuccess();
                 break;
-
-            case Operation.GuestDel:
-                toast.success("Guest successfully deleted");
-                setDataChanged(true);
-                props.onSuccess();
-                break;               
     
             case Operation.Order:
                 toast.success("Item successfully ordered");
@@ -143,6 +137,12 @@ const GuestServices = forwardRef((props, ref) => {
                 setDataChanged(true);
                 props.onSuccess();
                 break;
+
+            case Operation.GuestDel:
+                toast.success("Guest successfully deleted");
+                setDataChanged(true);
+                props.onSuccess();
+                break;               
                     
             default:                
                 break;                

@@ -224,9 +224,11 @@ export const guestRoomSchema = Yup.object({
                     }
                 }
             }
-        }),
-    keyInputCheckInDate: Yup.string().required("Check In date can't be empty!"),
-    keyInputCheckInTime: Yup.string().required("Check In time can't be empty!"),
+        })
+});
+
+export const guestRoomTransactionSchema = Yup.object({
+    keyInputRooms: Yup.array(),
 });
 
 export const guestTableSchema = Yup.object({

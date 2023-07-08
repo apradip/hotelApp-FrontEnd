@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef, useMemo, useCallback } from "react";
-import { AgGridReact } from "ag-grid-react"; 
+import React, {useEffect, useState, useRef, useMemo, useCallback, forwardRef, useImperativeHandle} from "react";
+import {AgGridReact} from "ag-grid-react"; 
 
-// import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { formatDDMMYYYY } from "../common/Common";
+import {Modal, NavLink} from "react-bootstrap";
+import {useStateContext} from "../../contexts/ContextProvider";
+import {formatDDMMYYYY} from "../common/Common";
 import NumericEditor from "../common/NumericEditor";
 import DateEditor from "../common/DateEditor";
 import RoomEditor from "../common/RoomEditor";
@@ -11,20 +11,129 @@ import ExtraPersonEditor from "../common/ExtraPersonEditor";
 import ExtraBedEditor from "../common/ExtraBedEditor";
 
 import useFetchWithAuth from "../common/useFetchWithAuth";
+import {X} from "react-feather";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {    
-	const contextValues = useStateContext();
-    const gridRef = useRef();
-	const [selectedRowNode, setSelectedRowNode] = useState();
-    const [finalTariff, setFinalTariff] = useState(0);
-        
-    const [rowData, setRowData] = useState(pDefaultRowData);
-    const [emptyRowCount, setEmptyRowCount] = useState(pDefaultRowData.length);
-    const [roomData, setRoomData] = useState(null);
+// Start:: form
+const DeleteConfirmationForm = forwardRef((props, ref) => {
+    const [showModal, setShowModal] = useState(false);
 
+    // Start :: Show modal 
+    const handleShowModal = () => {
+        setShowModal(true);
+    };
+    // End :: Show modal 
+
+    // Start :: Close modal 
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+    // End :: Close modal 
+
+    // Start :: Save 
+    const handleSave = () => {
+        setShowModal(false);
+        props.onSubmited(); 
+    };
+    // End :: Save 
+
+
+    // // Start:: Call delete api
+    // const handleSave = async () => {
+    //     //await doDelete();
+    //     //error === null ? onSubmited() : toast.error(error);
+    //     onSubmited();
+    // };
+    // // End:: Call delete api
+
+    // Start:: forward reff show modal function
+    useImperativeHandle(ref, () => {
+        return {handleShowModal}
+    });
+    // End:: forward reff show modal function
+    
+    // Start:: Html
+    return (
+        <Modal 
+            size="sm"
+            show={showModal}>
+
+            {/* Start:: Modal header */}
+            <Modal.Header>
+                {/* Header text */}
+                <Modal.Title>Delete guest room</Modal.Title>
+
+                {/* Close button */}
+                <NavLink 
+                    className="nav-icon" href="#" 
+                    onClick={handleCloseModal}>
+                    <i className="align-middle"><X/></i>
+                </NavLink>
+            </Modal.Header>
+            {/* End:: Modal header */}
+
+            {/* Start:: Modal body */}
+            <Modal.Body>
+                <label className="form-label">Are you really want to delete room no. <mark><code>{props.pRoom} on {props.pOccupancyDate}</code></mark> ?</label>
+            </Modal.Body>
+            {/* End:: Modal body */}
+
+            {/* Start:: Modal footer */}
+            <Modal.Footer>
+
+                {/* Start:: Close button */}
+                <button 
+                    type="button"   
+                    className="btn btn-danger"
+                    autoFocus
+                    onClick={handleCloseModal}>
+                    Close
+                </button>
+                {/* End:: Close button */}
+
+                {/* Start:: Save button */}
+                <button 
+                    type="button"
+                    className="btn btn-success"
+                    onClick={handleSave}>
+                    Confirm
+                </button>
+                {/* End:: Save button */}
+
+            </Modal.Footer>
+            {/* End:: Modal footer */}
+
+        </Modal>
+    );
+    // End:: Html
+
+});
+// End:: form
+
+const RoomBookingGrid = ({pState, pData, onChange}) => {    
+	const contextValues = useStateContext();
+    const gridRef = useRef(null);
+	const deleteRef = useRef(null);
+    const [selectedRowNode, setSelectedRowNode] = useState(null);
+    // const [rowData, setRowData] = useState([]);
+    const [finalTariff, setFinalTariff] = useState(0);
+    
+    const suppressNavigation = (params) => {
+        var KEY_DELETE = 'Delete';
+        var event = params.event;
+        var key = event.key;
+        var keysToSuppress = [
+            KEY_DELETE
+        ];
+        
+        var suppress = keysToSuppress.some(function (suppressedKey) {
+          return suppressedKey === key || key.toUpperCase() === suppressedKey;
+        });
+
+        return suppress;
+    };
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
@@ -41,13 +150,19 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
             field: "rowId", 
             width: 100,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : ``},
+            suppressKeyboardEvent: function (params) {
+                return suppressNavigation(params);
+            },
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : `Total`},
         },
         {
             headerName: "Date", 
             field: "occupancyDate", 
             width: 190,
             hide: operationWiseHideState(pState, "occupancyDate"),
+            suppressKeyboardEvent: function (params) {
+                return suppressNavigation(params);
+            },
             cellEditor: DateEditor, 
             editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},            
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatDDMMYYYY(params.value)}` : ""},
@@ -57,70 +172,78 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
             field: "room", 
             width: 210,
             hide: false,
+            suppressKeyboardEvent: function (params) {
+                return suppressNavigation(params);
+            },
             cellEditor: RoomEditor, 
             editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},
             cellRenderer: (params) => {return params.value},
             valueGetter: (params) => {return params.data.room},
             valueSetter: (params) => {
                 params.data.room = "Select room";
-                params.data.extPerson = 0;
+                params.data.extraPerson = 0;
                 params.data.extraPersonTariff = 0;
-                params.data.extBed = 0;
+                params.data.extraBed = 0;
                 params.data.extraBedTariff = 0;
                 params.data.maxDiscount = 0;
                 params.data.discount = 0;
                 params.data.tariff = 0;
-                params.data.roomId = "";
+                params.data.id = "";
                 params.data.gstPercentage = 0;    
-                params.data.gst = 0;
+                params.data.gstCharge = 0;
+                params.data.finalTariff = 0;
 
-                if (params.newValue) {
-                    const selectedRoom = params.newValue[0];
+                if (!params.newValue) return true;
 
-                    // find selected room details
-                    params.data.room = selectedRoom.no;
-                    params.data.extPerson = 0;
-                    params.data.extraPersonTariff = selectedRoom.extraPersonTariff;
-                    params.data.extBed = 0;
-                    params.data.extraBedTariff = selectedRoom.extraBedTariff;
-                    params.data.maxDiscount = selectedRoom.maxDiscount;
-                    params.data.discount = selectedRoom.maxDiscount;
-                    params.data.tariff = selectedRoom.tariff;
-                    params.data.roomId = selectedRoom._id;
-                    params.data.gstPercentage = 0;    
-                    params.data.gst = 0;
+                const selectedRoom = params.newValue[0];
 
-                    // calculate room tariff
-                    const tariff = (params.data.extPerson * params.data.extraPersonTariff) + 
-                                    (params.data.extBed * params.data.extraBedTariff) + 
-                                    (params.data.tariff - params.data.discount) +
-                                    params.data.gst;
-                                    
-                    params.data.finalTariff = tariff;
-                        
-                    // set tariff to get the gst percentage
-                    setFinalTariff(tariff);
-                }
+                // find selected room details
+                params.data.room = selectedRoom.no;
+                params.data.extraPerson = 0;
+                params.data.extraPersonTariff = selectedRoom.extraPersonTariff;
+                params.data.extraBed = 0;
+                params.data.extraBedTariff = selectedRoom.extraBedTariff;
+                params.data.maxDiscount = selectedRoom.maxDiscount;
+                params.data.discount = selectedRoom.maxDiscount;
+                params.data.tariff = selectedRoom.tariff;
+                params.data.id = selectedRoom._id;
+                params.data.gstPercentage = 0;    
+                params.data.gstCharge = 0;
+                params.data.finalTariff = 0;
+
+                // calculate room tariff
+                const tariff = (params.data.extraPerson * params.data.extraPersonTariff) + 
+                                (params.data.extraBed * params.data.extraBedTariff) + 
+                                (params.data.tariff - params.data.discount) +
+                                params.data.gstCharge;
+                                
+                params.data.finalTariff = tariff;
+                    
+                // set tariff to get the gst percentage
+                setFinalTariff(tariff);
 
                 return true;
             }
         },
         {
             headerName: "Ext. Person",
-            field: "extPerson", 
+            field: "extraPerson", 
             width: 180,
             hide: false,
             type: "rightAligned",
+            suppressKeyboardEvent: function (params) {
+                return suppressNavigation(params);
+            },
             cellEditor: ExtraPersonEditor,
-            editable: (params) => {return params.data.roomId !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
+            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
-            valueGetter: (params) => {return params.data.extPerson},
+            valueGetter: (params) => {return params.data.extraPerson},
             valueSetter: (params) => {
-                params.data.extPerson = params.newValue;
+                params.data.extraPerson = params.newValue;
 
                 // calculate room tariff
                 const tariff = (params.newValue * params.data.extraPersonTariff) + 
-                                    (params.data.extBed * params.data.extraBedTariff) + 
+                                    (params.data.extraBed * params.data.extraBedTariff) + 
                                     (params.data.tariff - params.data.discount);
 
                 params.data.finalTariff = tariff;                                    
@@ -133,19 +256,22 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
         },
         {
             headerName: "Ext. Bed", 
-            field: "extBed", 
+            field: "extraBed", 
             width: 150,
             hide: false,
             type: "rightAligned",
+            suppressKeyboardEvent: function (params) {
+                return suppressNavigation(params);
+            },
             cellEditor: ExtraBedEditor,
-            editable: (params) => {return params.data.roomId !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
+            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
-            valueGetter: (params) => {return params.data.extBed},
+            valueGetter: (params) => {return params.data.extraBed},
             valueSetter: (params) => {
-                params.data.extBed = params.newValue;
+                params.data.extraBed = params.newValue;
 
                 // calculate room tariff
-                const tariff = (params.data.extPerson * params.data.extraPersonTariff) + 
+                const tariff = (params.data.extraPerson * params.data.extraPersonTariff) + 
                                     (params.newValue * params.data.extraBedTariff) + 
                                     (params.data.tariff - params.data.discount);
 
@@ -162,8 +288,11 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
             field: "discount", 
             hide: operationWiseHideState(pState, "discount"),
             type: "rightAligned",
+            suppressKeyboardEvent: function (params) {
+                return suppressNavigation(params);
+            },
             cellEditor: NumericEditor, 
-            editable: (params) => {return params.data.roomId !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
+            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `₹ ${Number(params.value).toFixed(2)}` : ""},
             valueGetter: (params) => {return params.data.discount},
             valueSetter: (params) => {
@@ -171,8 +300,8 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
                     params.data.discount = params.newValue;
 
                     // calculate room tariff
-                    const tariff = (params.data.extPerson * params.data.extraPersonTariff) + 
-								   (params.data.extBed * params.data.extraBedTariff) + 
+                    const tariff = (params.data.extraPerson * params.data.extraPersonTariff) + 
+								   (params.data.extraBed * params.data.extraBedTariff) + 
                                    (params.data.tariff - params.newValue);
 
                     params.data.finalTariff = tariff;                                        
@@ -186,13 +315,13 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
         },
         {
             headerName: "GST", 
-            field: "gst", 
-            hide: operationWiseHideState(pState, "gst"),
+            field: "gstCharge", 
+            hide: operationWiseHideState(pState, "gstCharge"),
             type: "rightAligned",
             valueFormatter: (params) => {return !params.node.rowPinned ? `₹ ${Number(params.value).toFixed(2)}` : ""},
-            valueGetter: (params) => {return params.data.gst},
+            valueGetter: (params) => {return params.data.gstCharge},
             valueSetter: (params) => {
-                params.data.gst = params.newValue;
+                params.data.gstCharge = params.newValue;
                 return true;
             }
         },
@@ -210,7 +339,10 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
             }
         },
         {
-            field: "roomId"
+            field: "id"
+        },
+        {
+            field: "itemTransactionId"
         },
         {
             field: "tariff"
@@ -233,12 +365,12 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
                 params.data.gstPercentage = params.newValue;
 
                 // calculate room tariff
-                const finalTariff = (params.data.extPerson * params.data.extraPersonTariff) + 
-                                    (params.data.extBed * params.data.extraBedTariff) + 
+                const finalTariff = (params.data.extraPerson * params.data.extraPersonTariff) + 
+                                    (params.data.extraBed * params.data.extraBedTariff) + 
                                     (params.data.tariff - params.data.discount);
 
-                params.data.gst = (finalTariff * (params.newValue / 100));                                    
-                params.data.finalTariff = finalTariff + params.data.gst;                                    
+                params.data.gstCharge = (finalTariff * (params.newValue / 100));                                    
+                params.data.finalTariff = finalTariff + params.data.gstCharge;                                    
 
                 // set tariff to get the gst percentage
     			setFinalTariff(params.data.finalTariff);
@@ -248,7 +380,7 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
         }
     ]);
     const pinnedRowData = [
-        {room: `Total ${pNoOfDay} day(s)`, finalTariff: 0}
+        {rowId: "Total", finalTariff: 0}
     ];
 	const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.gstAPI}`,
@@ -258,64 +390,92 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
     });
 
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
-        gridRef.current.api.setRowData(rowData);
-                
+    const handleGridReady = useCallback(() => {
+        let rows = [];
+
+        pData.forEach(element => {
+            rows.push({
+                        rowId: rows.length + 1, 
+                        occupancyDate: element.occupancyDate,
+                        room: element.no, 
+                        extraPerson: element.extraPerson,
+                        extraBed: element.extraBed,
+                        discount: element.discount,
+                        gstCharge: element.gstCharge, 
+                        finalTariff: element.finalTariff,
+                        id: element.id,
+                        itemTransactionId: element.itemTransactionId,
+                        tariff: element.tariff,
+                        extraPersonTariff: element.extraPersonTariff, 
+                        extraBedTariff: element.extraBedTariff, 
+                        maxDiscount: element.maxDiscount,
+                        gstPercentage: element.gstPercentage
+                    });
+        });
+
+        gridRef.current.api.setRowData(rows);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
-    };
+    }, [pData]);
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
-    const handleFirstDataRendered = (params) => {
+    const handleFirstDataRendered = useCallback(() => {
         gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
 
+        // claculate sum
         calculateSum();
-    };
+    },[]);
     // End:: load empty data to grid
     
     // Start:: on row selection change set selected 
-    const handleSelectionChanged = (event) => {
+    const handleSelectionChanged = useCallback((event) => {
 		setSelectedRowNode(event.api.getSelectedNodes()[0]);		
-        setFinalTariff(0);
-    };
+        // setFinalTariff(0);
+    }, []);
     // End:: on row selection change set selected 
 
     // set grid data to a parent component
-    const handleCellValueChanged = (event) => {
-        let row = [];    
+    const handleCellValueChanged = useCallback(() => {
+        let rows = [];    
 
-        gridRef.current.api.forEachNode((rowNode, index) => {
+        gridRef.current.api.forEachNode((rowNode) => {
             if (rowNode.data.room !== "Select room") {
-                row.push({
-                            roomId : rowNode.data.roomId, 
-                            occupancyDate : "", 
-                            roomNo: rowNode.data.room, 
-                            isAC : true, 
-                            tariff : rowNode.data.finalTariff, 
-                            extraBedCount : rowNode.data.extBed, 
-                            extraBedTariff : rowNode.data.extraBedTariff, 
-                            extraPersonCount : rowNode.data.extPerson, 
-                            extraPersonTariff : rowNode.data.extraPersonTariff, 
-                            discount : rowNode.data.discount, 
-                            maxDiscount : rowNode.data.maxDiscount, 
-                            gstPercentage : rowNode.data.gstPercentage, 
-                            gstAmount : rowNode.data.gst, 
-                            price : rowNode.data.tariff
-                        });
+                rows.push({
+                        rowId: rowNode.data.rowId, 
+                        room: rowNode.data.room, 
+                        occupancyDate: rowNode.data.occupancyDate, 
+                        extraBed: rowNode.data.extraBed, 
+                        extraPerson: rowNode.data.extraPerson, 
+                        discount: rowNode.data.discount, 
+                        gstCharge: rowNode.data.gstCharge,
+                        finalTariff: rowNode.data.finalTariff, 
+                        id: rowNode.data.id, 
+                        itemTransactionId: rowNode.data.itemTransactionId,
+                        tariff: rowNode.data.tariff,
+                        extraBedTariff: rowNode.data.extraBedTariff, 
+                        extraPersonTariff: rowNode.data.extraPersonTariff, 
+                        maxDiscount: rowNode.data.maxDiscount, 
+                        gstPercentage: rowNode.data.gstPercentage
+                    });
             }
         });
-              
-        setRoomData(row);
-        calculateSum();
-        onChange(roomData);
-    };
 
+        // calculate sum
+        calculateSum();
+
+        // raise on change event for parent component 
+        onChange(rows);
+    }, []);
+
+    const handleCellKeyDown = useCallback((e) => {
+        if (e.event.key === "Delete") deleteRef && deleteRef.current.handleShowModal();
+    }, []);
+    
     // Start:: find gst% from api
     useEffect(() => {
         (async () => {
@@ -336,124 +496,163 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
             !loading && 
                 data && 
                     selectedRowNode && 
-                        selectedRowNode.setDataValue('gstPercentage', data.gstPercentage);
+                        selectedRowNode.setDataValue("gstPercentage", data.gstPercentage);
     }, [data, error, loading]);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: set gst% to grid
-
-    // Start:: set add empty row grid
-    useEffect(() => {
-        addRow(); 
-    }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: set add empty row grid
     
-    const addRow = useCallback (() => {
-        if (rowData.length > 0) {
-            if (emptyRowCount < 1) {
-                
-                let emptyRow = rowData;
+    const handleAddRow = useCallback (() => {
+        let rows = [];
+        let emptyCount = 0;
 
-                emptyRow.push({
-                            rowId: emptyRow.length + 1, 
-                            occupancyDate: new Date(), 
-                            room: "Select room", 
-                            extPerson: 0, 
-                            extBed: 0, 
-                            discount: 0, 
-                            gst: 0, 
-                            finalTariff: 0, 
-                            roomId: "", 
-                            extraBedTariff: 0, 
-                            extraPersonTariff: 0, 
-                            maxDiscount: 0, 
-                            tariff: 0, 
-                            gstPercentage: 0
-                        });
+        //calculate empty row
+        gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+            if (rowNode.data.room === "Select room") emptyCount ++;
 
-                setRowData(emptyRow);
+            rows.push({
+                rowId: rowNode.data.rowId, 
+                room: rowNode.data.room, 
+                occupancyDate: rowNode.data.occupancyDate, 
+                extraBed: rowNode.data.extraBed, 
+                extraPerson: rowNode.data.extraPerson, 
+                discount: rowNode.data.discount, 
+                gstCharge: rowNode.data.gstCharge,
+                finalTariff: rowNode.data.finalTariff, 
+                id: rowNode.data.id, 
+                itemTransactionId: rowNode.data.itemTransactionId,
+                tariff: rowNode.data.tariff,
+                extraBedTariff: rowNode.data.extraBedTariff, 
+                extraPersonTariff: rowNode.data.extraPersonTariff, 
+                maxDiscount: rowNode.data.maxDiscount, 
+                gstPercentage: rowNode.data.gstPercentage
+            });
+        });
 
-                gridRef.current.api.setRowData(rowData);
-                gridRef.current.api.sizeColumnsToFit();
+        if (emptyCount >= 1) return;
+
+        rows.push({
+            rowId: rows.length + 1, 
+            occupancyDate: new Date(),
+            room: "Select room", 
+            extraPerson: 0, 
+            extraBed: 0, 
+            discount: 0, 
+            gstCharge: 0, 
+            finalTariff: 0, 
+            id: "", 
+            itemTransactionId: "",
+            tariff: 0,
+            extraPersonTariff: 0, 
+            extraBedTariff: 0, 
+            maxDiscount: 0, 
+            gstPercentage: 0
+        });
+
+        gridRef.current.api.setRowData(rows);
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Start :: Save 
+    const handleDeleteRow = useCallback(() => {
+        let rows = [];
+
+        gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+            if (rowNode.data.rowId !== selectedRowNode.data.rowId) {
+                rows.push({
+                    rowId: rows.length + 1, 
+                    room: rowNode.data.room, 
+                    occupancyDate: rowNode.data.occupancyDate, 
+                    extraBed: rowNode.data.extraBed, 
+                    extraPerson: rowNode.data.extraPerson, 
+                    discount: rowNode.data.discount, 
+                    gstCharge: rowNode.data.gstCharge,
+                    finalTariff: rowNode.data.finalTariff, 
+                    id: rowNode.data.id, 
+                    itemTransactionId: rowNode.data.itemTransactionId,
+                    tariff: rowNode.data.tariff,
+                    extraBedTariff: rowNode.data.extraBedTariff, 
+                    extraPersonTariff: rowNode.data.extraPersonTariff, 
+                    maxDiscount: rowNode.data.maxDiscount, 
+                    gstPercentage: rowNode.data.gstPercentage
+                });
             }
-        }
-    }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
+        });
+        
+        gridRef.current.api.setRowData(rows);
+
+        // calculate sum
+        calculateSum();
+
+        // raise on change event for parent component 
+        onChange(rows);
+    }, [selectedRowNode]);
+    // End :: Save 
 
     // Start:: calculate sum on change tariff
     const calculateSum = useCallback (() => {
-        let subTotalTariff = 0;
-        let emptyCount = 0;
+        let total = 0;
 
         // calculate total expance
-        gridRef.current.api && gridRef.current.api.forEachNode((rowNode, index) => {
-            subTotalTariff = subTotalTariff + rowNode.data.finalTariff;
-        })
-
-        pinnedRowData[0].room = `Total ${pNoOfDay} day(s)`;
-        pinnedRowData[0].finalTariff = subTotalTariff * pNoOfDay;
-        
-        gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-
-
-        //calculate empty row
-        gridRef.current.api.forEachNode((rowNode, index) => {
-            if (rowNode.data.room === "Select room") {
-                emptyCount ++;
-            }
+        gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+            total += rowNode.data.finalTariff;
         });
 
-        setEmptyRowCount(emptyCount);
+        pinnedRowData[0].finalTariff = total;
+        gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+
+        // add empty row
+        handleAddRow();
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: calculate sum on change tariff
 
     function operationWiseHideState (state, colName) {
         switch(state){
-            case 'ADD': 
+            case "ADD": 
                 switch(colName) {
-                    case 'occupancyDate': 
+                    case "occupancyDate": 
                         return true;
 
-                    case 'room': 
+                    case "room": 
                         return false;
 
-                    case 'discount': 
+                    case "discount": 
                         return false;
 
-                    case 'gst': 
+                    case "gstCharge": 
                         return false;
 
                     default: 
                         return false;
                 }
 
-            case 'MOD': 
+            case "MOD": 
                 switch(colName) {
-                    case 'occupancyDate': 
+                    case "occupancyDate": 
                         return false;
 
-                    case 'room': 
+                    case "room": 
                         return false;
 
-                    case 'discount': 
+                    case "discount": 
                         return false;
 
-                    case 'gst': 
+                    case "gstCharge": 
                         return false;
 
                     default: 
                         return false;
                 }
 
-            case 'VIEW': 
+            case "VIEW": 
                 switch(colName) {
-                    case 'occupancyDate': 
+                    case "occupancyDate": 
                         return false;
 
-                    case 'room': 
+                    case "room": 
                         return false;
 
-                    case 'discount': 
+                    case "discount": 
                         return true;
 
-                    case 'gst': 
+                    case "gstCharge": 
                         return true;
 
                     default: 
@@ -464,9 +663,10 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
                 return false;
         }
     };
-
+        
 	return (
-        <div className="ag-theme-alpine grid">
+        <div className="col-12 ag-theme-alpine grid-height-400">
+
             <AgGridReact	
                 ref={gridRef}
                 columnDefs={columnDefs}
@@ -476,7 +676,18 @@ const RoomBookingGrid = ({ pState, pDefaultRowData, pNoOfDay, onChange }) => {
                 onGridReady={handleGridReady}
                 onFirstDataRendered={handleFirstDataRendered}
                 onSelectionChanged={handleSelectionChanged}
-                onCellValueChanged={handleCellValueChanged} />
+                onCellValueChanged={handleCellValueChanged}
+                onCellKeyDown={handleCellKeyDown}/>
+
+            {/* Start:: Form component */}
+            {selectedRowNode &&
+                <DeleteConfirmationForm 
+                    ref={deleteRef}
+                    pRoom={selectedRowNode.data.room}
+                    pOccupancyDate={selectedRowNode.data.occupancyDate}
+                    onSubmited={handleDeleteRow}/>}
+                {/* End:: Form component */}
+
         </div>
     )
 }

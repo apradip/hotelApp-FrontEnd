@@ -108,12 +108,6 @@ const GuestTables = forwardRef((props, ref) => {
                 setDataChanged(true);
                 props.onSuccess();
                 break;
-
-            case Operation.GuestDel:
-                toast.success("Guest successfully deleted");
-                setDataChanged(true);
-                props.onSuccess();
-                break;               
     
             case Operation.Order:
                 toast.success("Item successfully ordered");
@@ -143,6 +137,12 @@ const GuestTables = forwardRef((props, ref) => {
                 setDataChanged(true);
                 props.onSuccess();
                 break;
+
+            case Operation.GuestDel:
+                toast.success("Guest successfully deleted");
+                setDataChanged(true);
+                props.onSuccess();
+                break;               
                     
             default:                
                 break;                
@@ -198,6 +198,8 @@ const GuestTables = forwardRef((props, ref) => {
         let colIdx = 0;
         let rowData = [];
 
+        if (!pData) return null;
+        
         return pData.map((item) => {
             rowData.push(item);
             colIdx++;

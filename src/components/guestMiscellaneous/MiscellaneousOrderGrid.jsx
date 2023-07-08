@@ -253,7 +253,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                     });
 
             setRowData(emptyRow);
-            gridRef.current.api.setRowData(rowData);
+            gridRef.current.api.setRowData(emptyRow);
             gridRef.current.api.sizeColumnsToFit();
 
             setEmptyRowCount(0);

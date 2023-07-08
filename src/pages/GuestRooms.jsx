@@ -1,13 +1,22 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Breadcrumb } from "react-bootstrap";
-import { toast } from "react-toastify";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Breadcrumb} from "react-bootstrap";
+import {toast} from "react-toastify";
 
-import { HotelId } from "../App";
-import { useStateContext } from "../contexts/ContextProvider";
+import {HotelId} from "../App";
+import {useStateContext} from "../contexts/ContextProvider";
 import Add from "../components/guestRoom/GuestRoomAdd";
 import Card from "../components/guestRoom/GuestRoomCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
+
+const Operation = {
+    GuestAdd: 'GUEST_ADD',
+    Booked: 'BOOKED',
+    BillGenerate: 'BILL_GENERATE',
+    PaymentAdd: 'PAYMENT_ADD',
+    Checkout: 'GUEST_CHECKOUT',
+    GuestDel: 'GUEST_DEL'
+};
 
 
 // Start:: Component
@@ -92,32 +101,43 @@ const GuestRooms = forwardRef(( props, ref ) => {
     // End:: Close modal
 
     // Start:: on data operation successfully
-    const handleSuccess = ( operation ) => {
+    const handleSuccess = (operation) => {
         switch (operation) {
-            case "add":
-                toast.success("Data successfully added");
-                setDataChanged(true);
-                props.onSuccess();
-                break;
-
-            case "edit":
-                toast.success("Data successfully changed");
-                setDataChanged(true);
-                props.onSuccess();
-                break;                
-
-            case "delete":
-                toast.success("Data successfully deleted");
-                setDataChanged(true);
-                props.onSuccess();
-                break;                
-
-            case "addPayment":
-                toast.success("Payment successfully added");
+            case Operation.GuestAdd:
+                toast.success("Guest successfully added");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
     
+            case Operation.Booked:
+                toast.success("Room successfully booked");
+                setDataChanged(true);
+                props.onSuccess();
+                break;               
+    
+            case Operation.BillGenerate:
+                setDataChanged(true);
+                props.onSuccess();
+                break;                                
+
+            case Operation.PaymentAdd:
+                toast.success("Payment successfully done");
+                setDataChanged(true);
+                props.onSuccess();
+                break;
+    
+            case Operation.Checkout:
+                toast.success("Guest successfully checked out");
+                setDataChanged(true);
+                props.onSuccess();
+                break;
+
+            case Operation.GuestDel:
+                toast.success("Guest successfully deleted");
+                setDataChanged(true);
+                props.onSuccess();
+                break;               
+                    
             default:                
                 break;                
         }
@@ -142,11 +162,32 @@ const GuestRooms = forwardRef(( props, ref ) => {
     };
     // End:: handle page change
 
+    // Start:: forward reff change search and open add/edit/delete modal
+    useImperativeHandle(ref, () => {
+        return {changeSearch, openAdd, openEdit, openDelete, close}
+    });
+    // End:: forward reff change search and open add/edit/delete modal
+
+    // Start:: fetch data list from api
+    useEffect(() => {
+        (async () => {
+            await doFetch();
+            setDataChanged(false);
+          })();
+    }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch data list from api
+
+    useEffect(() => {
+        error && toast.error(error);
+    }, [data, error, loading]);
+
     // Start:: show all data in card format
     const displayData = (pData = []) => {
         let rowIdx = 0;
         let colIdx = 0;
         let rowData = [];
+
+        if (!pData) return null;
 
         return pData.map((item) => {
             rowData.push(item);
@@ -166,11 +207,11 @@ const GuestRooms = forwardRef(( props, ref ) => {
         })
     };
 
-    const createRow = ( pData, rowIdx ) => {
+    const createRow = (pData, rowIdx) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className="row m-0 p-0" key={rowKey}>
+            <div className="row" key={rowKey}>
                 {
                     pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
@@ -181,55 +222,40 @@ const GuestRooms = forwardRef(( props, ref ) => {
     };
 
     const createCol = (pData = undefined, itemIdx) => {
-        const colKey = `col_${pData._id}`;
+        const colKey = `col_${pData.id}`;
 
         return (
-            <div className="col-xl-4 col-md-4 m-0" key={colKey}>
+            <div className="col-xl-4 col-md-4" key={colKey}>
                 <Card 
                     ref={(el) => cardRefs.current[itemIdx] = el}
                     pIndex={itemIdx}
-                    pId={pData._id} 
-                    pRoomNos={pData.roomNos}
+                    pGuestId={pData.id} 
+                    pTransactionId={pData.transactionId ? pData.transactionId : "undefined"}
                     pName={pData.name}
                     pMobile={pData.mobile}
-                    pAddress={pData.address + ", " + pData.city + ", " + pData.state}
-                    pCheckInDate={pData.checkInDate}
-                    pCheckOutDate={pData.checkOutDate}
-                    pTotalExpenseAmount={pData.totalExpenseAmount}
-                    pTotalPaidAmount={pData.totalPaidAmount}
-                    onEdited={() => {handleSuccess("edit")}}
-                    onDeleted={() => {handleSuccess("delete")}} 
-                    onPaymentAdded={() => {handleSuccess("addPayment")}} 
+                    pGuestCount={pData.guestCount}
+                    pCorporateName={pData.corporateName}
+                    pCorporateAddress={pData.corporateAddress}
+                    pGstNo={pData.gstNo}
+                    pDayCount={pData.dayCount}
+                    pBookingAgent={pData.bookingAgent}
+                    pPlan={pData.plan}
+                    pRooms={pData.rooms}
+                    pIndate={pData.inDate}
+                    pInTime={pData.inTime}
+                    pTotalExpense={pData.totalExpense}
+                    pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
+                    onBooked={() => {handleSuccess(Operation.Booked)}}
+                    onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
+                    onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
+                    onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
+                    onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
                     onClosed={close} 
                     onActivated={handleActivated}/>                
             </div>);
     };
     // End:: show all data in card format
 
-    // Start:: forward reff change search and open add/edit/delete modal
-    useImperativeHandle(ref, () => {
-        return {
-            changeSearch, openAdd, openEdit, openDelete, close
-        }
-    });
-    // End:: forward reff change search and open add/edit/delete modal
-
-    // Start:: fetch data list from api
-    useEffect(() => {
-        (async () => {
-            try {
-              await doFetch();
-              setDataChanged(false);
-            } catch (err) {
-              console.log("Error occured when fetching data");
-            }
-          })();
-    }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch data list from api
-
-    useEffect(() => {
-        error && toast.error(error);
-    }, [data, error, loading]);
 
     // Start:: Html
     return ( 
@@ -258,12 +284,12 @@ const GuestRooms = forwardRef(( props, ref ) => {
             {/* Start :: display data */}
             <section className="content">
                 <div className="container-fluid">
-                    <div className="card mb-0">
+                    <div className="card">
                         
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
                             {/* Start :: Display data count */}
-                            <div className="col-12 text-danger">
+                            <div className="col-12 text-danger p-0">
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -273,33 +299,31 @@ const GuestRooms = forwardRef(( props, ref ) => {
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body">
-                            { loading &&
+                        <div className="card-body py-0">
+                            {loading &&
                                 <div className="d-flex justify-content-center">
                                     <div className="spinner-border text-primary" role="status"/>
-                                </div> }
+                                </div>}
 
-                            { !loading && 
+                            {!loading && 
                                 data && 
-                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem)) }
+                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
                         </div>
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer">
-                            <div className="row">
-                                {/* Start :: Pagination */}
-                                <div className="col-12 d-flex justify-content-end">
-                                    {!loading && 
-                                            data && 
-                                                <Paging
-                                                    itemPerPage={itemPerPage}
-                                                    totalItem={data.length}
-                                                    selectedPage={selectedPage}
-                                                    onPaging={handlePaging} />}
-                                </div>
-                                {/* End :: Pagination */}
+                        <div className="card-footer p-0">
+                            {/* Start :: Pagination */}
+                            <div className="col-12 d-flex justify-content-end">
+                                {!loading && 
+                                        data && 
+                                            <Paging
+                                                itemPerPage={itemPerPage}
+                                                totalItem={data.length}
+                                                selectedPage={selectedPage}
+                                                onPaging={handlePaging}/>}
                             </div>
+                            {/* End :: Pagination */}
                         </div>
                         {/* End :: Footer & operational panel */}
 
@@ -311,8 +335,8 @@ const GuestRooms = forwardRef(( props, ref ) => {
             {/* Start :: add employee component */}
             <Add 
                 ref={addRef}   
-                onAdded={() => {handleSuccess("add")}}
-                onClosed={close} />
+                onAdded={() => {handleSuccess(Operation.GuestAdd)}}
+                onClosed={close}/>
             {/* End :: add employee component */}
 
         </div>

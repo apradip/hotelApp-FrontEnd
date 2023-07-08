@@ -4,7 +4,7 @@ export const subStr = (text, len) => {
     let t = ''
     t = text && text.length > len ? text.substr(0, len) + ' ...' : text
     return t
-}
+};
 
 export const  getPage = (baseURL, url) => {
     let component = ''
@@ -13,7 +13,7 @@ export const  getPage = (baseURL, url) => {
 
     paramArr.length > 0 ? component = paramArr[0] : component = params
     return component;
-}
+};
 
 export const getPageName = (selectedCompont) => {
     let name = ''
@@ -299,7 +299,7 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.name = true
             attribute.show.search = true
             attribute.show.add = true
-            attribute.show.edit = true
+            attribute.show.edit = false
             attribute.show.delete = true
 
             break
@@ -365,7 +365,7 @@ export const getPageAttribute = (selectedCompont) => {
     }
 
     return attribute
-}
+};
 
 export const getAccessLevel = (accessLevelArray) => {
     let names = "";
@@ -377,20 +377,37 @@ export const getAccessLevel = (accessLevelArray) => {
     }
 
     return names
-}
+};
 
-export const getRooms = (roomList) => {
+//  get employee first name
+export const getFirstName = (name) => {
+    const names = name.split(" ");
+    return names.length > 0 ? names[0] : name;
+};
+
+export const getRooms = (roomObject) => {
     let rooms = "";
-    const roomArr = roomList && roomList.split(",");
 
-    if (roomArr !== "undefined") {
-        for (const item of roomArr) {
-            rooms === "" ? rooms = item.no : rooms = rooms + ", " + item.no;
-        }
+    if (roomObject) {
+        roomObject.map((room) => (
+            rooms.length > 0 ? rooms = rooms + ", " + room.no : rooms = room.no
+        ))
     }
 
-    return rooms
-}
+    return rooms;
+};
+
+export const getTables = (tableObject) => {
+    let tables = "";
+
+    if (tableObject) {
+        tableObject.map((table) => (
+            tables.length > 0 ? tables = tables + ", " + table.no : tables = table.no
+        ))
+    }
+
+    return tables;
+};
 
 export const formatYYYYMMDD = (longDateTime) => {
     let dt = new Date(longDateTime),
@@ -398,7 +415,7 @@ export const formatYYYYMMDD = (longDateTime) => {
       day = ("0" + dt.getDate()).slice(-2);
     
     return [dt.getFullYear(), mon, day].join("-");
-}
+};
 
 export const formatDDMMYYYY = (longDateTime) => {
     let dt = new Date(longDateTime),
@@ -406,13 +423,13 @@ export const formatDDMMYYYY = (longDateTime) => {
       day = ("0" + dt.getDate()).slice(-2);
     
     return [day, mon, dt.getFullYear()].join("/");
-}
+};
 
 export const formatHHMM = (longDateTime) => {
     const tim = new Date(longDateTime);
     const moment = moment(tim).format();
     return moment.format("HH:mm");
-}
+};
 
 export const formatTime12Hour = (time) => {
     // Check correct time format and split into components
@@ -425,7 +442,7 @@ export const formatTime12Hour = (time) => {
     }
 
     return time.join (''); // return adjusted time or original string
-}
+};
 
 export const formatINR = (number) => {
     return "₹ " + parseFloat(number, 10).toFixed(2);
@@ -436,20 +453,3 @@ export const formatBillNo = (number) => {
     const num = number + '';
     return pad.repeat(8 - num.length) + number;
 };
-
-
-//  get employee first name
-export const getFirstName = (name) => {
-    const names = name.split(" ");
-    return names.length > 0 ? names[0] : name;
-};
-
-export const getTables = (tableObject) => {
-    let tables = "";
-
-    tableObject.map((table) => (
-        tables.length > 0 ? tables = tables + ", " + table.no : tables = table.no
-    ))
-
-    return tables;
-}

@@ -208,9 +208,7 @@ const GuestFoods = forwardRef(( props, ref ) => {
 
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
-        return {
-            changeSearch, openAdd, openEdit, openDelete, close
-        }
+        return {changeSearch, openAdd, openEdit, openDelete, close}
     });
     // End:: forward reff change search and open add/edit/delete modal
 

@@ -1,21 +1,24 @@
 import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
 import {Card, Dropdown, Stack} from "react-bootstrap";
-// import TimeElapsed from "../common/TimeElapsed";
+import TimeElapsed from "../common/TimeElapsed";
 import {NavLink} from "react-router-dom";
-import {Edit3, ShoppingBag, CreditCard, LogOut, ChevronDown} from "react-feather";
-
-import {subStr, formatINR} from "../common/Common";
-import {formatDDMMYYYY} from "../common/Common";
+import {PenTool, FileText, CreditCard, LogOut, Scissors, MoreVertical} from "react-feather";
+import {subStr, formatINR, getRooms} from "../common/Common";
 
 import View from "./GuestRoomView";
-import Edit from "./GuestRoomEdit";
-import Delete from "./GuestRoomDelete";
+import Booking from "./GuestRoomBooking";
+import GenerateBill from "./GuestRoomGenerateBill";
 import AddPayment from "../guestPayment/GuestPaymentAdd";
+import Checkout from "./GuestRoomCheckout";
+import Delete from "./GuestRoomDelete";
 
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown" ref={ref} 
-        onClick={(e) => {e.preventDefault(); onClick(e);}}>
+        onClick={(e) => {
+            e.preventDefault(); 
+            onClick(e);
+        }}>
       {children}
     </NavLink>
 ));
@@ -41,9 +44,11 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handelOpenDelete
 const GuestRoomCard = forwardRef((props, ref) => {
     const viewRef = useRef(null);
-    const editRef = useRef(null);
-    const deleteRef = useRef(null);
+    const bookingRef=useRef(null);
+    const generateBillRef=useRef(null);
     const addPaymentRef = useRef(null);
+    const checkoutRef=useRef(null);
+    const deleteRef = useRef(null);
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
 
@@ -53,17 +58,17 @@ const GuestRoomCard = forwardRef((props, ref) => {
     };
     // End:: Show view modal 
 
-    // Start:: Show edit modal 
-    const handelOpenEdit = () => {
-        editRef && editRef.current.handleShowModal();
+    // Start:: Show order modal 
+    const handelOpenBooking = () => {
+        bookingRef && bookingRef.current.handleShowModal();
     };
-    // End:: Show edit modal 
+    // End:: Show order modal 
 
-    // Start:: Show delete modal 
-    const handelOpenDelete = () => {
-        deleteRef && deleteRef.current.handleShowModal();
+    // Start:: Show generate bill modal 
+    const handelOpenGenerateBill = () => {
+        generateBillRef && generateBillRef.current.handleShowModal();
     };
-    // End:: Show delete modal 
+    // End:: Show generate bill modal 
 
     // Start:: Show payment modal 
     const handelOpenPayment = () => {
@@ -73,9 +78,15 @@ const GuestRoomCard = forwardRef((props, ref) => {
 
     // Start:: Show checkout modal 
     const handelOpenCheckout = () => {
-        // deleteRef && deleteRef.current.handleShowModal();
+        checkoutRef && checkoutRef.current.handleShowModal();
     };
     // End:: Show checkout modal 
+
+    // Start:: Show delete modal 
+    const handelOpenDelete = () => {
+        deleteRef && deleteRef.current.handleShowModal();
+    };
+    // End:: Show delete modal 
     
     // Start:: Close all modal 
     const handleClose = () => {
@@ -93,7 +104,11 @@ const GuestRoomCard = forwardRef((props, ref) => {
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
         return {
-            handleDeSelect, handelOpenEdit, handelOpenDelete
+            handleDeSelect, 
+            handelOpenBooking, 
+            handelOpenGenerateBill, 
+            handelOpenPayment,
+            handelOpenDelete
         }
     });
     // Edit:: forward reff de-select, show edit/delete modal function
@@ -103,97 +118,91 @@ const GuestRoomCard = forwardRef((props, ref) => {
         <>
             {/* Start :: card component */}
             <Card 
+                ref={ref}
                 key={props.pIndex}
                 index={props.pIndex}
                 className={"border"}
                 border={active ? "info" : focus ? "primary" : ""}  
-                ref={ref}
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
-                                        if (e.detail === 1) {
-                                            setActive(!active) 
-                                            props.onActivated(props.pIndex)
-                                        }    
-                                        else if (e.detail === 2) {
-                                            handelOpenView()
-                                        }  
-                                   }}>
+                                    if (e.detail === 1) {
+                                        setActive(!active) 
+                                        props.onActivated(props.pIndex)
+                                    }    
+                                    else if (e.detail === 2) {
+                                        handelOpenView()
+                                    }  
+                                }}>
 
                 <Card.Body className="text-sm p-1">
                     <Stack gap={1}>
                         <Stack direction="horizontal" gap={0}>
-                            <span className="col-10 text-left">
-                                <h4>{subStr(props.pRoomNos, 20)}</h4>
+                            <span className="col-9 text-left pl-1">
+                                <b>{props.pCorporateName ? subStr(props.pCorporateName, 40): subStr(props.pName, 40)}</b>
                             </span>
 
-                            {/* Start:: Column menu */}
-                            <span className="col-2 text-right">
+                            <span className="col-3 text-right text-danger pr-1">
+                                <b>{formatINR(props.pTotalBalance)}</b>
+                            </span>
+                        </Stack>
+
+                        <Stack gap={0}>
+                            <span className="col-12 text-left px-1">
+                                    Room(s): {getRooms(props.pRooms)}</span>
+                        </Stack>        
+
+                        <Stack direction="horizontal" gap={0}>
+                            <span className="col-6 text-left pl-1">
+                                {props.pGuestCount} no of guest(s)</span>
+
+                            <span className="col-5 text-right pr-0">
+                                <TimeElapsed
+                                    pInDate={props.pIndate}
+                                    pInTime={props.pInTime}/>
+                            </span>
+
+                            <span className="col-1 text-right pr-1">
                                 {/* Start:: operational menu */}
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle}>
-                                        <ChevronDown size={16}/>
+                                        <MoreVertical size={16}/>
                                     </Dropdown.Toggle>
                                     
                                     <Dropdown.Menu>
                                         <Dropdown.Item eventKey="1" 
-                                            onClick={handelOpenEdit}>
-                                            <Edit3 className="feather-16 mr-3"/>Edit
+                                            onClick={handelOpenBooking}>
+                                            <PenTool className="feather-16 mr-3" />Booking
                                         </Dropdown.Item>
 
-                                        <Dropdown.Item eventKey="2"
-                                            onClick = {handelOpenDelete}>
-                                            <ShoppingBag className="feather-16 mr-3"/>Delete
+                                        <Dropdown.Item eventKey="2" 
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
+                                            onClick={handelOpenGenerateBill}>
+                                            <FileText className="feather-16 mr-3"/>Bill
                                         </Dropdown.Item>
 
-                                        <Dropdown.Item eventKey="3" 
-                                            onClick = {handelOpenPayment}>
+                                        <Dropdown.Item eventKey="3"
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
+                                            onClick={handelOpenPayment}>
                                             <CreditCard className="feather-16 mr-3"/>Payment
                                         </Dropdown.Item>
 
-                                        {/* <Dropdown.Item eventKey="4"
-                                            onClick = {handelOpenPayment}>
-                                            <CreditCard className="feather-16 mr-3"/>Payment
-                                        </Dropdown.Item> */}
-
-                                        <Dropdown.Item eventKey="5"
-                                            onClick = {handelOpenCheckout}>
+                                        <Dropdown.Item eventKey="4"
+                                            disabled={props.pTransactionId !== "undefined" ? false : true}
+                                            onClick={handelOpenCheckout}>
                                             <LogOut className="feather-16 mr-3"/>Check out
+                                        </Dropdown.Item>
+
+                                        <Dropdown.Item eventKey="5" 
+                                            disabled={props.pTransactionId === "undefined" ? false : true}
+                                            onClick={handelOpenDelete}>
+                                            <Scissors className="feather-16 mr-3"/>Delete
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 {/* End:: operational menu */}
                             </span>
-                            {/* End:: Column menu */}
                         </Stack>
-
-                        <Stack gap={0}>
-                            <div className="col-12">{subStr(props.pName, 45)}</div>
-                        </Stack>
-
-                        <Stack gap={0}>
-                            <div className="col-12">{subStr(props.pAddress, 45)}</div>
-                        </Stack>        
-
-                        <Stack gap={0}>
-                            <div className="col-12">Mobile : {props.pMobile}</div>
-                        </Stack>        
-
-                        <Stack direction="horizontal" gap={0}>
-                            <span className="col-6 text-left">
-                                Check In : {formatDDMMYYYY(props.pCheckInDate)}</span>
-                                
-                            <span className="col-6 text-right text-danger">
-                                Check Out : {formatDDMMYYYY(props.pCheckOutDate)}</span>
-                        </Stack>
-
-                        <Stack direction="horizontal" gap={0}>
-                            <span className="col-6 text-left">
-                                Expense : {formatINR(props.pTotalExpenseAmount)}</span>
-                                
-                            <span className="col-6 text-right text-danger">
-                                Due : {formatINR(props.pTotalExpenseAmount - props.pTotalPaidAmount)}</span>
-                        </Stack>                        
                     </Stack>
                 </Card.Body>
             </Card>
@@ -202,38 +211,88 @@ const GuestRoomCard = forwardRef((props, ref) => {
             {/* Start :: view component */}
             <View
                 ref={viewRef}
-                pId={props.pId} 
+                pGuestId={props.pGuestId} 
+                pName={props.pName}
+                pMobile={props.pMobile}
+                pGuestCount={props.pGuestCount}
+                pCorporateName={props.pCorporateName}
+                pCorporateAddress={props.pCorporateAddress}
+                pGstNo={props.pGstNo}
+                pDayCount={props.pDayCount}
+                pBookingAgent={props.pBookingAgent}
+                pPlan={props.pPlan}
                 onClosed={handleClose}/>
             {/* End :: view component */}
 
-            {/* Start :: edit component */}
-            <Edit 
-                ref={editRef}
-                pId={props.pId} 
-                onEdited={props.onEdited} 
+            {/* Start :: booking component */}
+            <Booking
+                ref={bookingRef}
+                pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
+                pName={props.pName}
+                pMobile={props.pMobile}
+                pGuestCount={props.pGuestCount}
+                pCorporateName={props.pCorporateName}
+                pCorporateAddress={props.pCorporateAddress}
+                pGstNo={props.pGstNo}
+                pDayCount={props.pDayCount}
+                pBookingAgent={props.pBookingAgent}
+                pPlan={props.pPlan}
+                onSaved={props.onBooked} 
                 onClosed={handleClose}/>
-            {/* End :: edit component */}
+            {/* End :: booking component */}
 
-            {/* Start :: delete component */}
-            <Delete 
-                ref={deleteRef}
-                pId={props.pId} 
-                onDeleted={props.onDeleted} 
+            {/* Start :: generate & display summery bill component */}
+            <GenerateBill 
+                ref={generateBillRef}
+                pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
+                pName={props.pName}
+                pMobile={props.pMobile}
+                pGuestCount={props.pGuestCount}
+                pCorporateName={props.pCorporateName}
+                pCorporateAddress={props.pCorporateAddress}
+                pGstNo={props.pGstNo}
+                pPlan={props.pPlan}
+                pDayCount={props.pDayCount}
+                pBookingAgent={props.pBookingAgent}
+                onSaved={props.onBillGenerated}
                 onClosed={handleClose}/>
-            {/* End :: delete component */}
+            {/* End :: generate & display summery bill component */}
 
             {/* Start :: add payment component */}
             <AddPayment 
                 ref={addPaymentRef}
-                pGuestId={props.pId}    
+                pGuestId={props.pGuestId}    
+                pTransactionId={props.pTransactionId}
                 pName={props.pName}
                 pMobile={props.pMobile}
-                pAddress={props.pAddress}    
-                pBalance={props.pTotalExpenseAmount - props.pTotalPaidAmount}    
-                onAdded={props.onPaymentAdded}
-                onClosed={handleClose} />
+                pCorporateName={props.pCorporateName}
+                pCorporateAddress={props.pCorporateAddress}
+                pBalance={props.pTotalBalance}    
+                onSaved={props.onPaymentAdded}
+                onClosed={handleClose}/>
             {/* End :: add payment component */}
 
+            {/* Start :: checkout component */}
+            <Checkout
+                ref={checkoutRef}
+                pGuestId={props.pGuestId} 
+                pTransactionId={props.pTransactionId}
+                pName={props.pName}
+                pCorporateName={props.pCorporateName}
+                onSaved={props.onCheckedout} 
+                onClosed={handleClose}/>
+            {/* End :: checkout component */}
+
+            {/* Start :: delete component */}
+            <Delete 
+                ref={deleteRef}
+                pId={props.pGuestId} 
+                pName={props.pName}
+                onDeleted={props.onDeleted} 
+                onClosed={handleClose}/>
+            {/* End :: delete component */}
         </>
     );
     // End:: Html

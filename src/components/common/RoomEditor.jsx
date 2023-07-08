@@ -1,10 +1,10 @@
-import React, { useContext, forwardRef, useImperativeHandle, useEffect, useState } from "react";
+import React, {useContext, forwardRef, useImperativeHandle, useEffect, useState} from "react";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
-const RoomEditor = forwardRef(( props, ref ) => {	
+const RoomEditor = forwardRef((props, ref) => {	
 	const hotelId = useContext(HotelId);
 	const contextValues = useStateContext();
 	const selectInput = React.createRef();
@@ -19,6 +19,7 @@ const RoomEditor = forwardRef(( props, ref ) => {
 		extraPersonTariff: 0,
 		isOccupied: false
 	};
+
 	const [listRoom, setListRoom] = useState(null);
 	const [selectedRoom, setSelectedRoom] = useState(null);
 	const [defaultRoom, setDefaultRoom] = useState(props.value);
@@ -28,7 +29,9 @@ const RoomEditor = forwardRef(( props, ref ) => {
 
 	const handleChange = (event) => {
 		event.preventDefault();
+
 		const roomObject = listRoom.filter((item) => event.target.value === item._id);
+
 		setSelectedRoom(roomObject);
 		setDefaultRoom(roomObject._id);
     };
@@ -38,9 +41,7 @@ const RoomEditor = forwardRef(( props, ref ) => {
     };
 
 	useImperativeHandle(ref, () => {
-        return {
-            getValue
-        }
+        return {getValue}
     });
 
 	useEffect(() => {
@@ -67,7 +68,7 @@ const RoomEditor = forwardRef(( props, ref ) => {
 				multiple={false}
 				value={defaultRoom}
 				onChange={handleChange}
-				style={{border: "none", height: "99%", width: "100%"}} >
+				style={{border: "none", height: "99%", width: "100%"}}>
 
 				{listRoom && listRoom.map((item) => {
 					return(<option key={item._id} value={item._id}>{item.no}</option>)

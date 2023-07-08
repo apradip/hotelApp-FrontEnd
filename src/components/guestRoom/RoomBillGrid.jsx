@@ -6,7 +6,7 @@ import {formatINR} from "../common/Common";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const ServiceBillGrid = ({pData}) => {    
+const RoomBillGrid = ({pData}) => {    
     const gridRef = useRef();
     const [rowData, setRowData] = useState([]);
     const [totalItemPrice, setTotalItemPrice] = useState(0);
@@ -122,7 +122,7 @@ const ServiceBillGrid = ({pData}) => {
         let rows = [];
 
         pData.forEach(element => {
-            const object = {
+            const row = {
                             rowId: rows.length + 1, 
                             id: element.id,
                             name: element.name, 
@@ -133,7 +133,7 @@ const ServiceBillGrid = ({pData}) => {
                             gstCharge: element.gstCharge
                         };
     
-            rows.push(object);
+            rows.push(row);
 
             totalPrice += element.unitPrice * element.quantity;
             totalService += element.serviceCharge;
@@ -164,4 +164,4 @@ const ServiceBillGrid = ({pData}) => {
     );
 }
  
-export default ServiceBillGrid;
+export default RoomBillGrid;

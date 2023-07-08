@@ -50,20 +50,20 @@ const Login = () => {
                         <div className="col-md-5 contents">
                             {showPassword &&
                                 <LoginPassword 
-                                    onSuccess = { handleSuccess }
-                                    onBack = { handleBack } />
+                                    onSuccess={handleSuccess}
+                                    onBack={handleBack}/>
                             }
 
                             {showForgetPassword &&
                                 <ForgetPassword 
-                                    onSuccess = { handleOtpSuccess }
-                                    onBack = { handleBack } />
+                                    onSuccess={handleOtpSuccess}
+                                    onBack={handleBack}/>
                             }
 
                             {showOtp &&
                                 <LoginOtp 
-                                    onSuccess = { handleSuccess }
-                                    onBack = { handleBack } />
+                                    onSuccess={handleSuccess}
+                                    onBack={handleBack}/>
                             }
                         </div>
                     </div>

@@ -7,7 +7,7 @@ import React, { useEffect, useRef, forwardRef, useImperativeHandle } from "react
 
 // useImperativeHandle
 // setFocus
-const Search = forwardRef(( props, ref ) => {
+const Search = forwardRef((props, ref) => {
     const inputRef = useRef(null);
 
     useEffect(() => {
@@ -33,9 +33,7 @@ const Search = forwardRef(( props, ref ) => {
 
     // Start:: forward reff set focus function
     useImperativeHandle(ref, () => {
-        return {
-            setFocus
-        }
+        return {setFocus}
     }, []);
     // End:: forward reff set focus function
 
@@ -49,13 +47,13 @@ const Search = forwardRef(( props, ref ) => {
             {/* Input element text */}
             <input 
                 autoFocus
-                type = "search" 
-                className = "form-control mr-2"
-                placeholder = "search" 
-                autoComplete = "off"
-                ref = {inputRef}
-                maxLength = {100}
-                onKeyUp = {handleSearchChange} />
+                type="search" 
+                className="form-control mr-2"
+                placeholder="search" 
+                autoComplete="off"
+                ref={inputRef}
+                maxLength={100}
+                onKeyUp={handleSearchChange}/>
         </form>
     )
     // End:: Html

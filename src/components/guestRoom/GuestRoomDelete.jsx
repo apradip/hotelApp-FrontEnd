@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { X } from "react-feather";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Modal, NavLink} from "react-bootstrap";
+import {toast} from "react-toastify";
+import {X} from "react-feather";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({ pId, pName, onSubmited, onClosed }) => {
+const Form = ({pId, pName, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const inputRef = useRef(null);
@@ -44,7 +44,7 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
                     autoFocus
                     disabled={loading}
                     ref={inputRef} 
-                    onClick={onClosed} >
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -53,15 +53,15 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
                 <button 
                     type="button"
                     className="btn btn-success"
-                    disabled = { loading || error }
-                    onClick = { handleSave } >
+                    disabled={loading || error}
+                    onClick={handleSave}>
 
-                    { !loading && "Confirm" }
-                    { loading && 
+                    {!loading && "Confirm"}
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
-                        </> }
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
@@ -84,11 +84,11 @@ const Form = ({ pId, pName, onSubmited, onClosed }) => {
 
 // useImperativeHandle
 // handleShowModal
-const GuestRoomDelete = forwardRef(( props, ref ) => {
+const GuestRoomDelete = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pId}`
     });
 
@@ -114,9 +114,7 @@ const GuestRoomDelete = forwardRef(( props, ref ) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {
-            handleShowModal
-        }
+        return {handleShowModal}
     });
     // End:: forward reff show modal function
 
@@ -152,10 +150,10 @@ const GuestRoomDelete = forwardRef(( props, ref ) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            { data &&
+            {data &&
                 <Modal 
                     size="sm"
-                    show={showModal} >
+                    show={showModal}>
 
                     {/* Start:: Modal header */}
                     <Modal.Header>
@@ -165,7 +163,7 @@ const GuestRoomDelete = forwardRef(( props, ref ) => {
                         {/* Close button */}
                         <NavLink 
                             className="nav-icon" href="#" 
-                            onClick = { handleCloseModal } >
+                            onClick={handleCloseModal}>
                             <i className="align-middle"><X/></i>
                         </NavLink>
                     </Modal.Header>
@@ -176,7 +174,7 @@ const GuestRoomDelete = forwardRef(( props, ref ) => {
                         pId={props.pId} 
                         pName={data.roomNos}
                         onSubmited={handleSave} 
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                         {/* End:: Form component */}
             </Modal>}
             {/* End:: Delete modal */}
