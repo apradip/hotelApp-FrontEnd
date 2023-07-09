@@ -92,7 +92,6 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
         // validationSchema: guestRoomTransactionSchema,
         validateOnChange,
         onSubmit: async () => {
-            console.log({bookings: bookingData});
             bookingData && await doInsert({bookings: bookingData});
         
             if (error === null) {

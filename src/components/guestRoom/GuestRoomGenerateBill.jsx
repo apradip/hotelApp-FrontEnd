@@ -221,7 +221,7 @@ const GuestRoomGenerateBill = forwardRef((props, ref) => {
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const {data, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}/${props.pTransactionId}`
+        url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pGuestId}/${props.pTransactionId}`
     });
 
     // Start:: Show modal
@@ -294,7 +294,7 @@ const GuestRoomGenerateBill = forwardRef((props, ref) => {
                         pGuestCount={props.pGuestCount}
                         pCorporateName={props.pCorporateName}
                         pCorporateAddress={props.pCorporateAddress}
-                        pData={data[0].services}
+                        pData={data[0].rooms}
                         onClosed={handleCloseModal}/>                        
                         {/* End:: Form component */}
                     

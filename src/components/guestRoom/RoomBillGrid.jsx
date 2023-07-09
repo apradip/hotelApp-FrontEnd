@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef, useMemo} from "react";
 import {AgGridReact} from "ag-grid-react"; 
 
-import {formatINR} from "../common/Common";
+import {formatINR, formatDDMMYYYY} from "../common/Common";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
@@ -10,7 +10,6 @@ const RoomBillGrid = ({pData}) => {
     const gridRef = useRef();
     const [rowData, setRowData] = useState([]);
     const [totalItemPrice, setTotalItemPrice] = useState(0);
-    const [totalServiceCharge, setTotalServiceCharge] = useState(0);
     const [totalGstCharge, setTotalGstCharge] = useState(0);
     const [total, setTotal] = useState(0);
 
@@ -39,36 +38,25 @@ const RoomBillGrid = ({pData}) => {
             field: "rowId", 
             width: 50,
             hide: false,
-            editable: (params) => {return false},
+            editable: () => {return false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : null},
         },
         {
-            headerName: "Item", 
-            field: "name", 
+            headerName: "Occupancy date", 
+            field: "occupancyDate", 
+            hide: false,
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatDDMMYYYY(params.value)}` : ''}
+        },
+        {
+            headerName: "Room no.", 
+            field: "no", 
             hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}` : null}
         },
         {
-            headerName: "UnitPrice", 
-            field: "unitPrice", 
+            headerName: "Tariff", 
+            field: "tariff", 
             type: "rightAligned",
-            width: 50,
-            hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ''}
-        },
-        {
-            headerName: "Quantity", 
-            field: "quantity", 
-            type: "rightAligned",
-            width: 50,
-            hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ''}
-        },
-        {
-            headerName: "Price", 
-            field: "price", 
-            type: "rightAligned",
-            width: 50,
             hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : `${formatINR(params.value)}`}
         },
@@ -76,18 +64,14 @@ const RoomBillGrid = ({pData}) => {
             field: "id"
         },
         {
-            field: "serviceCharge"
-        },
-        {
             field: "gstCharge"
         }
     ]);
 
     const pinnedRowData = [
-        {rowId: "Sum", price: 0},
-        {rowId: "Service tax", price: 0},
-        {rowId: "GST", price: 0},
-        {rowId: "Total", price: 0}
+        {rowId: "Sum", tariff: 0},
+        {rowId: "GST", tariff: 0},
+        {rowId: "Total", triaff: 0}
     ];
 
     // Start:: load empty data to grid
@@ -102,10 +86,9 @@ const RoomBillGrid = ({pData}) => {
     // Start:: load empty data to grid
     const handleFirstDataRendered = () => {
         // set pinned data
-        pinnedRowData[0].price = totalItemPrice;
-        pinnedRowData[1].price = totalServiceCharge;
-        pinnedRowData[2].price = totalGstCharge;
-        pinnedRowData[3].price = total;
+        pinnedRowData[0].tariff = totalItemPrice;
+        pinnedRowData[1].tariff = totalGstCharge;
+        pinnedRowData[2].tariff = total;
 
         gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
@@ -118,32 +101,27 @@ const RoomBillGrid = ({pData}) => {
     useEffect(() => {
         let totalPrice = 0;
         let totalGst = 0;
-        let totalService = 0;
         let rows = [];
 
         pData.forEach(element => {
             const row = {
                             rowId: rows.length + 1, 
+                            no: element.no, 
+                            occupancyDate: element.occupancyDate,
+                            tariff: element.tariff + (element.extraPersonCount * element.extraPersonTariff) + (element.extraBedCount * element.extraBedTariff) - element.discount,
                             id: element.id,
-                            name: element.name, 
-                            unitPrice: element.unitPrice,
-                            quantity: element.quantity,
-                            price: element.unitPrice * element.quantity,
-                            serviceCharge: element.serviceCharge,
                             gstCharge: element.gstCharge
                         };
     
             rows.push(row);
 
-            totalPrice += element.unitPrice * element.quantity;
-            totalService += element.serviceCharge;
+            totalPrice += element.tariff;
             totalGst += element.gstCharge;
         });
         
         setTotalItemPrice(totalPrice);
         setTotalGstCharge(totalGst);
-        setTotalServiceCharge(totalService);
-        setTotal(totalPrice + totalGst + totalService);
+        setTotal(totalPrice + totalGst);
 
         setRowData(rows);
     }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps

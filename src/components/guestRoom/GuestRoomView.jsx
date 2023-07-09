@@ -1,16 +1,13 @@
 import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
 import {Modal, NavLink} from "react-bootstrap";
-import {X} from "react-feather";
-import {subStr} from "../common/Common";
 
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
-// import {formatDDMMYYYY} from "../common/Common";
-// import GetPhotoIDName from "../common/GetPhotoIDName";
-// import GetPlanName from "../common/GetPlanName";
-// import GetBookingAgentName from "../common/GetBookingAgentName";
 import BookingGrid from "./RoomBookingGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
+
+import {subStr} from "../common/Common";
+import {X} from "react-feather";
 
 
 // Start:: form
@@ -240,10 +237,10 @@ const GuestRoomView = forwardRef((props, ref) => {
                         pBookingAgent={props.pBookingAgent}
                         pPlan={props.pPlan}
                         pData={data}
-                        onClosed={handleCloseModal} />
+                        onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
                     
-                </Modal> }
+                </Modal>}
             {/* End:: View modal */}
         </>
     );

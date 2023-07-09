@@ -149,20 +149,16 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
             field: "rowId", 
             width: 100,
             hide: false,
-            suppressKeyboardEvent: function (params) {
-                return suppressNavigation(params);
-            },
+            suppressKeyboardEvent: (params) => {return suppressNavigation(params)},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : `Total`},
         },
         {
             headerName: "Date", 
             field: "occupancyDate", 
             width: 190,
-            hide: operationWiseHideState(pState, "occupancyDate"),
-            suppressKeyboardEvent: function (params) {
-                return suppressNavigation(params);
-            },
             cellEditor: DateEditor, 
+            hide: operationWiseHideState(pState, "occupancyDate"),
+            suppressKeyboardEvent: (params) => {return suppressNavigation(params)},
             editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},            
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatDDMMYYYY(params.value)}` : ""},
         },
@@ -171,10 +167,8 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
             field: "room", 
             width: 210,
             hide: false,
-            suppressKeyboardEvent: function (params) {
-                return suppressNavigation(params);
-            },
             cellEditor: RoomEditor, 
+            suppressKeyboardEvent: (params) => {return suppressNavigation(params)},
             editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},
             cellRenderer: (params) => {return params.value},
             valueGetter: (params) => {return params.data.room},
@@ -227,13 +221,11 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         {
             headerName: "Ext. Person",
             field: "extraPerson", 
+            type: "rightAligned",
             width: 180,
             hide: false,
-            type: "rightAligned",
-            suppressKeyboardEvent: function (params) {
-                return suppressNavigation(params);
-            },
             cellEditor: ExtraPersonEditor,
+            suppressKeyboardEvent: (params) => {return suppressNavigation(params)},
             editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
             valueGetter: (params) => {return params.data.extraPerson},
@@ -256,13 +248,11 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         {
             headerName: "Ext. Bed", 
             field: "extraBed", 
+            type: "rightAligned",
             width: 150,
             hide: false,
-            type: "rightAligned",
-            suppressKeyboardEvent: function (params) {
-                return suppressNavigation(params);
-            },
             cellEditor: ExtraBedEditor,
+            suppressKeyboardEvent: (params) => {return suppressNavigation(params)},
             editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
             valueGetter: (params) => {return params.data.extraBed},
@@ -285,12 +275,10 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         {
             headerName: "Discount", 
             field: "discount", 
-            hide: operationWiseHideState(pState, "discount"),
             type: "rightAligned",
-            suppressKeyboardEvent: function (params) {
-                return suppressNavigation(params);
-            },
+            hide: operationWiseHideState(pState, "discount"),
             cellEditor: NumericEditor, 
+            suppressKeyboardEvent: (params) => {return suppressNavigation(params)},
             editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `₹ ${Number(params.value).toFixed(2)}` : ""},
             valueGetter: (params) => {return params.data.discount},
@@ -315,8 +303,8 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         {
             headerName: "GST", 
             field: "gstCharge", 
-            hide: operationWiseHideState(pState, "gstCharge"),
             type: "rightAligned",
+            hide: operationWiseHideState(pState, "gstCharge"),
             valueFormatter: (params) => {return !params.node.rowPinned ? `₹ ${Number(params.value).toFixed(2)}` : ""},
             valueGetter: (params) => {return params.data.gstCharge},
             valueSetter: (params) => {
@@ -327,9 +315,8 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         {
             headerName: "Tariff", 
             field: "finalTariff", 
-            hide: false,
             type: "rightAligned",
-            cellClass: "ag-lock-pinned right",
+            hide: false,
             valueFormatter: (params) => {return `₹ ${Number(params.value).toFixed(2)}`},
             valueGetter: (params) => {return params.data.finalTariff},
             valueSetter: (params) => {
@@ -416,6 +403,12 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
+
+        if (pData) {
+            handleAddRow();
+        }
+        // raise on change event for parent component 
+        onChange(rows);
     }, [pData]);
     // End:: load empty data to grid
     
@@ -438,7 +431,7 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     }, []);
     // End:: on row selection change set selected 
 
-    // set grid data to a parent component
+    // Start:: on grid data change calculate final tariff
     const handleCellValueChanged = useCallback(() => {
         let rows = [];    
 
@@ -470,6 +463,7 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         // raise on change event for parent component 
         onChange(rows);
     }, []);
+    // End:: on grid data change calculate final tariff
 
     const handleCellKeyDown = useCallback((e) => {
         if ((pState !== "ADD") && (pState !== "MOD")) return;
@@ -552,7 +546,7 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         gridRef.current.api.setRowData(rows);
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
 
-    // Start :: Save 
+    // Start :: Delete row 
     const handleDeleteRow = useCallback(() => {
         let rows = [];
 
@@ -588,7 +582,7 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         // raise on change event for parent component 
         onChange(rows);
     }, [selectedRowNode]);
-    // End :: Save 
+    // End :: Delete row 
 
     // Start:: calculate sum on change tariff
     const calculateSum = useCallback (() => {

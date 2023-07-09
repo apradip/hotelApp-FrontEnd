@@ -15,7 +15,7 @@ const Form = ({pGuestId, pTransactionId, pName, pCorporateName,
     const contextValues = useStateContext()
     const inputRef = useRef(null)
     const {loading, error, doDelete} = useFetchWithAuth({
-        url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
+        url: `${contextValues.guestRoomAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     })
 
     // Start:: Call delete api
