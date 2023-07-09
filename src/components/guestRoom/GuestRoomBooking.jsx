@@ -92,6 +92,7 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
         // validationSchema: guestRoomTransactionSchema,
         validateOnChange,
         onSubmit: async () => {
+            console.log({bookings: bookingData});
             bookingData && await doInsert({bookings: bookingData});
         
             if (error === null) {
@@ -195,7 +196,7 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                     <div className="col-12">
 
                         {/* Label element */}
-                        <label className="col-12 form-label"><b>Items</b></label>
+                        <label className="col-12 form-label"><b>Rooms</b></label>
 
                         {/* Start:: Column service detail */}
                         <BookingGrid

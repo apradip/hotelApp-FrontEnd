@@ -117,7 +117,6 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     const gridRef = useRef(null);
 	const deleteRef = useRef(null);
     const [selectedRowNode, setSelectedRowNode] = useState(null);
-    // const [rowData, setRowData] = useState([]);
     const [finalTariff, setFinalTariff] = useState(0);
     
     const suppressNavigation = (params) => {
@@ -473,6 +472,7 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     }, []);
 
     const handleCellKeyDown = useCallback((e) => {
+        if ((pState !== "ADD") && (pState !== "MOD")) return;
         if (e.event.key === "Delete") deleteRef && deleteRef.current.handleShowModal();
     }, []);
     
@@ -503,6 +503,8 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     const handleAddRow = useCallback (() => {
         let rows = [];
         let emptyCount = 0;
+
+        if ((pState !== "ADD") && (pState !== "MOD")) return;
 
         //calculate empty row
         gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
@@ -553,6 +555,8 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     // Start :: Save 
     const handleDeleteRow = useCallback(() => {
         let rows = [];
+
+        if ((pState !== "ADD") && (pState !== "MOD")) return;
 
         gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
             if (rowNode.data.rowId !== selectedRowNode.data.rowId) {
