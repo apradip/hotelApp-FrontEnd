@@ -66,7 +66,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             }
         },
         {
-            headerName: "Unit price",
+            headerName: "Rate",
             field: "unitPrice",
             type: "rightAligned",
             width: 50,
@@ -125,6 +125,9 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "despatchDate"
         }
     ]);
+    const pinnedRowData = [
+        {rowId: "Total", totalPrice: 0}
+    ];
 
     // Start:: load empty data to grid
     const handleGridReady = () => {
@@ -151,6 +154,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         setRowData(row);
 
         gridRef.current.api.setRowData(row);
+        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
@@ -158,11 +162,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
-    const handleFirstDataRendered = (params) => {
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-        gridRef.current.api.sizeColumnsToFit();
-
+    const handleFirstDataRendered = () => {
         calculateSum();
     };
     // End:: load empty data to grid
@@ -214,21 +214,21 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     // Start:: calculate sum on change tariff
     const calculateSum = useCallback (() => {
-        let totalPrice = 0;
+        let total = 0;
         let emptyCount = 0;
 
         // calculate total expance
         gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
-            totalPrice += rowNode.data.totalPrice;
+            total += rowNode.data.totalPrice;
         });
 
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode) => {
-            if (rowNode.data.name === "Select item") {
-                emptyCount ++;
-            }
+            if (rowNode.data.name === "Select item") emptyCount ++;
         });
 
+        pinnedRowData[0].totalPrice = total;
+        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         setEmptyRowCount(emptyCount);
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: calculate sum on change tariff

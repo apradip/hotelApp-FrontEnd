@@ -1,9 +1,6 @@
 import React, {useState, useCallback, useRef, useMemo} from "react";
 import {AgGridReact} from "ag-grid-react";
 
-// import {HotelId} from "../../App";
-// import {useStateContext} from "../../contexts/ContextProvider";
-
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 

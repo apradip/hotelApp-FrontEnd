@@ -88,7 +88,7 @@ const Form = ({pGuestId, pName, pMobile,
                         </div>
                         :
                         <div className="col-sx-12 col-md-6 mb-3">
-                            <label className="col-12 form-label"><b>Mobile</b></label>
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
@@ -263,38 +263,34 @@ const GuestPaymentAdd = forwardRef((props, ref) => {
 
     // Start:: Html
     return (
-        <>
-            {/* Start:: Add modal */}
-            <Modal size="md"
-                show={showModal}>
+        <Modal size="md"
+            show={showModal}>
 
-                {/* Start:: Modal header */}
-                <Modal.Header>
-                    {/* Header text */}
-                    <Modal.Title>Payment</Modal.Title>
+            {/* Start:: Modal header */}
+            <Modal.Header>
+                {/* Header text */}
+                <Modal.Title>Payment</Modal.Title>
 
-                    {/* Close button */}
-                    <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>
-                        <i className="align-middle"><X/></i>
-                    </NavLink>
-                </Modal.Header>
-                {/* End:: Modal header */}
+                {/* Close button */}
+                <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>
+                    <i className="align-middle"><X/></i>
+                </NavLink>
+            </Modal.Header>
+            {/* End:: Modal header */}
 
-                {/* Start:: Form component */}
-                <Form
-                    pGuestId = {props.pGuestId}
-                    pName = {props.pName}
-                    pMobile = {props.pMobile}
-                    pCorporateName = {props.pCorporateName}
-                    pCorporateAddress = {props.pCorporateAddress}
-                    pBalance = {props.pBalance}
-                    onSubmited = {handleSave} 
-                    onClosed = {handleCloseModal} />
-                {/* End:: Form component */}
+            {/* Start:: Form component */}
+            <Form
+                pGuestId = {props.pGuestId}
+                pName = {props.pName}
+                pMobile = {props.pMobile}
+                pCorporateName = {props.pCorporateName}
+                pCorporateAddress = {props.pCorporateAddress}
+                pBalance = {props.pBalance}
+                onSubmited = {handleSave} 
+                onClosed = {handleCloseModal} />
+            {/* End:: Form component */}
 
-            </Modal>
-            {/* End:: Add modal */}
-        </>            
+        </Modal>
     )
     // End:: Html
 

@@ -400,13 +400,13 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         });
 
         gridRef.current.api.setRowData(rows);
+        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
 
-        if (pData) {
-            handleAddRow();
-        }
+        if (pData) handleAddRow();
+    
         // raise on change event for parent component 
         onChange(rows);
     }, [pData]);
@@ -414,11 +414,6 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = useCallback(() => {
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-        gridRef.current.api.sizeColumnsToFit();
-
         // claculate sum
         calculateSum();
     },[]);
@@ -594,7 +589,7 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         });
 
         pinnedRowData[0].finalTariff = total;
-        gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
 
         // add empty row
         handleAddRow();

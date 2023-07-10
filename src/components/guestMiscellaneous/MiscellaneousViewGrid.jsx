@@ -44,7 +44,7 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
             valueGetter: (params) => {return params.data.name}
         },
         {
-            headerName: "Unit price",
+            headerName: "Rate",
             field: "unitPrice",
             type: "rightAligned",
             width: 50,
@@ -91,10 +91,14 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
             field: "despatchDate"
         }
     ]);
+    const pinnedRowData = [
+        {rowId: "Total", totalPrice: 0}
+    ];
 
     // Start:: load empty data to grid
     const handleGridReady = () => {
         let row = [];
+        let sum = 0;
         
         pDefaultRowData.forEach(element => {
             const data = {
@@ -110,19 +114,15 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
                             totalPrice: element.unitPrice * element.quantity,
                             despatchDate: element.despatchDate
                         };
-    
+            
+            sum = sum + data.totalPrice;                       
             row.push(data);
         });
 
+        pinnedRowData[0].totalPrice = sum;
+
         gridRef.current.api.setRowData(row);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-        gridRef.current.api.sizeColumnsToFit();
-    };
-    // End:: load empty data to grid
-    
-    // Start:: load empty data to grid
-    const handleFirstDataRendered = (params) => {
+        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();
@@ -138,8 +138,7 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
                 rowClassRules={rowClassRules}
                 rowData={null}
                 rowSelection={"single"}
-                onGridReady={handleGridReady}
-                onFirstDataRendered={handleFirstDataRendered}/>
+                onGridReady={handleGridReady}/>
         </div>
     );
 }

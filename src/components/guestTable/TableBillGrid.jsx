@@ -24,15 +24,12 @@ const TableBillGrid = ({pData}) => {
           hide: true,
         };
     }, []);
-
     const rowClassRules = useMemo(() => {
         return {
             "ag-row-pinned_other": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId !== "Total";},
-        
-            "ag-row-pinned_total": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId === "Total";},
+            "ag-row-pinned_total": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId === "Total";}
         };
     }, []);  
-
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -49,7 +46,7 @@ const TableBillGrid = ({pData}) => {
             valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}` : null}
         },
         {
-            headerName: "UnitPrice", 
+            headerName: "Rate", 
             field: "unitPrice", 
             type: "rightAligned",
             width: 50,
@@ -82,7 +79,6 @@ const TableBillGrid = ({pData}) => {
             field: "gstCharge"
         }
     ]);
-
     const pinnedRowData = [
         {rowId: "Sum", price: 0},
         {rowId: "Service tax", price: 0},

@@ -24,15 +24,12 @@ const ServiceBillGrid = ({pData}) => {
           hide: true,
         };
     }, []);
-
     const rowClassRules = useMemo(() => {
         return {
             "ag-row-pinned_other": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId !== "Total"; },
-        
             "ag-row-pinned_total": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId === "Total"; },
         };
     }, []);  
-
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -49,7 +46,7 @@ const ServiceBillGrid = ({pData}) => {
             valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}` : null}
         },
         {
-            headerName: "UnitPrice", 
+            headerName: "Rate", 
             field: "unitPrice", 
             type: "rightAligned",
             width: 50,
@@ -70,7 +67,7 @@ const ServiceBillGrid = ({pData}) => {
             type: "rightAligned",
             width: 50,
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : `${formatINR(params.value)}`}
+            valueFormatter: (params) => {return `${formatINR(params.value)}`}
         },
         {
             field: "id"
@@ -82,7 +79,6 @@ const ServiceBillGrid = ({pData}) => {
             field: "gstCharge"
         }
     ]);
-
     const pinnedRowData = [
         {rowId: "Sum", price: 0},
         {rowId: "Service tax", price: 0},
@@ -107,7 +103,7 @@ const ServiceBillGrid = ({pData}) => {
         pinnedRowData[2].price = totalGstCharge;
         pinnedRowData[3].price = total;
 
-        gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
         gridRef.current.api.sizeColumnsToFit();

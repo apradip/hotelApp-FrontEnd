@@ -115,14 +115,14 @@ const Form = ({onSubmited, onClosed}) => {
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
-                            htmlFor={"keyInputMobile"}><b>Mobile No.</b></label>
+                            htmlFor={"keyInputMobile"}><b>Mobile no.</b></label>
 
                         <div className="col-12">
                             {/* Input element text*/}
                             <input 
                                 type="text" 
                                 name="keyInputMobile"
-                                placeholder="Mobile No."
+                                placeholder="Mobile no."
                                 className="form-control"
                                 autoComplete="off"
                                 maxLength={100}
@@ -237,14 +237,14 @@ const Form = ({onSubmited, onClosed}) => {
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
-                            htmlFor={"keyInputGST"}><b>GST No.</b></label>
+                            htmlFor={"keyInputGST"}><b>GST no.</b></label>
 
                         <div className="col-12">
                             {/* Input element select*/}
                             <input 
                                 type="text" 
                                 name="keyInputGST"
-                                placeholder="GST No."
+                                placeholder="GST no."
                                 className="form-control"
                                 autoComplete="off"
                                 maxLength={100}

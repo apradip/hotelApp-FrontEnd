@@ -163,7 +163,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                 :
                                 <Stack direction="horizontal" gap={0}>
                                     <span className="col-12 text-left px-1">
-                                        Mobile No. {props.pMobile}</span>
+                                        Mobile no. {props.pMobile}</span>
                                 </Stack> 
                             }
                         </Stack>        

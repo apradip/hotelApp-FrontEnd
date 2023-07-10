@@ -100,7 +100,7 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                         </div>
                     :
                         <div className="col-sx-12 col-md-5 mb-3">
-                            <label className="col-12 form-label"><b>Mobile</b></label>
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
                         </div>
                     }
