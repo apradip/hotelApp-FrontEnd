@@ -21,7 +21,6 @@ import Miscellaneouses from "../pages/Miscellaneouses";
 import Services from "../pages/Services";
 import GuestRooms from "../pages/GuestRooms";
 import GuestTables from "../pages/GuestTables";
-import GuestFoods from "../pages/GuestFoods";
 import GuestServices from "../pages/GuestServices";
 import GuestMiscellaneouses from "../pages/GuestMiscellaneouses";
 import GuestPayments from "../pages/GuestPayments";
@@ -144,10 +143,6 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
       case "guesttables":
         guestTableRef && guestTableRef.current.changeSearch(text);
         break;
-  
-      case "guestfoods":
-        guestFoodRef && guestFoodRef.current.changeSearch(text);
-        break;
 
       case "guestservices":
         guestServiceRef && guestServiceRef.current.changeSearch(text);
@@ -220,10 +215,6 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
         guestTableRef && guestTableRef.current.openAdd();
         break;
 
-      case "guestfoods":
-        guestFoodRef && guestFoodRef.current.openAdd();
-        break;
-
       case "guestservices":
         guestServiceRef && guestServiceRef.current.openAdd();
         break;
@@ -293,10 +284,6 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
 
       case "guesttables":
         guestTableRef && guestTableRef.current.openEdit();
-        break;
-  
-      case "guestfoods":
-        guestFoodRef && guestFoodRef.current.openEdit();
         break;
 
       // case "guestservices":
@@ -368,10 +355,6 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
 
       case "guesttables":
         guestTableRef && guestTableRef.current.openDelete();
-        break;
-  
-      case "guestfoods":
-        guestFoodRef && guestFoodRef.current.openDelete();
         break;
 
       case "guestservices":
@@ -504,11 +487,6 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
 
               <Route exact path="/guesttables" element={<GuestTables
                                                         ref={guestTableRef} 
-                                                        onSuccess={handleSuccess}
-                                                        onClose={handleClose} />}/>
-
-              <Route exact path="/guestfoods" element={<GuestFoods
-                                                        ref={guestFoodRef} 
                                                         onSuccess={handleSuccess}
                                                         onClose={handleClose} />}/>
 

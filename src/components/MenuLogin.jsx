@@ -188,12 +188,6 @@ const MenuLogin = forwardRef((props, ref) => {
                                                 <Link size={16}/> <p>Miscellaneous</p>
                                             </NavLink>
                                         </li>
-                                        <li className={`nav-item ${menuSelected === 'guestpayments' ? 'active' : ''}`}
-                                            onClick={() => {handelClickMenuItem('guestpayments')}}>
-                                            <NavLink to="/guestpayments" className="nav-link">
-                                                <Link size={16}/> <p>Payment</p>
-                                            </NavLink>
-                                        </li>
                                     </ul>
                                 </li>
 
