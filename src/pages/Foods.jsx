@@ -1,13 +1,19 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Breadcrumb } from "react-bootstrap";
-import { toast } from "react-toastify";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {Breadcrumb} from "react-bootstrap";
+import {toast} from "react-toastify";
 
-import { HotelId } from "../App";
-import { useStateContext } from "../contexts/ContextProvider";
+import {HotelId} from "../App";
+import {useStateContext} from "../contexts/ContextProvider";
 import Add from "../components/food/FoodAdd";
 import Card from "../components/food/FoodCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
+
+const Operation = {
+    Add: 'ADD',
+    Mod: 'MOD',
+    Del: 'DEL'
+};
 
 // Start:: Component
 // props parameters
@@ -20,12 +26,12 @@ import useFetchWithAuth from "../components/common/useFetchWithAuth";
 // openEdit 
 // openDelete
 // close
-const Foods = forwardRef(( props, ref ) => {
+const Foods = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState('');
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -56,14 +62,14 @@ const Foods = forwardRef(( props, ref ) => {
 
     // Start:: Open edit modal
     const openEdit = () => {
-        if (selectedCardIndex !== null) {
+        if (selectedCardIndex) {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
                     if (selectedCardIndex === idx)
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
                 });
             } else {
-                toast.warning("Nothing selected to edit");
+                toast.warning('Nothing selected to edit');
             }
         }
     };
@@ -71,14 +77,14 @@ const Foods = forwardRef(( props, ref ) => {
 
     // Start:: Open delete modal
     const openDelete = () => {
-        if (selectedCardIndex !== null) {
+        if (selectedCardIndex) {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
                     if (selectedCardIndex === idx)
                         cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
                 });
             } else {
-                toast.warning("Nothing selected to delete");
+                toast.warning('Nothing selected to delete');
             }
         }
     };
@@ -91,22 +97,22 @@ const Foods = forwardRef(( props, ref ) => {
     // End:: Close modal
 
     // Start:: on data operation successfully
-    const handleSuccess = ( operation ) => {
+    const handleSuccess = (operation) => {
         switch (operation) {
-            case "add":
-                toast.success("Data successfully added");
+            case Operation.Add:
+                toast.success('Data successfully added');
                 setDataChanged(true);
                 props.onSuccess();
                 break;
 
-            case "edit":
-                toast.success("Data successfully changed");
+            case Operation.Mod:
+                toast.success('Data successfully changed');
                 setDataChanged(true);
                 props.onSuccess();
                 break;                
 
-            case "delete":
-                toast.success("Data successfully deleted");
+            case Operation.Del:
+                toast.success('Data successfully deleted');
                 setDataChanged(true);
                 props.onSuccess();
                 break;                
@@ -163,7 +169,7 @@ const Foods = forwardRef(( props, ref ) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className="row" key={rowKey}>
+            <div className='row' key={rowKey}>
                 {pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
                         return createCol(item, itemIdx);
@@ -175,8 +181,7 @@ const Foods = forwardRef(( props, ref ) => {
         const colKey = `col_${pData._id}`;
 
         return (
-
-            <div className="col-xl-4 col-md-4" key={colKey} >
+            <div className='col-xl-4 col-md-4' key={colKey}>
                 <Card 
                     ref={(el) => cardRefs.current[itemIdx] = el}
                     pIndex={itemIdx}
@@ -184,11 +189,12 @@ const Foods = forwardRef(( props, ref ) => {
                     pName={pData.name}
                     pPrice={pData.price}
                     pDescription={pData.description}
-                    onEdited={() => {handleSuccess("edit")}}
-                    onDeleted={() => {handleSuccess("delete")}} 
+                    onEdited={() => {handleSuccess(Operation.Mod)}}
+                    onDeleted={() => {handleSuccess(Operation.Del)}} 
                     onClosed={close} 
-                    onActivated={handleActivated} />                
-            </div>);
+                    onActivated={handleActivated}/>                
+            </div>
+        );
     };
     // End:: show all data in card format
 
@@ -205,7 +211,7 @@ const Foods = forwardRef(( props, ref ) => {
                 await doFetch();
                 setDataChanged(false);
             } catch (err) {
-                console.log("Error occured when fetching data");
+                console.log('Error occured when fetching data');
             }
         })();
     }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
@@ -217,20 +223,20 @@ const Foods = forwardRef(( props, ref ) => {
 
     // Start:: Html
     return ( 
-        <div className="content-wrapper">
+        <div className='content-wrapper'>
 
             {/* Seart :: Bread crumb */}
-            <div className="content-header">
-                <div className="container-fluid">   
-                    <div className="row">
-                        <div className="col-sm-4 m-0">
-                            <h1 className="text-dark">Food</h1>
+            <div className='content-header'>
+                <div className='container-fluid'>   
+                    <div className='row'>
+                        <div className='col-sm-4 m-0'>
+                            <h1 className='text-dark'>Food</h1>
                         </div>
 
-                        <div className="col-sm-8">
-                            <Breadcrumb className="breadcrumb float-sm-right">
-                                <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
-                                <Breadcrumb.Item href = "/">Master</Breadcrumb.Item>
+                        <div className='col-sm-8'>
+                            <Breadcrumb className='breadcrumb float-sm-right'>
+                                <Breadcrumb.Item href = '/'>Home</Breadcrumb.Item>
+                                <Breadcrumb.Item href = '/'>Master</Breadcrumb.Item>
                                 <Breadcrumb.Item active>Food</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
@@ -240,14 +246,14 @@ const Foods = forwardRef(( props, ref ) => {
             {/* End :: Bread crumb */}
 
             {/* Start :: display data */}
-            <section className="content">
-                <div className="container-fluid">
-                    <div className="card mb-0">
+            <section className='content'>
+                <div className='container-fluid'>
+                    <div className='card mb-0'>
                         
                         {/* Start :: Header & operational panel */}
-                        <div className="card-header">
+                        <div className='card-header'>
                             {/* Start :: Display data count */}
-                            <div className="col-12 text-danger p-0">
+                            <div className='col-12 text-danger p-0'>
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -257,10 +263,10 @@ const Foods = forwardRef(( props, ref ) => {
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body py-0">
+                        <div className='card-body py-0'>
                             { loading &&
-                                <div className="d-flex justify-content-center">
-                                    <div className="spinner-border text-primary" role="status"/>
+                                <div className='d-flex justify-content-center'>
+                                    <div className='spinner-border text-primary' role='status'/>
                                 </div> }
 
                             { !loading && 
@@ -270,17 +276,17 @@ const Foods = forwardRef(( props, ref ) => {
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer py-0">
-                            <div className="row">
+                        <div className='card-footer py-0'>
+                            <div className='row'>
                                 {/* Start :: Pagination */}
-                                <div className="col-12 d-flex justify-content-end">
+                                <div className='col-12 d-flex justify-content-end'>
                                     {!loading && 
                                             data && 
                                                 <Paging
                                                     itemPerPage={itemPerPage}
                                                     totalItem={data.length}
                                                     selectedPage={selectedPage}
-                                                    onPaging={handlePaging} />}
+                                                    onPaging={handlePaging}/>}
                                 </div>
                                 {/* End :: Pagination */}
                             </div>
@@ -295,7 +301,7 @@ const Foods = forwardRef(( props, ref ) => {
             {/* Start :: add table component */}
             <Add 
                 ref={addRef}   
-                onAdded={() => {handleSuccess("add")}}
+                onAdded={() => {handleSuccess('add')}}
                 onClosed={close}/>
             {/* End :: add table component */}
 

@@ -45,7 +45,7 @@ const HeaderLogin = forwardRef((props, ref) => {
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${props.pEmployeeId}`
     });
-	const { doLogout } = useFetchWithAuth({
+	const {doLogout} = useFetchWithAuth({
         url: `${contextValues.logoutAPI}/${hotelId}/${props.pEmployeeId}`
     });
 
@@ -153,7 +153,7 @@ const HeaderLogin = forwardRef((props, ref) => {
         <nav className="main-header navbar navbar-expand navbar-white navbar-light">
 
             {/* Start:: Left navbar links */}
-            <ul className="navbar-nav" style={{border: "solid 0px red"}}>
+            <ul className="navbar-nav">
                 <li className="nav-item"
                     onClick = {handleToggleSideMenu}>
                     <NavLink to="#" className="nav-link">
@@ -184,19 +184,19 @@ const HeaderLogin = forwardRef((props, ref) => {
                                             <button 
                                                 className="btn btn-success me-1" 
                                                 size="md" 
-                                                onClick={handleOpenAdd}>
+                                                onClick={() => {handleOpenAdd()}}>
                                                 <Paperclip className="feather-16"/>
                                             </button>
                                         </OverlayTrigger>}
 
                                     {getPageAttribute(selectedPage).show.edit &&
                                         <OverlayTrigger
-                                            placemen ="bottom"
+                                            placement ="bottom"
                                             overlay={<Tooltip>edit</Tooltip>}>
                                             <button 
-                                                className="btn btn-info me-1" 
+                                                className="d-none d-md-block d-lg-block d-xl-block btn btn-info me-1" 
                                                 size="md" 
-                                                onClick={handleOpenEdit}>
+                                                onClick={() => {handleOpenEdit()}}>
                                                 <Edit3 className="feather-16"/>
                                             </button>
                                         </OverlayTrigger>}
@@ -206,9 +206,9 @@ const HeaderLogin = forwardRef((props, ref) => {
                                             placement = "bottom"
                                             overlay = {<Tooltip>delete</Tooltip>}>
                                             <button 
-                                                className="btn btn-danger mx-0" 
+                                                className="d-none d-md-block d-lg-block d-xl-block btn btn-danger mx-0" 
                                                 size="md" 
-                                                onClick={handleOpenDel}>
+                                                onClick={() => {handleOpenDel()}}>
                                                 <Scissors className="feather-16"/>
                                             </button>
                                         </OverlayTrigger>}

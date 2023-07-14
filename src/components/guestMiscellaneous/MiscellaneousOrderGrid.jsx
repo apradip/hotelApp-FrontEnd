@@ -16,7 +16,6 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const contextValues = useStateContext();
     const gridRef = useRef();
     const [rowData, setRowData] = useState();
-    // const [totalPrice, setTotalPrice] = useState(0);
     const [emptyRowCount, setEmptyRowCount] = useState();
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
@@ -25,11 +24,12 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
-          resizable: false,
+          resizable: true,
           editable: false,
           sortable: false,
           filter: false,
           hide: true,
+          suppressSizeToFit: true,
         }
     }, []);
     const [columnDefs] = useState([
@@ -130,13 +130,17 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
     ];
+    const [style, setStyle] = useState({
+        height: '100%',
+        width: '100%',
+    });
 
     // Start:: load empty data to grid
-    const handleGridReady = () => {
+    const handleGridReady = (params) => {
         let row = [];
         
         pDefaultRowData.forEach(element => {
-            const data = {
+            const object = {
                             rowId: row.length + 1, 
                             id: element.id,
                             name: element.name, 
@@ -150,7 +154,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                             despatchDate: element.despatchDate
                         };
     
-            row.push(data);
+            row.push(object);
         });
 
         setRowData(row);
@@ -159,6 +163,15 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
+
+        params.api.sizeColumnsToFit();
+        
+        window.addEventListener('resize', function () {
+            setTimeout(function () {
+              params.api.sizeColumnsToFit();
+            });
+          });
+
         gridRef.current.api.sizeColumnsToFit();
     };
     // End:: load empty data to grid
@@ -262,15 +275,17 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     
 	return (
         <div className="col-12 ag-theme-alpine grid-height-400">
-            <AgGridReact	
-                ref={gridRef}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowData={null}
-                rowSelection={"single"}
-                onGridReady={handleGridReady}
-                onFirstDataRendered={handleFirstDataRendered}
-                onCellValueChanged={handleCellValueChanged}/>
+            <div style={style}>
+                <AgGridReact	
+                    ref={gridRef}
+                    columnDefs={columnDefs}
+                    defaultColDef={defaultColDef}
+                    rowData={null}
+                    rowSelection={"single"}
+                    onGridReady={handleGridReady}
+                    onFirstDataRendered={handleFirstDataRendered}
+                    onCellValueChanged={handleCellValueChanged}/>
+            </div>
         </div>
     );
 }

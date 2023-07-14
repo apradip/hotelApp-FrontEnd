@@ -299,7 +299,7 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.name = true
             attribute.show.search = true
             attribute.show.add = true
-            attribute.show.edit = false
+            attribute.show.edit = true
             attribute.show.delete = true
 
             break
@@ -310,21 +310,21 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.name = true
             attribute.show.search = true
             attribute.show.add = true
-            attribute.show.edit = false
-            attribute.show.delete = true
-
-            break
-
-        case 'guestfoods':
-            attribute.name = 'Guest food'
-            attribute.dynamic = true
-            attribute.show.name = true
-            attribute.show.search = true
-            attribute.show.add = true
             attribute.show.edit = true
             attribute.show.delete = true
 
             break
+
+        // case 'guestfoods':
+        //     attribute.name = 'Guest food'
+        //     attribute.dynamic = true
+        //     attribute.show.name = true
+        //     attribute.show.search = true
+        //     attribute.show.add = true
+        //     attribute.show.edit = true
+        //     attribute.show.delete = true
+
+        //     break
 
         case 'guestservices':
             attribute.name = 'Services'
@@ -332,7 +332,7 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.name = true 
             attribute.show.search = true
             attribute.show.add = true
-            attribute.show.edit = false
+            attribute.show.edit = true
             attribute.show.delete = true
 
             break
@@ -343,7 +343,7 @@ export const getPageAttribute = (selectedCompont) => {
             attribute.show.name = true 
             attribute.show.search = true
             attribute.show.add = true
-            attribute.show.edit = false
+            attribute.show.edit = true
             attribute.show.delete = true
 
             break
@@ -427,8 +427,9 @@ export const formatDDMMYYYY = (longDateTime) => {
 
 export const formatHHMM = (longDateTime) => {
     const tim = new Date(longDateTime);
-    const moment = moment(tim).format();
-    return moment.format("HH:mm");
+    // const moment = moment(tim).format("HH:mm");
+    // return moment.format("HH:mm");
+    return moment(tim).format("HH:mm");
 };
 
 export const formatTime12Hour = (time) => {

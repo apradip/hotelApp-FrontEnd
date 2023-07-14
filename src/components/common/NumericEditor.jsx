@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, {Component, createRef} from 'react';
 
 const KEY_BACKSPACE = 'Backspace';
 const KEY_DELETE = 'Delete';
@@ -90,10 +90,7 @@ export default class NumericEditor extends Component {
       return;
     }
 
-    if (
-      !this.finishedEditingPressed(event) &&
-      !this.isKeyPressedNumeric(event)
-    ) {
+    if (!this.finishedEditingPressed(event) && !this.isKeyPressedNumeric(event)) {
       if (event.preventDefault) event.preventDefault();
     }
   }

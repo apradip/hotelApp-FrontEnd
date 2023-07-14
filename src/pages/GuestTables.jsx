@@ -253,6 +253,7 @@ const GuestTables = forwardRef((props, ref) => {
                     pInTime={pData.inTime}
                     pTotalExpense={pData.totalExpense}
                     pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
+                    pOption={pData.option}
                     onOrdered={() => {handleSuccess(Operation.Order)}}
                     onDespatched={() => {handleSuccess(Operation.Despatch)}}
                     onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}

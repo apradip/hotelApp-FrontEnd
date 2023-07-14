@@ -109,7 +109,7 @@ const Form = ({pTransactionNo, pTransactionDate, pTransactionTime,
                     <div className="col-12">
 
                         {/* Label element */}
-                        <label className="col-12 form-label"><b>Items</b></label>
+                        <label className="col-12 form-label"><b>Miscellaneous items</b></label>
                         
                         {/* Start:: Column miscellaneous detail */}
                         <BillGrid

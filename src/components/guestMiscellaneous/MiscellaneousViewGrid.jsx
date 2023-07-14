@@ -14,11 +14,12 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
-          resizable: false,
+          resizable: true,
           editable: false,
           sortable: false,
           filter: false,
           hide: true,
+          suppressSizeToFit: true,
         }
     }, []);
     const rowClassRules = useMemo(() => {
@@ -94,9 +95,13 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
     ];
+    const [style, setStyle] = useState({
+        height: '100%',
+        width: '100%',
+    });
 
     // Start:: load empty data to grid
-    const handleGridReady = () => {
+    const handleGridReady = (params) => {
         let row = [];
         let sum = 0;
         
@@ -125,20 +130,31 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
         gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
+
+        params.api.sizeColumnsToFit();
+
+        window.addEventListener('resize', function () {
+            setTimeout(function () {
+              params.api.sizeColumnsToFit();
+            });
+          });
+
         gridRef.current.api.sizeColumnsToFit();
     };
     // End:: load empty data to grid
     
 	return (
         <div className="col-12 ag-theme-alpine grid-height-400">
-            <AgGridReact	
-                ref={gridRef}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowClassRules={rowClassRules}
-                rowData={null}
-                rowSelection={"single"}
-                onGridReady={handleGridReady}/>
+            <div style={style}>
+                <AgGridReact	
+                    ref={gridRef}
+                    columnDefs={columnDefs}
+                    defaultColDef={defaultColDef}
+                    rowClassRules={rowClassRules}
+                    rowData={null}
+                    rowSelection={"single"}
+                    onGridReady={handleGridReady}/>
+            </div>
         </div>
     );
 }

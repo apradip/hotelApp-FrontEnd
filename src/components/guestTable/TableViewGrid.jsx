@@ -14,11 +14,12 @@ const TableOrderGrid = ({pDefaultRowData}) => {
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
-          resizable: false,
+          resizable: true,
           editable: false,
           sortable: false,
           filter: false,
           hide: true,
+          suppressSizeToFit: true,
         }
     }, []);
     const rowClassRules = useMemo(() => {
@@ -96,12 +97,12 @@ const TableOrderGrid = ({pDefaultRowData}) => {
     ];
 
     // Start:: load empty data to grid
-    const handleGridReady = () => {
+    const handleGridReady = (params) => {
         let row = [];
         let sum = 0;
 
         pDefaultRowData.forEach(element => {
-            const data = {
+            const object = {
                             rowId: row.length + 1, 
                             id: element.id,
                             name: element.name, 
@@ -115,8 +116,8 @@ const TableOrderGrid = ({pDefaultRowData}) => {
                             despatchDate: element.despatchDate
                         };
     
-            sum = sum + data.totalPrice;                       
-            row.push(data);
+            sum = sum + object.totalPrice;                       
+            row.push(object);
         });
 
         pinnedRowData[0].totalPrice = sum;
@@ -125,6 +126,15 @@ const TableOrderGrid = ({pDefaultRowData}) => {
         gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
+
+        params.api.sizeColumnsToFit();
+
+        window.addEventListener('resize', function () {
+            setTimeout(function () {
+              params.api.sizeColumnsToFit();
+            });
+          });
+
         gridRef.current.api.sizeColumnsToFit();
     };
     // End:: load empty data to grid

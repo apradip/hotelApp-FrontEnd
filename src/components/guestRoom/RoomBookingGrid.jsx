@@ -136,11 +136,12 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
-          resizable: false,
+          resizable: true,
           editable: false,
           sortable: false,
           filter: false,
           hide: true,
+          suppressSizeToFit: true,
         };
     }, []);
     const [columnDefs] = useState([
@@ -403,6 +404,15 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
+
+        // params.api.sizeColumnsToFit();
+
+        // window.addEventListener('resize', function () {
+        //     setTimeout(function () {
+        //       params.api.sizeColumnsToFit();
+        //     });
+        //   });
+
         gridRef.current.api.sizeColumnsToFit();
 
         if (pData) handleAddRow();

@@ -122,7 +122,7 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                     <div className="col-12">
 
                         {/* Label element */}
-                        <label className="col-12 form-label"><b>Items</b></label>
+                        <label className="col-12 form-label"><b>Servicable items</b></label>
 
                         {/* Start:: Column service detail */}
                         <DespatchGrid

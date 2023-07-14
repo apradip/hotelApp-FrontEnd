@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Select from "react-select";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
 const TableSelect = ({onChange, name, value, disabled = false}) => {
@@ -33,7 +33,7 @@ const TableSelect = ({onChange, name, value, disabled = false}) => {
             try {
                 await doFetch();
             } catch (err) {
-            //   console.log("Error occured when fetching data");
+              console.log("Error occured when fetching data");
             }
 
 			value &&

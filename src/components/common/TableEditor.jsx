@@ -1,10 +1,10 @@
-import React, { useContext, forwardRef, useImperativeHandle, useEffect, useState } from "react";
+import React, {useContext, forwardRef, useImperativeHandle, useEffect, useState} from "react";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
-const TableEditor = forwardRef(( props, ref ) => {	
+const TableEditor = forwardRef((props, ref) => {	
 	const hotelId = useContext(HotelId);
 	const contextValues = useStateContext();
 	const selectInput = React.createRef();
@@ -33,9 +33,7 @@ const TableEditor = forwardRef(( props, ref ) => {
     };
 
 	useImperativeHandle(ref, () => {
-        return {
-            getValue
-        }
+        return {getValue}
     });
 
 	useEffect(() => {

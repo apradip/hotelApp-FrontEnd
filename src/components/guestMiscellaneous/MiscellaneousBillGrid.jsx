@@ -17,14 +17,14 @@ const MiscellaneousBillGrid = ({pData}) => {
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
-          resizable: false,
+          resizable: true,
           editable: false,
           sortable: false,
           filter: false,
           hide: true,
+          suppressSizeToFit: true,
         };
     }, []);
-
     const rowClassRules = useMemo(() => {
         return {
             'ag-row-pinned_other': (params) => { return params.node.rowPinned === 'bottom' && params.data.rowId !== "Total"; },
@@ -32,7 +32,6 @@ const MiscellaneousBillGrid = ({pData}) => {
             'ag-row-pinned_total': (params) => { return params.node.rowPinned === 'bottom' && params.data.rowId === "Total"; },
         };
     }, []);  
-
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -82,7 +81,6 @@ const MiscellaneousBillGrid = ({pData}) => {
             field: "gstCharge"
         }
     ]);
-
     const pinnedRowData = [
         {rowId: "Sum", price: 0},
         {rowId: "Service tax", price: 0},

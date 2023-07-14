@@ -1,10 +1,9 @@
-import React, { Component } from "react";
-import { Scissors } from "react-feather";
+import React, {Component} from "react";
+import {Scissors} from "react-feather";
 
 export default class DeleteButtonRender extends Component {
   constructor(props) {
     super(props);
-
     this.invokeDeleteMethod = this.invokeDeleteMethod.bind(this);
   }
 

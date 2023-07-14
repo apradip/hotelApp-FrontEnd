@@ -245,6 +245,7 @@ const GuestRooms = forwardRef(( props, ref ) => {
                     pInTime={pData.inTime}
                     pTotalExpense={pData.totalExpense}
                     pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
+                    pOption={pData.option}
                     onBooked={() => {handleSuccess(Operation.Booked)}}
                     onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
                     onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 

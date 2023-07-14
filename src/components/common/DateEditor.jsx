@@ -1,9 +1,7 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
+import React, {useState, forwardRef, useImperativeHandle} from "react";
 import DatePicker from "react-datepicker";
 
-import { formatYYYYMMDD } from "../common/Common";
-
-const DateEditor = forwardRef(( props, ref ) => {	
+const DateEditor = forwardRef((props, ref) => {	
 	const dateInput = React.createRef();
 	const [selected, setSelected] = useState(new Date(props.value));
 
@@ -12,9 +10,7 @@ const DateEditor = forwardRef(( props, ref ) => {
     };
 
 	useImperativeHandle(ref, () => {
-        return {
-            getValue
-        }
+        return {getValue}
     });
 
 	return (
@@ -26,7 +22,8 @@ const DateEditor = forwardRef(( props, ref ) => {
 			dateFormat="dd/MM/yyyy"
 			showDisabledMonthNavigation
 			selected={selected}
-			onChange={(value) => {  setSelected(value)
+			onChange={(value) => {
+									setSelected(value)
 									return true
 								}}
 			/>

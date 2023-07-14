@@ -108,7 +108,7 @@ const Form = ({pTransactionNo, pTransactionDate, pTransactionTime,
 
                     {/* Start:: Column service detail */}
                     <div className="col-12">
-                        <label className="col-12 form-label"><b>Items</b></label>
+                        <label className="col-12 form-label"><b>Servicable items</b></label>
                         {/* Start:: Column service detail */}
                         <BillGrid
                             pData={pData}/>
@@ -152,7 +152,6 @@ const Form = ({pTransactionNo, pTransactionDate, pTransactionTime,
     // End:: Html
 
 };
-
 // End:: form
 
 

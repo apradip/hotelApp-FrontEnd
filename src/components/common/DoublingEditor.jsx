@@ -1,14 +1,10 @@
-import React, { Component, createRef } from 'react';
+import React, {Component, createRef} from 'react';
 
 export default class DoublingEditor extends Component {
     constructor(props) {
         super(props);
- 
         this.inputRef = createRef();
- 
-        this.state = {
-            value: parseInt(props.value)
-        };
+         this.state = {value: parseInt(props.value)};
     }
  
     componentDidMount() {

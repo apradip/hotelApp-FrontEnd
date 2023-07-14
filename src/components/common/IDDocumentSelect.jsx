@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 
-import { useStateContext } from "../../contexts/ContextProvider";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
-const IDDocumentSelect = ({ onChange, name, value, disabled = false }) => {
+const IDDocumentSelect = ({onChange, name, value, disabled = false}) => {
 	const contextValues = useStateContext();
     const { data, loading, doFetch } = useFetchWithAuth({
         url: `${contextValues.idDocumentAPI}`

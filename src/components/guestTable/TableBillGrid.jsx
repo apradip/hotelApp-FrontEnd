@@ -17,11 +17,12 @@ const TableBillGrid = ({pData}) => {
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
-          resizable: false,
+          resizable: true,
           editable: false,
           sortable: false,
           filter: false,
           hide: true,
+          suppressSizeToFit: true,
         };
     }, []);
     const rowClassRules = useMemo(() => {
@@ -87,10 +88,19 @@ const TableBillGrid = ({pData}) => {
     ];
 
     // Start:: load empty data to grid
-    const handleGridReady = () => {
+    const handleGridReady = (params) => {
         gridRef.current.api.setRowData(rowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
+
+        params.api.sizeColumnsToFit();
+
+        window.addEventListener('resize', function () {
+            setTimeout(function () {
+              params.api.sizeColumnsToFit();
+            });
+          });
+
         gridRef.current.api.sizeColumnsToFit();
     };
     // End:: load empty data to grid

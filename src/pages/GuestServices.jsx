@@ -249,6 +249,7 @@ const GuestServices = forwardRef((props, ref) => {
                     pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
                     pIndate={pData.inDate}
                     pInTime={pData.inTime}
+                    pOption={pData.option}
                     onOrdered={() => {handleSuccess(Operation.Order)}}
                     onDespatched={() => {handleSuccess(Operation.Despatch)}}
                     onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}

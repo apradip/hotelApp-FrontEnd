@@ -1,15 +1,15 @@
-import { useContext, useEffect } from "react";
-import { toast } from "react-toastify";
+import {useContext, useEffect} from "react";
+import {toast} from "react-toastify";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
 
 // Start:: Component
 // props parameters
 // pId
-const GetPlanName = ({ pId }) => {    
+const GetPlanName = ({pId}) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const { data, loading, error, doFetch } = useFetchWithAuth({

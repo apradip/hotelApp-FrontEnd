@@ -8,7 +8,7 @@ import Edit from "./FoodEdit";
 import Delete from "./FoodDelete";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
-    <NavLink to="#" className="dropdown" ref={ref} 
+    <NavLink to='#' className='dropdown' ref={ref} 
         onClick={(e) => {e.preventDefault(); onClick(e);}}>
       {children}
     </NavLink>
@@ -146,8 +146,8 @@ const FoodCard = forwardRef((props, ref) => {
             {/* Start :: view component */}
             <View
                 ref={viewRef}
-                pId={ props.pId} 
-                onClosed={handleClose} />
+                pId={props.pId} 
+                onClosed={handleClose}/>
             {/* End :: view component */}
 
             {/* Start :: edit component */}
@@ -155,7 +155,7 @@ const FoodCard = forwardRef((props, ref) => {
                 ref={editRef}
                 pId={props.pId} 
                 onEdited={props.onEdited} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: edit component */}
 
             {/* Start :: delete component */}
@@ -163,7 +163,7 @@ const FoodCard = forwardRef((props, ref) => {
                 ref={deleteRef}
                 pId={props.pId} 
                 onDeleted={props.onDeleted} 
-                onClosed={handleClose} />
+                onClosed={handleClose}/>
             {/* End :: delete component */}
         </>
     );

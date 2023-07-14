@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { axiosPrivate } from "./axiosPrivate";
+import {useState} from "react";
+import {axiosPrivate} from "./axiosPrivate";
 
 const useFetchWithAuth = (params) => {
     const [loading, setLoading] = useState(false);

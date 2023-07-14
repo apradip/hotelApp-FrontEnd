@@ -5,19 +5,17 @@ import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const TableDespatchGrid = ({pDefaultRowData, onChange}) => {    
-    // const hotelId = useContext(HotelId);
-    // const contextValues = useStateContext();
     const gridRef = useRef();
-    // const [rowData, setRowData] = useState();
 
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
-          resizable: false,
+          resizable: true,
           editable: false,
           sortable: false,
           filter: false,
           hide: true,
+          suppressSizeToFit: true,
         }
     }, []);
 
@@ -67,7 +65,7 @@ const TableDespatchGrid = ({pDefaultRowData, onChange}) => {
         let row = [];
         
         pDefaultRowData.forEach(element => {
-            const data = {
+            const object = {
                             rowId: row.length + 1, 
                             id: element.id,
                             name: element.name, 
@@ -75,14 +73,21 @@ const TableDespatchGrid = ({pDefaultRowData, onChange}) => {
                             itemTransactionId: element.itemTransactionId
                         };
     
-            row.push(data);
+            row.push(object);
         });
-
-        // setRowData(row);
 
         gridRef.current.api.setRowData(row);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
+
+        params.api.sizeColumnsToFit();
+
+        window.addEventListener('resize', function () {
+            setTimeout(function () {
+              params.api.sizeColumnsToFit();
+            });
+          });
+
         gridRef.current.api.sizeColumnsToFit();
     };
     // End:: load empty data to grid

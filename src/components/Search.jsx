@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import React, {useEffect, useRef, forwardRef, useImperativeHandle} from "react";
 
 // Start:: Component
 // props parameters

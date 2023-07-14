@@ -11,41 +11,42 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({onSubmited, onClosed}) => {
+const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporateAddress, pGST, 
+                onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}`
+        url: `${contextValues.guestAPI}/${hotelId}/${pGuestId}`
     });
 
     // Start:: Form validate and save data
-    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
+    const {values, errors, touched, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
-            keyInputName: '',
-            keyInputMobile: '',
-            keyInputGuestCount: 1,
-            keyInputCorporateName: '',
-            keyInputCorporateAddress: '',
-            keyInputGST: ''
+            keyInputName: pName,
+            keyInputMobile: pMobile,
+            keyInputGuestCount: pGuestCount,
+            keyInputCorporateName: pCorporateName,
+            keyInputCorporateAddress: pCorporateAddress,
+            keyInputGST: pGST
         },
         validationSchema: guestSmallSchema,
         validateOnChange,
-        onSubmit: async (values) => {
+        onSubmit: async (values, action) => {
             const payload = {   
-                option: 'M',
+                option: 'S',
                 name: values.keyInputName.toUpperCase(), 
                 mobile: parseInt(values.keyInputMobile),
                 guestCount: parseInt(values.keyInputGuestCount),
                 corporateName: values.keyInputCorporateName ? values.keyInputCorporateName.toUpperCase() : '',
                 corporateAddress: values.keyInputCorporateAddress ? values.keyInputCorporateAddress.toUpperCase() : '',
                 gstNo: values.keyInputGST ? values.keyInputGST.toUpperCase() : ''
-            }
-
+            };
+            
             await doInsert(payload);
         
             if (error === null) {
-                resetForm();
+                action.resetForm();
                 onSubmited();
             } else {
                 toast.error(error);
@@ -61,7 +62,7 @@ const Form = ({onSubmited, onClosed}) => {
         onClosed();
     };
     // End:: close form    
-    
+
     // Start:: Html
     return (
         <form>
@@ -70,23 +71,23 @@ const Form = ({onSubmited, onClosed}) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className='row'>
+                <div className="row">
 
                     {/* Start:: Column name */}
-                    <div className='col-sx-12 col-md-4 mb-3'>
+                    <div className="col-sx-12 col-md-4 mb-3">
 
                         {/* Label element */}
-                        <label className='col-12 form-label' 
-                            htmlFor={'keyInputName'}><b>Name</b></label>
+                        <label className="col-12 form-label" 
+                            htmlFor={"keyInputName"}><b>Name</b></label>
 
-                        <div className='col-12'>
+                        <div className="col-12">
                             {/* Input element text*/}
                             <input 
-                                type='text' 
-                                name='keyInputName'
-                                placeholder='Name'
-                                className='form-control'
-                                autoComplete='off'
+                                type="text" 
+                                name="keyInputName"
+                                placeholder="Name"
+                                className="form-control"
+                                autoComplete="off"
                                 maxLength={100}
                                 disabled={loading} 
                                 value={values.keyInputName} 
@@ -95,27 +96,27 @@ const Form = ({onSubmited, onClosed}) => {
                             {/* Validation message */}
                             {errors.keyInputName && 
                                 touched.keyInputName ? 
-                                    (<small className='text-danger'>{errors.keyInputName}</small>) : 
+                                    (<small className="text-danger">{errors.keyInputName}</small>) : 
                                         null}
                         </div>
                     </div>
                     {/* End:: Column name */}
 
                     {/* Start:: Column mobile */}
-                    <div className='col-sx-12 col-md-4 mb-3'>
+                    <div className="col-sx-12 col-md-4 mb-3">
 
                         {/* Label element */}
-                        <label className='col-12 form-label' 
-                            htmlFor={'keyInputMobile'}><b>Mobile no.</b></label>
+                        <label className="col-12 form-label" 
+                            htmlFor={"keyInputMobile"}><b>Mobile no.</b></label>
 
-                        <div className='col-12'>
+                        <div className="col-12">
                             {/* Input element text*/}
                             <input 
-                                type='text'
-                                name='keyInputMobile'
-                                placeholder='Mobile no.'
-                                className='form-control'
-                                autoComplete='off'
+                                type="text" 
+                                name="keyInputMobile"
+                                placeholder="Mobile no."
+                                className="form-control"
+                                autoComplete="off"
                                 maxLength={100}
                                 disabled={loading} 
                                 value={values.keyInputMobile} 
@@ -124,27 +125,27 @@ const Form = ({onSubmited, onClosed}) => {
                             {/* Validation message */}
                             {errors.keyInputMobile && 
                                 touched.keyInputMobile ? 
-                                    (<small className='text-danger'>{errors.keyInputMobile}</small>) : 
+                                    (<small className="text-danger">{errors.keyInputMobile}</small>) : 
                                         null}
                         </div>                    
                     </div>
                     {/* End:: Column mobile */}
 
                     {/* Start:: Column no of guest */}
-                    <div className='col-sx-12 col-md-4 mb-3'>
+                    <div className="col-sx-12 col-md-4 mb-3">
 
                         {/* Label element */}
-                        <label className='col-12 form-label' 
-                            htmlFor={'keyInputGuestCount'}><b>Guest count</b></label>
+                        <label className="col-12 form-label" 
+                            htmlFor={"keyInputGuestCount"}><b>Guest count</b></label>
 
-                        <div className='col-12'>
+                        <div className="col-12">
                             {/* Input element text*/}
                             <input 
-                                type='text'
-                                name='keyInputGuestCount'
-                                placeholder='Guest count'
-                                className='form-control'
-                                autoComplete='off'
+                                type="text" 
+                                name="keyInputGuestCount"
+                                placeholder="Guest count"
+                                className="form-control"
+                                autoComplete="off"
                                 maxLength={2}
                                 disabled={loading} 
                                 value={values.keyInputGuestCount} 
@@ -153,7 +154,7 @@ const Form = ({onSubmited, onClosed}) => {
                             {/* Validation message */}
                             {errors.keyInputGuestCount && 
                                 touched.keyInputGuestCount ? 
-                                    (<small className='text-danger'>{errors.keyInputGuestCount}</small>) : 
+                                    (<small className="text-danger">{errors.keyInputGuestCount}</small>) : 
                                         null}
                         </div>                                                        
                     </div>
@@ -163,24 +164,24 @@ const Form = ({onSubmited, onClosed}) => {
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className='row'>
+                <div className="row">
 
                     {/* Start:: Column corporate name */}
-                    <div className='col-sx-12 col-md-4 mb-3'>
+                    <div className="col-sx-12 col-md-4 mb-3">
 
                         {/* Label element */}
-                        <label className='col-12 form-label' 
-                            htmlFor={'keyInputCorporateName'}><b>Corporate name</b></label>
+                        <label className="col-12 form-label" 
+                            htmlFor={"keyInputCorporateName"}><b>Corporate name</b></label>
 
-                        <div className='col-12'>
+                        <div className="col-12">
 
                             {/* Input element text*/}
                             <input 
-                                type='text' 
-                                name='keyInputCorporateName'
-                                placeholder='Corporate name'
-                                className='form-control'
-                                autoComplete='off'
+                                type="text" 
+                                name="keyInputCorporateName"
+                                placeholder="Corporate name"
+                                className="form-control"
+                                autoComplete="off"
                                 maxLength={100}
                                 disabled={loading} 
                                 value={values.keyInputCorporateName} 
@@ -189,27 +190,27 @@ const Form = ({onSubmited, onClosed}) => {
                             {/* Validation message */}
                             {errors.keyInputCorporateName && 
                                 touched.keyInputCorporateName ? 
-                                    (<small className='text-danger'>{errors.keyInputCorporateName}</small>) : 
+                                    (<small className="text-danger">{errors.keyInputCorporateName}</small>) : 
                                         null}
                         </div>    
                     </div>
                     {/* End:: Column corporate name */}
 
                     {/* Start:: Column coroprate address */}
-                    <div className='col-sx-12 col-md-4 mb-3'>
+                    <div className="col-sx-12 col-md-4 mb-3">
 
                         {/* Label element */}
-                        <label className='col-12 form-label' 
-                            htmlFor={'keyInputCorporateAddress'}><b>Corporate address</b></label>
+                        <label className="col-12 form-label" 
+                            htmlFor={"keyInputCorporateAddress"}><b>Corporate address</b></label>
 
-                        <div className='col-12'>
+                        <div className="col-12">
                             {/* Input element text*/}
                             <input 
-                                type='text'
-                                name='keyInputCorporateAddress'
-                                placeholder='Corporate address'
-                                className='form-control'
-                                autoComplete='off'
+                                type="text" 
+                                name="keyInputCorporateAddress"
+                                placeholder="Corporate address"
+                                className="form-control"
+                                autoComplete="off"
                                 maxLength={100}
                                 disabled={loading} 
                                 value={values.keyInputCorporateAddress} 
@@ -218,27 +219,27 @@ const Form = ({onSubmited, onClosed}) => {
                             {/* Validation message */}
                             {errors.keyInputCorporateAddress && 
                                 touched.keyInputCorporateAddress ? 
-                                    (<small className='text-danger'>{errors.keyInputCorporateAddress}</small>) : 
+                                    (<small className="text-danger">{errors.keyInputCorporateAddress}</small>) : 
                                         null}
                         </div>                            
                     </div>
                     {/* End:: Column coroprate address */}
 
                     {/* Start:: Column gst no */}
-                    <div className='col-sx-12 col-md-4 mb-3'>
+                    <div className="col-sx-12 col-md-4 mb-3">
 
                         {/* Label element */}
-                        <label className='col-12 form-label' 
-                            htmlFor={'keyInputGST'}><b>GST no.</b></label>
+                        <label className="col-12 form-label" 
+                            htmlFor={"keyInputGST"}><b>GST no.</b></label>
 
-                        <div className='col-12'>
+                        <div className="col-12">
                             {/* Input element select*/}
                             <input 
-                                type='text'
-                                name='keyInputGST'
-                                placeholder='GST no.'
-                                className='form-control'
-                                autoComplete='off'
+                                type="text" 
+                                name="keyInputGST"
+                                placeholder="GST no."
+                                className="form-control"
+                                autoComplete="off"
                                 maxLength={100}
                                 disabled={loading} 
                                 value={values.keyInputGST} 
@@ -247,7 +248,7 @@ const Form = ({onSubmited, onClosed}) => {
                             {/* Validation message */}
                             {errors.keyInputGST && 
                                 touched.keyInputGST ? 
-                                    (<small className='text-danger'>{errors.keyInputGST}</small>) : 
+                                    (<small className="text-danger">{errors.keyInputGST}</small>) : 
                                         null}
                         </div>                        
                     </div>
@@ -259,40 +260,39 @@ const Form = ({onSubmited, onClosed}) => {
             </Modal.Body>
             {/* End:: Modal body */}
 
-
             {/* Start:: Modal footer */}
             <Modal.Footer>
-                
+
                 {/* Start:: Close button */}
-                <button 
-                    type='button'
-                    className='btn btn-danger'
+                <button
+                    type="button"
+                    className="btn btn-danger"
                     disabled={loading}
                     onClick={handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
-
+                
                 {/* Start:: Save button */}
                 <button 
-                    type='button'
-                    className='btn btn-success'
+                    type="button"
+                    className="btn btn-success"
                     disabled={loading} 
                     onClick={handleSubmit}>
 
-                    {!loading && 'Confirm'}
+                    {!loading && "Confirm"}
                     {loading && 
-                        <>
-                            <span className='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>
-                            Working
-                        </>}
+                                <>
+                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Working
+                                </>}
                 </button>
                 {/* End:: Save button */}
 
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </form>
+        </form> 
     );
     // End:: Html
 
@@ -302,14 +302,20 @@ const Form = ({onSubmited, onClosed}) => {
 
 // Start:: Component
 // props parameters
-// onAdded()
+// pId
+// onEdited()
 // onClosed()
 
 // useImperativeHandle
 // handleShowModal
-const GuestMiscellaneousAdd = forwardRef((props, ref) => {
+const GuestMiscellaneousEdit = forwardRef((props, ref) => {    
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-
+    const {data, loading, error, doFetch} = useFetchWithAuth({
+        url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
+    });
+    
     // Start:: Show modal
     const handleShowModal = () => {
         setShowModal(true);
@@ -320,16 +326,16 @@ const GuestMiscellaneousAdd = forwardRef((props, ref) => {
     const handleCloseModal = () => {
         setShowModal(false);
         props.onClosed();
-    };
+    };    
     // End:: Close modal
-    
+
     // Start:: Save
-    const handleSave = () => {
-        props.onAdded();
+    const handleSave = () => { 
         setShowModal(false);
+        props.onSaved();
     };
     // End:: Save
-
+    
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
         return {handleShowModal}
@@ -346,34 +352,61 @@ const GuestMiscellaneousAdd = forwardRef((props, ref) => {
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        (async () => {
+            try {
+                showModal && await doFetch();
+            } catch (err) {
+                console.log('Error occured when fetching data');
+            }
+            })();
+    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch id wise detail from api
+        
+    useEffect(() => {
+        error && toast.error(error);
+    }, [data, error, loading]);
+    
     // Start:: Html
     return (
         <>
-            {/* Start:: Add modal */}
-            <Modal size='lg'
-                show={showModal}>
+            {/* Start:: Edit modal */}
+            {data &&
+                <Modal
+                    size="lg" 
+                    show={showModal}>
 
-                {/* Start:: Modal header */}
-                <Modal.Header>
-                    {/* Header text */}
-                    <Modal.Title>New</Modal.Title>
+                    {/* Start:: Modal header */}
+                    <Modal.Header>
+                        {/* Header text */}
+                        <Modal.Title>Edit</Modal.Title>
+                        
+                        {/* Close button */}
+                        <NavLink 
+                            className="nav-icon" href="#" 
+                            onClick={handleCloseModal}>
+                            <i className="align-middle"><X/></i>
+                        </NavLink>
+                    </Modal.Header>
+                    {/* End:: Modal header */}
 
-                    {/* Close button */}
-                    <NavLink className='nav-icon' href='#' onClick={handleCloseModal}>
-                        <i className='align-middle'><X/></i>
-                    </NavLink>
-                </Modal.Header>
-                {/* End:: Modal header */}
-
-                {/* Start:: Form component */}
-                <Form
-                    onSubmited={handleSave} 
-                    onClosed={handleCloseModal}/>
-                {/* End:: Form component */}
-
-            </Modal>
-            {/* End:: Add modal */}
-        </>            
+                    {/* Start:: Form component */}
+                    <Form 
+                        pGuestId={data._id}
+                        pName={data.name}
+                        pMobile={data.mobile}
+                        pGuestCount={data.guestCount}
+                        pCorporateName={data.corporateName}
+                        pCorporateAddress={data.corporateAddress}
+                        pGST={data.gstNo}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal}/>
+                        {/* End:: Form component */}
+                    
+                </Modal>}
+            {/* End:: Edit modal */}
+        </>
     );
     // End:: Html
 
@@ -381,4 +414,4 @@ const GuestMiscellaneousAdd = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestMiscellaneousAdd;
+export default GuestMiscellaneousEdit;

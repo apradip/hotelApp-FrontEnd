@@ -11,6 +11,7 @@ import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
 const Operation = {
     GuestAdd: 'GUEST_ADD',
+    GuestMod: 'GUEST_MOD',
     Order: 'ORDER',
     Despatch: 'DESPATCH',
     BillGenerate: 'BILL_GENERATE',
@@ -66,30 +67,23 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
     // Start:: Open edit modal
     const openEdit = () => {
-        if (selectedCardIndex !== null) {
-            if (selectedCardIndex >= 0) { 
-                cardRefs.current.forEach((item, idx) => {
-                    if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
-                })
-            } else {
-                toast.warning('Nothing selected to edit');
-            }
+        if (selectedCardIndex >= 0) { 
+            cardRefs.current.forEach((item, idx) => {
+                if (selectedCardIndex === idx) {
+                    cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
+                }
+            })
         }
     };
     // End:: Open edit modal
 
     // Start:: Open delete modal
     const openDelete = () => {
-        if (selectedCardIndex !== null) {
-            if (selectedCardIndex >= 0) { 
-                cardRefs.current.forEach((item, idx) => {
-                    if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
-                })
-            } else {
-                toast.warning('Nothing selected to delete');
-            }
+        if (selectedCardIndex >= 0) { 
+            cardRefs.current.forEach((item, idx) => {
+                if (selectedCardIndex === idx)
+                    cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
+            })
         }
     };
     // End:: Open delete modal
@@ -108,7 +102,13 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                 setDataChanged(true);
                 props.onSuccess();
                 break;
-    
+
+            case Operation.GuestMod:
+                toast.success('Guest successfully changed');
+                setDataChanged(true);
+                props.onSuccess();
+                break;
+                    
             case Operation.Order:
                 toast.success('Item successfully ordered');
                 setDataChanged(true);
@@ -220,7 +220,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className="row" key={rowKey}>
+            <div className='row' key={rowKey}>
                 {pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
                         return createCol(item, itemIdx);
@@ -232,12 +232,14 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         const colKey = `col_${pData.id}`;
 
         return (
-            <div className="col-xl-4 col-md-4" key={colKey}>
-                <Card className="border"
+            <div className='col-sm-6 col-md-4 col-xl-4' key={colKey}>
+                <Card className='border'
                     ref={(el) => cardRefs.current[itemIdx] = el}
                     pIndex={itemIdx}
                     pGuestId={pData.id} 
                     pTransactionId={pData.transactionId}
+                    pTableTransactionId={pData.tableTransactionId}
+                    pServiceTransactionId={pData.serviceTransactionId}
                     pName={pData.name}
                     pMobile={pData.mobile}
                     pGuestCount={pData.guestCount}
@@ -248,6 +250,8 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                     pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
                     pIndate={pData.inDate}
                     pInTime={pData.inTime}
+                    pOption={pData.option}
+                    onEdited={() => {handleSuccess(Operation.GuestMod)}}
                     onOrdered={() => {handleSuccess(Operation.Order)}}
                     onDespatched={() => {handleSuccess(Operation.Despatch)}}
                     onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
@@ -262,20 +266,20 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
     // Start:: Html
     return ( 
-        <div className="content-wrapper">
+        <div className='content-wrapper'>
             
             {/* Seart :: Bread crumb */}
-            <div className="content-header">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-sm-4 m-0">
-                            <h1 className="text-dark">Miscellaneous</h1>
+            <div className='content-header'>
+                <div className='container-fluid'>
+                    <div className='row'>
+                        <div className='col-sm-4 m-0'>
+                            <h1 className='text-dark'>Miscellaneous</h1>
                         </div>
 
-                        <div className="col-sm-8">
-                            <Breadcrumb className="breadcrumb float-sm-right">
-                                <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
-                                <Breadcrumb.Item href = "/">Transaction</Breadcrumb.Item>
+                        <div className='col-sm-8'>
+                            <Breadcrumb className='breadcrumb float-sm-right'>
+                                <Breadcrumb.Item href = '/'>Home</Breadcrumb.Item>
+                                <Breadcrumb.Item href = '/'>Transaction</Breadcrumb.Item>
                                 <Breadcrumb.Item active>Miscellaneous</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
@@ -285,14 +289,14 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             {/* End :: Bread crumb */}
 
             {/* Start :: display data */}
-            <section className="content">
-                <div className="container-fluid">
-                    <div className="card">
+            <section className='content'>
+                <div className='container-fluid'>
+                    <div className='card'>
 
                         {/* Start :: Header & operational panel */}
-                        <div className="card-header">
+                        <div className='card-header'>
                             {/* Start :: Display data count */}
-                            <div className="col-12 text-danger p-0">
+                            <div className='col-12 text-danger p-0'>
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -302,10 +306,10 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body py-0">
+                        <div className='card-body py-0'>
                             {loading &&
-                                <div className="d-flex justify-content-center">
-                                    <div className="spinner-border text-primary" role="status"/>
+                                <div className='d-flex justify-content-center'>
+                                    <div className='spinner-border text-primary' role='status'/>
                                 </div>}
 
                             {!loading && 
@@ -315,10 +319,10 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer py-0">
-                            <div className="row">
+                        <div className='card-footer py-0'>
+                            <div className='row'>
                                 {/* Start :: Pagination */}
-                                <div className="col-12 d-flex justify-content-end">
+                                <div className='col-12 d-flex justify-content-end'>
                                     {!loading && 
                                             data && 
                                                 <Paging

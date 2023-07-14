@@ -1,5 +1,5 @@
 import axios from "axios";
-import { memoizedRefreshToken } from "./refreshToken";
+import {memoizedRefreshToken} from "./refreshToken";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URI;
 

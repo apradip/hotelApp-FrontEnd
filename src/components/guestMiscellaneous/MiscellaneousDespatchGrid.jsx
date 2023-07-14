@@ -12,19 +12,19 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const gridRef = useRef();
-    const [rowData, setRowData] = useState();
-    const {data, doFetch} = useFetchWithAuth({
+    const {doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
     });
 
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
-          resizable: false,
+          resizable: true,
           editable: false,
           sortable: false,
           filter: false,
           hide: true,
+          suppressSizeToFit: true,
         }
     }, []);
     const [columnDefs] = useState([
@@ -68,11 +68,11 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
     }    
 
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
+    const handleGridReady = () => {
         let row = [];
         
         pDefaultRowData.forEach(element => {
-            const data = {
+            const object = {
                             rowId: row.length + 1, 
                             id: element.id,
                             name: element.name, 
@@ -80,10 +80,8 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
                             itemTransactionId: element.itemTransactionId
                         };
     
-            row.push(data);
+            row.push(object);
         });
-
-        setRowData(row);
 
         gridRef.current.api.setRowData(row);
         gridRef.current.api.refreshCells();

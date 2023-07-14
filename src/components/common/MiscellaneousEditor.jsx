@@ -1,8 +1,8 @@
-import React, { useContext, forwardRef, useImperativeHandle, useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
+import React, {useContext, forwardRef, useImperativeHandle, useEffect, useState} from "react";
+import {Form} from "react-bootstrap";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
 const MiscellaneousEditor = forwardRef((props, ref) => {	
@@ -33,9 +33,7 @@ const MiscellaneousEditor = forwardRef((props, ref) => {
     };
 
 	useImperativeHandle(ref, () => {
-        return {
-            getValue
-        }
+        return {getValue}
     });
 
 	useEffect(() => {
@@ -61,7 +59,7 @@ const MiscellaneousEditor = forwardRef((props, ref) => {
 				multiple = {false}
 				value = {defaultItem}
 				onChange = {handleChange}
-				style = {{border: "none", height: "99%", width: "100%"}} >
+				style = {{border: "none", height: "99%", width: "100%"}}>
 
 				{listItem && listItem.map((item) => {
 					return(<option key={item._id} value={item._id}>{item.name}</option>)

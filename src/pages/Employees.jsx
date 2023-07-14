@@ -21,7 +21,7 @@ import useFetchWithAuth from "../components/common/useFetchWithAuth";
 // openEdit 
 // openDelete
 // close
-const Employees = forwardRef(( props, ref ) => {
+const Employees = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const itemPerRow = contextValues.itemPerRow;
@@ -160,7 +160,7 @@ const Employees = forwardRef(( props, ref ) => {
         })
     };
 
-    const createRow = ( pData, rowIdx ) => {
+    const createRow = (pData, rowIdx) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
@@ -264,14 +264,14 @@ const Employees = forwardRef(( props, ref ) => {
 
                         {/* Start :: Display data */}
                         <div className="card-body py-0">
-                            { loading &&
+                            {loading &&
                                 <div className="d-flex justify-content-center">
                                     <div className="spinner-border text-primary" role="status"/>
-                                </div> }
+                                </div>}
 
-                            { !loading && 
+                            {!loading && 
                                 data && 
-                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem)) }
+                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
                         </div>
                         {/* End :: Display data */}
                         
@@ -283,10 +283,10 @@ const Employees = forwardRef(( props, ref ) => {
                                     {!loading && 
                                             data && 
                                                 <Paging
-                                                    itemPerPage = { itemPerPage }
-                                                    totalItem = { data.length }
-                                                    selectedPage = { selectedPage }
-                                                    onPaging = { handlePaging } />}
+                                                    itemPerPage={itemPerPage}
+                                                    totalItem={data.length}
+                                                    selectedPage={selectedPage}
+                                                    onPaging={handlePaging}/>}
                                 </div>
                                 {/* End :: Pagination */}
                             </div>
@@ -302,7 +302,7 @@ const Employees = forwardRef(( props, ref ) => {
             <Add 
                 ref={addRef}   
                 onAdded={() => {handleSuccess("add")}}
-                onClosed={close} />
+                onClosed={close}/>
             {/* End :: add employee component */}
 
         </div>

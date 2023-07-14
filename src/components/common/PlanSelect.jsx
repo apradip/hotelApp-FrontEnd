@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, {useContext, useEffect} from "react";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
-const PlanSelect = ({ onChange, name, value, disabled = false }) => {
+const PlanSelect = ({onChange, name, value, disabled = false}) => {
 	const hotelId = useContext(HotelId);
 	const contextValues = useStateContext();
     const { data, loading, doFetch } = useFetchWithAuth({

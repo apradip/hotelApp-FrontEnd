@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import React, {useState, useEffect, useRef} from "react";
+import {Routes, Route} from "react-router-dom";
+import {ToastContainer} from "react-toastify";
 
-import { useStateContext } from "../contexts/ContextProvider";
-import { getPage } from "./common/Common";
+import {useStateContext} from "../contexts/ContextProvider";
+import {getPage} from "./common/Common";
 import Header from "./HeaderLogin";
 import Menu from "./MenuLogin";
 import Footer from "./FooterLogin";
@@ -61,7 +61,7 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
   const bookingAgentRef = useRef(null);
   const guestRoomRef = useRef(null);
   const guestTableRef = useRef(null);
-  const guestFoodRef = useRef(null);
+  // const guestFoodRef = useRef(null);
   const guestServiceRef = useRef(null);
   const guestMiscellaneousRef = useRef(null);
   const guestPaymentRef = useRef(null);
@@ -286,13 +286,13 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
         guestTableRef && guestTableRef.current.openEdit();
         break;
 
-      // case "guestservices":
-      //   guestServiceRef && guestServiceRef.current.openEdit();
-      //   break;
+      case "guestservices":
+        guestServiceRef && guestServiceRef.current.openEdit();
+        break;
 
-      // case "guestmiscellaneous":
-      //   guestMiscellaneousRef && guestMiscellaneousRef.current.openEdit();
-      //   break;
+      case "guestmiscellaneous":
+        guestMiscellaneousRef && guestMiscellaneousRef.current.openEdit();
+        break;
           
       case "guestpayments":
         guestPaymentRef && guestPaymentRef.current.openEdit();
@@ -409,107 +409,107 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
             onChangeSearch={(s) => handleSearch(s)} 
             onClickAdd={handleAdd} 
             onClickEdit={handleEdit}
-            onClickDel={handleDel} />
+            onClickDel={handleDel}/>
         {/* End:: header nav component */}
 
         {/* Start:: sidebar */}
         <Menu
           ref={menuRef}
           onSelectParent={(pr) => handleClickParent(pr)}
-          onSelectPage={(p) => handleClickPage(p)} />
+          onSelectPage={(p) => handleClickPage(p)}/>
         {/* End:: sidebar */}
 
         {/* Start:: all page cpmponents */}
         <main>
             {/* Start :: route page */}
             <Routes>
-              <Route exact path="/dashboard" element={<Dashboard />}/>
+              <Route exact path="/dashboard" element={<Dashboard/>}/>
             
               <Route exact path="/accesslevels" element={<AccessLevels 
                                                           ref={accessLevelRef} 
                                                           onSuccess={handleSuccess}
-                                                          onClose={handleClose} />}/>
+                                                          onClose={handleClose}/>}/>
 
               <Route exact path="/iddocuments" element={<IDDocuments 
                                                           ref={idDocumentRef} 
                                                           onSuccess={handleSuccess}
-                                                          onClose={handleClose} />}/>
+                                                          onClose={handleClose}/>}/>
 
               <Route exact path="/bookingagents" element={<BookingAgents 
                                                             ref={bookingAgentRef} 
                                                             onSuccess={handleSuccess}
-                                                            onClose={handleClose} />}/>
+                                                            onClose={handleClose}/>}/>
             
               <Route exact path="/plans" element={<Plans 
                                                     ref={planRef} 
                                                     onSuccess={handleSuccess}
-                                                    onClose={handleClose} />}/>
+                                                    onClose={handleClose}/>}/>
 
               <Route exact path="/roomcategories" element={<RoomCategories 
                                                             ref={roomCategoryRef} 
                                                             onSuccess={handleSuccess}
-                                                            onClose={handleClose} />}/>
+                                                            onClose={handleClose}/>}/>
 
               <Route exact path="/employees" element={<Employees 
                                                         ref={employeeRef} 
                                                         onSuccess={handleSuccess}
-                                                        onClose={handleClose} />}/>
+                                                        onClose={handleClose}/>}/>
 
               <Route exact path="/rooms" element={<Rooms
                                                     ref={roomRef} 
                                                     onSuccess={handleSuccess}
-                                                    onClose={handleClose} />}/>
+                                                    onClose={handleClose}/>}/>
 
               <Route exact path="/tables" element={<Tables
                                                     ref={tableRef} 
                                                     onSuccess={handleSuccess}
-                                                    onClose={handleClose} />}/>
+                                                    onClose={handleClose}/>}/>
 
               <Route exact path="/foods" element={<Foods
                                                     ref={foodRef} 
                                                     onSuccess={handleSuccess}
-                                                    onClose={handleClose} />}/>
+                                                    onClose={handleClose}/>}/>
 
               <Route exact path="/miscellaneouses" element={<Miscellaneouses
                                                             ref={miscellaneousRef} 
                                                             onSuccess={handleSuccess}
-                                                            onClose={handleClose} />}/>
+                                                            onClose={handleClose}/>}/>
 
               <Route exact path="/services" element={<Services
                                                       ref={serviceRef} 
                                                       onSuccess={handleSuccess}
-                                                      onClose={handleClose} />}/>
+                                                      onClose={handleClose}/>}/>
 
               <Route exact path="/guestrooms" element={<GuestRooms
                                                         ref={guestRoomRef} 
                                                         onSuccess={handleSuccess}
-                                                        onClose={handleClose} />}/>
+                                                        onClose={handleClose}/>}/>
 
               <Route exact path="/guesttables" element={<GuestTables
                                                         ref={guestTableRef} 
                                                         onSuccess={handleSuccess}
-                                                        onClose={handleClose} />}/>
+                                                        onClose={handleClose}/>}/>
 
               <Route exact path="/guestservices" element={<GuestServices
                                                         ref={guestServiceRef} 
                                                         onSuccess={handleSuccess}
-                                                        onClose={handleClose} />}/>
+                                                        onClose={handleClose}/>}/>
 
-              <Route exact path="/guestmiscellaneous" element = {<GuestMiscellaneouses
-                                                                  ref = {guestMiscellaneousRef} 
-                                                                  onSuccess = {handleSuccess}
-                                                                  onClose = {handleClose} />}/>
+              <Route exact path="/guestmiscellaneous" element={<GuestMiscellaneouses
+                                                                  ref={guestMiscellaneousRef} 
+                                                                  onSuccess={handleSuccess}
+                                                                  onClose={handleClose}/>}/>
 
               <Route exact path="/guestpayments" element={<GuestPayments
                                                           ref={guestPaymentRef} 
                                                           onSuccess={handleSuccess}
-                                                          onClose={handleClose} />}/>
+                                                          onClose={handleClose}/>}/>
 
-              <Route exact path="/support" element={<Support />}/>
-              <Route exact path="/help" element={<Help />}/>
-              <Route exact path="/privacy" element={<Privacy />}/>
-              <Route exact path="/terms" element={<Terms />}/>
-              <Route path="*" element={<Error404 />}/>
+              <Route exact path="/support" element={<Support/>}/>
+              <Route exact path="/help" element={<Help/>}/>
+              <Route exact path="/privacy" element={<Privacy/>}/>
+              <Route exact path="/terms" element={<Terms/>}/>
+              <Route path="*" element={<Error404/>}/>
             </Routes>
             {/* End :: route page */}
 
@@ -523,7 +523,7 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
               hideProgressBar = { true }
               newestOnTop = { true }
               rtl = { false }
-              closeButton = {CloseButton} />
+              closeButton = {CloseButton}/>
             {/* End :: display message */}
         </main>
         {/* End:: all page cpmponents */}
@@ -531,7 +531,7 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
         {/* Start:: footer component */}
         <Footer 
           onClickPage={(p) => handleClickPage(p)}  
-          ref={footerRef} />
+          ref={footerRef}/>
         {/* End:: footer component */}
 
       </div>

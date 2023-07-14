@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Select from "react-select";
 
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
-const AccessLevelSelect = ({ onChange, name, value, disabled = false }) => {
+const AccessLevelSelect = ({onChange, name, value, disabled = false}) => {
 	const contextValues = useStateContext();
 	const [accesslevelList, setAccesslevelList] = useState([]);
 	const [selectedList, setSelectedList] = useState(value);

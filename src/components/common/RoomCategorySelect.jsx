@@ -1,13 +1,13 @@
-import React, { useContext, useEffect } from "react";
+import React, {useContext, useEffect} from "react";
 
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {HotelId} from "../../App";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
-const RoomCategorySelect = ({ onChange, name, value, disabled = false }) => {
+const RoomCategorySelect = ({onChange, name, value, disabled = false}) => {
 	const hotelId = useContext(HotelId);
 	const contextValues = useStateContext();
-    const { data, loading, doFetch } = useFetchWithAuth({
+    const {data, loading, doFetch} = useFetchWithAuth({
         url: `${contextValues.roomCategoryAPI}/${hotelId}`
     });
 
@@ -36,7 +36,7 @@ const RoomCategorySelect = ({ onChange, name, value, disabled = false }) => {
 			
 			{data &&
 				data.map((item) => {
-					return (<option key = { item._id } value = { item._id } >{ item.name }</option>)
+					return (<option key = {item._id} value = {item._id} >{item.name}</option>)
 				})}
 		</select>
     );

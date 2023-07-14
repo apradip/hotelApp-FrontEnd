@@ -1,17 +1,13 @@
-// import { useContext, useEffect } from "react";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
+import {useEffect} from "react";
+import {toast} from "react-toastify";
 
-// import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
+import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
-
 
 // Start:: Component
 // props parameters
 // pId
-const GetBookingAgentName = ({ pId }) => {    
-    // const hotelId = useContext(HotelId);
+const GetBookingAgentName = ({pId}) => {    
     const contextValues = useStateContext();
     const { data, loading, error, doFetch } = useFetchWithAuth({
         url: `${contextValues.bookingAgentAPI}/${pId}`

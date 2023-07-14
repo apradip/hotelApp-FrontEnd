@@ -24,11 +24,12 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
-          resizable: false,
+          resizable: true,
           editable: false,
           sortable: false,
           filter: false,
           hide: true,
+          suppressSizeToFit: true,
         }
     }, []);
     const [columnDefs] = useState([
@@ -130,11 +131,11 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     ];
 
     // Start:: load empty data to grid
-    const handleGridReady = () => {
+    const handleGridReady = (params) => {
         let row = [];
         
         pDefaultRowData.forEach(element => {
-            const data = {
+            const object = {
                             rowId: row.length + 1, 
                             id: element.id,
                             name: element.name, 
@@ -148,7 +149,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                             despatchDate: element.despatchDate
                         };
     
-            row.push(data);
+            row.push(object);
         });
 
         setRowData(row);
@@ -157,6 +158,15 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
+
+        params.api.sizeColumnsToFit();
+
+        window.addEventListener('resize', function () {
+            setTimeout(function () {
+              params.api.sizeColumnsToFit();
+            });
+          });
+
         gridRef.current.api.sizeColumnsToFit();
     };
     // End:: load empty data to grid
