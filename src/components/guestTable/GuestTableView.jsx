@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react"
-import {Modal, NavLink} from "react-bootstrap"
+import {Modal, NavLink, Row, Col} from "react-bootstrap"
 import {X} from "react-feather"
 import {subStr, getTables} from "../common/Common"
 
@@ -46,50 +46,50 @@ const Form = ({pName, pMobile, pGuestCount,
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        <Col sx={12} md={5} className="mb-3">
                             <label className="col-12 form-label"><b>Company</b></label>
                             <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
-                        </div>
+                        </Col>
                     :
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        <Col sx={12} md={5} className="mb-3">
                             <label className="col-12 form-label"><b>Name</b></label>
                             <label className="col-12 text-muted">{subStr(pName, 30)}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        <Col sx={12} md={5} className="mb-3">
                             <label className="col-12 form-label"><b>Address</b></label>
                             <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
-                        </div>
+                        </Col>
                     :
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        <Col sx={12} md={5} className="mb-3">
                             <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column mobile no / company address */}
-                    <div className="col-sx-12 col-md-2 mb-3">
+                    <Col sx={12} md={2} className="mb-3">
                         <label className="col-12 form-label"><b>Guest count</b></label>
                         <label className="col-12 text-muted">{pGuestCount} No.</label>
-                    </div>
+                    </Col>
                     {/* End:: Column mobile no / company address */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
-                    <div className="col-12">
+                    <Col sx={12} md={12}>
                         {/* Label element */}
                         <label className="col-12 text-muted"><b>Items</b></label>
 
@@ -98,8 +98,8 @@ const Form = ({pName, pMobile, pGuestCount,
                             pDefaultRowData={defaultRowData}/>
                         {/* End:: Column room detail */}
 
-                    </div>                
-                </div>
+                    </Col>                
+                </Row>
                 {/* End:: Row */}
 
             </Modal.Body>
@@ -167,11 +167,11 @@ const GuestTableView = forwardRef((props, ref) => {
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') handleCloseModal()
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") handleCloseModal()
         })
 
-        return () => {document.removeEventListener('keydown', handleCloseModal)}
+        return () => {document.removeEventListener("keydown", handleCloseModal)}
     }, [])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 

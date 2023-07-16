@@ -401,9 +401,10 @@ export const getTables = (tableObject) => {
     let tables = "";
 
     if (tableObject) {
-        tableObject.map((table) => (
-            tables.length > 0 ? tables = tables + ", " + table.no : tables = table.no
-        ))
+        if (Array.isArray(tableObject) && tableObject.length > 0){
+            tableObject.map((table) => (
+                tables.length > 0 ? tables = tables + ", " + table.no : tables = table.no))
+        }
     }
 
     return tables;

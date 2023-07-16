@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Breadcrumb} from "react-bootstrap";
+import {Breadcrumb, Row, Col} from "react-bootstrap";
 import {toast} from "react-toastify";
 
 import {HotelId} from "../App";
@@ -10,13 +10,13 @@ import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
 const Operation = {
-    GuestAdd: 'GUEST_ADD',
-    Order: 'ORDER',
-    Despatch: 'DESPATCH',
-    BillGenerate: 'BILL_GENERATE',
-    PaymentAdd: 'PAYMENT_ADD',
-    Checkout: 'GUEST_CHECKOUT',
-    GuestDel: 'GUEST_DEL'
+    GuestAdd: "GUEST_ADD",
+    Order: "ORDER",
+    Despatch: "DESPATCH",
+    BillGenerate: "BILL_GENERATE",
+    PaymentAdd: "PAYMENT_ADD",
+    Checkout: "GUEST_CHECKOUT",
+    GuestDel: "GUEST_DEL"
 };
 
 // Start:: Component
@@ -222,21 +222,21 @@ const GuestTables = forwardRef((props, ref) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className="row" key={rowKey}>
+            <Row key={rowKey}>
                 {
                     pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
                         return createCol(item, itemIdx);
                     })
                 }
-            </div>)
+            </Row>)
     };
     
     const createCol = (pData = undefined, itemIdx) => {
         const colKey = `col_${pData.id}`;
 
         return (
-            <div className="col-xl-4 col-md-4" key={colKey}>
+            <Col xl={4} md={4} key={colKey}>
                 <Card 
                     ref={(el) => cardRefs.current[itemIdx] = el}
                     pIndex={itemIdx}
@@ -262,7 +262,7 @@ const GuestTables = forwardRef((props, ref) => {
                     onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
                     onClosed={close} 
                     onActivated={handleActivated}/>                
-            </div>)
+            </Col>)
     };
     // End:: show all data in card format
     

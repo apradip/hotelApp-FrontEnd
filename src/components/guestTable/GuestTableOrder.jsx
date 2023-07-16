@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink} from "react-bootstrap";
+import {Modal, NavLink, Row, Col} from "react-bootstrap";
 import {useFormik} from "formik";
 import {toast} from "react-toastify";
 import {X} from "react-feather";
@@ -8,14 +8,17 @@ import {subStr, getTables} from "../common/Common";
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {guestTableSchema} from "../../schemas";
+import TableSelect from "../common/TableSelect";
 import OrderGrid from "./TableOrderGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
-                pCorporateName, pCorporateAddress, pGstNo, 
-                pTables, pData, onSubmited, onClosed}) => {
+const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
+    pCorporateName, pCorporateAddress, pGstNo, pTables, 
+    pData, 
+    onSubmited, onClosed}) => {
+
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [orderData, setOrderData] = useState(null);
@@ -23,45 +26,48 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
     const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     });
+    const {doUpdate} = useFetchWithAuth({
+        url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}`
+    });
 
     const handelChangeData = (gridData) => {
         let dataList = [];
-        
-        for(const row of gridData) {
+
+        for (const row of gridData) {
             let operation = "A";
 
-            for(const od of pData) {
-                if (od.id === row.id) {
-                    operation = "M";
-                }
+            for (const od of pData) {
+                if (od.id === row.id) operation = "M";
             }
 
-            dataList.push({id: row.id, 
-                quantity: row.quantity, 
-                operation: operation});
+            dataList.push({
+                id: row.id,
+                quantity: row.quantity,
+                operation: operation
+            });
         }
 
-        for(const od of pData) {
+        for (const od of pData) {
             let found = false;
 
             for (const e of gridData) {
-                if (e.id === od.id) {
-                    found = true;
-                }
+                if (e.id === od.id) found = true;
             }
 
             if (!found) {
-                dataList.push({id: od.id, 
-                    quantity: od.quantity, 
-                    operation: "R"});
+                dataList.push({
+                    id: od.id,
+                    quantity: od.quantity,
+                    operation: "R"
+                });
             }
         }
 
         setOrderData(dataList);
-    }; 
+    };
 
     // Start:: Form validate and save data
-    const {handleSubmit, resetForm} = useFormik({
+    const {setFieldValue, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputName: pName,
             keyInputMobile: pMobile,
@@ -74,36 +80,29 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
         validationSchema: guestTableSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            // let payload;
-
-            // if (pData.length > 0) {
-            //     payload = {   
-            //         transactionId: pData[0].transactionId,
-            //         foods: orderData
-            //     };
-            // } else {
-            //     payload = {   
-            //         foods: orderData
-            //     };
-            // }
-
             orderData && await doInsert({orders: orderData});
-        
+
             if (error === null) {
                 resetForm();
                 onSubmited();
             } else {
-                toast.error(error);
+                toast.error(error);;
             }
         }
     });
     // End:: Form validate and save data
 
     // Strat:: close form    
+    const handleChangeTable = async (tables) => {
+        await doUpdate({tables: tables});
+    };
+    // End:: close form    
+    
+    // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false);
-        resetForm();
-        onClosed();
+        setValidateOnChange(false)
+        resetForm()
+        onClosed()
     };
     // End:: close form    
 
@@ -115,66 +114,90 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column name / company */}
-                    {pCorporateName ? 
-                        <div className="col-sx-12 col-md-5 mb-3">
+                    {pCorporateName ?
+                        <Col sx={12} md={5}>
                             <label className="col-12 form-label"><b>Company</b></label>
                             <label className="col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
-                        </div>
-                    :
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        </Col>
+                        :
+                        <Col sx={12} md={5}>
                             <label className="col-12 form-label"><b>Name</b></label>
                             <label className="col-12 text-muted">{subStr(pName, 30)}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
-                    {pCorporateName ? 
-                        <div className="col-sx-12 col-md-5 mb-3">
+                    {pCorporateName ?
+                        <Col sx={12} md={5}>
                             <label className="col-12 form-label"><b>Address</b></label>
                             <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
-                        </div>
-                    :
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        </Col>
+                        :
+                        <Col sx={12} md={5}>
                             <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column guest count */}
-                    <div className="col-sx-12 col-md-2 mb-3">
+                    <Col sx={12} md={2}>
                         <label className="col-12 form-label"><b>Guest count</b></label>
                         <label className="col-12 text-muted">{pGuestCount} No.</label>
-                    </div>
+                    </Col>
                     {/* End:: Column guest count */}
 
-                </div>
+                </Row>
+                {/* End:: Row */}
+
+
+                {/* Start:: Row */}
+                <Row>
+
+                    <Col sx={5} md={5}>
+                        {/* Label element */}
+                        <label className="col-12 form-label"><b>Food items</b></label>
+                    </Col>
+
+                    <Col sx={7} md={7}>
+                        {/* Label element */}
+                        <label className="col-12 form-label"><b>Tables</b></label>
+
+                        {/* Input element select*/}
+                        <TableSelect
+                            name={"keyInputTables"}
+                            value={pTables}
+                            onChange={(value) => {
+                                setFieldValue("keyInputTables", value)
+                                if (!value) return
+                                handleChangeTable(value)
+                            }}/>
+                    </Col>
+
+                </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row className="mt-2">
 
                     {/* Start:: Column service detail */}
-                    <div className="col-12">
-
-                        {/* Label element */}
-                        <label className="col-12 form-label"><b>Food items</b></label>
+                    <Col sx={12} md={12}>
 
                         {/* Start:: Column service detail */}
                         <OrderGrid
                             pState="MOD"
                             pDefaultRowData={pData}
-                            onChange={handelChangeData}/>
+                            onChange={handelChangeData} />
                         {/* End:: Column service detail */}
 
-                    </div>                
+                    </Col>
                     {/* End:: Column service detail */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
             </Modal.Body>
@@ -192,31 +215,31 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                     Close
                 </button>
                 {/* End:: Close button */}
-                
+
                 {/* Start:: Save button */}
-                <button 
+                <button
                     type="button"
                     className="btn btn-success"
-                    disabled={loading} 
+                    disabled={loading}
                     onClick={handleSubmit}>
 
                     {!loading && "Confirm"}
-                    {loading && 
-                                <>
-                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                    Working
-                                </>}
+                    {loading &&
+                        <>
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Working
+                        </>}
                 </button>
                 {/* End:: Save button */}
 
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </form> 
+        </form>
     );
     // End:: Html
 
-}
+};
 // End:: form
 
 
@@ -235,15 +258,13 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
 
 // useImperativeHandle
 // handleShowModal
-const GuestTableOrder = forwardRef((props, ref) => {    
+const GuestTableOrder = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
-        params: {
-            option: "N"
-        }
+        params: {option: "N"}
     });
 
     // Start:: Show modal
@@ -260,7 +281,7 @@ const GuestTableOrder = forwardRef((props, ref) => {
     // End:: Close modal
 
     // Start:: Save
-    const handleSave = () => { 
+    const handleSave = () => {
         setShowModal(false);
         props.onSaved();
     };
@@ -276,9 +297,9 @@ const GuestTableOrder = forwardRef((props, ref) => {
     useEffect(() => {
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape") handleCloseModal();
-        })
+        });
 
-        return () => {document.removeEventListener("keydown", handleCloseModal);}
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
@@ -286,7 +307,7 @@ const GuestTableOrder = forwardRef((props, ref) => {
     useEffect(() => {
         (async () => {
             showModal && await doFetch();
-        })();
+        })()
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
@@ -302,18 +323,18 @@ const GuestTableOrder = forwardRef((props, ref) => {
                     <Modal.Header>
                         {/* Header text */}
                         <Modal.Title>Order - [{getTables(props.pTables)}]</Modal.Title>
-                       
+
                         {/* Close button */}
-                        <NavLink 
-                            className="nav-icon" href="#" 
+                        <NavLink
+                            className="nav-icon" href="#"
                             onClick={handleCloseModal}>
-                            <i className="align-middle"><X/></i>
+                            <i className="align-middle"><X /></i>
                         </NavLink>
                     </Modal.Header>
                     {/* End:: Modal header */}
 
                     {/* Start:: Form component */}
-                    <Form 
+                    <Form
                         pGuestId={props.pGuestId}
                         pTransactionId={props.pTransactionId}
                         pName={props.pName}
@@ -324,10 +345,10 @@ const GuestTableOrder = forwardRef((props, ref) => {
                         pGstNo={props.pGstNo}
                         pTables={props.pTables}
                         pData={data}
-                        onSubmited={handleSave} 
-                        onClosed={handleCloseModal}/>
-                        {/* End:: Form component */}
-                    
+                        onSubmited={handleSave}
+                        onClosed={handleCloseModal} />
+                    {/* End:: Form component */}
+
                 </Modal>}
             {/* End:: Edit modal */}
         </>

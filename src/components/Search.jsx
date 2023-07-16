@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, forwardRef, useImperativeHandle} from "react";
+import React, {useEffect, useRef, forwardRef, useImperativeHandle} from "react"
 
 // Start:: Component
 // props parameters
@@ -8,33 +8,33 @@ import React, {useEffect, useRef, forwardRef, useImperativeHandle} from "react";
 // useImperativeHandle
 // setFocus
 const Search = forwardRef((props, ref) => {
-    const inputRef = useRef(null);
+    const inputRef = useRef(null)
 
     useEffect(() => {
-        inputRef.current.value = "";
-        setFocus();
-    }, [props.currentPage]);
+        inputRef.current.value = ""
+        setFocus()
+    }, [props.currentPage])
 
       
     // Start:: handle change
     const handleSearchChange = (e) => {
-        const {value} = e.target;
-        props.onChange(value);
-    };
+        const {value} = e.target
+        props.onChange(value)
+    }
     // End:: handle change
 
 
     // Start:: set focus to search box
     const setFocus = () => {
-        inputRef.current && inputRef.current.focus();
-    };
+        inputRef.current && inputRef.current.focus()
+    }
     // End:: set focus to search box
 
 
     // Start:: forward reff set focus function
     useImperativeHandle(ref, () => {
         return {setFocus}
-    }, []);
+    }, [])
     // End:: forward reff set focus function
 
 
@@ -61,4 +61,4 @@ const Search = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default Search;
+export default Search

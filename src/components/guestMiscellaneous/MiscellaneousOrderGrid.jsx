@@ -1,25 +1,25 @@
-import React, {useContext, useEffect, useState, useRef, useMemo, useCallback} from "react";
-import {AgGridReact} from "ag-grid-react";
+import React, {useContext, useEffect, useState, useRef, useMemo, useCallback} from "react"
+import {AgGridReact} from "ag-grid-react"
 
-import {HotelId} from "../../App";
-import {formatINR} from "../common/Common";
-import {useStateContext} from "../../contexts/ContextProvider";
-import ItemSelector from "../common/MiscellaneousEditor";
-import QuantityEditor from "../common/QuantityEditor";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import {HotelId} from "../../App"
+import {formatINR} from "../common/Common"
+import {useStateContext} from "../../contexts/ContextProvider"
+import ItemSelector from "../common/MiscellaneousEditor"
+import QuantityEditor from "../common/QuantityEditor"
+import useFetchWithAuth from "../common/useFetchWithAuth"
 
-import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
-import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+import "ag-grid-community/styles/ag-grid.css" // Core grid CSS, always needed
+import "ag-grid-community/styles/ag-theme-alpine.css" // Optional theme CSS
 
 const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
-    const gridRef = useRef();
-    const [rowData, setRowData] = useState();
-    const [emptyRowCount, setEmptyRowCount] = useState();
+    const hotelId = useContext(HotelId)
+    const contextValues = useStateContext()
+    const gridRef = useRef()
+    const [rowData, setRowData] = useState()
+    const [emptyRowCount, setEmptyRowCount] = useState()
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
-    });
+    })
 
     const defaultColDef = useMemo(() => {
         return {
@@ -31,7 +31,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
           hide: true,
           suppressSizeToFit: true,
         }
-    }, []);
+    }, [])
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -82,7 +82,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             width: 50,
             hide: false,
             cellEditor: QuantityEditor,
-            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === 'ADD' ? true : pState === 'MOD' ? true : pState === 'VIEW' ? false : true : false},
+            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
             valueGetter: (params) => {return params.data.quantity},
             valueSetter: (params) => {
@@ -126,18 +126,18 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         {
             field: "despatchDate"
         }
-    ]);
+    ])
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
-    ];
+    ]
     const [style, setStyle] = useState({
-        height: '100%',
-        width: '100%',
-    });
+        height: "100%",
+        width: "100%"
+    })
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
-        let row = [];
+        let row = []
         
         pDefaultRowData.forEach(element => {
             const object = {
@@ -152,39 +152,39 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                             gstCharge: element.gstCharge, 
                             totalPrice: element.unitPrice * element.quantity,
                             despatchDate: element.despatchDate
-                        };
+                        }
     
-            row.push(object);
+            row.push(object)
         });
 
-        setRowData(row);
+        setRowData(row)
 
-        gridRef.current.api.setRowData(row);
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
+        gridRef.current.api.setRowData(row)
+        gridRef.current.api.setPinnedBottomRowData(pinnedRowData)
+        gridRef.current.api.refreshCells()
+        gridRef.current.api.redrawRows()
 
-        params.api.sizeColumnsToFit();
+        params.api.sizeColumnsToFit()
         
-        window.addEventListener('resize', function () {
+        window.addEventListener("resize", function () {
             setTimeout(function () {
-              params.api.sizeColumnsToFit();
-            });
-          });
+              params.api.sizeColumnsToFit()
+            })
+          })
 
-        gridRef.current.api.sizeColumnsToFit();
-    };
+        gridRef.current.api.sizeColumnsToFit()
+    }
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = () => {
-        calculateSum();
-    };
+        calculateSum()
+    }
     // End:: load empty data to grid
 
     // set grid data to a parent component
     const handleCellValueChanged = () => {
-        let dataRows = [];    
+        let dataRows = []    
 
         gridRef.current.api.forEachNode((gridRow) => {
             if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
@@ -199,35 +199,35 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                             gstCharge: gridRow.data.gstCharge,
                             totalPrice: gridRow.data.totalPrice,
                             despatchDate: gridRow.data.despatchDate
-                        });
+                        })
             }
-        });
+        })
               
-        onChange(dataRows);
-        calculateSum();
-    };
+        onChange(dataRows)
+        calculateSum()
+    }
 
     // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
-            await doFetch();
-          })();
-    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+            await doFetch()
+          })()
+    }, [])        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
 
     useEffect(() => {
-        data && calculateSum();
-    }, [data]);
+        data && calculateSum()
+    }, [data])
 
     // Start:: set add empty row grid
     useEffect(() => {
-        if (pState !== "VIEW") data && addRow();
-    }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
+        if (pState !== "VIEW") data && addRow()
+    }, [emptyRowCount])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: set add empty row grid
     
     const addRow = useCallback (() => {
         if (emptyRowCount <= 0) {
-            let emptyRow = rowData;
+            let emptyRow = rowData
 
             emptyRow.push({
                         rowId: emptyRow.length + 1, 
@@ -241,35 +241,35 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                         gstCharge: 0,
                         totalPrice: 0,
                         despatchDate: undefined
-                    });
+                    })
 
-            setRowData(emptyRow);
-            gridRef.current.api.setRowData(emptyRow);
-            gridRef.current.api.sizeColumnsToFit();
+            setRowData(emptyRow)
+            gridRef.current.api.setRowData(emptyRow)
+            gridRef.current.api.sizeColumnsToFit()
 
-            setEmptyRowCount(0);
+            setEmptyRowCount(0)
         }
-    }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
+    }, [emptyRowCount])        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: calculate sum on change tariff
     const calculateSum = useCallback (() => {
-        let total = 0;
-        let emptyCount = 0;
+        let total = 0
+        let emptyCount = 0
 
         // calculate total expance
         gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
-            total += rowNode.data.totalPrice;
-        });
+            total += rowNode.data.totalPrice
+        })
 
         //calculate empty row
         gridRef.current.api.forEachNode((rowNode) => {
-            if (rowNode.data.name === "Select item") emptyCount ++;
-        });
+            if (rowNode.data.name === "Select item") emptyCount ++
+        })
 
-        pinnedRowData[0].totalPrice = total;
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        setEmptyRowCount(emptyCount);
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+        pinnedRowData[0].totalPrice = total
+        gridRef.current.api.setPinnedBottomRowData(pinnedRowData)
+        setEmptyRowCount(emptyCount)
+    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: calculate sum on change tariff
 
     
@@ -287,7 +287,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                     onCellValueChanged={handleCellValueChanged}/>
             </div>
         </div>
-    );
+    )
 }
  
-export default MiscellaneousOrderGrid;
+export default MiscellaneousOrderGrid

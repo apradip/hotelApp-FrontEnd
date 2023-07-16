@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink} from "react-bootstrap";
-import DatePicker from "react-datepicker";
+import {Modal, NavLink, Row, Col} from "react-bootstrap";
 import {useFormik} from "formik";
 import {toast} from "react-toastify";
 import {X} from "react-feather";
@@ -8,8 +7,6 @@ import {X} from "react-feather";
 import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {guestTableSchema} from "../../schemas";
-import {formatYYYYMMDD, formatHHMM} from "../common/Common";
-import TableSelect from "../common/TableSelect";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -23,7 +20,7 @@ const Form = ({onSubmited, onClosed}) => {
     });
 
     // Start:: Form validate and save data
-    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
+    const {values, errors, touched, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputName: "",
             keyInputMobile: "",
@@ -45,11 +42,8 @@ const Form = ({onSubmited, onClosed}) => {
                 guestCount: parseInt(values.keyInputGuestCount),
                 corporateName: values.keyInputCorporateName,
                 corporateAddress: values.keyInputCorporateAddress,
-                gstNo: values.keyInputGST,
-                tables: values.keyInputTables,
-                checkInDate: formatYYYYMMDD(values.keyInputCheckInDate),
-                checkInTime: values.keyInputCheckInTime
-            }
+                gstNo: values.keyInputGST
+            };
 
             await doInsert(payload);
         
@@ -79,10 +73,10 @@ const Form = ({onSubmited, onClosed}) => {
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column name */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -107,11 +101,11 @@ const Form = ({onSubmited, onClosed}) => {
                                     (<small className="text-danger">{errors.keyInputName}</small>) : 
                                         null}
                         </div>
-                    </div>
+                    </Col>
                     {/* End:: Column name */}
 
                     {/* Start:: Column mobile */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -136,7 +130,7 @@ const Form = ({onSubmited, onClosed}) => {
                                     (<small className="text-danger">{errors.keyInputMobile}</small>) : 
                                         null}
                         </div>                    
-                    </div>
+                    </Col>
                     {/* End:: Column mobile */}
 
                     {/* Start:: Column no of guest */}
@@ -168,14 +162,14 @@ const Form = ({onSubmited, onClosed}) => {
                     </div>
                     {/* End:: Column no of guest */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column corporate name */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -200,11 +194,11 @@ const Form = ({onSubmited, onClosed}) => {
                                     (<small className="text-danger">{errors.keyInputCorporateName}</small>) : 
                                         null}
                         </div>        
-                    </div>
+                    </Col>
                     {/* End:: Column corporate name */}
 
                     {/* Start:: Column coroprate address */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -229,11 +223,11 @@ const Form = ({onSubmited, onClosed}) => {
                                     (<small className="text-danger">{errors.keyInputCorporateAddress}</small>) : 
                                         null}
                         </div>        
-                    </div>
+                    </Col>
                     {/* End:: Column coroprate address */}
 
                     {/* Start:: Column gst no */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -258,98 +252,10 @@ const Form = ({onSubmited, onClosed}) => {
                                     (<small className="text-danger">{errors.keyInputGST}</small>) : 
                                         null}
                         </div>
-                    </div>
+                    </Col>
                     {/* End:: Column gst no */}
 
-                </div>
-                {/* End:: Row */}
-
-                {/* Start:: Row */}
-                <div className="row">
-
-                    {/* Start:: Column table */}
-                    <div className="col-sx-12 col-md-4 mb-3">
-
-                        {/* Label element */}
-                        <label className="col-12 form-label" 
-                            htmlFor={"keyInputTables"}><b>Tables</b></label>
-
-                        <div className="col-12">
-                            {/* Input element select*/}
-                            <TableSelect 
-                                name={"keyInputTables"}
-                                onChange={(value) => {setFieldValue("keyInputTables", value)}}/>
-
-                            {/* Validation message */}
-                            {errors.keyInputTables && 
-                                touched.keyInputTables ? 
-                                    (<small className="text-danger">{errors.keyInputTables}</small>) : 
-                                        null}
-                        </div>        
-                    </div>
-                    {/* End:: Column table */}
-
-                    {/* Start:: Column check in date */}
-                    <div className="col-sx-12 col-md-4 mb-3">
-
-                        {/* Label element */}
-                        <label className="col-12 form-label" 
-                            htmlFor={"keyInputCheckInDate"}><b>Check in date</b></label>
-
-                        <div className="col-12">
-                            {/* Input element text*/}
-                            <DatePicker
-                                name="keyInputCheckInDate"
-                                placeholder="Check in date"
-                                className="form-control"
-                                disabled={loading} 
-                                minDate={new Date()}
-                                dateFormat="dd/MM/yyyy"
-                                showDisabledMonthNavigation
-                                selected={values.keyInputCheckInDate}
-                                onChange={(value) => {setFieldValue("keyInputCheckInDate", value)}} />
-
-                            {/* Validation message */}
-                            {errors.keyInputCheckInDate && 
-                                touched.keyInputCheckInDate ? 
-                                    (<small className="text-danger">{errors.keyInputCheckInDate}</small>) : 
-                                        null}
-                        </div>        
-                    </div>
-                    {/* End:: Column check in date */}
-
-                    {/* Start:: Column check in time */}
-                    <div className="col-sx-12 col-md-4 mb-3">
-
-                        {/* Label element */}
-                        <label className="col-12 form-label" 
-                            htmlFor={"keyInputCheckInTime"}><b>Check in time</b></label>
-
-                        <div className="col-12">
-                            {/* Input element text*/}
-                            <DatePicker
-                                name="keyInputCheckInTime"
-                                placeholder="Check in time"
-                                className="form-control"
-                                disabled={loading} 
-                                showTimeSelect
-                                showTimeSelectOnly
-                                timeIntervals={15}
-                                timeCaption="Time"
-                                dateFormat="h:mm aa"
-                                selected={values.keyInputCheckInTime}
-                                onChange={(value) => {setFieldValue("keyInputCheckInTime", value)}} />
-
-                            {/* Validation message */}
-                            {errors.keyInputCheckInTime && 
-                                touched.keyInputCheckInTime ? 
-                                    (<small className="text-danger">{errors.keyInputCheckInTime}</small>) : 
-                                        null}
-                        </div>        
-                    </div>
-                    {/* End:: Column check in time */}
-
-                </div>
+                </Row>
                 {/* End:: Row */}
 
             </Modal.Body>

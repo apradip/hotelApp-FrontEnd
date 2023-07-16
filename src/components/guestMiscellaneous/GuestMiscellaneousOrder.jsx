@@ -1,38 +1,38 @@
-import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink} from "react-bootstrap";
-import {useFormik} from "formik";
-import {toast} from "react-toastify";
-import {X} from "react-feather";
-import {subStr} from "../common/Common";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react"
+import {Modal, NavLink, Row, Col} from "react-bootstrap"
+import {useFormik} from "formik"
+import {toast} from "react-toastify"
+import {X} from "react-feather"
+import {subStr} from "../common/Common"
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
-import {guestMiscellaneousSchema} from "../../schemas";
-import OrderGrid from "./MiscellaneousOrderGrid";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import {HotelId} from "../../App"
+import {useStateContext} from "../../contexts/ContextProvider"
+import {guestMiscellaneousSchema} from "../../schemas"
+import OrderGrid from "./MiscellaneousOrderGrid"
+import useFetchWithAuth from "../common/useFetchWithAuth"
 
 
 // Start:: form
 const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
                 pCorporateName, pCorporateAddress, pGstNo, pData, 
                 onSubmited, onClosed}) => {
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
-    const [orderData, setOrderData] = useState(null);
-    const [validateOnChange, setValidateOnChange] = useState(false);
+    const hotelId = useContext(HotelId)
+    const contextValues = useStateContext()
+    const [orderData, setOrderData] = useState(null)
+    const [validateOnChange, setValidateOnChange] = useState(false)
     const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
-    });
+    })
 
     const handelChangeData = (gridData) => {
-        let dataList = [];
+        let dataList = []
         
         for(const row of gridData) {
-            let operation = "A";
+            let operation = "A"
 
             for(const od of pData) {
                 if (od.id === row.id) {
-                    operation = "M";
+                    operation = "M"
                 }
             }
 
@@ -42,23 +42,23 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
         }
 
         for(const od of pData) {
-            let found = false;
+            let found = false
 
             for (const e of dataList) {
                 if (e.id === od.id) {
-                    found = true;
+                    found = true
                 }
             }
 
             if (!found) {
                 dataList.push({id: od.id, 
                     quantity: od.quantity, 
-                    operation: "R"});
+                    operation: "R"})
             }
         }
 
-        setOrderData(dataList);
-    }; 
+        setOrderData(dataList)
+    } 
 
     // Start:: Form validate and save data
     const {handleSubmit, resetForm} = useFormik({
@@ -76,21 +76,21 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
             orderData && await doInsert({orders: orderData});
         
             if (error === null) {
-                resetForm();
-                onSubmited();
+                resetForm()
+                onSubmited()
             } else {
-                toast.error(error);
+                toast.error(error)
             }
         }
-    });
+    })
     // End:: Form validate and save data
 
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false);
-        resetForm();
-        onClosed();
-    };
+        setValidateOnChange(false)
+        resetForm()
+        onClosed()
+    }
     // End:: close form    
 
     // Start:: Html
@@ -101,51 +101,51 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <Col sx={12} sm={12} md={12} lg={5} xl={5} xxl={5} className="mb-3">
                             <label className="col-12 form-label"><b>Company</b></label>
                             <label className="col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
-                        </div>
+                        </Col>
                     :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <Col sx={12} sm={12} md={12} lg={5} xl={5} xxl={5} className="mb-3">
                             <label className="col-12 form-label"><b>Name</b></label>
                             <label className="col-12 text-muted">{subStr(pName, 30)}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <Col sx={12} sm={12} md={12} lg={5} xl={5} xxxl={5} className="mb-3">
                             <label className="col-12 form-label"><b>Address</b></label>
                             <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
-                        </div>
+                        </Col>
                     :
-                        <div className="col-sx-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+                        <Col sx={12} sm={12} md={12} lg={5} xl={5} xxxl={5} className="mb-3">
                             <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column guest count */}
-                    <div className="col-sx-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 mb-3">
+                    <Col sx={12} sm={12} md={12} lg={2} xl={2} xxxl={2} className="mb-3">
                         <label className="col-12 form-label"><b>Guest count</b></label>
                         <label className="col-12 text-muted">{pGuestCount} No.</label>
-                    </div>
+                    </Col>
                     {/* End:: Column guest count */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column miscellaneous detail */}
-                    <div className="col-12">
+                    <Col sx={12} md={12}>
 
                         {/* Label element */}
                         <label className="col-12 form-label"><b>Miscellaneous items</b></label>
@@ -157,10 +157,10 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                             onChange={handelChangeData}/>
                         {/* End:: Column miscellaneous detail */}
 
-                    </div>                
+                    </Col>                
                     {/* End:: Column miscellaneous detail */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
             </Modal.Body>
@@ -199,7 +199,7 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
             {/* End:: Modal footer */}
 
         </form> 
-    );
+    )
     // End:: Html
 
 }
@@ -221,58 +221,56 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
 // useImperativeHandle
 // handleShowModal
 const GuestMiscellaneousOrder = forwardRef((props, ref) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
-    const [showModal, setShowModal] = useState(false);
+    const hotelId = useContext(HotelId)
+    const contextValues = useStateContext()
+    const [showModal, setShowModal] = useState(false)
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
         params: {
             option: "N"
         }
-    });
+    })
 
     // Start:: Show modal
     const handleShowModal = () => {
-        setShowModal(true);
-    };
+        setShowModal(true)
+    }
     // End:: Show modal
 
     // Start:: Close modal
     const handleCloseModal = () => {
-        setShowModal(false);
-        props.onClosed();
-    };
+        setShowModal(false)
+        props.onClosed()
+    }
     // End:: Close modal
 
     // Start:: Save
     const handleSave = () => { 
-        setShowModal(false);
-        props.onSaved();
-    };
+        setShowModal(false)
+        props.onSaved()
+    }
     // End:: Save
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal};
-    });
+        return {handleShowModal}
+    })
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal();
-        })
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal()})
 
-        return () => {document.removeEventListener("keydown", handleCloseModal);}
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+        return () => {document.removeEventListener("keydown", handleCloseModal)}
+    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            showModal && await doFetch();
-          })();
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
+            showModal && await doFetch()
+          })()
+    }, [showModal])        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Html
@@ -315,11 +313,11 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
                 </Modal>}
             {/* End:: Edit modal */}
         </>
-    );
+    )
     // End:: Html
 
-});
+})
 // End:: Component
 
 
-export default GuestMiscellaneousOrder;
+export default GuestMiscellaneousOrder

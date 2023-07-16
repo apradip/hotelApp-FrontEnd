@@ -1,31 +1,31 @@
-import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Row, Col, Card, Badge, Dropdown, Stack} from "react-bootstrap";
-import TimeElapsed from "../common/TimeElapsed";
-import {NavLink} from "react-router-dom";
-import {Coffee, Phone, ChevronsRight, Edit2, PenTool, ShoppingBag, FileText, CreditCard, LogOut, Scissors, MoreVertical} from "react-feather";
-import {subStr, formatINR} from "../common/Common";
+import React, {useState, useRef, forwardRef, useImperativeHandle} from "react"
+import {Row, Col, Card, Badge, Dropdown} from "react-bootstrap"
+import TimeElapsed from "../common/TimeElapsed"
+import {NavLink} from "react-router-dom"
+import {Coffee, Phone, Tag, ChevronsRight, Edit2, PenTool, ShoppingBag, FileText, CreditCard, LogOut, Scissors, MoreVertical} from "react-feather"
+import {subStr, formatINR} from "../common/Common"
 
-import View from "./GuestMiscellaneousView";
-import Edit from "./GuestMiscellaneousEdit";
-import Delete from "./GuestMiscellaneousDelete";
+import View from "./GuestMiscellaneousView"
+import Edit from "./GuestMiscellaneousEdit"
+import Delete from "./GuestMiscellaneousDelete"
 
-import OrderTable from "../guestTable/GuestTableOrder";
-import OrderService from "../guestService/GuestServiceOrder";
-import Order from "./GuestMiscellaneousOrder";
+import OrderTable from "../guestTable/GuestTableOrder"
+import OrderService from "../guestService/GuestServiceOrder"
+import Order from "./GuestMiscellaneousOrder"
 
-import DespatchTable from "../guestTable/GuestTableDespatch";
-import DespatchService from "../guestService/GuestServiceDespatch";
-import Despatch from "./GuestMiscellaneousDespatch";
+import DespatchTable from "../guestTable/GuestTableDespatch"
+import DespatchService from "../guestService/GuestServiceDespatch"
+import Despatch from "./GuestMiscellaneousDespatch"
 
-import GenerateBillTable from "../guestTable/GuestTableGenerateBill";
-import GenerateBillService from "../guestService/GuestServiceGenerateBill";
-import GenerateBill from "./GuestMiscellaneousGenerateBill";
+import GenerateBillTable from "../guestTable/GuestTableGenerateBill"
+import GenerateBillService from "../guestService/GuestServiceGenerateBill"
+import GenerateBill from "./GuestMiscellaneousGenerateBill"
 
-import AddPayment from "../guestPayment/GuestPaymentAdd";
+import AddPayment from "../guestPayment/GuestPaymentAdd"
 
-import CheckoutTable from "../guestTable/GuestTableCheckout";
-import CheckoutService from "../guestService/GuestServiceCheckout";
-import Checkout from "./GuestMiscellaneousCheckout";
+import CheckoutTable from "../guestTable/GuestTableCheckout"
+import CheckoutService from "../guestService/GuestServiceCheckout"
+import Checkout from "./GuestMiscellaneousCheckout"
 
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
@@ -33,7 +33,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
         onClick={(e) => {e.preventDefault(); onClick(e);}}>
       {children}
     </NavLink>
-));
+))
 
 // Start:: Component
 // props parameters
@@ -59,154 +59,154 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handelOpenCheckout
 // handelOpenDelete
 const GuestMiscellaneousCard = forwardRef((props, ref) => {
-    const viewRef=useRef(null);
-    const editRef = useRef(null);
-    const deleteRef=useRef(null);
+    const viewRef=useRef(null)
+    const editRef = useRef(null)
+    const deleteRef=useRef(null)
 
-    const orderTableRef=useRef(null);
-    const orderServiceRef=useRef(null);
-    const orderRef=useRef(null);
+    const orderTableRef=useRef(null)
+    const orderServiceRef=useRef(null)
+    const orderRef=useRef(null)
     
-    const despatchTableRef=useRef(null);
-    const despatchServiceRef=useRef(null);
-    const despatchRef=useRef(null);
+    const despatchTableRef=useRef(null)
+    const despatchServiceRef=useRef(null)
+    const despatchRef=useRef(null)
 
-    const generateBillTableRef=useRef(null);
-    const generateBillServiceRef=useRef(null);
-    const generateBillRef=useRef(null);
+    const generateBillTableRef=useRef(null)
+    const generateBillServiceRef=useRef(null)
+    const generateBillRef=useRef(null)
 
-    const addPaymentRef=useRef(null);
+    const addPaymentRef=useRef(null)
 
-    const checkoutTableRef=useRef(null);
-    const checkoutServiceRef=useRef(null);
-    const checkoutRef=useRef(null);
+    const checkoutTableRef=useRef(null)
+    const checkoutServiceRef=useRef(null)
+    const checkoutRef=useRef(null)
     
-    const [focus, setFocus]=useState(false);
-    const [active, setActive]=useState(false);
+    const [focus, setFocus]=useState(false)
+    const [active, setActive]=useState(false)
 
     // Start:: Show view modal 
     const handelOpenView = () => {
-        viewRef && viewRef.current.handleShowModal();
-    };
+        viewRef && viewRef.current.handleShowModal()
+    }
     // End:: Show view modal 
 
     // Start:: Show edit modal 
     const handelOpenEdit = () => {
-        editRef && editRef.current.handleShowModal();
-    };
+        editRef && editRef.current.handleShowModal()
+    }
     // End:: Show edit modal 
     
     // Start:: Show order modal 
     const handelOpenOrder = (option) => {
         switch (option) {
             case "M" :
-                orderRef && orderRef.current.handleShowModal();
-                return;
+                orderRef && orderRef.current.handleShowModal()
+                return
 
             case "T" :
-                orderTableRef && orderTableRef.current.handleShowModal();
-                return;
+                orderTableRef && orderTableRef.current.handleShowModal()
+                return
                 
             case "S" :
-                orderServiceRef && orderServiceRef.current.handleShowModal();
-                return;                
+                orderServiceRef && orderServiceRef.current.handleShowModal()
+                return
 
             default:
-                orderRef && orderRef.current.handleShowModal();
-                return;                
+                orderRef && orderRef.current.handleShowModal()
+                return
         }
-    };
+    }
     // End:: Show order modal 
 
     // Start:: Show despatch modal 
     const handelOpenDespatch = (option) => {
         switch (option) {
             case "M" :
-                despatchRef && despatchRef.current.handleShowModal();
-                return;
+                despatchRef && despatchRef.current.handleShowModal()
+                return
 
             case "T" :
-                despatchTableRef && despatchTableRef.current.handleShowModal();
-                return;
+                despatchTableRef && despatchTableRef.current.handleShowModal()
+                return
                 
             case "S" :
-                despatchServiceRef && despatchServiceRef.current.handleShowModal();
-                return;                
+                despatchServiceRef && despatchServiceRef.current.handleShowModal()
+                return
 
             default:
-                despatchRef && despatchRef.current.handleShowModal();
-                return;                
+                despatchRef && despatchRef.current.handleShowModal()
+                return
         }
-    };
+    }
     // End:: Show despatch modal 
     
     // Start:: Show generate bill modal 
     const handelOpenGenerateBill = (option) => {
         switch (option) {
             case "M" :
-                generateBillRef && generateBillRef.current.handleShowModal();
-                return;
+                generateBillRef && generateBillRef.current.handleShowModal()
+                return
 
             case "T" :
-                generateBillTableRef && generateBillTableRef.current.handleShowModal();
-                return;
+                generateBillTableRef && generateBillTableRef.current.handleShowModal()
+                return
                 
             case "S" :
-                generateBillServiceRef && generateBillServiceRef.current.handleShowModal();
-                return;                
+                generateBillServiceRef && generateBillServiceRef.current.handleShowModal()
+                return
 
             default:
-                generateBillRef && generateBillRef.current.handleShowModal();
-                return;                
+                generateBillRef && generateBillRef.current.handleShowModal()
+                return
         }
-    };
+    }
     // End:: Show generate bill modal 
 
     // Start:: Show payment modal 
     const handelOpenPayment = () => {
-        addPaymentRef && addPaymentRef.current.handleShowModal();
-    };
+        addPaymentRef && addPaymentRef.current.handleShowModal()
+    }
     // End:: Show payment modal 
     
     // Start:: Show checkout modal 
     const handelOpenCheckout = (option) => {
         switch (option) {
             case "M" :
-                checkoutRef && checkoutRef.current.handleShowModal();
-                return;
+                checkoutRef && checkoutRef.current.handleShowModal()
+                return
 
             case "T" :
-                checkoutTableRef && checkoutTableRef.current.handleShowModal();
-                return;
+                checkoutTableRef && checkoutTableRef.current.handleShowModal()
+                return
                 
             case "S" :
-                checkoutServiceRef && checkoutServiceRef.current.handleShowModal();
-                return;                
+                checkoutServiceRef && checkoutServiceRef.current.handleShowModal()
+                return
 
             default:
-                checkoutRef && checkoutRef.current.handleShowModal();
-                return;                
+                checkoutRef && checkoutRef.current.handleShowModal()
+                return 
         }
-    };
+    }
     // End:: Show checkout modal 
     
     // Start:: Show delete modal 
     const handelOpenDelete = () => {
-        deleteRef && deleteRef.current.handleShowModal();
-    };
+        deleteRef && deleteRef.current.handleShowModal()
+    }
     // End:: Show delete modal 
     
     // Start:: Close all modal 
     const handleClose = () => {
-        props.onClosed();
-    };
+        props.onClosed()
+    }
     // End:: Close all modal 
 
     // Start:: de-select card 
     const handleDeSelect = () => {
-        setActive(false);
-        setFocus(false);
-    };
+        setActive(false)
+        setFocus(false)
+    }
     // End:: de-select card
 
     // Start:: forward reff de-select, show edit/delete modal function
@@ -220,7 +220,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
             handelOpenPayment,
             handelOpenDelete
         }
-    });
+    })
     // End:: forward reff de-select, show edit/delete modal function
 
     // Start:: Html
@@ -232,8 +232,8 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 ref={ref}
                 key={props.pIndex}
                 index={props.pIndex}
-                className={props.pOption === 'R' ? 'border-room' : 'border'}
-                border={active ? 'info' : focus ? 'primary' : ''}  
+                className={props.pOption === "R" ? "border-room" : "border"}
+                border={active ? "info" : focus ? "primary" : ""}  
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick={(e) => { 
@@ -251,8 +251,8 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     <Row className="m-1">
                         <Col xs={8} sm={8} md={8} lg={8} xl={8} className="p-0">
                             <b>{props.pCorporateName ? subStr(props.pCorporateName, 20): subStr(props.pName, 20)}</b>
-                            {props.pOption === 'R' &&
-                            <Badge pill bg='danger'>R</Badge>}
+                            {props.pOption === "R" &&
+                            <Badge pill bg="danger">R</Badge>}
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className="text-right text-danger p-0">
                             <b>{formatINR(props.pTotalBalance)}</b>
@@ -292,16 +292,16 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
 
                                     {props.pOption === "R" &&
                                     <>
-                                        <Dropdown autoClose="outside">
+                                        <Dropdown alignRight drop='right'>
                                             <Dropdown.Toggle as={CustomToggle}>
                                                 <span className="dropdown-item">
-                                                    <Coffee className="feather-16 mr-3"/>
+                                                    <Coffee className="feather-16 mr-2"/>
                                                     Food
                                                     <ChevronsRight className="feather-16 float-right"/>
                                                 </span>
                                             </Dropdown.Toggle>
 
-                                            <Dropdown.Menu>
+                                            <Dropdown.Menu className="dropdown-sub">
                                                 <Dropdown.Item eventKey="10" 
                                                     onClick={() => {handelOpenOrder("T")}}>
                                                     <PenTool className="feather-16 mr-3" />Order
@@ -333,16 +333,16 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                             </Dropdown.Menu>
                                         </Dropdown>
 
-                                        <Dropdown autoClose="outside">
+                                        <Dropdown>
                                             <Dropdown.Toggle as={CustomToggle} drop="end" variant="secondary">
                                                 <span className="dropdown-item">
-                                                    <Phone className="feather-16 mr-3" />
+                                                    <Phone className="feather-16 mr-2"/>
                                                     Service
                                                     <ChevronsRight className="feather-16 float-end"/>
                                                 </span>
                                             </Dropdown.Toggle>
 
-                                            <Dropdown.Menu>
+                                            <Dropdown.Menu className="dropdown-sub">
                                                 <Dropdown.Item eventKey="20" 
                                                     onClick={() => {handelOpenOrder("S")}}>
                                                     <PenTool className="feather-16 mr-3" />Order
@@ -374,42 +374,55 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                             </Dropdown.Menu>
                                         </Dropdown>
 
-                                        <Dropdown.Divider />
                                     </>
                                     }
+
+                                    <Dropdown dropright>
+                                        <Dropdown.Toggle as={CustomToggle} drop="end" variant="secondary">
+                                            <span className="dropdown-item">
+                                                <Tag className="feather-16 mr-2"/>
+                                                Miscellaneous
+                                                <ChevronsRight className="feather-16 float-end"/>
+                                            </span>
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu className="dropdown-sub">
+                                            <Dropdown.Item eventKey="30" 
+                                                onClick={() => {handelOpenOrder("M")}}>
+                                                <PenTool className="feather-16 mr-3" />Order
+                                            </Dropdown.Item>
+                                            
+                                            <Dropdown.Item eventKey="31"
+                                                onClick={() => {handelOpenDespatch("M")}}>
+                                                <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                            </Dropdown.Item>
+
+                                            <Dropdown.Item eventKey="32" 
+                                                disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                onClick={() => {handelOpenGenerateBill("M")}}>
+                                                <FileText className="feather-16 mr-3"/>Bill
+                                            </Dropdown.Item>
+
+                                            <Dropdown.Item eventKey="33"
+                                                disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                onClick={handelOpenPayment}>
+                                                <CreditCard className="feather-16 mr-3"/>Payment
+                                            </Dropdown.Item>
+
+                                            <Dropdown.Item eventKey="34"
+                                                disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                onClick={() => {handelOpenCheckout("M")}}>
+                                                <LogOut className="feather-16 mr-3"/>Check out
+                                            </Dropdown.Item>
+
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+
+                                    <Dropdown.Divider />
 
                                     <Dropdown.Item eventKey="3" 
                                         onClick={() => {handelOpenEdit()}}>
                                         <Edit2 className="feather-16 mr-3"/>Edit
-                                    </Dropdown.Item>
-
-                                    <Dropdown.Item eventKey="4" 
-                                        onClick={() => {handelOpenOrder("M")}}>
-                                        <PenTool className="feather-16 mr-3"/>Order
-                                    </Dropdown.Item>
-
-                                    <Dropdown.Item eventKey="5"
-                                        disabled={props.pTransactionId !== 'undefined' ? false : true}
-                                        onClick={() => {handelOpenDespatch("M")}}>
-                                        <ShoppingBag className="feather-16 mr-3"/>Despatch
-                                    </Dropdown.Item>
-
-                                    <Dropdown.Item eventKey="6" 
-                                        disabled={props.pTransactionId !== 'undefined' ? false : true}
-                                        onClick={() => {handelOpenGenerateBill("M")}}>
-                                        <FileText className="feather-16 mr-3"/>Bill
-                                    </Dropdown.Item>
-
-                                    <Dropdown.Item eventKey="7"
-                                        disabled={props.pTransactionId !== 'undefined' ? false : true}
-                                        onClick={handelOpenPayment}>
-                                        <CreditCard className="feather-16 mr-3"/>Payment
-                                    </Dropdown.Item>
-
-                                    <Dropdown.Item eventKey="8"
-                                        disabled={props.pTransactionId !== 'undefined' ? false : true}
-                                        onClick={() => {handelOpenCheckout("M")}}>
-                                        <LogOut className="feather-16 mr-3"/>Check out
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey="9" 
@@ -469,7 +482,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                // pTables={props.pTables}
+                pTables={props.pTables}
                 pIndate={props.inDate}
                 pInTime={props.inTime}
                 onSaved={props.onOrdered} 
@@ -517,7 +530,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 pCorporateName={props.pCorporateName}
                 pCorporateAddress={props.pCorporateAddress}
                 pGstNo={props.pGstNo}
-                // pTables={props.pTables}
+                pTables={props.pTables}
                 pIndate={props.inDate}
                 pInTime={props.inTime}
                 onSaved={props.onDespatched} 
@@ -651,9 +664,9 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
 
 
         </>
-    );
+    )
     // End:: Html
 
-});
+})
 
-export default GuestMiscellaneousCard;
+export default GuestMiscellaneousCard

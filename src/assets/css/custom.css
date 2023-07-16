@@ -12,10 +12,22 @@ label:not(.form-check-label):not(.custom-file-label) {
   color: #47b9c1;
 }
 
+.dropdown-item {
+  padding: 6px;
+  margin: 0px;
+}
+
 .dropdown-item:hover {
   background-color: #47b9c1 !important;
   color: #fff;
 }
+
+.dropdown-sub {
+  background-color: #c3c8cd;
+  text-decoration: none;
+  color: #869099;
+}
+
 
 .sidebar {
   min-width: 100% !important;

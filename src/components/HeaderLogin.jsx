@@ -1,18 +1,18 @@
-import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Nav, Navbar, OverlayTrigger, Tooltip} from "react-bootstrap";
-import Dropdown from 'react-bootstrap/Dropdown';
-import {useNavigate, NavLink} from "react-router-dom";
-import {toast} from "react-toastify";
-import {Menu, Paperclip, Edit3, Scissors, User, MoreVertical} from "react-feather";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react"
+import {Nav, Navbar, OverlayTrigger, Tooltip} from "react-bootstrap"
+import Dropdown from "react-bootstrap/Dropdown"
+import {useNavigate, NavLink} from "react-router-dom"
+import {toast} from "react-toastify"
+import {Menu, Paperclip, Edit3, Scissors, User, MoreVertical} from "react-feather"
 
-import {HotelId} from "../App";
-import {useStateContext} from "../contexts/ContextProvider";
-import {getFirstName, getPageAttribute} from "./common/Common";
-import useFetchWithAuth from "./common/useFetchWithAuth";
-import Search from "./Search";
-import Profile from "./auth/Profile";
-import ChangePassword from "./auth/ChangePassword";
-import Logout from "./auth/Logout";
+import {HotelId} from "../App"
+import {useStateContext} from "../contexts/ContextProvider"
+import {getFirstName, getPageAttribute} from "./common/Common"
+import useFetchWithAuth from "./common/useFetchWithAuth"
+import Search from "./Search"
+import Profile from "./auth/Profile"
+import ChangePassword from "./auth/ChangePassword"
+import Logout from "./auth/Logout"
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown"
@@ -20,7 +20,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
         onClick={(e) => {e.preventDefault(); onClick(e);}} >
         {children}
     </NavLink>
-));
+))
 
 // Start:: Component
 // props parameters
@@ -36,116 +36,116 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // changePage
 // success
 const HeaderLogin = forwardRef((props, ref) => {   
-    const hotelId = useContext(HotelId);     
-    const contextValues = useStateContext();
-    const [selectedPage, setSelectedPage] = useState(null);
-    const [menuState, setMenuState] = useState(contextValues.showMenu);
-    const searchRef = useRef(null);
-    const navigate = useNavigate();
+    const hotelId = useContext(HotelId)     
+    const contextValues = useStateContext()
+    const [selectedPage, setSelectedPage] = useState(null)
+    const [menuState, setMenuState] = useState(contextValues.showMenu)
+    const searchRef = useRef(null)
+    const navigate = useNavigate()
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${props.pEmployeeId}`
-    });
+    })
 	const {doLogout} = useFetchWithAuth({
         url: `${contextValues.logoutAPI}/${hotelId}/${props.pEmployeeId}`
-    });
+    })
 
     useEffect(() => {
-        contextValues.setMenuStatus(menuState);
-        props.onToggleSideBar(menuState);
-    }, [menuState]);    // eslint-disable-line react-hooks/exhaustive-deps
+        contextValues.setMenuStatus(menuState)
+        props.onToggleSideBar(menuState)
+    }, [menuState])    // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: on success of user options
     const handleToggleSideMenu = () => {
-        setMenuState(!menuState);
-    };
+        setMenuState(!menuState)
+    }
 
     const handleClose = () => {
-        console.log("close");
-    };
+        console.log("close")
+    }
     
     const handleChangeProfileSuccess = async () => {
-        toast.success("Profile successfully updated & your password has been reseated");
+        toast.success("Profile successfully updated & your password has been reseated")
 
         (async () => {
             try {
-                await doFetch();
+                await doFetch()
             } catch (err) {
-              console.log("Error occured when fetching data");
+              console.log("Error occured when fetching data")
             }
-        })();
+        })()
 
         (async () => {
             try {
-                await doLogout();
-                handleLogoutSuccess();
+                await doLogout()
+                handleLogoutSuccess()
             } catch (err) {
-              console.log("Error occured when fetching data");
+              console.log("Error occured when fetching data")
             }
-        })();        
-    };
+        })()
+    }
     
     const handleChangePasswordSuccess = async() => {
-        toast.success("Password successfully updated");
+        toast.success("Password successfully updated")
 
         (async () => {
             try {
-                await doLogout();
-                handleLogoutSuccess();
+                await doLogout()
+                handleLogoutSuccess()
             } catch (err) {
-              console.log("Error occured when fetching data");
+              console.log("Error occured when fetching data")
             }
-          })();
-    };
+          })()
+    }
         
     const handleLogoutSuccess = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("token")
+        localStorage.removeItem("refreshToken")
 
-        navigate("./", { replace: true });
-        navigate(0);
-    };
+        navigate("./", { replace: true })
+        navigate(0)
+    }
     // End:: on success of user options
 
     // Start:: handle page component search/add/edit/delete
     // Start:: Search
     const handleSearch = (text) => {
-        props.onChangeSearch(text);
-    };
+        props.onChangeSearch(text)
+    }
     // End:: Search
 
     // Start:: Open add modal
     const handleOpenAdd = () => {
-        props.onClickAdd();
-    };
+        props.onClickAdd()
+    }
     // End:: Open add modal
 
     // Start:: Open edit modal
     const handleOpenEdit = () => {
-        props.onClickEdit();
-    };
+        props.onClickEdit()
+    }
     // End:: Open edit modal
 
     // Start:: Open delete modal
     const handleOpenDel = () => {
-        props.onClickDel();
-    };
+        props.onClickDel()
+    }
     // End:: Open delete modal
 
     // Start:: on successfull operation
     const success = () => {
-        searchRef.current.setFocus();
-    };
+        searchRef.current.setFocus()
+    }
     // End:: on successfull operation
     // End:: handle page component search/add/edit/delete 
 
     // Start:: forward reff change page
     const changePage = (page) => {
-        setSelectedPage(page);
-    };
+        setSelectedPage(page)
+    }
     
     useImperativeHandle(ref, () => {
         return {changePage, success}
-    });
+    })
     // End:: forward reff change page
 
     // Start:: Html
@@ -253,9 +253,9 @@ const HeaderLogin = forwardRef((props, ref) => {
             {/* End:: Right navbar links */}
 
         </nav>
-    );
+    )
     // End:: Html
 
-});
+})
 
-export default HeaderLogin;
+export default HeaderLogin

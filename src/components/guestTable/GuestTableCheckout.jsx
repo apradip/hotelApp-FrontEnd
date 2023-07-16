@@ -151,7 +151,7 @@ const GuestTableCheckout = forwardRef((props, ref) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal};
+        return {handleShowModal}
     })
     // End:: forward reff show modal function
 

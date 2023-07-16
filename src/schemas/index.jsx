@@ -276,7 +276,7 @@ export const guestTableSchema = Yup.object({
                 }
             }
         }),
-    keyInputTables: Yup.array(),
+    // keyInputTables: Yup.array(),
     // keyInputCheckInDate: Yup.string().required("Check In date can't be empty!"),
     // keyInputCheckInTime: Yup.string().required("Check In time can't be empty!")
 });

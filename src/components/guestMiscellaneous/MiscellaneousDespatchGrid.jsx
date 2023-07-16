@@ -1,20 +1,20 @@
-import React, {useContext, useEffect, useState, useRef, useMemo, useCallback} from "react";
-import {AgGridReact} from "ag-grid-react";
+import React, {useContext, useEffect, useState, useRef, useMemo, useCallback} from "react"
+import {AgGridReact} from "ag-grid-react"
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import {HotelId} from "../../App"
+import {useStateContext} from "../../contexts/ContextProvider"
+import useFetchWithAuth from "../common/useFetchWithAuth"
 
-import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
-import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+import "ag-grid-community/styles/ag-grid.css" // Core grid CSS, always needed
+import "ag-grid-community/styles/ag-theme-alpine.css" // Optional theme CSS
 
 const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
-    const gridRef = useRef();
+    const hotelId = useContext(HotelId)
+    const contextValues = useStateContext()
+    const gridRef = useRef()
     const {doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
-    });
+    })
 
     const defaultColDef = useMemo(() => {
         return {
@@ -26,7 +26,7 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
           hide: true,
           suppressSizeToFit: true,
         }
-    }, []);
+    }, [])
     const [columnDefs] = useState([
         {
             headerName: "", 
@@ -54,12 +54,12 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
             valueGetter: (params) => {return params.data.quantity},
         },
         {
-            field: 'id'
+            field: "id"
         },
         {
-            field: 'itemTransactionId'
+            field: "itemTransactionId"
         }
-    ]);
+    ])
 
     function isFirstColumn(params) {
         var displayedColumns = params.columnApi.getAllDisplayedColumns();
@@ -69,7 +69,7 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
 
     // Start:: load empty data to grid
     const handleGridReady = () => {
-        let row = [];
+        let row = []
         
         pDefaultRowData.forEach(element => {
             const object = {
@@ -78,38 +78,38 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
                             name: element.name, 
                             quantity: element.quantity, 
                             itemTransactionId: element.itemTransactionId
-                        };
+                        }
     
-            row.push(object);
-        });
+            row.push(object)
+        })
 
-        gridRef.current.api.setRowData(row);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-        gridRef.current.api.sizeColumnsToFit();
-    };
+        gridRef.current.api.setRowData(row)
+        gridRef.current.api.refreshCells()
+        gridRef.current.api.redrawRows()
+        gridRef.current.api.sizeColumnsToFit()
+    }
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
-    const handleFirstDataRendered = (params) => {
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-        gridRef.current.api.sizeColumnsToFit();
-    };
+    const handleFirstDataRendered = () => {
+        gridRef.current.api.refreshCells()
+        gridRef.current.api.redrawRows()
+        gridRef.current.api.sizeColumnsToFit()
+    }
     // End:: load empty data to grid
 
     // Start:: on row selection change set selected 
     const onSelectionChanged = useCallback(() => {
-        onChange(gridRef.current.api.getSelectedRows());
-    }, []);
+        onChange(gridRef.current.api.getSelectedRows())
+    }, [])
     // End:: on row selection change set selected 
 
     // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
-            await doFetch();
-          })();
-    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+            await doFetch()
+          })()
+    }, [])        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
     
 	return (
@@ -124,7 +124,7 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
                 onFirstDataRendered={handleFirstDataRendered}
                 onSelectionChanged={onSelectionChanged}/>
         </div>
-    );
+    )
 }
  
-export default MiscellaneousDespatchGrid;
+export default MiscellaneousDespatchGrid

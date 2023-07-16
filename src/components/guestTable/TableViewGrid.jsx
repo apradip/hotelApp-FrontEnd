@@ -1,15 +1,15 @@
-import React, {useState, useRef, useMemo} from "react";
-import {AgGridReact} from "ag-grid-react";
+import React, {useState, useRef, useMemo} from "react"
+import {AgGridReact} from "ag-grid-react"
 
-import {formatINR} from "../common/Common";
-import FoodItemSelector from "../common/FoodEditor";
-import QuantityEditor from "../common/QuantityEditor";
+import {formatINR} from "../common/Common"
+import FoodItemSelector from "../common/FoodEditor"
+import QuantityEditor from "../common/QuantityEditor"
 
-import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
-import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+import "ag-grid-community/styles/ag-grid.css" // Core grid CSS, always needed
+import "ag-grid-community/styles/ag-theme-alpine.css" // Optional theme CSS
 
 const TableOrderGrid = ({pDefaultRowData}) => {    
-    const gridRef = useRef();
+    const gridRef = useRef()
 
     const defaultColDef = useMemo(() => {
         return {
@@ -21,12 +21,12 @@ const TableOrderGrid = ({pDefaultRowData}) => {
           hide: true,
           suppressSizeToFit: true,
         }
-    }, []);
+    }, [])
     const rowClassRules = useMemo(() => {
         return {
           "ag-row-order": "data.despatchDate === undefined",
         };
-    }, []);
+    }, [])
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -91,15 +91,15 @@ const TableOrderGrid = ({pDefaultRowData}) => {
         {
             field: "despatchDate"
         }
-    ]);
+    ])
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
-    ];
+    ]
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
-        let row = [];
-        let sum = 0;
+        let row = []
+        let sum = 0
 
         pDefaultRowData.forEach(element => {
             const object = {
@@ -114,29 +114,27 @@ const TableOrderGrid = ({pDefaultRowData}) => {
                             gstCharge: element.gstCharge, 
                             totalPrice: element.unitPrice * element.quantity,
                             despatchDate: element.despatchDate
-                        };
+                        }
     
-            sum = sum + object.totalPrice;                       
-            row.push(object);
-        });
+            sum += object.totalPrice                       
+            row.push(object)
+        })
 
-        pinnedRowData[0].totalPrice = sum;
+        pinnedRowData[0].totalPrice = sum
 
-        gridRef.current.api.setRowData(row);
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
+        gridRef.current.api.setRowData(row)
+        gridRef.current.api.setPinnedBottomRowData(pinnedRowData)
+        gridRef.current.api.refreshCells()
+        gridRef.current.api.redrawRows()
 
-        params.api.sizeColumnsToFit();
+        params.api.sizeColumnsToFit()
 
-        window.addEventListener('resize', function () {
-            setTimeout(function () {
-              params.api.sizeColumnsToFit();
-            });
-          });
+        window.addEventListener("resize", function () {
+            setTimeout(function () {params.api.sizeColumnsToFit()})
+          })
 
-        gridRef.current.api.sizeColumnsToFit();
-    };
+        gridRef.current.api.sizeColumnsToFit()
+    }
     // End:: load empty data to grid
     
 	return (
@@ -150,7 +148,7 @@ const TableOrderGrid = ({pDefaultRowData}) => {
                 rowSelection={"single"}
                 onGridReady={handleGridReady}/>
         </div>
-    );
+    )
 }
  
-export default TableOrderGrid;
+export default TableOrderGrid

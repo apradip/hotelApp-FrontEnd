@@ -10,7 +10,7 @@ const TableSelect = ({onChange, name, value, disabled = false}) => {
 	const contextValues = useStateContext();
 	const [tableList, setTableList] = useState([]);
 	const [selectedList, setSelectedList] = useState(value);
-    const { data, loading, error, doFetch } = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.tableAPI}/${hotelId}`,
 		params: {
             option: "E"
@@ -36,8 +36,10 @@ const TableSelect = ({onChange, name, value, disabled = false}) => {
               console.log("Error occured when fetching data");
             }
 
-			value &&
-				value.map((item) => {return defaultList.push({value: item.id, label: item.no});})
+			if (Array.isArray(value) && value.length > 0){
+				value &&
+					value.map((item) => {return defaultList.push({value: item.id, label: item.no});})
+			}
           })();
     }, [value]);		// eslint-disable-line react-hooks/exhaustive-deps
 
@@ -58,6 +60,7 @@ const TableSelect = ({onChange, name, value, disabled = false}) => {
 
 	return (
 		<Select 
+			className="col-12"
 			name={name}
 			options={tableList} 
 			defaultValue={defaultList}

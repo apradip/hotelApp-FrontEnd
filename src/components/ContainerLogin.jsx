@@ -1,34 +1,34 @@
-import React, {useState, useEffect, useRef} from "react";
-import {Routes, Route} from "react-router-dom";
-import {ToastContainer} from "react-toastify";
+import React, {useState, useEffect, useRef} from "react"
+import {Routes, Route} from "react-router-dom"
+import {ToastContainer} from "react-toastify"
 
-import {useStateContext} from "../contexts/ContextProvider";
-import {getPage} from "./common/Common";
-import Header from "./HeaderLogin";
-import Menu from "./MenuLogin";
-import Footer from "./FooterLogin";
+import {useStateContext} from "../contexts/ContextProvider"
+import {getPage} from "./common/Common"
+import Header from "./HeaderLogin"
+import Menu from "./MenuLogin"
+import Footer from "./FooterLogin"
 import Dashboard from "../pages/Dashboard"
-import AccessLevels from "../pages/AccessLevels";
-import Plans from "../pages/Plans";
-import RoomCategories from "../pages/RoomCategories";
-import IDDocuments from "../pages/IDDocuments";
-import BookingAgents from "../pages/BookingAgents";
-import Employees from "../pages/Employees";
-import Rooms from "../pages/Rooms";
-import Tables from "../pages/Tables";
-import Foods from "../pages/Foods";
-import Miscellaneouses from "../pages/Miscellaneouses";
-import Services from "../pages/Services";
-import GuestRooms from "../pages/GuestRooms";
-import GuestTables from "../pages/GuestTables";
-import GuestServices from "../pages/GuestServices";
-import GuestMiscellaneouses from "../pages/GuestMiscellaneouses";
-import GuestPayments from "../pages/GuestPayments";
-import Support from "../pages/Support";
-import Help from "../pages/Help";
-import Privacy from "../pages/Privacy";
-import Terms from "../pages/Terms";
-import Error404 from "../pages/Error404";
+import AccessLevels from "../pages/AccessLevels"
+import Plans from "../pages/Plans"
+import RoomCategories from "../pages/RoomCategories"
+import IDDocuments from "../pages/IDDocuments"
+import BookingAgents from "../pages/BookingAgents"
+import Employees from "../pages/Employees"
+import Rooms from "../pages/Rooms"
+import Tables from "../pages/Tables"
+import Foods from "../pages/Foods"
+import Miscellaneouses from "../pages/Miscellaneouses"
+import Services from "../pages/Services"
+import GuestRooms from "../pages/GuestRooms"
+import GuestTables from "../pages/GuestTables"
+import GuestServices from "../pages/GuestServices"
+import GuestMiscellaneouses from "../pages/GuestMiscellaneouses"
+import GuestPayments from "../pages/GuestPayments"
+import Support from "../pages/Support"
+import Help from "../pages/Help"
+import Privacy from "../pages/Privacy"
+import Terms from "../pages/Terms"
+import Error404 from "../pages/Error404"
 
 
 // Start:: hide toast close button
@@ -36,45 +36,44 @@ const CloseButton = ({closeToast}) => (
   <i className="material-icons"
       onClick={closeToast}>
   </i>
-);
+)
 // End:: hide toast close button
 
 // Start:: Component
 const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
-  const contextValues = useStateContext();
-  const [menuState, setMenuState] = useState(contextValues.showMenu);
-  const [menuParentSelected, setMenuParentSelected] = useState(null);
-  const [menuSelected, setMenuSelected] = useState(null);
-  const menuRef = useRef(null);
-  const navRef = useRef(null);
-  const footerRef = useRef(null);
-  const accessLevelRef = useRef(null);
-  const employeeRef = useRef(null);
-  const idDocumentRef = useRef(null);
-  const planRef = useRef(null);
-  const roomCategoryRef = useRef(null);
-  const roomRef = useRef(null);
-  const tableRef = useRef(null);
-  const foodRef = useRef(null);
-  const miscellaneousRef = useRef(null);
-  const serviceRef = useRef(null);
-  const bookingAgentRef = useRef(null);
-  const guestRoomRef = useRef(null);
-  const guestTableRef = useRef(null);
-  // const guestFoodRef = useRef(null);
-  const guestServiceRef = useRef(null);
-  const guestMiscellaneousRef = useRef(null);
-  const guestPaymentRef = useRef(null);
+  const contextValues = useStateContext()
+  const [menuState, setMenuState] = useState(contextValues.showMenu)
+  const [menuParentSelected, setMenuParentSelected] = useState(null)
+  const [menuSelected, setMenuSelected] = useState(null)
+  const menuRef = useRef(null)
+  const navRef = useRef(null)
+  const footerRef = useRef(null)
+  const accessLevelRef = useRef(null)
+  const employeeRef = useRef(null)
+  const idDocumentRef = useRef(null)
+  const planRef = useRef(null)
+  const roomCategoryRef = useRef(null)
+  const roomRef = useRef(null)
+  const tableRef = useRef(null)
+  const foodRef = useRef(null)
+  const miscellaneousRef = useRef(null)
+  const serviceRef = useRef(null)
+  const bookingAgentRef = useRef(null)
+  const guestRoomRef = useRef(null)
+  const guestTableRef = useRef(null)
+  const guestServiceRef = useRef(null)
+  const guestMiscellaneousRef = useRef(null)
+  const guestPaymentRef = useRef(null)
 
   useEffect(() => {
-    const page = getPage(process.env.REACT_APP_BASE_URI, window.location.href);
-    navRef.current.changePage(page);
-    setMenuSelected(page);
-  }, []);   // eslint-disable-line react-hooks/exhaustive-deps
+    const page = getPage(process.env.REACT_APP_BASE_URI, window.location.href)
+    navRef.current.changePage(page)
+    setMenuSelected(page)
+  }, [])   // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    navRef.current.changePage(menuSelected);
-  }, [menuSelected]);
+    navRef.current.changePage(menuSelected)
+  }, [menuSelected])
 
   // Start:: show/hide side menu bar
   const handleToggleSideBar = (s) => {
@@ -235,164 +234,164 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
   const handleEdit = () => {
     switch (menuSelected) {
       case "accesslevels":
-        accessLevelRef && accessLevelRef.current.openEdit();
-        break;
+        accessLevelRef && accessLevelRef.current.openEdit()
+        break
 
       case "plans":
-        planRef && planRef.current.openEdit();
-        break;
+        planRef && planRef.current.openEdit()
+        break
 
       case "roomcategories":
-        roomCategoryRef && roomCategoryRef.current.openEdit();
-        break;
+        roomCategoryRef && roomCategoryRef.current.openEdit()
+        break
           
       case "iddocuments":
-        idDocumentRef && idDocumentRef.current.openEdit();
-        break;
+        idDocumentRef && idDocumentRef.current.openEdit()
+        break
 
       case "bookingagents":
-        bookingAgentRef && bookingAgentRef.current.openEdit();
-        break;
+        bookingAgentRef && bookingAgentRef.current.openEdit()
+        break
 
       case "employees":
-        employeeRef && employeeRef.current.openEdit();
-        break;
+        employeeRef && employeeRef.current.openEdit()
+        break
           
       case "rooms":
-        roomRef && roomRef.current.openEdit();
-        break;
+        roomRef && roomRef.current.openEdit()
+        break
   
       case "tables":
-        tableRef && tableRef.current.openEdit();
-        break;
+        tableRef && tableRef.current.openEdit()
+        break
 
       case "foods":
-        foodRef && foodRef.current.openEdit();
-        break;
+        foodRef && foodRef.current.openEdit()
+        break
 
       case "miscellaneouses":
-        miscellaneousRef && miscellaneousRef.current.openEdit();
-        break;
+        miscellaneousRef && miscellaneousRef.current.openEdit()
+        break
     
       case "services":
-        serviceRef && serviceRef.current.openEdit();
-        break;
+        serviceRef && serviceRef.current.openEdit()
+        break
           
       case "guestrooms":
-        guestRoomRef && guestRoomRef.current.openEdit();
-        break;
+        guestRoomRef && guestRoomRef.current.openEdit()
+        break
 
       case "guesttables":
-        guestTableRef && guestTableRef.current.openEdit();
-        break;
+        guestTableRef && guestTableRef.current.openEdit()
+        break
 
       case "guestservices":
-        guestServiceRef && guestServiceRef.current.openEdit();
-        break;
+        guestServiceRef && guestServiceRef.current.openEdit()
+        break
 
       case "guestmiscellaneous":
-        guestMiscellaneousRef && guestMiscellaneousRef.current.openEdit();
-        break;
+        guestMiscellaneousRef && guestMiscellaneousRef.current.openEdit()
+        break
           
       case "guestpayments":
-        guestPaymentRef && guestPaymentRef.current.openEdit();
-        break;
+        guestPaymentRef && guestPaymentRef.current.openEdit()
+        break
           
       default:
-        break;        
+        break        
       }
-  };
+  }
 
   const handleDel = () => {
     switch (menuSelected) {
       case "accesslevels":
-        accessLevelRef && accessLevelRef.current.openDelete();
-        break;
+        accessLevelRef && accessLevelRef.current.openDelete()
+        break
 
       case "plans":
-        planRef && planRef.current.openDelete();
-        break;
+        planRef && planRef.current.openDelete()
+        break
 
       case "roomcategories":
-        roomCategoryRef && roomCategoryRef.current.openDelete();
-        break;
+        roomCategoryRef && roomCategoryRef.current.openDelete()
+        break
           
       case "iddocuments":
-        idDocumentRef && idDocumentRef.current.openDelete();
-        break;
+        idDocumentRef && idDocumentRef.current.openDelete()
+        break
 
       case "bookingagents":
-        bookingAgentRef && bookingAgentRef.current.openDelete();
-        break;
+        bookingAgentRef && bookingAgentRef.current.openDelete()
+        break
   
       case "employees":
-        employeeRef && employeeRef.current.openDelete();
-        break;
+        employeeRef && employeeRef.current.openDelete()
+        break
   
       case "rooms":
-        roomRef && roomRef.current.openDelete();
-        break;
+        roomRef && roomRef.current.openDelete()
+        break
 
       case "tables":
-        tableRef && tableRef.current.openDelete();
-        break;
+        tableRef && tableRef.current.openDelete()
+        break
 
       case "foods":
-        foodRef && foodRef.current.openDelete();
-        break;
+        foodRef && foodRef.current.openDelete()
+        break
 
       case "miscellaneouses":
-        miscellaneousRef && miscellaneousRef.current.openDelete();
-        break;
+        miscellaneousRef && miscellaneousRef.current.openDelete()
+        break
 
       case "services":
-        serviceRef && serviceRef.current.openDelete();
-        break;
+        serviceRef && serviceRef.current.openDelete()
+        break
           
       case "guestrooms":
-        guestRoomRef && guestRoomRef.current.openDelete();
-        break;
+        guestRoomRef && guestRoomRef.current.openDelete()
+        break
 
       case "guesttables":
-        guestTableRef && guestTableRef.current.openDelete();
-        break;
+        guestTableRef && guestTableRef.current.openDelete()
+        break
 
       case "guestservices":
-        guestServiceRef && guestServiceRef.current.openDelete();
-        break;
+        guestServiceRef && guestServiceRef.current.openDelete()
+        break
   
       case "guestmiscellaneous":
-        guestMiscellaneousRef && guestMiscellaneousRef.current.openDelete();
-        break;
+        guestMiscellaneousRef && guestMiscellaneousRef.current.openDelete()
+        break
           
       case "guestpayments":
-        guestPaymentRef && guestPaymentRef.current.openDelete();
-        break;
+        guestPaymentRef && guestPaymentRef.current.openDelete()
+        break
           
       default:
-        break;
+        break
     }
-  };
+  }
 
   const handleClose = () => {
     // console.log("close")
-  };
+  }
 
   const handleSuccess = () => {
-    navRef.current.success();
-  };
+    navRef.current.success()
+  }
   // End:: handle header operational options
 
   // Start:: click footer page
   const handleClickParent = (parent) => {
-    setMenuParentSelected(parent);
-  };
+    setMenuParentSelected(parent)
+  }
   // End:: click footer page
 
   // Start:: click footer page
   const handleClickPage = (page) => {
-    setMenuSelected(page);
-  };
+    setMenuSelected(page)
+  }
   // End:: click footer page
   
   // Start:: Html
@@ -536,11 +535,11 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
 
       </div>
     </div>
-  );
+  )
   // End:: Html
 
-};
+}
 // End:: Component
 
 
-export default ContainerLogin;
+export default ContainerLogin

@@ -1,27 +1,27 @@
-import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink} from "react-bootstrap";
-import {toast} from "react-toastify";
-import {X} from "react-feather";
+import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react"
+import {Modal, NavLink} from "react-bootstrap"
+import {toast} from "react-toastify"
+import {X} from "react-feather"
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import {HotelId} from "../../App"
+import {useStateContext} from "../../contexts/ContextProvider"
+import useFetchWithAuth from "../common/useFetchWithAuth"
 
 
 // Start:: form
 const Form = ({pGuestId, pName, onSubmited, onClosed}) => {
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
-    const inputRef = useRef(null);
+    const hotelId = useContext(HotelId)
+    const contextValues = useStateContext()
+    const inputRef = useRef(null)
     const {loading, error, doDelete} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${pGuestId}`
-    });
+    })
 
     // Start:: Call delete api
     const handleSave = async () => {
-        await doDelete();
-        error === null ? onSubmited() : toast.error(error);
-    };
+        await doDelete()
+        error === null ? onSubmited() : toast.error(error)
+    }
     // End:: Call delete api
 
     // Start:: Html
@@ -69,10 +69,10 @@ const Form = ({pGuestId, pName, onSubmited, onClosed}) => {
             {/* End:: Modal footer */}
 
         </form>                    
-    );
+    )
     // End:: Html
 
-};
+}
 // End:: form
 
 // Start:: form
@@ -104,10 +104,10 @@ const FormError = ({pName, onClosed}) => {
             {/* End:: Modal footer */}
 
         </form>                    
-    );
+    )
     // End:: Html
 
-};
+}
 // End:: form
 
 
@@ -120,64 +120,64 @@ const FormError = ({pName, onClosed}) => {
 // useImperativeHandle
 // handleShowModal
 const GuestMiscellaneousDelete = forwardRef((props, ref) => {
-    const hotelId=useContext(HotelId);
-    const contextValues=useStateContext();
-    const [showModal, setShowModal]=useState(false);
+    const hotelId=useContext(HotelId)
+    const contextValues=useStateContext()
+    const [showModal, setShowModal]=useState(false)
     const {data, loading, error, doFetch}=useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
-    });
+    })
 
     // Start :: Show modal 
     const handleShowModal = () => {
-        setShowModal(true);
-    };
+        setShowModal(true)
+    }
     // End :: Show modal 
 
     // Start :: Close modal 
     const handleCloseModal = () => {
-        setShowModal(false);
-        props.onClosed();
-    };
+        setShowModal(false)
+        props.onClosed()
+    }
     // End :: Close modal 
 
     // Start :: Save 
     const handleSave = () => {
-        setShowModal(false);
-        props.onDeleted(); 
-    };
+        setShowModal(false)
+        props.onDeleted()
+    }
     // End :: Save 
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
         return {handleShowModal}
-    });
+    })
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
         document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal();
-        });
+            if (event.key === "Escape") handleCloseModal()
+        })
 
-        return () => {document.removeEventListener("keydown", handleCloseModal);}
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+        return () => {document.removeEventListener("keydown", handleCloseModal)}
+    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
             try {
-                showModal && await doFetch();
+                showModal && await doFetch()
             } catch (err) {
-              console.log("Error occured when fetching data");
+              console.log("Error occured when fetching data")
             }
-          })();
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
+          })()
+    }, [showModal])        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     useEffect(() => {
-        error && toast.error(error);
-    }, [data, error, loading]);
+        error && toast.error(error)
+    }, [data, error, loading])
 
     // Start:: Html
     return (
@@ -252,11 +252,11 @@ const GuestMiscellaneousDelete = forwardRef((props, ref) => {
             </Modal>}
             {/* End:: Delete modal */}
         </>
-    );
+    )
     // End:: Html
 
-});
+})
 // End:: Component
 
 
-export default GuestMiscellaneousDelete;
+export default GuestMiscellaneousDelete

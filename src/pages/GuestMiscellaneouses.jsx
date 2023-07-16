@@ -10,14 +10,14 @@ import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
 const Operation = {
-    GuestAdd: 'GUEST_ADD',
-    GuestMod: 'GUEST_MOD',
-    Order: 'ORDER',
-    Despatch: 'DESPATCH',
-    BillGenerate: 'BILL_GENERATE',
-    PaymentAdd: 'PAYMENT_ADD',
-    Checkout: 'GUEST_CHECKOUT',
-    GuestDel: 'GUEST_DEL'
+    GuestAdd: "GUEST_ADD",
+    GuestMod: "GUEST_MOD",
+    Order: "ORDER",
+    Despatch: "DESPATCH",
+    BillGenerate: "BILL_GENERATE",
+    PaymentAdd: "PAYMENT_ADD",
+    Checkout: "GUEST_CHECKOUT",
+    GuestDel: "GUEST_DEL"
 };
 
 // Start:: Component
@@ -36,7 +36,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     const contextValues = useStateContext();
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState("");
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -98,25 +98,25 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     const handleSuccess = (operation) => {
         switch (operation) {
             case Operation.GuestAdd:
-                toast.success('Guest successfully added');
+                toast.success("Guest successfully added");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
 
             case Operation.GuestMod:
-                toast.success('Guest successfully changed');
+                toast.success("Guest successfully changed");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
                     
             case Operation.Order:
-                toast.success('Item successfully ordered');
+                toast.success("Item successfully ordered");
                 setDataChanged(true);
                 props.onSuccess();
                 break;               
 
             case Operation.Despatch:
-                toast.success('Item successfully despatched');
+                toast.success("Item successfully despatched");
                 setDataChanged(true);
                 props.onSuccess();
                 break;                
@@ -127,19 +127,19 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                 break;                
                     
             case Operation.PaymentAdd:
-                toast.success('Payment successfully added');
+                toast.success("Payment successfully added");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
 
             case Operation.Checkout:
-                toast.success('Guest successfully checked out');
+                toast.success("Guest successfully checked out");
                 setDataChanged(true);
                 props.onSuccess();
                 break;
 
             case Operation.GuestDel:
-                toast.success('Guest successfully deleted');
+                toast.success("Guest successfully deleted");
                 setDataChanged(true);
                 props.onSuccess();
                 break;               
@@ -182,7 +182,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
               await doFetch();
               setDataChanged(false);
             } catch (err) {
-              console.log('Error occured when fetching data');
+              console.log("Error occured when fetching data");
             }
           })();
     }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
@@ -220,7 +220,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
-            <div className='row' key={rowKey}>
+            <div className="row" key={rowKey}>
                 {pData.map((item, idx) => {
                         const itemIdx = (rowIdx * itemPerRow) + idx;
                         return createCol(item, itemIdx);
@@ -232,8 +232,8 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         const colKey = `col_${pData.id}`;
 
         return (
-            <div className='col-sm-6 col-md-4 col-xl-4' key={colKey}>
-                <Card className='border'
+            <div className="col-sm-6 col-md-4 col-xl-4" key={colKey}>
+                <Card className="border"
                     ref={(el) => cardRefs.current[itemIdx] = el}
                     pIndex={itemIdx}
                     pGuestId={pData.id} 
@@ -246,6 +246,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                     pCorporateName={pData.corporateName}
                     pCorporateAddress={pData.corporateAddress}
                     pGstNo={pData.gstNo}
+                    pTables={pData.tables}
                     pTotalExpense={pData.totalExpense}
                     pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
                     pIndate={pData.inDate}
@@ -266,20 +267,20 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
     // Start:: Html
     return ( 
-        <div className='content-wrapper'>
+        <div className="content-wrapper">
             
             {/* Seart :: Bread crumb */}
-            <div className='content-header'>
-                <div className='container-fluid'>
-                    <div className='row'>
-                        <div className='col-sm-4 m-0'>
-                            <h1 className='text-dark'>Miscellaneous</h1>
+            <div className="content-header">
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-sm-4 m-0">
+                            <h1 className="text-dark">Miscellaneous</h1>
                         </div>
 
-                        <div className='col-sm-8'>
-                            <Breadcrumb className='breadcrumb float-sm-right'>
-                                <Breadcrumb.Item href = '/'>Home</Breadcrumb.Item>
-                                <Breadcrumb.Item href = '/'>Transaction</Breadcrumb.Item>
+                        <div className="col-sm-8">
+                            <Breadcrumb className="breadcrumb float-sm-right">
+                                <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+                                <Breadcrumb.Item href="/">Transaction</Breadcrumb.Item>
                                 <Breadcrumb.Item active>Miscellaneous</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
@@ -289,14 +290,14 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             {/* End :: Bread crumb */}
 
             {/* Start :: display data */}
-            <section className='content'>
-                <div className='container-fluid'>
-                    <div className='card'>
+            <section className="content">
+                <div className="container-fluid">
+                    <div className="card">
 
                         {/* Start :: Header & operational panel */}
-                        <div className='card-header'>
+                        <div className="card-header">
                             {/* Start :: Display data count */}
-                            <div className='col-12 text-danger p-0'>
+                            <div className="col-12 text-danger p-0">
                                 {!loading && 
                                     data && 
                                         `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
@@ -306,10 +307,10 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className='card-body py-0'>
+                        <div className="card-body py-0">
                             {loading &&
-                                <div className='d-flex justify-content-center'>
-                                    <div className='spinner-border text-primary' role='status'/>
+                                <div className="d-flex justify-content-center">
+                                    <div className="spinner-border text-primary" role="status"/>
                                 </div>}
 
                             {!loading && 
@@ -319,10 +320,10 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className='card-footer py-0'>
-                            <div className='row'>
+                        <div className="card-footer py-0">
+                            <div className="row">
                                 {/* Start :: Pagination */}
-                                <div className='col-12 d-flex justify-content-end'>
+                                <div className="col-12 d-flex justify-content-end">
                                     {!loading && 
                                             data && 
                                                 <Paging

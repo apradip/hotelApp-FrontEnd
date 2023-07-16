@@ -1,24 +1,24 @@
-import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink} from "react-bootstrap";
-import {useFormik} from "formik";
-import {toast} from "react-toastify";
-import {X} from "react-feather";
+import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react"
+import {Modal, NavLink, Row, Col} from "react-bootstrap"
+import {useFormik} from "formik"
+import {toast} from "react-toastify"
+import {X} from "react-feather"
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
-import {guestSmallSchema} from "../../schemas";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import {HotelId} from "../../App"
+import {useStateContext} from "../../contexts/ContextProvider"
+import {guestSmallSchema} from "../../schemas"
+import useFetchWithAuth from "../common/useFetchWithAuth"
 
 
 // Start:: form
 const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporateAddress, pGST, 
                 onSubmited, onClosed}) => {
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
-    const [validateOnChange, setValidateOnChange] = useState(false);
+    const hotelId = useContext(HotelId)
+    const contextValues = useStateContext()
+    const [validateOnChange, setValidateOnChange] = useState(false)
     const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${pGuestId}`
-    });
+    })
 
     // Start:: Form validate and save data
     const {values, errors, touched, handleChange, handleSubmit, resetForm} = useFormik({
@@ -34,33 +34,33 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
         validateOnChange,
         onSubmit: async (values, action) => {
             const payload = {   
-                option: 'S',
+                option: "S",
                 name: values.keyInputName.toUpperCase(), 
                 mobile: parseInt(values.keyInputMobile),
                 guestCount: parseInt(values.keyInputGuestCount),
-                corporateName: values.keyInputCorporateName ? values.keyInputCorporateName.toUpperCase() : '',
-                corporateAddress: values.keyInputCorporateAddress ? values.keyInputCorporateAddress.toUpperCase() : '',
-                gstNo: values.keyInputGST ? values.keyInputGST.toUpperCase() : ''
+                corporateName: values.keyInputCorporateName ? values.keyInputCorporateName.toUpperCase() : "",
+                corporateAddress: values.keyInputCorporateAddress ? values.keyInputCorporateAddress.toUpperCase() : "",
+                gstNo: values.keyInputGST ? values.keyInputGST.toUpperCase() : ""
             };
             
-            await doInsert(payload);
+            await doInsert(payload)
         
             if (error === null) {
-                action.resetForm();
-                onSubmited();
+                action.resetForm()
+                onSubmited()
             } else {
-                toast.error(error);
+                toast.error(error)
             }
         }
-    });
+    })
     // End:: Form validate and save data
 
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false);
-        resetForm();
-        onClosed();
-    };
+        setValidateOnChange(false)
+        resetForm()
+        onClosed()
+    }
     // End:: close form    
 
     // Start:: Html
@@ -71,10 +71,10 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column name */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -99,11 +99,11 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
                                     (<small className="text-danger">{errors.keyInputName}</small>) : 
                                         null}
                         </div>
-                    </div>
+                    </Col>
                     {/* End:: Column name */}
 
                     {/* Start:: Column mobile */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -128,11 +128,11 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
                                     (<small className="text-danger">{errors.keyInputMobile}</small>) : 
                                         null}
                         </div>                    
-                    </div>
+                    </Col>
                     {/* End:: Column mobile */}
 
                     {/* Start:: Column no of guest */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -157,17 +157,17 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
                                     (<small className="text-danger">{errors.keyInputGuestCount}</small>) : 
                                         null}
                         </div>                                                        
-                    </div>
+                    </Col>
                     {/* End:: Column no of guest */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column corporate name */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -193,11 +193,11 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
                                     (<small className="text-danger">{errors.keyInputCorporateName}</small>) : 
                                         null}
                         </div>    
-                    </div>
+                    </Col>
                     {/* End:: Column corporate name */}
 
                     {/* Start:: Column coroprate address */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -222,11 +222,11 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
                                     (<small className="text-danger">{errors.keyInputCorporateAddress}</small>) : 
                                         null}
                         </div>                            
-                    </div>
+                    </Col>
                     {/* End:: Column coroprate address */}
 
                     {/* Start:: Column gst no */}
-                    <div className="col-sx-12 col-md-4 mb-3">
+                    <Col sx={12} md={4} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -251,10 +251,10 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
                                     (<small className="text-danger">{errors.keyInputGST}</small>) : 
                                         null}
                         </div>                        
-                    </div>
+                    </Col>
                     {/* End:: Column gst no */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
             </Modal.Body>
@@ -293,10 +293,10 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
             {/* End:: Modal footer */}
 
         </form> 
-    );
+    )
     // End:: Html
 
-};
+}
 // End:: form
 
 
@@ -309,64 +309,62 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
 // useImperativeHandle
 // handleShowModal
 const GuestMiscellaneousEdit = forwardRef((props, ref) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
-    const [showModal, setShowModal] = useState(false);
+    const hotelId = useContext(HotelId)
+    const contextValues = useStateContext()
+    const [showModal, setShowModal] = useState(false)
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
-    });
+    })
     
     // Start:: Show modal
     const handleShowModal = () => {
         setShowModal(true);
-    };
+    }
     // End:: Show modal
 
     // Start:: Close modal
     const handleCloseModal = () => {
         setShowModal(false);
         props.onClosed();
-    };    
+    }    
     // End:: Close modal
 
     // Start:: Save
     const handleSave = () => { 
         setShowModal(false);
         props.onSaved();
-    };
+    }
     // End:: Save
     
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
         return {handleShowModal}
-    });
+    })
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') handleCloseModal();
-        });
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal()})
 
-        return () => {document.removeEventListener('keydown', handleCloseModal);}
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+        return () => {document.removeEventListener("keydown", handleCloseModal)}
+    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
             try {
-                showModal && await doFetch();
+                showModal && await doFetch()
             } catch (err) {
-                console.log('Error occured when fetching data');
+                console.log("Error occured when fetching data")
             }
-            })();
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
+            })()
+    }, [showModal])        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
         
     useEffect(() => {
-        error && toast.error(error);
-    }, [data, error, loading]);
+        error && toast.error(error)
+    }, [data, error, loading])
     
     // Start:: Html
     return (
@@ -407,11 +405,11 @@ const GuestMiscellaneousEdit = forwardRef((props, ref) => {
                 </Modal>}
             {/* End:: Edit modal */}
         </>
-    );
+    )
     // End:: Html
 
-});
+})
 // End:: Component
 
 
-export default GuestMiscellaneousEdit;
+export default GuestMiscellaneousEdit

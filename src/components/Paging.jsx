@@ -1,12 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Link } from "react-router-dom"
 
 const Paging = ({ itemPerPage, totalItem, selectedPage, onPaging }) => {
-    const pages = [];
+    const pages = []
 
     for (let idx = 1; idx <= Math.ceil(totalItem / itemPerPage); idx++) {
-        pages.push(idx);
-    };
+        pages.push(idx)
+    }
 
     return (
         <nav>
@@ -22,7 +22,7 @@ const Paging = ({ itemPerPage, totalItem, selectedPage, onPaging }) => {
                 ))}
             </ul>
         </nav>
-    );
-};
+    )
+}
 
-export default Paging;
+export default Paging

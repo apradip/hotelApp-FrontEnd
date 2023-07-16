@@ -1,38 +1,38 @@
-import React, {useState, useEffect, forwardRef} from "react";
-import {NavLink} from "react-router-dom";
-import SimpleBar from "simplebar-react";
-import {Grid, Command, Feather, BookOpen, Link, ChevronLeft, ChevronDown} from "react-feather";
+import React, {useState, useEffect, forwardRef} from "react"
+import {NavLink} from "react-router-dom"
+import SimpleBar from "simplebar-react"
+import {Grid, Command, Feather, BookOpen, Link, ChevronLeft, ChevronDown} from "react-feather"
 
-import "simplebar-react/dist/simplebar.min.css";
+import "simplebar-react/dist/simplebar.min.css"
 
 const MenuLogin = forwardRef((props, ref) => {
-    const [menuIsOpen, setMenuIsOpen] = useState(null);
-    const [menuParentSelected, setMenuParentSelected] = useState(null);
-    const [menuSelected, setMenuSelected] = useState(null);
+    const [menuIsOpen, setMenuIsOpen] = useState(null)
+    const [menuParentSelected, setMenuParentSelected] = useState(null)
+    const [menuSelected, setMenuSelected] = useState(null)
       
     useEffect(() => {
-        props.onSelectPage(menuSelected);
-    }, [menuSelected]);    // eslint-disable-line react-hooks/exhaustive-deps
+        props.onSelectPage(menuSelected)
+    }, [menuSelected])    // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: click parent menu
     const toggleParentMenuItem = (name) => {
-        let isOpen = false;
+        let isOpen = false
 
         if (menuParentSelected === name) {
-            isOpen = menuIsOpen ? false : true;
+            isOpen = menuIsOpen ? false : true
         } else {
-            isOpen = true;
+            isOpen = true
         }
 
-        setMenuIsOpen(isOpen);
-        setMenuParentSelected(name);
-    };
+        setMenuIsOpen(isOpen)
+        setMenuParentSelected(name)
+    }
     // End:: click parent menu
 
     // Start:: click page menu
     const handelClickMenuItem = (page) => {
-        setMenuSelected(page);
-    };
+        setMenuSelected(page)
+    }
     // End:: click page menu
 
 
@@ -219,8 +219,8 @@ const MenuLogin = forwardRef((props, ref) => {
 
             </aside>
         </div>
-    );
+    )
     // End:: Html
-});
+})
  
-export default MenuLogin;
+export default MenuLogin

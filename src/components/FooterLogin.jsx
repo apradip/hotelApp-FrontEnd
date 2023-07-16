@@ -1,6 +1,6 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
-import { NavLink } from "react-router-dom";
-import { Stack } from "react-bootstrap";
+import React, { useState, forwardRef, useImperativeHandle } from "react"
+import { NavLink } from "react-router-dom"
+import { Stack } from "react-bootstrap"
 
 
 // Start:: Component
@@ -10,27 +10,25 @@ import { Stack } from "react-bootstrap";
 // useImperativeHandle
 // changePage
 
-const FooterLogin = forwardRef(( props, ref ) => {
-    const [selectedPage, setSelectedPage] = useState(null);
-	const currentYear = new Date().getFullYear();
+const FooterLogin = forwardRef((props, ref) => {
+    const [selectedPage, setSelectedPage] = useState(null)
+	const currentYear = new Date().getFullYear()
 
 	// Start:: click page menu
     const handelClickMenuItem = (page) => {
-        changePage(page);
-		props.onClickPage(page);
-    };
+        changePage(page)
+		props.onClickPage(page)
+    }
     // End:: click page menu
 
 	// Start:: forward reff change page
 	const changePage = (page) => {
-		setSelectedPage(page);
-	};
+		setSelectedPage(page)
+	}
 	
 	useImperativeHandle(ref, () => {
-		return {
-			changePage
-		}
-	});
+		return {changePage}
+	})
 	// End:: forward reff change page
 	
 	// Start:: Html
@@ -57,8 +55,8 @@ const FooterLogin = forwardRef(( props, ref ) => {
 				</Stack>
 			</footer>
 		</div>
-    );
+    )
 	// End:: Html
-});
+})
  
-export default FooterLogin;
+export default FooterLogin
