@@ -1,15 +1,15 @@
-import React, {useState, useRef, useMemo} from "react";
-import {AgGridReact} from "ag-grid-react";
+import React, { useState, useRef, useMemo } from "react";
+import { AgGridReact } from "ag-grid-react";
 
-import {formatINR} from "../common/Common"
-import ItemSelector from "../common/MiscellaneousEditor"
-import QuantityEditor from "../common/QuantityEditor"
+import { formatINR } from "../common/Common";
+import ItemSelector from "../common/MiscellaneousEditor";
+import QuantityEditor from "../common/QuantityEditor";
 
-import "ag-grid-community/styles/ag-grid.css" // Core grid CSS, always needed
-import "ag-grid-community/styles/ag-theme-alpine.css" // Optional theme CSS
+import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
+import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const MiscellaneousViewGrid = ({pDefaultRowData}) => {    
-    const gridRef = useRef()
+    const gridRef = useRef();
 
     const defaultColDef = useMemo(() => {
         return {
@@ -19,14 +19,12 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true,
+          suppressSizeToFit: true
         }
-    }, [])
+    }, []);
     const rowClassRules = useMemo(() => {
-        return {
-          "ag-row-order": "data.despatchDate === undefined",
-        };
-    }, [])
+        return {"ag-row-order": "data.despatchDate === undefined"};
+    }, []);
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -91,70 +89,73 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
         {
             field: "despatchDate"
         }
-    ])
+    ]);
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
-    ]
+    ];
     const [style, setStyle] = useState({
         height: "100%",
         width: "100%"
-    })
+    });
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
-        let row = []
-        let sum = 0
+        let row = [];
+        let sum = 0;
         
-        pDefaultRowData.forEach(element => {
-            const data = {
-                            rowId: row.length + 1, 
-                            id: element.id,
-                            name: element.name, 
-                            unitPrice: element.unitPrice,
-                            quantity: element.quantity, 
-                            serviceChargePercentage: element.serviceChargePercentage, 
-                            serviceCharge: element.serviceCharge, 
-                            gstPercentage: element.gstPercentage, 
-                            gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity,
-                            despatchDate: element.despatchDate
-                        }
-            
-            sum += data.totalPrice                       
-            row.push(data)
-        })
+        try {
+            pDefaultRowData.forEach(element => {
+                const data = {
+                    rowId: row.length + 1, 
+                    id: element.id,
+                    name: element.name, 
+                    unitPrice: element.unitPrice,
+                    quantity: element.quantity, 
+                    serviceChargePercentage: element.serviceChargePercentage, 
+                    serviceCharge: element.serviceCharge, 
+                    gstPercentage: element.gstPercentage, 
+                    gstCharge: element.gstCharge, 
+                    totalPrice: element.unitPrice * element.quantity,
+                    despatchDate: element.despatchDate};
+                
+                sum += data.totalPrice;                       
+                row.push(data);
+            });
 
-        pinnedRowData[0].totalPrice = sum
+            pinnedRowData[0].totalPrice = sum;
 
-        gridRef.current.api.setRowData(row)
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData)
-        gridRef.current.api.refreshCells()
-        gridRef.current.api.redrawRows()
+            gridRef.current.api.setRowData(row);
+            gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+            gridRef.current.api.refreshCells();
+            gridRef.current.api.redrawRows();
 
-        params.api.sizeColumnsToFit()
+            params.api.sizeColumnsToFit();
 
-        window.addEventListener("resize", function () {
-            setTimeout(function () {params.api.sizeColumnsToFit()})
-        })
+            window.addEventListener("resize", function () {
+                setTimeout(function () {params.api.sizeColumnsToFit()});
+            });
 
-        gridRef.current.api.sizeColumnsToFit()
-    }
+            gridRef.current.api.sizeColumnsToFit();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: load empty data to grid
     
 	return (
-        <div className="col-12 ag-theme-alpine grid-height-400">
-            <div style={style}>
+        <div className = "col-12 ag-theme-alpine grid-height-400">
+            <div style = {style}>
                 <AgGridReact	
-                    ref={gridRef}
-                    columnDefs={columnDefs}
-                    defaultColDef={defaultColDef}
-                    rowClassRules={rowClassRules}
-                    rowData={null}
-                    rowSelection={"single"}
-                    onGridReady={handleGridReady}/>
+                    ref = {gridRef}
+                    columnDefs = {columnDefs}
+                    defaultColDef = {defaultColDef}
+                    rowClassRules = {rowClassRules}
+                    rowData = {null}
+                    rowSelection = {"single"}
+                    onGridReady = {handleGridReady} />
             </div>
         </div>
-    )
-}
+    );
+};
  
-export default MiscellaneousViewGrid
+export default MiscellaneousViewGrid;

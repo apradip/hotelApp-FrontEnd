@@ -1,23 +1,23 @@
 import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Breadcrumb} from "react-bootstrap";
+import {Breadcrumb, Row, Col} from "react-bootstrap";
 import {toast} from "react-toastify";
 
 import {HotelId} from "../App";
 import {useStateContext} from "../contexts/ContextProvider";
 import Add from "../components/guestMiscellaneous/GuestMiscellaneousAdd";
-import Card from "../components/guestMiscellaneous/GuestMiscellaneousCard";
+import CardMiscellaneous from "../components/guestMiscellaneous/GuestMiscellaneousCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
 const Operation = {
     GuestAdd: "GUEST_ADD",
     GuestMod: "GUEST_MOD",
+    GuestDel: "GUEST_DEL",
     Order: "ORDER",
     Despatch: "DESPATCH",
     BillGenerate: "BILL_GENERATE",
     PaymentAdd: "PAYMENT_ADD",
-    Checkout: "GUEST_CHECKOUT",
-    GuestDel: "GUEST_DEL"
+    Checkout: "GUEST_CHECKOUT"
 };
 
 // Start:: Component
@@ -47,125 +47,153 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     const indexOfFirstItem = indexOfLastItem - itemPerPage;
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}`,
-        params: {
-            search: search
-        }
+        params: {search: search}
     });
 
     // Start:: Change search text
-    const changeSearch = (text) => {
-        setSearch(text);
-        setSelectedPage(1);
+    const changeSearch = (search) => {
+        try {
+            setSearch(search);
+            setSelectedPage(1);
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Change search text
 
     // Start:: Open add modal
     const openAdd = () => {
-        addRef.current.handleShowModal();
+        try {
+            addRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Open add modal
 
     // Start:: Open edit modal
     const openEdit = () => {
-        if (selectedCardIndex >= 0) { 
-            cardRefs.current.forEach((item, idx) => {
-                if (selectedCardIndex === idx) {
-                    cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
-                }
-            })
+        try {
+            if (selectedCardIndex >= 0) { 
+                cardRefs.current.forEach((item, idx) => {
+                    if (selectedCardIndex === idx)
+                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
+                });
+            }
+        } catch (err) {
+            console.log(err);
         }
     };
     // End:: Open edit modal
 
     // Start:: Open delete modal
     const openDelete = () => {
-        if (selectedCardIndex >= 0) { 
-            cardRefs.current.forEach((item, idx) => {
-                if (selectedCardIndex === idx)
-                    cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
-            })
+        try {
+            if (selectedCardIndex >= 0) { 
+                cardRefs.current.forEach((item, idx) => {
+                    if (selectedCardIndex === idx)
+                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
+                });
+            }
+        } catch (err) {
+            console.log(err);
         }
     };
     // End:: Open delete modal
 
     // Start:: Close modal
     const close = () => {
-        props.onClose();
+        try {
+            props.onClose();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Close modal
 
     // Start:: on data operation successfully
     const handleSuccess = (operation) => {
-        switch (operation) {
-            case Operation.GuestAdd:
-                toast.success("Guest successfully added");
-                setDataChanged(true);
-                props.onSuccess();
-                break;
+        try {
+            switch (operation) {
+                case Operation.GuestAdd:
+                    toast.success("Guest successfully added");
+                    setDataChanged(true);
+                    props.onSuccess();
+                    break;
 
-            case Operation.GuestMod:
-                toast.success("Guest successfully changed");
-                setDataChanged(true);
-                props.onSuccess();
-                break;
-                    
-            case Operation.Order:
-                toast.success("Item successfully ordered");
-                setDataChanged(true);
-                props.onSuccess();
-                break;               
+                case Operation.GuestMod:
+                    toast.success("Guest successfully changed");
+                    setDataChanged(true);
+                    props.onSuccess();
+                    break;
 
-            case Operation.Despatch:
-                toast.success("Item successfully despatched");
-                setDataChanged(true);
-                props.onSuccess();
-                break;                
+                case Operation.GuestDel:
+                    toast.success("Guest successfully deleted");
+                    setDataChanged(true);
+                    props.onSuccess();
+                    break;               
+                        
+                case Operation.Order:
+                    toast.success("Item successfully ordered");
+                    setDataChanged(true);
+                    props.onSuccess();
+                    break;               
 
-            case Operation.BillGenerate:
-                setDataChanged(true);
-                props.onSuccess();
-                break;                
-                    
-            case Operation.PaymentAdd:
-                toast.success("Payment successfully added");
-                setDataChanged(true);
-                props.onSuccess();
-                break;
+                case Operation.Despatch:
+                    toast.success("Item successfully despatched");
+                    setDataChanged(true);
+                    props.onSuccess();
+                    break;                
 
-            case Operation.Checkout:
-                toast.success("Guest successfully checked out");
-                setDataChanged(true);
-                props.onSuccess();
-                break;
+                case Operation.BillGenerate:
+                    setDataChanged(true);
+                    props.onSuccess();
+                    break;                
+                        
+                case Operation.PaymentAdd:
+                    toast.success("Payment successfully added");
+                    setDataChanged(true);
+                    props.onSuccess();
+                    break;
 
-            case Operation.GuestDel:
-                toast.success("Guest successfully deleted");
-                setDataChanged(true);
-                props.onSuccess();
-                break;               
-                    
-            default:                
-                break;                
+                case Operation.Checkout:
+                    toast.success("Guest successfully checked out");
+                    setDataChanged(true);
+                    props.onSuccess();
+                    break;
+                        
+                default:                
+                    break;                
+            }
+        } catch (err) {
+            console.log(err);
         }
     };
     // End:: on data operation successfully
 
     // Start:: change selection of card element    
     const handleActivated = (index) => {
+        try {
             setSelectedCardIndex(index);
 
             cardRefs.current && cardRefs.current.forEach((item, idx) => {
-                if (index !== idx) {
+                if (index !== idx) 
                     cardRefs.current[idx] && cardRefs.current[idx].handleDeSelect();
-                }
             });
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: change selection of card element    
 
     // Seart:: handle page change
     const handlePaging = (pageNumber) => {
-        cardRefs.current = [itemPerRow];
-        setSelectedPage(pageNumber);
+        try {
+            cardRefs.current = [itemPerRow];
+            setSelectedPage(pageNumber);
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: handle page change
 
@@ -198,70 +226,82 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         let colIdx = 0;
         let rowData = [];
 
-        return pData.map((item) => {
-            rowData.push(item);
-            colIdx++;
+        try {
+            return pData.map((item) => {
+                rowData.push(item);
+                colIdx++;
 
-            if ((rowData.length === itemPerRow) || (pData.length === colIdx)) {
-                const r = rowIdx;
-                const d = rowData;
+                if ((rowData.length === itemPerRow) || (pData.length === colIdx)) {
+                    const r = rowIdx;
+                    const d = rowData;
 
-                rowIdx++;
-                rowData = [];
+                    rowIdx++;
+                    rowData = [];
 
-                return createRow(d, r);
-            } else { 
-                return null;
-            }
-        });
+                    return createRow(d, r);
+                } else { 
+                    return null;
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
     };
 
-    const createRow = ( pData, rowIdx ) => {
-        const rowKey=`row_${rowIdx}`;
+    const createRow = (pData, rowIdx) => {
+        try {
+            const rowKey=`row_${rowIdx}`;
 
-        return (
-            <div className="row" key={rowKey}>
-                {pData.map((item, idx) => {
-                        const itemIdx = (rowIdx * itemPerRow) + idx;
-                        return createCol(item, itemIdx);
-                    })}
-            </div>)
+            return (
+                <Row key={rowKey}>
+                    {
+                        pData.map((item, idx) => {
+                            const itemIdx = (rowIdx * itemPerRow) + idx;
+                            return createCol(item, itemIdx);
+                        })
+                    }
+                </Row>);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
-    const createCol = (pData = undefined, itemIdx) => {
-        const colKey = `col_${pData.id}`;
+    const createCol = (pData = undefined, itemIdx) => {   
+        try {
+            const colKey = `col_${pData.id}`;
 
-        return (
-            <div className="col-sm-6 col-md-4 col-xl-4" key={colKey}>
-                <Card className="border"
-                    ref={(el) => cardRefs.current[itemIdx] = el}
-                    pIndex={itemIdx}
-                    pGuestId={pData.id} 
-                    pTransactionId={pData.transactionId}
-                    pTableTransactionId={pData.tableTransactionId}
-                    pServiceTransactionId={pData.serviceTransactionId}
-                    pName={pData.name}
-                    pMobile={pData.mobile}
-                    pGuestCount={pData.guestCount}
-                    pCorporateName={pData.corporateName}
-                    pCorporateAddress={pData.corporateAddress}
-                    pGstNo={pData.gstNo}
-                    pTables={pData.tables}
-                    pTotalExpense={pData.totalExpense}
-                    pTotalBalance={pData.totalBalance ? pData.totalBalance * -1 : pData.totalBalance}
-                    pIndate={pData.inDate}
-                    pInTime={pData.inTime}
-                    pOption={pData.option}
-                    onEdited={() => {handleSuccess(Operation.GuestMod)}}
-                    onOrdered={() => {handleSuccess(Operation.Order)}}
-                    onDespatched={() => {handleSuccess(Operation.Despatch)}}
-                    onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
-                    onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
-                    onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
-                    onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
-                    onClosed={close} 
-                    onActivated={handleActivated}/>                
-            </div>)
+            return (
+                <Col xl={4} md={4} key={colKey}>
+                    {
+                        (pData.option === "M") &&
+                            <CardMiscellaneous className = "border"
+                                ref = {(el) => cardRefs.current[itemIdx] = el}
+                                pIndex = {itemIdx}
+                                pGuestId = {pData.id} 
+                                pName = {pData.name}
+                                pMobile = {pData.mobile}
+                                pGuestCount = {pData.guestCount}
+                                pCorporateName = {pData.corporateName}
+                                pCorporateAddress = {pData.corporateAddress}
+                                pGstNo = {pData.gstNo}
+                                pBalance = {pData.balance}
+                                pOption = {pData.option}
+                                pIndate = {pData.inDate}
+                                pInTime = {pData.inTime}
+                                onEdited = {() => {handleSuccess(Operation.GuestMod)}}
+                                onDeleted = {() => {handleSuccess(Operation.GuestDel)}}
+                                onOrdered = {() => {handleSuccess(Operation.Order)}}
+                                onDespatched = {() => {handleSuccess(Operation.Despatch)}}
+                                onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
+                                onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
+                                onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
+                                onClosed = {close} 
+                                onActivated = {handleActivated} />                
+                    }
+                </Col>);
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: show all data in card format
 
@@ -327,10 +367,10 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                                     {!loading && 
                                             data && 
                                                 <Paging
-                                                    itemPerPage={itemPerPage}
-                                                    totalItem={data.length}
-                                                    selectedPage={selectedPage}
-                                                    onPaging={handlePaging}/>}
+                                                    itemPerPage = {itemPerPage}
+                                                    totalItem = {data.length}
+                                                    selectedPage = {selectedPage}
+                                                    onPaging = {handlePaging} />}
                                 </div>
                                 {/* End :: Pagination */}
                             </div>
@@ -344,9 +384,9 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
             {/* Start :: add component */}
             <Add 
-                ref={addRef}   
-                onAdded={() => {handleSuccess(Operation.GuestAdd)}}
-                onClosed={close}/>
+                ref = {addRef}   
+                onAdded = {() => {handleSuccess(Operation.GuestAdd)}}
+                onClosed = {close} />
             {/* End :: add component */}
 
         </div>

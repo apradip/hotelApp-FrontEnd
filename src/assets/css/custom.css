@@ -152,3 +152,10 @@ label:not(.form-check-label):not(.custom-file-label) {
 .ag-row-delivery {
   background-color: rgb(206, 247, 175) !important;
 }
+
+.paid {
+  background-image: url("../img/photos/paid.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: right center;
+}

@@ -86,9 +86,9 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 
                 {/* Close button */}
                 <NavLink 
-                    className="nav-icon" href="#" 
-                    onClick={handleClose}>
-                    <i className="align-middle"><X/></i>
+                    className = "nav-icon" href = "#" 
+                    onClick = {handleClose}>
+                    <i className = "align-middle"><X/></i>
                 </NavLink>
             </Modal.Header>
             {/* End:: Modal header */}
@@ -100,87 +100,87 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 <Row>
 
                     {/* Start:: Column name */}
-                    <Col sx={12} md={4} className="mb-3">
+                    <Col sx = {12} md = {4} className = "mb-3">
 
                         {/* Label element */}
-                        <label className="col-12 form-label" 
-                            htmlFor={"keyInputName"}><b>Name</b></label>
+                        <label className = "col-12 form-label" 
+                            htmlFor = {"keyInputName"}><b>Name</b></label>
 
-                        <div className="col-12">
+                        <div className = "col-12">
                             {/* Input element text*/}
                             <input 
-                                type="text" 
-                                name="keyInputName"
-                                placeholder="Name"
-                                className="form-control"
-                                autoComplete="off"
-                                maxLength={100}
-                                disabled={loading} 
-                                value={values.keyInputName} 
-                                onChange={handleChange}/>
+                                type = "text" 
+                                name = "keyInputName"
+                                placeholder = "Name"
+                                className = "form-control"
+                                autoComplete = "off"
+                                maxLength = {100}
+                                disabled = {loading} 
+                                value = {values.keyInputName} 
+                                onChange = {handleChange} />
 
                             {/* Validation message */}
                             {errors.keyInputName && 
                                 touched.keyInputName ? 
-                                    (<small className="text-danger">{errors.keyInputName}</small>) : 
+                                    (<small className = "text-danger">{errors.keyInputName}</small>) : 
                                         null}
                         </div>
                     </Col>
                     {/* End:: Column name */}
 
                     {/* Start:: Column mobile */}
-                    <Col sx={12} md={4} className="mb-3">
+                    <Col sx = {12} md = {4} className = "mb-3">
 
                         {/* Label element */}
-                        <label className="col-12 form-label" 
-                            htmlFor={"keyInputMobile"}><b>Mobile no.</b></label>
+                        <label className = "col-12 form-label" 
+                            htmlFor = {"keyInputMobile"}><b>Mobile no.</b></label>
 
-                        <div className="col-12">
+                        <div className = "col-12">
                             {/* Input element text*/}
                             <input 
-                                type="text" 
-                                name="keyInputMobile"
-                                placeholder="Mobile no."
-                                className="form-control"
-                                autoComplete="off"
-                                maxLength={100}
-                                disabled={loading} 
-                                value={values.keyInputMobile} 
-                                onChange={handleChange}/>
+                                type = "text" 
+                                name = "keyInputMobile"
+                                placeholder = "Mobile no."
+                                className = "form-control"
+                                autoComplete = "off"
+                                maxLength = {100}
+                                disabled = {loading} 
+                                value = {values.keyInputMobile} 
+                                onChange = {handleChange} />
 
                             {/* Validation message */}
                             {errors.keyInputMobile && 
                                 touched.keyInputMobile ? 
-                                    (<small className="text-danger">{errors.keyInputMobile}</small>) : 
+                                    (<small className = "text-danger">{errors.keyInputMobile}</small>) : 
                                         null}
                         </div>                    
                     </Col>
                     {/* End:: Column mobile */}
 
                     {/* Start:: Column no of guest */}
-                    <Col sx={12} md={4} className="mb-3">
+                    <Col sx = {12} md = {4} className = "mb-3">
 
                         {/* Label element */}
-                        <label className="col-12 form-label" 
-                            htmlFor={"keyInputGuestCount"}><b>Guest count</b></label>
+                        <label className = "col-12 form-label" 
+                            htmlFor = {"keyInputGuestCount"}><b>Guest count</b></label>
 
-                        <div className="col-12">
+                        <div className = "col-12">
                             {/* Input element text*/}
                             <input 
-                                type="text" 
-                                name="keyInputGuestCount"
-                                placeholder="Guest count"
-                                className="form-control"
-                                autoComplete="off"
-                                maxLength={2}
-                                disabled={loading} 
-                                value={values.keyInputGuestCount} 
-                                onChange={handleChange}/>
+                                type = "text" 
+                                name = "keyInputGuestCount"
+                                placeholder = "Guest count"
+                                className = "form-control"
+                                autoComplete = "off"
+                                maxLength = {2}
+                                disabled = {loading} 
+                                value = {values.keyInputGuestCount} 
+                                onChange = {handleChange} />
 
                             {/* Validation message */}
                             {errors.keyInputGuestCount && 
                                 touched.keyInputGuestCount ? 
-                                    (<small className="text-danger">{errors.keyInputGuestCount}</small>) : 
+                                    (<small className = "text-danger">{errors.keyInputGuestCount}</small>) : 
                                         null}
                         </div>                                                        
                     </Col>
@@ -193,88 +193,88 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 <Row>
 
                     {/* Start:: Column corporate name */}
-                    <Col sx={12} md={4} className="mb-3">
+                    <Col sx = {12} md = {4} className = "mb-3">
 
                         {/* Label element */}
-                        <label className="col-12 form-label" 
-                            htmlFor={"keyInputCorporateName"}><b>Corporate name</b></label>
+                        <label className = "col-12 form-label" 
+                            htmlFor = {"keyInputCorporateName"}><b>Corporate name</b></label>
 
-                        <div className="col-12">
+                        <div className = "col-12">
 
                             {/* Input element text*/}
                             <input 
-                                type="text" 
-                                name="keyInputCorporateName"
-                                placeholder="Corporate name"
-                                className="form-control"
-                                autoComplete="off"
-                                maxLength={100}
-                                disabled={loading} 
-                                value={values.keyInputCorporateName} 
-                                onChange={handleChange}/>
+                                type = "text" 
+                                name = "keyInputCorporateName"
+                                placeholder = "Corporate name"
+                                className = "form-control"
+                                autoComplete = "off"
+                                maxLength = {100}
+                                disabled = {loading} 
+                                value = {values.keyInputCorporateName} 
+                                onChange = {handleChange} />
 
                             {/* Validation message */}
                             {errors.keyInputCorporateName && 
                                 touched.keyInputCorporateName ? 
-                                    (<small className="text-danger">{errors.keyInputCorporateName}</small>) : 
+                                    (<small className = "text-danger">{errors.keyInputCorporateName}</small>) : 
                                         null}
                         </div>    
                     </Col>
                     {/* End:: Column corporate name */}
 
                     {/* Start:: Column coroprate address */}
-                    <Col sx={12} md={4} className="mb-3">
+                    <Col sx = {12} md = {4} className = "mb-3">
 
                         {/* Label element */}
-                        <label className="col-12 form-label" 
-                            htmlFor={"keyInputCorporateAddress"}><b>Corporate address</b></label>
+                        <label className = "col-12 form-label" 
+                            htmlFor = {"keyInputCorporateAddress"}><b>Corporate address</b></label>
 
-                        <div className="col-12">
+                        <div className = "col-12">
                             {/* Input element text*/}
                             <input 
-                                type="text" 
-                                name="keyInputCorporateAddress"
-                                placeholder="Corporate address"
-                                className="form-control"
-                                autoComplete="off"
-                                maxLength={100}
-                                disabled={loading} 
-                                value={values.keyInputCorporateAddress} 
-                                onChange={handleChange}/>
+                                type = "text" 
+                                name = "keyInputCorporateAddress"
+                                placeholder = "Corporate address"
+                                className = "form-control"
+                                autoComplete = "off"
+                                maxLength = {100}
+                                disabled = {loading} 
+                                value = {values.keyInputCorporateAddress} 
+                                onChange = {handleChange} />
 
                             {/* Validation message */}
                             {errors.keyInputCorporateAddress && 
                                 touched.keyInputCorporateAddress ? 
-                                    (<small className="text-danger">{errors.keyInputCorporateAddress}</small>) : 
+                                    (<small className = "text-danger">{errors.keyInputCorporateAddress}</small>) : 
                                         null}
                         </div>                            
                     </Col>
                     {/* End:: Column coroprate address */}
 
                     {/* Start:: Column gst no */}
-                    <Col sx={12} md={4} className="mb-3">
+                    <Col sx = {12} md = {4} className = "mb-3">
 
                         {/* Label element */}
-                        <label className="col-12 form-label" 
-                            htmlFor={"keyInputGST"}><b>GST no.</b></label>
+                        <label className = "col-12 form-label" 
+                            htmlFor = {"keyInputGST"}><b>GST no.</b></label>
 
-                        <div className="col-12">
+                        <div className = "col-12">
                             {/* Input element select*/}
                             <input 
-                                type="text" 
-                                name="keyInputGST"
-                                placeholder="GST no."
-                                className="form-control"
-                                autoComplete="off"
-                                maxLength={100}
-                                disabled={loading} 
-                                value={values.keyInputGST} 
-                                onChange={handleChange}/>
+                                type = "text" 
+                                name = "keyInputGST"
+                                placeholder = "GST no."
+                                className = "form-control"
+                                autoComplete = "off"
+                                maxLength = {100}
+                                disabled = {loading} 
+                                value = {values.keyInputGST} 
+                                onChange = {handleChange} />
 
                             {/* Validation message */}
                             {errors.keyInputGST && 
                                 touched.keyInputGST ? 
-                                    (<small className="text-danger">{errors.keyInputGST}</small>) : 
+                                    (<small className = "text-danger">{errors.keyInputGST}</small>) : 
                                         null}
                         </div>                        
                     </Col>
@@ -291,25 +291,25 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                 {/* Start:: Close button */}
                 <button
-                    type="button"
-                    className="btn btn-danger"
-                    disabled={loading}
-                    onClick={handleClose}>
-                    Close
+                    type = "button"
+                    className = "btn btn-danger"
+                    disabled = {loading}
+                    onClick = {handleClose}>
+                    Close 
                 </button>
                 {/* End:: Close button */}
                 
                 {/* Start:: Save button */}
                 <button 
-                    type="button"
-                    className="btn btn-success"
-                    disabled={loading} 
-                    onClick={handleSubmit}>
+                    type = "button"
+                    className = "btn btn-success"
+                    disabled = {loading} 
+                    onClick = {handleSubmit} >
 
                     {!loading && "Confirm"}
                     {loading && 
                                 <>
-                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <span className = "spinner-border spinner-border-sm" role = "status" aria-hidden = "true"></span>
                                     Working
                                 </>}
                 </button>
@@ -334,7 +334,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
 // useImperativeHandle
 // handleShowModal
-const GuestMiscellaneousEdit = forwardRef((props, ref) => {    
+const GuestTableEdit = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -395,7 +395,7 @@ const GuestMiscellaneousEdit = forwardRef((props, ref) => {
             } catch (err) {
                 console.log("Error occured when fetching data");
             }
-        })();
+            })()
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
         
@@ -428,4 +428,4 @@ const GuestMiscellaneousEdit = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestMiscellaneousEdit;
+export default GuestTableEdit;

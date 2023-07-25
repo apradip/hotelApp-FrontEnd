@@ -1,11 +1,11 @@
-import React, {useState, useCallback, useRef, useMemo} from "react"
-import {AgGridReact} from "ag-grid-react"
+import React, { useState, useCallback, useRef, useMemo } from "react";
+import { AgGridReact } from "ag-grid-react";
 
-import "ag-grid-community/styles/ag-grid.css" // Core grid CSS, always needed
-import "ag-grid-community/styles/ag-theme-alpine.css" // Optional theme CSS
+import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
+import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const TableDespatchGrid = ({pDefaultRowData, onChange}) => {    
-    const gridRef = useRef()
+    const gridRef = useRef();
 
     const defaultColDef = useMemo(() => {
         return {
@@ -16,8 +16,8 @@ const TableDespatchGrid = ({pDefaultRowData, onChange}) => {
           filter: false,
           hide: true,
           suppressSizeToFit: true,
-        }
-    }, [])
+        };
+    }, []);
 
     const [columnDefs] = useState([
         {
@@ -52,11 +52,11 @@ const TableDespatchGrid = ({pDefaultRowData, onChange}) => {
         {
             field: "itemTransactionId"
         }
-    ])
+    ]);
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
-        let row = []
+        let row = [];
         
         pDefaultRowData.forEach(element => {
             const object = {
@@ -67,41 +67,41 @@ const TableDespatchGrid = ({pDefaultRowData, onChange}) => {
                             itemTransactionId: element.itemTransactionId
                         }
     
-            row.push(object)
+            row.push(object);
         });
 
-        gridRef.current.api.setRowData(row)
-        gridRef.current.api.refreshCells()
-        gridRef.current.api.redrawRows()
+        gridRef.current.api.setRowData(row);
+        gridRef.current.api.refreshCells();
+        gridRef.current.api.redrawRows();
 
-        params.api.sizeColumnsToFit()
+        params.api.sizeColumnsToFit();
 
         window.addEventListener("resize", function () {
-            setTimeout(function () {params.api.sizeColumnsToFit()})
-        })
+            setTimeout(function () {params.api.sizeColumnsToFit();});
+        });
 
-        gridRef.current.api.sizeColumnsToFit()
-    }
+        gridRef.current.api.sizeColumnsToFit();
+    };
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = () => {
-        gridRef.current.api.refreshCells()
-        gridRef.current.api.redrawRows()
-        gridRef.current.api.sizeColumnsToFit()
-    }
+        gridRef.current.api.refreshCells();
+        gridRef.current.api.redrawRows();
+        gridRef.current.api.sizeColumnsToFit();
+    };
     // End:: load empty data to grid
 
     function isFirstColumn(params) {
-        var displayedColumns = params.columnApi.getAllDisplayedColumns()
-        var thisIsFirstColumn = displayedColumns[0] === params.column
-        return thisIsFirstColumn
-    }    
+        var displayedColumns = params.columnApi.getAllDisplayedColumns();
+        var thisIsFirstColumn = displayedColumns[0] === params.column;
+        return thisIsFirstColumn;
+    };   
 
     const onSelectionChanged = useCallback(() => {
-        const dataRows = gridRef.current.api.getSelectedRows()
-        onChange(dataRows)
-    }, [])
+        const dataRows = gridRef.current.api.getSelectedRows();
+        onChange(dataRows);
+    }, []);
 
     
 	return (
@@ -116,7 +116,7 @@ const TableDespatchGrid = ({pDefaultRowData, onChange}) => {
                 onFirstDataRendered={handleFirstDataRendered}
                 onSelectionChanged={onSelectionChanged}/>
         </div>
-    )
-}
+    );
+};
  
-export default TableDespatchGrid
+export default TableDespatchGrid;

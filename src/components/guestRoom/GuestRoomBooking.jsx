@@ -1,20 +1,22 @@
-import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink} from "react-bootstrap";
-import {useFormik} from "formik";
-import {toast} from "react-toastify";
-import {X} from "react-feather";
-import {subStr} from "../common/Common";
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink, Row, Col } from "react-bootstrap";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { X } from "react-feather";
+import { subStr } from "../common/Common";
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
 import BookingGrid from "./RoomBookingGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
+const Form = ({pGuestId, pName, pMobile, pGuestCount, 
                 pDayCount, pPlan, pBookingAgent, 
-                pCorporateName, pCorporateAddress, pData, 
+                pCorporateName, pCorporateAddress, pTransactionId, 
+                pData, 
+                pShow, 
                 onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
@@ -92,13 +94,18 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
         // validationSchema: guestRoomTransactionSchema,
         validateOnChange,
         onSubmit: async () => {
-            bookingData && await doInsert({bookings: bookingData});
+            try {
+                bookingData && await doInsert({bookings: bookingData});
         
-            if (error === null) {
-                resetForm();
-                onSubmited();
-            } else {
-                toast.error(error);
+                if (error === null) {
+                    resetForm();
+                    onSubmited();
+                } else {
+                    toast.error(error);
+                }
+            } catch (err) {
+                console.log(err);
+                toast.error(err);
             }
         }
     });
@@ -114,100 +121,115 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
 
     // Start:: Html
     return (
-        <form>
+        <Modal size="lg"
+            show = {pShow}>
+
+            {/* Start:: Modal header */}
+            <Modal.Header>
+                {/* Header text */}
+                <Modal.Title>Booking</Modal.Title>
+                
+                {/* Close button */}
+                <NavLink 
+                    className="nav-icon" href="#" 
+                    onClick={onClosed}>
+                    <i className = "align-middle"><X/></i>
+                </NavLink>
+            </Modal.Header>
+            {/* End:: Modal header */}
 
             {/* Start:: Modal body */}
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        <Col sx = {12} md = {5} className="mb-3">
                             <label className="col-12 form-label"><b>Company</b></label>
                             <label className="col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
-                        </div>
+                        </Col>
                     :
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        <Col sx = {12} md = {5} className="mb-3">
                             <label className="col-12 form-label"><b>Name</b></label>
                             <label className="col-12 text-muted">{subStr(pName, 30)}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        <Col sx = {12} md = {5} className="mb-3">
                             <label className="col-12 form-label"><b>Address</b></label>
                             <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
-                        </div>
+                        </Col>
                     :
-                        <div className="col-sx-12 col-md-5 mb-3">
+                        <Col sx = {12} md = {5} className="mb-3">
                             <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column guest count */}
-                    <div className="col-sx-12 col-md-2 mb-3">
+                    <Col sx = {12} md = {2} className="mb-3">
                         <label className="col-12 form-label"><b>Guest count</b></label>
                         <label className="col-12 text-muted">{pGuestCount} No.</label>
-                    </div>
+                    </Col>
                     {/* End:: Column guest count */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column day count */}
-                    <div className="col-sx-12 col-md-5 mb-3">
+                    <Col sx = {12} md = {5} className="mb-3">
                         <label className="col-12 form-label"><b>Day count</b></label>
                         <label className="col-12 text-muted">{pDayCount} day(s)</label>
-                    </div>
+                    </Col>
                     {/* End:: Column day count */}
 
                     {/* Start:: Column plan */}
-                    <div className="col-sx-12 col-md-5 mb-3">
+                    <Col sx = {12} md = {5} className="mb-3">
                         <label className="col-12 form-label"><b>Plan</b></label>
                         <label className="col-12 text-muted">{pPlan}</label>
-                    </div>
+                    </Col>
                     {/* End:: Column plan */}
 
                     {/* Start:: Column agent */}
-                    <div className="col-sx-12 col-md-2 mb-3">
+                    <Col sx = {12} md = {2} className="mb-3">
                         <label className="col-12 form-label"><b>Agent</b></label>
                         <label className="col-12 text-muted">{pBookingAgent}</label>
-                    </div>
+                    </Col>
                     {/* End:: Column agent */}
 
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column service detail */}
-                    <div className="col-12">
+                    <Col sx = {12} md = {12}>
 
                         {/* Label element */}
                         <label className="col-12 form-label"><b>Rooms</b></label>
 
                         {/* Start:: Column service detail */}
                         <BookingGrid
-                            pState="MOD"
-                            pData={pData}
-                            onChange={handelChangeData}/>
+                            pState = "MOD"
+                            pData = {pData}
+                            onChange = {handelChangeData} />
                         {/* End:: Column service detail */}
 
-                    </div>                
+                    </Col>                
                     {/* End:: Column service detail */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
             </Modal.Body>
@@ -244,8 +266,7 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
 
             </Modal.Footer>
             {/* End:: Modal footer */}
-
-        </form> 
+        </Modal>
     );
     // End:: Html
 
@@ -273,9 +294,7 @@ const GuestRoomBooking = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pGuestId}`,
-        params: {
-            option: "N"
-        }
+        params: {option: "N"}
     });
 
     // Start:: Show modal
@@ -306,19 +325,20 @@ const GuestRoomBooking = forwardRef((props, ref) => {
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal();
-        })
-
-        return () => {document.removeEventListener("keydown", handleCloseModal);}
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            showModal && await doFetch();
-          })();
+            try {
+                showModal && await doFetch();
+            } catch (err) {
+                console.log("Error occured when fetching data");
+            }
+        })();
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
@@ -327,41 +347,21 @@ const GuestRoomBooking = forwardRef((props, ref) => {
         <>
             {/* Start:: Edit modal */}
             {data &&
-                <Modal size="lg"
-                    show={showModal}>
-
-                    {/* Start:: Modal header */}
-                    <Modal.Header>
-                        {/* Header text */}
-                        <Modal.Title>Booking</Modal.Title>
-                        
-                        {/* Close button */}
-                        <NavLink 
-                            className="nav-icon" href="#" 
-                            onClick={handleCloseModal}>
-                            <i className = "align-middle"><X/></i>
-                        </NavLink>
-                    </Modal.Header>
-                    {/* End:: Modal header */}
-
-                    {/* Start:: Form component */}
-                    <Form 
-                        pGuestId={props.pGuestId}
-                        pTransactionId={props.pTransactionId}
-                        pName={props.pName}
-                        pMobile={props.pMobile}
-                        pGuestCount={props.pGuestCount}
-                        pCorporateName={props.pCorporateName}
-                        pCorporateAddress={props.pCorporateAddress}
-                        pDayCount={props.pDayCount}
-                        pPlan={props.pPlan}
-                        pBookingAgent={props.pBookingAgent}
-                        pData={data}
-                        onSubmited={handleSave} 
-                        onClosed={handleCloseModal}/>
-                        {/* End:: Form component */}
-                    
-                </Modal>}
+                <Form 
+                    pGuestId = {props.pGuestId}
+                    pName = {data.name}
+                    pMobile = {data.mobile}
+                    pGuestCount = {data.guestCount}
+                    pCorporateName = {data.corporateName}
+                    pCorporateAddress = {data.corporateAddress}
+                    pDayCount = {data.dayCount}
+                    pPlan = {data.plan}
+                    pBookingAgent = {data.bookingAgent}
+                    pTransactionId = {data.transactionId}
+                    pData = {data.rooms}
+                    pShow = {showModal}
+                    onSubmited = {handleSave} 
+                    onClosed = {handleCloseModal} />}
             {/* End:: Edit modal */}
         </>
     );

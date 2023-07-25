@@ -1,23 +1,24 @@
-import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react"
-import {Modal, NavLink, Row, Col} from "react-bootstrap"
-import {useFormik} from "formik"
-import {toast} from "react-toastify"
-import {X} from "react-feather"
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink, Row, Col } from "react-bootstrap";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { X } from "react-feather";
 
-import {HotelId} from "../../App"
-import {useStateContext} from "../../contexts/ContextProvider"
-import {guestSmallSchema} from "../../schemas"
-import useFetchWithAuth from "../common/useFetchWithAuth"
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { guestSmallSchema } from "../../schemas";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({onSubmited, onClosed}) => {
-    const hotelId = useContext(HotelId)
-    const contextValues = useStateContext()
-    const [validateOnChange, setValidateOnChange] = useState(false)
+const Form = ({pShow, 
+                onSubmited, onClosed}) => {
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+    const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doInsert} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}`
-    })
+    });
 
     // Start:: Form validate and save data
     const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
@@ -32,39 +33,63 @@ const Form = ({onSubmited, onClosed}) => {
         validationSchema: guestSmallSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            const payload = {   
-                option: "M",
-                name: values.keyInputName.toUpperCase(), 
-                mobile: parseInt(values.keyInputMobile),
-                guestCount: parseInt(values.keyInputGuestCount),
-                corporateName: values.keyInputCorporateName ? values.keyInputCorporateName.toUpperCase() : "",
-                corporateAddress: values.keyInputCorporateAddress ? values.keyInputCorporateAddress.toUpperCase() : "",
-                gstNo: values.keyInputGST ? values.keyInputGST.toUpperCase() : ""
-            }
+            try {
+                const payload = {   
+                    option: "M",
+                    name: values.keyInputName.toUpperCase(), 
+                    mobile: parseInt(values.keyInputMobile),
+                    guestCount: parseInt(values.keyInputGuestCount),
+                    corporateName: values.keyInputCorporateName ? values.keyInputCorporateName.toUpperCase() : "",
+                    corporateAddress: values.keyInputCorporateAddress ? values.keyInputCorporateAddress.toUpperCase() : "",
+                    gstNo: values.keyInputGST ? values.keyInputGST.toUpperCase() : ""
+                };
 
-            await doInsert(payload)
+                await doInsert(payload);
         
-            if (error === null) {
-                resetForm()
-                onSubmited()
-            } else {
-                toast.error(error)
+                if (error === null) {
+                    resetForm();
+                    onSubmited();
+                } else {
+                    toast.error(error);
+                }
+            } catch (err) {
+                console.log(err);
+                toast.error(err);
             }
         }
-    })
+    });
     // End:: Form validate and save data
 
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false)
-        resetForm()
-        onClosed()
-    }
+        try {
+            setValidateOnChange(false);
+            resetForm();
+            onClosed();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: close form    
     
     // Start:: Html
     return (
-        <form>
+        <Modal size="lg"
+            show = {pShow}>
+
+            {/* Start:: Modal header */}
+            <Modal.Header>
+                {/* Header text */}
+                <Modal.Title>New</Modal.Title>
+
+                {/* Close button */}
+                <NavLink className = "nav-icon" 
+                    href = "#" 
+                    onClick = {handleClose}>
+                    <i className="align-middle"><X/></i>
+                </NavLink>
+            </Modal.Header>
+            {/* End:: Modal header */}
 
             {/* Start:: Modal body */}
             <Modal.Body>
@@ -253,26 +278,25 @@ const Form = ({onSubmited, onClosed}) => {
             </Modal.Body>
             {/* End:: Modal body */}
 
-
             {/* Start:: Modal footer */}
             <Modal.Footer>
                 
                 {/* Start:: Close button */}
                 <button 
-                    type="button"
-                    className="btn btn-danger"
-                    disabled={loading}
-                    onClick={handleClose}>
+                    type = "button"
+                    className = "btn btn-danger"
+                    disabled = {loading}
+                    onClick = {handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
 
                 {/* Start:: Save button */}
                 <button 
-                    type="button"
-                    className="btn btn-success"
-                    disabled={loading} 
-                    onClick={handleSubmit}>
+                    type = "button"
+                    className = "btn btn-success"
+                    disabled = {loading} 
+                    onClick = {handleSubmit}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -286,11 +310,11 @@ const Form = ({onSubmited, onClosed}) => {
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </form>
-    )
+        </Modal>
+    );
     // End:: Html
 
-}
+};
 // End:: form
 
 
@@ -302,77 +326,68 @@ const Form = ({onSubmited, onClosed}) => {
 // useImperativeHandle
 // handleShowModal
 const GuestMiscellaneousAdd = forwardRef((props, ref) => {
-    const [showModal, setShowModal] = useState(false)
+    const [showModal, setShowModal] = useState(false);
 
     // Start:: Show modal
     const handleShowModal = () => {
-        setShowModal(true)
-    }
+        try {
+            setShowModal(true);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: Show modal
 
     // Start:: Close modal
     const handleCloseModal = () => {
-        setShowModal(false)
-        props.onClosed()
-    }
+        try {
+            setShowModal(false);
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: Close modal
     
     // Start:: Save
     const handleSave = () => {
-        props.onAdded()
-        setShowModal(false)
-    }
+        try {
+            props.onAdded();
+            setShowModal(false);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: Save
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    })
+        return {handleShowModal};
+    });
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal();
-        })
-
-        return () => {document.removeEventListener("keydown", handleCloseModal);}
-    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
     // Start:: Html
     return (
         <>
-            {/* Start:: Add modal */}
-            <Modal size="lg"
-                show={showModal}>
-
-                {/* Start:: Modal header */}
-                <Modal.Header>
-                    {/* Header text */}
-                    <Modal.Title>New</Modal.Title>
-
-                    {/* Close button */}
-                    <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>
-                        <i className="align-middle"><X/></i>
-                    </NavLink>
-                </Modal.Header>
-                {/* End:: Modal header */}
-
-                {/* Start:: Form component */}
-                <Form
-                    onSubmited={handleSave} 
-                    onClosed={handleCloseModal}/>
-                {/* End:: Form component */}
-
-            </Modal>
-            {/* End:: Add modal */}
+            {/* Start:: Form component */}
+            <Form
+                pShow = {showModal}
+                onSubmited = {handleSave} 
+                onClosed = {handleCloseModal} />
+            {/* End:: Form component */}
         </>            
-    )
+    );
     // End:: Html
 
-})
+});
 // End:: Component
 
 
-export default GuestMiscellaneousAdd
+export default GuestMiscellaneousAdd;

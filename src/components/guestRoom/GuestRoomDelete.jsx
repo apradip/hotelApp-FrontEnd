@@ -1,36 +1,59 @@
-import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink} from "react-bootstrap";
-import {toast} from "react-toastify";
-import {X} from "react-feather";
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { X } from "react-feather";
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
+import ErrorModal from "../ErrorModal";
 
 
 // Start:: form
-const Form = ({pId, pName, onSubmited, onClosed}) => {
+const Form = ({pGuestId, pName, 
+                pShow,
+                onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const inputRef = useRef(null);
-    const { loading, error, doDelete } = useFetchWithAuth({
-        url: `${contextValues.guestRoomAPI}/${hotelId}/${pId}`
+    const {loading, error, doDelete} = useFetchWithAuth({
+        url: `${contextValues.guestAPI}/${hotelId}/${pGuestId}`
     });
 
     // Start:: Call delete api
     const handleSave = async () => {
-        await doDelete();
-        error === null ? onSubmited() : toast.error(error);
+        try {
+            await doDelete();
+            error === null ? onSubmited() : toast.error(error);
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Call delete api
 
     // Start:: Html
     return (
-        <form>
+        <Modal 
+            size = "sm"
+            show = {pShow}>
+
+            {/* Start:: Modal header */}
+            <Modal.Header>
+                {/* Header text */}
+                <Modal.Title>Delete</Modal.Title>
+
+                {/* Close button */}
+                <NavLink 
+                    className = "nav-icon" href = "#" 
+                    onClick = {onClosed} >
+                    <i className="align-middle"><X/></i>
+                </NavLink>
+            </Modal.Header>
+            {/* End:: Modal header */}
 
             {/* Start:: Modal body */}
             <Modal.Body>
-                <label className="form-label">Are you really want to remove <mark><code>{ pName }</code></mark> ?</label>
+                <label className="form-label">Are you really want to delete <mark><code>{pName}</code></mark> ?</label>
             </Modal.Body>
             {/* End:: Modal body */}
 
@@ -39,22 +62,22 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
 
                 {/* Start:: Close button */}
                 <button 
-                    type="button"   
-                    className="btn btn-danger"
                     autoFocus
-                    disabled={loading}
-                    ref={inputRef} 
-                    onClick={onClosed}>
+                    type = "button"   
+                    className = "btn btn-danger"
+                    disabled = {loading}
+                    ref = {inputRef} 
+                    onClick = {onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
 
                 {/* Start:: Save button */}
                 <button 
-                    type="button"
-                    className="btn btn-success"
-                    disabled={loading || error}
-                    onClick={handleSave}>
+                    type = "button"
+                    className = "btn btn-success"
+                    disabled = {loading || error}
+                    onClick = {handleSave}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -68,7 +91,7 @@ const Form = ({pId, pName, onSubmited, onClosed}) => {
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </form>                    
+        </Modal>
     );
     // End:: Html
 
@@ -88,45 +111,53 @@ const GuestRoomDelete = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
+    const modalErrorRef = useRef(null);
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pId}`
-    });
+        url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
+    });     //get guest details
 
     // Start :: Show modal 
     const handleShowModal = () => {
-        setShowModal(true);
+        try {
+            setShowModal(true);
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End :: Show modal 
 
     // Start :: Close modal 
     const handleCloseModal = () => {
-        setShowModal(false);
-        props.onClosed();
+        try {
+            setShowModal(false);
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End :: Close modal 
 
     // Start :: Save 
     const handleSave = () => {
-        setShowModal(false);
-        props.onDeleted(); 
+        try {
+            setShowModal(false);
+            props.onDeleted();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End :: Save 
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal}
+        return {handleShowModal};
     });
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal();
-        });
-
-        return () => {
-            document.removeEventListener("keydown", handleCloseModal);
-        }
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
@@ -143,40 +174,44 @@ const GuestRoomDelete = forwardRef((props, ref) => {
     // End:: fetch id wise detail from api
 
     useEffect(() => {
-        error && toast.error(error);
+        try {
+            error && toast.error(error);
+            data && 
+                    (data.balance !== 0 || 
+                    data.roomsDetail.length !== 0 ||
+                    data.tablesDetail.length !== 0 ||
+                    data.miscellaneaDetail.length !== 0 ||
+                    data.servicesDetail.length !== 0 ||
+                    data.expensesPaymentsDetail.length !== 0) && 
+                        modalErrorRef && 
+                            modalErrorRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     }, [data, error, loading]);
 
     // Start:: Html
     return (
         <>
+            <ErrorModal 
+                ref = {modalErrorRef}
+                message = {<span>Guest <mark><code>{props.pName}</code></mark>can't be deleted, because there is some activity.</span>}
+                onClosed = {handleCloseModal} />                        
+
             {/* Start:: Delete modal */}
-            {data &&
-                <Modal 
-                    size="sm"
-                    show={showModal}>
-
-                    {/* Start:: Modal header */}
-                    <Modal.Header>
-                        {/* Header text */}
-                        <Modal.Title>Delete guest room</Modal.Title>
-
-                        {/* Close button */}
-                        <NavLink 
-                            className="nav-icon" href="#" 
-                            onClick={handleCloseModal}>
-                            <i className="align-middle"><X/></i>
-                        </NavLink>
-                    </Modal.Header>
-                    {/* End:: Modal header */}
-
-                    {/* Start:: Form component */}
+            {data && 
+                (data.balance === 0 && 
+                data.roomsDetail.length === 0 && 
+                data.tablesDetail.length === 0 && 
+                data.miscellaneaDetail.length === 0 && 
+                data.servicesDetail.length === 0 && 
+                data.expensesPaymentsDetail.length === 0) && 
                     <Form 
-                        pId={props.pId} 
-                        pName={data.roomNos}
-                        onSubmited={handleSave} 
-                        onClosed={handleCloseModal}/>
-                        {/* End:: Form component */}
-            </Modal>}
+                        pGuestId = {props.pGuestId} 
+                        pName = {props.pName}
+                        pShow = {showModal}
+                        onSubmited = {handleSave} 
+                        onClosed = {handleCloseModal}/> }
             {/* End:: Delete modal */}
         </>
     );

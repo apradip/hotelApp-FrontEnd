@@ -1,12 +1,12 @@
-import React, {useState, useRef, useMemo} from "react"
-import {AgGridReact} from "ag-grid-react"
+import React, { useState, useRef, useMemo } from "react";
+import { AgGridReact } from "ag-grid-react";
 
-import {formatINR} from "../common/Common"
-import FoodItemSelector from "../common/FoodEditor"
-import QuantityEditor from "../common/QuantityEditor"
+import { formatINR } from "../common/Common";
+import FoodItemSelector from "../common/FoodEditor";
+import QuantityEditor from "../common/QuantityEditor";
 
-import "ag-grid-community/styles/ag-grid.css" // Core grid CSS, always needed
-import "ag-grid-community/styles/ag-theme-alpine.css" // Optional theme CSS
+import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
+import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const TableOrderGrid = ({pDefaultRowData}) => {    
     const gridRef = useRef()
@@ -149,6 +149,6 @@ const TableOrderGrid = ({pDefaultRowData}) => {
                 onGridReady={handleGridReady}/>
         </div>
     )
-}
+};
  
-export default TableOrderGrid
+export default TableOrderGrid;

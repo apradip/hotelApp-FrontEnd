@@ -1,8 +1,8 @@
-import React, {useContext, useEffect, useState, useRef, useMemo, useCallback} from "react";
-import {AgGridReact} from "ag-grid-react";
+import React, { useContext, useEffect, useState, useRef, useMemo, useCallback } from "react";
+import { AgGridReact } from "ag-grid-react";
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
@@ -12,7 +12,6 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const gridRef = useRef();
-    const [rowData, setRowData] = useState();
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
     });
@@ -25,7 +24,7 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true,
+          suppressSizeToFit: true
         }
     }, []);
     const [columnDefs] = useState([
@@ -63,79 +62,91 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
     ]);
 
     function isFirstColumn(params) {
-        var displayedColumns = params.columnApi.getAllDisplayedColumns();
-        var thisIsFirstColumn = displayedColumns[0] === params.column;
-        return thisIsFirstColumn;
-    }    
+        try {
+            var displayedColumns = params.columnApi.getAllDisplayedColumns();
+            var thisIsFirstColumn = displayedColumns[0] === params.column;
+            return thisIsFirstColumn;
+        } catch (err) {
+            console.log(err);
+        }
+    };    
 
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
+    const handleGridReady = () => {
         let row = [];
         
-        pDefaultRowData.forEach(element => {
-            const object = {
-                            rowId: row.length + 1, 
-                            id: element.id,
-                            name: element.name, 
-                            quantity: element.quantity,
-                            itemTransactionId: element.itemTransactionId
-                        };
-    
-            row.push(object);
-        });
-
-        setRowData(row);
-
-        gridRef.current.api.setRowData(row);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-
-        params.api.sizeColumnsToFit();
+        try {
+            pDefaultRowData.forEach(element => {
+                const object = {
+                                rowId: row.length + 1, 
+                                id: element.id,
+                                name: element.name, 
+                                quantity: element.quantity, 
+                                itemTransactionId: element.itemTransactionId
+                            };
         
-        window.addEventListener('resize', function () {
-            setTimeout(function () {
-              params.api.sizeColumnsToFit();
+                row.push(object);
             });
-          });
 
-        gridRef.current.api.sizeColumnsToFit();
+            gridRef.current.api.setRowData(row);
+            gridRef.current.api.refreshCells();
+            gridRef.current.api.redrawRows();
+            gridRef.current.api.sizeColumnsToFit();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
-    const handleFirstDataRendered = (params) => {
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-        gridRef.current.api.sizeColumnsToFit();
+    const handleFirstDataRendered = () => {
+        try {
+            gridRef.current.api.refreshCells();
+            gridRef.current.api.redrawRows();
+            gridRef.current.api.sizeColumnsToFit();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: load empty data to grid
 
+    // Start:: on row selection change set selected 
     const onSelectionChanged = useCallback(() => {
-        onChange(gridRef.current.api.getSelectedRows());
+        try {
+            onChange(gridRef.current.api.getSelectedRows());
+        } catch (err) {
+            console.log(err);
+        }
     }, []);
+    // End:: on row selection change set selected 
 
     // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
-            await doFetch();
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
           })();
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
 
     
 	return (
-        <div className="col-12 ag-theme-alpine grid-height-400">
+        <div className = "col-12 ag-theme-alpine grid-height-400">
             <AgGridReact	
-                ref={gridRef}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowData={null}
-                rowSelection={"multiple"}
-                onGridReady={handleGridReady}
-                onFirstDataRendered={handleFirstDataRendered}
-                onSelectionChanged={onSelectionChanged}/>
+                ref = {gridRef}
+                columnDefs = {columnDefs}
+                defaultColDef = {defaultColDef}
+                rowData = {null}
+                rowSelection = {"multiple"}
+                onGridReady = {handleGridReady}
+                onFirstDataRendered = {handleFirstDataRendered}
+                onSelectionChanged = {onSelectionChanged} />
         </div>
     );
-}
+
+};
  
 export default ServiceDespatchGrid;

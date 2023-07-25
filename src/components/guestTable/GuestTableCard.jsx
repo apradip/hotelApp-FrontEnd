@@ -1,17 +1,18 @@
-import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Card, Dropdown, Stack} from "react-bootstrap";
+import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
+import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
+import { PenTool, ShoppingBag, FileText, Edit2, Tag, LogOut, Scissors, MoreVertical } from "react-feather";
+import { subStr, formatINR, getTables } from "../common/Common";
 import TimeElapsed from "../common/TimeElapsed";
-import {NavLink} from "react-router-dom";
-import {PenTool, ShoppingBag, FileText, CreditCard, LogOut, Scissors, MoreVertical} from "react-feather";
-import {subStr, formatINR, getTables} from "../common/Common";
 
 import View from "./GuestTableView";
+import Edit from "./GuestTableEdit";
+import Delete from "./GuestTableDelete";
 import Order from "./GuestTableOrder";
 import Despatch from "./GuestTableDespatch";
 import GenerateBill from "./GuestTableGenerateBill";
-import AddPayment from "../guestPayment/GuestPaymentAdd";
 import Checkout from "./GuestTableCheckout";
-import Delete from "./GuestTableDelete";
+
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown" ref={ref} 
@@ -45,54 +46,90 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handelOpenDelete
 const GuestTableCard = forwardRef((props, ref) => {
     const viewRef = useRef(null);
+    const editRef = useRef(null);
+    const deleteRef = useRef(null);
     const orderRef = useRef(null);
     const despatchRef = useRef(null);
     const generateBillRef = useRef(null);
-    const addPaymentRef = useRef(null);
     const checkoutRef = useRef(null);
-    const deleteRef = useRef(null);
+
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
 
     // Start:: Show view modal 
     const handelOpenView = () => {
-        viewRef && viewRef.current.handleShowModal();
+        try {
+            viewRef && 
+                viewRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show view modal 
-
+    
     // Start:: Show order modal 
     const handelOpenOrder = () => {
-        orderRef && orderRef.current.handleShowModal();
+        try {
+            orderRef && 
+                orderRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show order modal 
 
     // Start:: Show despatch modal 
     const handelOpenDespatch = () => {
-        despatchRef && despatchRef.current.handleShowModal();
+        try {
+            despatchRef && 
+                despatchRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show despatch modal 
     
     // Start:: Show generate bill modal 
     const handelOpenGenerateBill = () => {
-        generateBillRef && generateBillRef.current.handleShowModal();
+        try {
+            generateBillRef && 
+                generateBillRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show generate bill modal 
-
-    // Start:: Show payment modal 
-    const handelOpenPayment = () => {
-        addPaymentRef && addPaymentRef.current.handleShowModal();
-    };
-    // End:: Show payment modal 
     
     // Start:: Show checkout modal 
     const handelOpenCheckout = () => {
-        checkoutRef && checkoutRef.current.handleShowModal();
+        try {
+            checkoutRef && 
+                checkoutRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show checkout modal 
     
+    // Start:: Show edit modal 
+    const handelOpenEdit = () => {
+        try {
+            editRef && 
+                editRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: Show edit modal 
+
     // Start:: Show delete modal 
     const handelOpenDelete = () => {
-        deleteRef && deleteRef.current.handleShowModal();
+        try {
+            deleteRef && 
+                deleteRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show delete modal 
     
@@ -104,8 +141,12 @@ const GuestTableCard = forwardRef((props, ref) => {
 
     // Start:: de-select card 
     const handleDeSelect = () => {
-        setActive(false);
-        setFocus(false);
+        try {
+            setActive(false);
+            setFocus(false);
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: de-select card
 
@@ -113,10 +154,10 @@ const GuestTableCard = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => {
         return {
             handleDeSelect, 
+            handelOpenEdit,  
             handelOpenOrder, 
             handelOpenDespatch, 
             handelOpenGenerateBill, 
-            handelOpenPayment,
             handelOpenDelete
         }
     });
@@ -127,14 +168,14 @@ const GuestTableCard = forwardRef((props, ref) => {
         <>
             {/* Start :: card component */}
             <Card 
-                key={props.pIndex}
-                index={props.pIndex}
-                className={"border"}
-                border={active ? "info" : focus ? "primary" : ""}  
-                ref={ref}
-                onMouseEnter={() => setFocus(true)}
-                onMouseLeave={() => setFocus(false)} 
-                onClick={(e) => { 
+                ref = {ref}
+                key = {props.pIndex}
+                index = {props.pIndex}
+                className = {"border"}
+                border = {active ? "info" : focus ? "primary" : ""}  
+                onMouseEnter = {() => setFocus(true)}
+                onMouseLeave = {() => setFocus(false)} 
+                onClick = {(e) => { 
                                     if (e.detail === 1) {
                                         setActive(!active)
                                         props.onActivated(props.pIndex)
@@ -145,83 +186,97 @@ const GuestTableCard = forwardRef((props, ref) => {
                                 }}> 
 
                 {/* Start:: card body */}
-                <Card.Body className="text-sm p-1"> 
-                    <Stack gap={1}>
-                        <Stack direction="horizontal" gap={0}>
-                            <span className="col-9 text-left pl-1">
-                                <b>{props.pCorporateName ? subStr(props.pCorporateName, 40): subStr(props.pName, 40)}</b>
-                            </span>
+                <Card.Body className = "text-sm p-1"> 
 
-                            <span className="col-3 text-right text-danger pr-1">
-                                <b>{formatINR(props.pTotalBalance)}</b>
-                            </span>
-                        </Stack>
+                    <Row className = "m-1">
+                        <Col xs = {8} sm = {8} md = {8} lg = {8} xl = {8} className = "p-0">
+                            <b>{props.pCorporateName ? subStr(props.pCorporateName, 20): subStr(props.pName, 20)}</b>
+                            {props.pOption === "R" &&
+                            <Badge pill bg = "danger">R</Badge>}
+                        </Col>
+                        <Col xs = {4} sm = {4} md = {4} lg = {4} xl = {4} className = "text-right text-danger p-0">
+                            <b>{formatINR(props.pBalance)}</b>
+                        </Col>
+                    </Row>
 
-                        <Stack gap={0}>
-                            <span className="col-12 text-left px-1">
-                                    Table(s): {getTables(props.pTables)}</span>
-                        </Stack>        
+                    <Row className = "d-none d-md-block d-lg-block d-xl-block m-1">
+                        {props.pCorporateName ?
+                                <Col xs = {12} sm = {12} md = {12} lg = {12} xl = {12} className = "p-0">
+                                    {subStr(props.pCorporateAddress, 30)}
+                                </Col>
+                                :
+                                <Col xs = {12} sm = {12} md = {12} lg = {12} xl = {12} className = "p-0">
+                                    Mobile no. {props.pMobile}
+                                </Col>
+                            }
 
-                        <Stack direction="horizontal" gap={0}>
-                            <span className="col-6 text-left pl-1">
-                                {props.pGuestCount} no of guest(s)</span>
+                            {/* <span className="col-12 text-left px-1">
+                                    Table(s): {getTables(props.pTables)}</span> */}
+                    </Row>
 
-                            <span className="col-5 text-right pr-0">
-                                <TimeElapsed
-                                    pInDate={props.pIndate}
-                                    pInTime={props.pInTime}/>
-                            </span>
+                    <Row className = "m-1">
+                        <Col xs = {10} sm = {10} md = {6} lg = {6} xl = {6} className = "p-0">
+                            {props.pGuestCount} no of guest(s)
+                        </Col>
 
-                            <span className="col-1 text-right pr-1">
-                                {/* Start:: operational menu */}
-                                <Dropdown>
-                                    <Dropdown.Toggle as={CustomToggle}>
-                                        <MoreVertical size={16}/>
-                                    </Dropdown.Toggle>
-                                    
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item eventKey="1" 
-                                            onClick = {handelOpenOrder}>
-                                            <PenTool className="feather-16 mr-3" />Order
-                                        </Dropdown.Item>
+                        <Col xs = {0} sm = {0} md = {5} lg = {5} xl = {5} className = "d-none d-md-block d-lg-block d-xl-block text-right p-0">
+                            <TimeElapsed
+                                pInDate = {props.pIndate}
+                                pInTime = {props.pInTime} />
+                        </Col>
 
-                                        <Dropdown.Item eventKey="2"
-                                            disabled={props.pTransactionId !== "undefined" ? false : true}
-                                            onClick = {handelOpenDespatch}>
-                                            <ShoppingBag className="feather-16 mr-3"/>Despatch
-                                        </Dropdown.Item>
+                        <Col xs = {2} sm = {2} md = {1} lg = {1} xl = {1} className = "text-right p-0">
 
-                                        <Dropdown.Item eventKey="3" 
-                                            disabled={props.pTransactionId !== "undefined" ? false : true}
-                                            onClick = {handelOpenGenerateBill}>
-                                            <FileText className="feather-16 mr-3"/>Bill
-                                        </Dropdown.Item>
+                            {/* Start:: operational menu */}
+                            <Dropdown>
+                                <Dropdown.Toggle as={CustomToggle}>
+                                    <MoreVertical size={16}/>
+                                </Dropdown.Toggle>
+                                
+                                <Dropdown.Menu>
 
-                                        <Dropdown.Item eventKey="4"
-                                            disabled={props.pTransactionId !== "undefined" ? false : true}
-                                            onClick = {handelOpenPayment}>
-                                            <CreditCard className="feather-16 mr-3"/>Payment
-                                        </Dropdown.Item>
+                                    <Dropdown.Item eventKey = "2" 
+                                        onClick = {() => {handelOpenOrder()}}>
+                                        <PenTool className = "feather-16 mr-3" />Order
+                                    </Dropdown.Item>
 
-                                        <Dropdown.Item eventKey="5"
-                                            disabled={props.pTransactionId !== "undefined" ? false : true}
-                                            onClick = {handelOpenCheckout}>
-                                            <LogOut className="feather-16 mr-3"/>Check out
-                                        </Dropdown.Item>
+                                    <Dropdown.Item eventKey = "3"
+                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                        onClick = {() => {handelOpenDespatch()}}>
+                                        <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                    </Dropdown.Item>
 
-                                        <Dropdown.Item eventKey="6"
-                                            disabled={props.pTransactionId === "undefined" ? false : true}
-                                            onClick = {handelOpenDelete}>
-                                            <Scissors className="feather-16 mr-3"/>Delete
-                                        </Dropdown.Item>
+                                    <Dropdown.Item eventKey = "4" 
+                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                        onClick = {() => {handelOpenGenerateBill()}}>
+                                        <FileText className="feather-16 mr-3"/>Bill
+                                    </Dropdown.Item>
 
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                {/* End:: operational menu */}
-                                    
-                            </span>
-                        </Stack>
-                    </Stack>
+                                    <Dropdown.Item eventKey = "5"
+                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                        onClick = {() => {handelOpenCheckout()}}>
+                                        <LogOut className="feather-16 mr-3"/>Check out
+                                    </Dropdown.Item>
+
+                                    <Dropdown.Divider />
+
+                                    <Dropdown.Item eventKey = "6" 
+                                        onClick = {() => {handelOpenEdit()}}>
+                                        <Edit2 className = "feather-16 mr-3"/>Edit
+                                    </Dropdown.Item>
+
+                                    <Dropdown.Item eventKey = "7"
+                                        onClick = {() => {handelOpenDelete()}}>
+                                        <Scissors className = "feather-16 mr-3"/>Delete
+                                    </Dropdown.Item>
+
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            {/* End:: operational menu */}
+                                   
+                        </Col>
+                    </Row>
+                    
                 </Card.Body>
                 {/* End:: card body */}
             </Card>
@@ -229,105 +284,62 @@ const GuestTableCard = forwardRef((props, ref) => {
 
             {/* Start :: view component */}
             <View
-                ref={viewRef}
-                pGuestId={props.pGuestId} 
-                pName={props.pName}
-                pMobile={props.pMobile}
-                pGuestCount={props.pGuestCount}
-                pCorporateName={props.pCorporateName}
-                pCorporateAddress={props.pCorporateAddress}
-                pGstNo={props.pGstNo}
-                pTables={props.pTables}
-                onClosed={handleClose}/>
+                ref = {viewRef}
+                pGuestId = {props.pGuestId} 
+                onClosed = {handleClose} />
             {/* End :: view component */}
+
+            {/* Start :: edit component */}
+            <Edit 
+                ref = {editRef}
+                pGuestId = {props.pGuestId} 
+                onSaved = {props.onEdited} 
+                onClosed = {handleClose} />
+            {/* End :: edit component */}
+
+            {/* Start :: delete employee component */}
+            <Delete 
+                ref = {deleteRef}
+                pGuestId = {props.pGuestId} 
+                pName = {props.pName}
+                onDeleted = {props.onDeleted} 
+                onClosed = {handleClose} />
+            {/* End :: delete employee component */}
 
             {/* Start :: order component */}
             <Order 
-                ref={orderRef}
-                pGuestId={props.pGuestId} 
-                pTransactionId={props.pTransactionId}
-                pName={props.pName}
-                pMobile={props.pMobile}
-                pGuestCount={props.pGuestCount}
-                pCorporateName={props.pCorporateName}
-                pCorporateAddress={props.pCorporateAddress}
-                pGstNo={props.pGstNo}
-                pTables={props.pTables}
-                pIndate={props.inDate}
-                pInTime={props.inTime}
-                onSaved={props.onOrdered} 
-                onClosed={handleClose}/>
+                ref = {orderRef}
+                pGuestId = {props.pGuestId} 
+                onSaved = {props.onOrdered} 
+                onClosed = {handleClose} />
             {/* End :: order component */}
 
             {/* Start :: despatch component */}
             <Despatch
-                ref={despatchRef}
-                pGuestId={props.pGuestId} 
-                pTransactionId={props.pTransactionId}
-                pName={props.pName}
-                pMobile={props.pMobile}
-                pGuestCount={props.pGuestCount}
-                pCorporateName={props.pCorporateName}
-                pCorporateAddress={props.pCorporateAddress}
-                pGstNo={props.pGstNo}
-                pTables={props.pTables}
-                pIndate={props.inDate}
-                pInTime={props.inTime}
-                onSaved={props.onDespatched} 
-                onClosed={handleClose}/>
+                ref = {despatchRef}
+                pGuestId = {props.pGuestId} 
+                onSaved = {props.onDespatched} 
+                onClosed = {handleClose} />
             {/* End :: despatch component */}
 
             {/* Start :: generate & display summery bill component */}
             <GenerateBill 
-                ref={generateBillRef}
-                pGuestId={props.pGuestId} 
-                pTransactionId={props.pTransactionId}
-                pName={props.pName}
-                pMobile={props.pMobile}
-                pGuestCount={props.pGuestCount}
-                pCorporateName={props.pCorporateName}
-                pCorporateAddress={props.pCorporateAddress}
-                pGstNo={props.pGstNo}
-                pTables={props.pTables}
-                pIndate={props.inDate}
-                pInTime={props.inTime}
-                onSaved={props.onBillGenerated}
-                onClosed={handleClose}/>
+                ref = {generateBillRef}
+                pGuestId = {props.pGuestId} 
+                onPaymentAdded = {props.onPaymentAdded}
+                onSaved = {props.onBillGenerated}
+                onClosed = {handleClose} />
             {/* End :: generate & display summery bill component */}
 
-            {/* Start :: add payment component */}
-            <AddPayment 
-                ref={addPaymentRef}
-                pGuestId={props.pGuestId}    
-                pTransactionId={props.pTransactionId}
-                pName={props.pName}
-                pMobile={props.pMobile}
-                pCorporateName={props.pCorporateName}
-                pCorporateAddress={props.pCorporateAddress}
-                pBalance={props.pTotalBalance}    
-                onSaved={props.onPaymentAdded}
-                onClosed={handleClose}/>
-            {/* End :: add payment component */}
-
-            {/* Start :: checkout component */}
+            {/* Start :: tables checkout component */}
             <Checkout
-                ref={checkoutRef}
-                pGuestId={props.pGuestId} 
-                pTransactionId={props.pTransactionId}
-                pName={props.pName}
-                pCorporateName={props.pCorporateName}
-                onSaved={props.onCheckedout} 
-                onClosed={handleClose}/>
-            {/* End :: checkout component */}
-
-            {/* Start :: delete employee component */}
-            <Delete 
-                ref={deleteRef}
-                pGuestId={props.pGuestId} 
-                pName={props.pName}
-                onDeleted={props.onDeleted} 
-                onClosed={handleClose}/>
-            {/* End :: delete employee component */}
+                ref = {checkoutRef}
+                pGuestId = {props.pGuestId} 
+                pName = {props.pName}
+                pCorporateName = {props.pCorporateName}
+                onSaved = {props.onCheckedout} 
+                onClosed = {handleClose} />
+            {/* End :: tables checkout component */}
 
         </>
     );

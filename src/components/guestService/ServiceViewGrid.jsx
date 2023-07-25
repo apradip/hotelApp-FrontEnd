@@ -1,7 +1,7 @@
-import React, {useState, useRef, useMemo, useCallback} from "react";
-import {AgGridReact} from "ag-grid-react";
+import React, { useState, useRef, useMemo } from "react";
+import { AgGridReact } from "ag-grid-react";
 
-import {formatINR} from "../common/Common";
+import { formatINR } from "../common/Common";
 import ItemSelector from "../common/ServiceEditor";
 import QuantityEditor from "../common/QuantityEditor";
 
@@ -19,13 +19,11 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true,
+          suppressSizeToFit: true
         }
     }, []);
     const rowClassRules = useMemo(() => {
-        return {
-          "ag-row-order": "data.despatchDate === undefined",
-        };
+        return {"ag-row-order": "data.despatchDate === undefined"};
     }, []);
     const [columnDefs] = useState([
         {
@@ -95,64 +93,70 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
     ];
+    const [style, setStyle] = useState({
+        height: "100%",
+        width: "100%"
+    });
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
         let row = [];
         let sum = 0;
-
-        pDefaultRowData.forEach(element => {
-            const object = {
-                            rowId: row.length + 1, 
-                            id: element.id,
-                            name: element.name, 
-                            unitPrice: element.unitPrice,
-                            quantity: element.quantity, 
-                            serviceChargePercentage: element.serviceChargePercentage, 
-                            serviceCharge: element.serviceCharge, 
-                            gstPercentage: element.gstPercentage, 
-                            gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity,
-                            despatchDate: element.despatchDate
-                        };
-            
-            sum = sum + object.totalPrice;                        
-            row.push(object);
-        });
-
-        pinnedRowData[0].totalPrice = sum;
-
-        gridRef.current.api.setRowData(row);
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-
-        params.api.sizeColumnsToFit();
-
-        window.addEventListener('resize', function () {
-            setTimeout(function () {
-              params.api.sizeColumnsToFit();
+        
+        try {
+            pDefaultRowData.forEach(element => {
+                const data = {
+                    rowId: row.length + 1, 
+                    id: element.id,
+                    name: element.name, 
+                    unitPrice: element.unitPrice,
+                    quantity: element.quantity, 
+                    serviceChargePercentage: element.serviceChargePercentage, 
+                    serviceCharge: element.serviceCharge, 
+                    gstPercentage: element.gstPercentage, 
+                    gstCharge: element.gstCharge, 
+                    totalPrice: element.unitPrice * element.quantity,
+                    despatchDate: element.despatchDate};
+                
+                sum += data.totalPrice;                       
+                row.push(data);
             });
-          });
 
-        gridRef.current.api.sizeColumnsToFit();
+            pinnedRowData[0].totalPrice = sum;
+
+            gridRef.current.api.setRowData(row);
+            gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+            gridRef.current.api.refreshCells();
+            gridRef.current.api.redrawRows();
+
+            params.api.sizeColumnsToFit();
+
+            window.addEventListener("resize", function () {
+                setTimeout(function () {params.api.sizeColumnsToFit()});
+            });
+
+            gridRef.current.api.sizeColumnsToFit();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: load empty data to grid
-   
-
+  
     
 	return (
-        <div className="col-12 ag-theme-alpine grid-height-400">
-            <AgGridReact	
-                ref={gridRef}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowClassRules={rowClassRules}
-                rowData={null}
-                rowSelection={"single"}
-                onGridReady={handleGridReady}/>
+        <div className = "col-12 ag-theme-alpine grid-height-400">
+            <div style = {style}>
+                <AgGridReact	
+                    ref = {gridRef}
+                    columnDefs = {columnDefs}
+                    defaultColDef = {defaultColDef}
+                    rowClassRules = {rowClassRules}
+                    rowData = {null}
+                    rowSelection = {"single"}
+                    onGridReady = {handleGridReady} />
+            </div>
         </div>
     );
-}
+};
  
 export default ServiceViewGrid;

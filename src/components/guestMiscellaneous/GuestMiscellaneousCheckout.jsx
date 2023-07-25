@@ -1,36 +1,59 @@
-import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react"
-import {Modal, NavLink} from "react-bootstrap"
-import {toast} from "react-toastify"
-import {X} from "react-feather"
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { X } from "react-feather";
 
-import {HotelId} from "../../App"
-import {useStateContext} from "../../contexts/ContextProvider"
-import useFetchWithAuth from "../common/useFetchWithAuth"
-
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import useFetchWithAuth from "../common/useFetchWithAuth";
+import ErrorModal from "../ErrorModal";
 
 // Start:: form
-const Form = ({pGuestId, pTransactionId, pName, pCorporateName, onSubmited, onClosed}) => {
-    const hotelId=useContext(HotelId)
-    const contextValues=useStateContext()
-    const inputRef=useRef(null)
+const Form = ({pGuestId, pName, pCorporateName, 
+                pShow,
+                onSubmited, onClosed}) => {
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+    const inputRef = useRef(null);
     const {loading, error, doDelete} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
-    })
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}`
+    });     //checkout guest
 
     // Start:: Call delete api
     const handleSave = async () => {
-        await doDelete()
-        error === null ? onSubmited() : toast.error(error)
-    }
+        try {
+            await doDelete();
+            error === null ? onSubmited() : toast.error(error);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: Call delete api
 
     // Start:: Html
     return (
-        <form>
+        <Modal 
+            size = "sm"
+            show = {pShow} >
+
+            {/* Start:: Modal header */}
+            <Modal.Header>
+                {/* Header text */}
+                <Modal.Title>Checkout</Modal.Title>
+
+                {/* Close button */}
+                <NavLink 
+                    className = "nav-icon" 
+                    href = "#" 
+                    onClick = {onClosed}>
+                    <i className = "align-middle"><X/></i>
+                </NavLink>
+            </Modal.Header>
+            {/* End:: Modal header */}
 
             {/* Start:: Modal body */}
             <Modal.Body>
-                <label className="form-label">Are you really want to check out guest <mark><code>{ pName ? pName : pCorporateName }</code></mark> ?</label>
+                <label className = "form-label">Are you really want to check out guest <mark><code>{ pName ? pName : pCorporateName }</code></mark> ?</label>
             </Modal.Body>
             {/* End:: Modal body */}
 
@@ -40,21 +63,21 @@ const Form = ({pGuestId, pTransactionId, pName, pCorporateName, onSubmited, onCl
                 {/* Start:: Close button */}
                 <button 
                     autoFocus
-                    type="button"   
-                    className="btn btn-danger"
-                    disabled={loading}
-                    ref={inputRef} 
-                    onClick={onClosed}>
+                    type = "button"   
+                    className = "btn btn-danger"
+                    disabled = {loading}
+                    ref = {inputRef} 
+                    onClick = {onClosed} >
                     Close
                 </button>
                 {/* End:: Close button */}
 
                 {/* Start:: Save button */}
                 <button 
-                    type="button"
-                    className="btn btn-success"
-                    disabled={loading || error}
-                    onClick={handleSave}>
+                    type = "button"
+                    className = "btn btn-success"
+                    disabled = {loading || error}
+                    onClick = {handleSave} >
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -68,50 +91,14 @@ const Form = ({pGuestId, pTransactionId, pName, pCorporateName, onSubmited, onCl
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </form>                    
-    )
+        </Modal>
+    );
     // End:: Html
 
-}
+};
 // End:: form
 
-
-// Start:: form
-const FormError = ({pName, pCorporateName, onClosed}) => {
-    // Start:: Html
-    return (
-        <form>
-
-            {/* Start:: Modal body */}
-            <Modal.Body>
-                <label className="form-label">Guest <mark><code>{pCorporateName ? pCorporateName : pName}</code></mark> can't be checked out, because there is some due.</label>
-            </Modal.Body>
-            {/* End:: Modal body */}
-
-            {/* Start:: Modal footer */}
-            <Modal.Footer>
-
-                {/* Start:: Close button */}
-                <button 
-                    type="button"   
-                    className="btn btn-danger"
-                    autoFocus
-                    onClick={onClosed}>
-                    Close
-                </button>
-                {/* End:: Close button */}
-
-            </Modal.Footer>
-            {/* End:: Modal footer */}
-
-        </form>                    
-    )
-    // End:: Html
-
-}
-// End:: form
-
-
+ 
 // Start:: Component
 // props parameters
 // pId
@@ -121,136 +108,118 @@ const FormError = ({pName, pCorporateName, onClosed}) => {
 // useImperativeHandle
 // handleShowModal
 const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
-    const hotelId = useContext(HotelId)
-    const contextValues = useStateContext()
-    const [showModal, setShowModal] = useState(false)
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+    const [showModal, setShowModal] = useState(false);
+    const modalErrorRef = useRef(null);
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
-    })
+    }); 
 
     // Start :: Show modal 
     const handleShowModal = () => {
-        setShowModal(true)
-    }
+        try {
+            setShowModal(true);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End :: Show modal 
 
     // Start :: Close modal 
     const handleCloseModal = () => {
-        setShowModal(false)
-        props.onClosed()
-    }
+        try {
+            setShowModal(false);
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End :: Close modal 
 
     // Start :: Save 
     const handleSave = () => {
-        setShowModal(false)
-        props.onSaved()
-    }
+        try {
+            setShowModal(false);
+            props.onSaved();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End :: Save 
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    })
+        return {handleShowModal};
+    });
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal()
-        })
-
-        return () => {document.removeEventListener("keydown", handleCloseModal)}
-    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
             try {
-                showModal && await doFetch()
+                showModal && await doFetch();
             } catch (err) {
-            //   console.log("Error occured when fetching data")
+                console.log("Error occured when fetching data");
             }
-          })()
-    }, [showModal])        // eslint-disable-line react-hooks/exhaustive-deps
+          })();
+    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     useEffect(() => {
-        error && toast.error(error)
-    }, [data, error, loading])
+        try {
+            error && toast.error(error);
+
+            // data && 
+            //         (data.balance !== 0 || 
+            //         data.roomsDetail.length !== 0 ||
+            //         data.tablesDetail.length !== 0 ||
+            //         data.miscellaneaDetail.length !== 0 ||
+            //         data.servicesDetail.length !== 0 ||
+            //         data.expensesPaymentsDetail.length !== 0) && 
+
+            data && 
+                data.balance !== 0 && 
+                    modalErrorRef && 
+                        modalErrorRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, error, loading]);
 
     // Start:: Html
     return (
         <>
+            <ErrorModal 
+                ref = {modalErrorRef}
+                message = {<span>Guest <mark><code>{props.pCorporateName ? props.pCorporateName : props.pName}</code></mark> can't be checked out, because there is some due.</span>}
+                onClosed = {handleCloseModal}/>                        
+
             {/* Start:: Delete modal */}
             {data && 
                 data.balance === 0 && 
-                <Modal 
-                    size="sm"
-                    show={showModal}>
-
-                    {/* Start:: Modal header */}
-                    <Modal.Header>
-                        {/* Header text */}
-                        <Modal.Title>Checkout</Modal.Title>
-
-                        {/* Close button */}
-                        <NavLink 
-                            className="nav-icon" href="#" 
-                            onClick={handleCloseModal}>
-                            <i className="align-middle"><X/></i>
-                        </NavLink>
-                    </Modal.Header>
-                    {/* End:: Modal header */}
-
-                    {/* Start:: Form component */}
                     <Form 
-                        pGuestId={props.pGuestId} 
-                        pTransactionId={props.pTransactionId}
-                        pName={props.pName}
-                        pCorporateName={props.pCorporateName}
-                        onSubmited={handleSave} 
-                        onClosed={handleCloseModal}/>
-                        {/* End:: Form component */}
-                </Modal>}
-            {/* End:: Delete modal */}
-
-            {/* Start:: Delete modal */}
-            {data && 
-                data.balance !== 0 && 
-                <Modal 
-                    size="sm"
-                    show={showModal}>
-
-                    {/* Start:: Modal header */}
-                    <Modal.Header>
-                        {/* Header text */}
-                        <Modal.Title>Error</Modal.Title>
-
-                        {/* Close button */}
-                        <NavLink 
-                            className="nav-icon" href="#" 
-                            onClick={handleCloseModal}>
-                            <i className="align-middle"><X/></i>
-                        </NavLink>
-                    </Modal.Header>
-                    {/* End:: Modal header */}
-
-                    {/* Start:: Form component */}
-                    <FormError 
-                        pName={props.pName}
-                        pCorporateName={props.pCorporateName}
-                        onClosed={handleCloseModal}/>
-                        {/* End:: Form component */}
-                </Modal>}
+                        pGuestId = {props.pGuestId} 
+                        pName = {props.pName}
+                        pCorporateName = {props.pCorporateName}
+                        pShow = {showModal}
+                        onSubmited = {handleSave} 
+                        onClosed = {handleCloseModal} />
+            }
             {/* End:: Delete modal */}
         </>
-    )
+    );
     // End:: Html
 
-})
+});
 // End:: Component
 
 
-export default GuestMiscellaneousCheckout
+export default GuestMiscellaneousCheckout;

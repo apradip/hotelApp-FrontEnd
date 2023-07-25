@@ -1,47 +1,69 @@
-import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react"
-import {Modal, NavLink, Row, Col} from "react-bootstrap"
-import {X} from "react-feather"
-import {subStr, getTables} from "../common/Common"
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink, Row, Col } from "react-bootstrap";
+import { X } from "react-feather";
+import { subStr, getTables } from "../common/Common";
 
-import {HotelId} from "../../App"
-import {useStateContext} from "../../contexts/ContextProvider"
-import ViewGrid from "./TableViewGrid"
-import useFetchWithAuth from "../common/useFetchWithAuth"
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import ViewGrid from "./TableViewGrid";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
 const Form = ({pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pData, 
+               pCorporateName, pCorporateAddress, 
+               pTables, pData, 
+               pShow, 
                onClosed}) => {
                     
-    const [defaultRowData, setDefaultRowData] = useState([])
+    const [defaultRowData, setDefaultRowData] = useState([]);
 
     useEffect(() => {
-        pData.forEach(element => {
-            const rowData = {
-                            rowId: defaultRowData.length + 1, 
-                            id: element.id,
-                            name: element.name, 
-                            unitPrice: element.unitPrice,
-                            quantity: element.quantity, 
-                            serviceChargePercentage: element.serviceChargePercentage, 
-                            serviceCharge: element.serviceCharge, 
-                            gstPercentage: element.gstPercentage, 
-                            gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity,
-                            despatchDate: element.despatchDate, 
-                            despatchTime: element.despatchTime
-                        }
-    
-            defaultRowData.push(rowData)
-        })
+        try {
+            if (pData) {
+                pData.forEach(element => {
+                    const rowData = {
+                        rowId: defaultRowData.length + 1, 
+                        id: element.id,
+                        name: element.name, 
+                        unitPrice: element.unitPrice,
+                        quantity: element.quantity, 
+                        serviceChargePercentage: element.serviceChargePercentage, 
+                        serviceCharge: element.serviceCharge, 
+                        gstPercentage: element.gstPercentage, 
+                        gstCharge: element.gstCharge, 
+                        totalPrice: element.unitPrice * element.quantity,
+                        despatchDate: element.despatchDate, 
+                        despatchTime: element.despatchTime
+                    };
 
-        setDefaultRowData(defaultRowData)
+                    defaultRowData.push(rowData);
+                });
+            }
+
+            setDefaultRowData(defaultRowData);
+        } catch (err) {
+            console.log("Error occured when fetching data");
+        }
     }, [pData])        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: Html
     return (
-        <form>
+        <Modal size="lg"
+            show={pShow}>
 
+            {/* Start:: Modal header */}
+            <Modal.Header>
+                {/* Header text */}
+                <Modal.Title>Food list - [{getTables(pTables)}]</Modal.Title>
+                {/* Close button */}
+                <NavLink 
+                    className="nav-icon" href="#" 
+                    onClick={onClosed} >
+                    <i className="align-middle"><X/></i>
+                </NavLink>
+            </Modal.Header>
+            {/* End:: Modal header */}
+    
             {/* Start:: Modal body */}
             <Modal.Body>
 
@@ -91,7 +113,7 @@ const Form = ({pName, pMobile, pGuestCount,
 
                     <Col sx={12} md={12}>
                         {/* Label element */}
-                        <label className="col-12 text-muted"><b>Items</b></label>
+                        <label className="col-12 text-muted"><b>Food items</b></label>
 
                         {/* Start:: Column room detail */}
                         <ViewGrid
@@ -121,11 +143,11 @@ const Form = ({pName, pMobile, pGuestCount,
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </form> 
+        </Modal>
     )
     // End:: Html
 
-}
+};
 // End:: form
 
 
@@ -137,54 +159,57 @@ const Form = ({pName, pMobile, pGuestCount,
 // useImperativeHandle
 // handleShowModal
 const GuestTableView = forwardRef((props, ref) => {    
-    const hotelId = useContext(HotelId)
-    const contextValues = useStateContext()
-    const [showModal, setShowModal] = useState(false)
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+    const [showModal, setShowModal] = useState(false);
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
-        params: {
-            option: "A"
-        }
-    })
+        params: {option: "A"}
+    });
 
     // Start :: Show modal 
     const handleShowModal = () => {
-        setShowModal(true)
-    }
+        try {
+            setShowModal(true);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End :: Show modal 
 
     // Start :: Close modal 
     const handleCloseModal = () => {
-        setShowModal(false)
-    }
+        try {
+            setShowModal(false);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End :: Close modal 
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    })
+        return {handleShowModal};
+    });
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal()
-        })
-
-        return () => {document.removeEventListener("keydown", handleCloseModal)}
-    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
             try {
-                showModal && await doFetch()
+                showModal && await doFetch();
             } catch (err) {
-              console.log("Error occured when fetching data")
+              console.log("Error occured when fetching data");
             }
-          })()
-    }, [showModal])         // eslint-disable-line react-hooks/exhaustive-deps
+          })();
+    }, [showModal]);         // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Html
@@ -192,41 +217,23 @@ const GuestTableView = forwardRef((props, ref) => {
         <>
             {/* Start:: View modal */}
             {data &&
-                <Modal size="lg"
-                    show={showModal}>
-
-                    {/* Start:: Modal header */}
-                    <Modal.Header>
-                        {/* Header text */}
-                        <Modal.Title>Food list - [{getTables(props.pTables)}]</Modal.Title>
-                        {/* Close button */}
-                        <NavLink 
-                            className="nav-icon" href="#" 
-                            onClick={handleCloseModal} >
-                            <i className="align-middle"><X/></i>
-                        </NavLink>
-                    </Modal.Header>
-                    {/* End:: Modal header */}
-
-                    {/* Start:: Form component */}
-                    <Form 
-                        pName={props.pName}
-                        pMobile={props.pMobile}
-                        pGuestCount={props.pGuestCount}
-                        pCorporateName={props.pCorporateName}
-                        pCorporateAddress={props.pCorporateAddress}
-                        pData={data}
-                        onClosed={handleCloseModal}/>
-                    {/* End:: Form component */}
-                    
-                </Modal>}
+                <Form 
+                    pName = {data.name}
+                    pMobile = {data.mobile}
+                    pGuestCount = {data.guestCount}
+                    pCorporateName = {data.corporateName}
+                    pCorporateAddress = {data.corporateAddress}
+                    pTables = {data.tables}
+                    pData = {data.items}
+                    pShow = {showModal}
+                    onClosed = {handleCloseModal}/>}
             {/* End:: View modal */}
         </>
-    )
+    );
     // End:: Html
 
-})
+});
 // End:: Component
 
 
-export default GuestTableView
+export default GuestTableView;

@@ -60,13 +60,13 @@ const TableSelect = ({onChange, name, value, disabled = false}) => {
 
 	return (
 		<Select 
-			className="col-12"
-			name={name}
-			options={tableList} 
-			defaultValue={defaultList}
-			isDisabled={disabled}
-			onChange={onSelect}
-			isMulti={true}/>
+			className = "col-12"
+			name = {name}
+			options = {tableList} 
+			defaultValue = {defaultList}
+			isDisabled = {disabled}
+			onChange = {onSelect}
+			isMulti = {true} />
     )
 }
  

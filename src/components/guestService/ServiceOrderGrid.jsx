@@ -1,9 +1,9 @@
-import React, {useContext, useEffect, useState, useRef, useMemo, useCallback} from "react";
-import {AgGridReact} from "ag-grid-react";
+import React, { useContext, useEffect, useState, useRef, useMemo, useCallback } from "react";
+import { AgGridReact } from "ag-grid-react";
 
-import {HotelId} from "../../App";
-import {formatINR} from "../common/Common";
-import {useStateContext} from "../../contexts/ContextProvider";
+import { HotelId } from "../../App";
+import { formatINR } from "../common/Common";
+import { useStateContext } from "../../contexts/ContextProvider";
 import ItemSelector from "../common/ServiceEditor";
 import QuantityEditor from "../common/QuantityEditor";
 import useFetchWithAuth from "../common/useFetchWithAuth";
@@ -29,7 +29,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true,
+          suppressSizeToFit: true
         }
     }, []);
     const [columnDefs] = useState([
@@ -89,7 +89,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 params.data.quantity = params.newValue;
                 params.data.serviceCharge = ((params.newValue * params.data.unitPrice) * (params.data.serviceChargePercentage / 100));
                 params.data.gstCharge = ((params.newValue * params.data.unitPrice) * (params.data.gstPercentage / 100));
-                params.data.totalPrice = (params.newValue * params.data.unitPrice);
+                params.data.totalPrice = params.newValue * params.data.unitPrice;                                    
 
                 return true;
             }
@@ -130,51 +130,62 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
     ];
+    const [style, setStyle] = useState({
+        height: "100%",
+        width: "100%"
+    });
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
         let row = [];
         
-        pDefaultRowData.forEach(element => {
-            const object = {
-                            rowId: row.length + 1, 
-                            id: element.id,
-                            name: element.name, 
-                            unitPrice: element.unitPrice,
-                            quantity: element.quantity, 
-                            serviceChargePercentage: element.serviceChargePercentage, 
-                            serviceCharge: element.serviceCharge, 
-                            gstPercentage: element.gstPercentage, 
-                            gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity,
-                            despatchDate: element.despatchDate
-                        };
-    
-            row.push(object);
-        });
+        try {
+            if (pDefaultRowData) {
+                pDefaultRowData.forEach(element => {
+                    const object = {
+                                    rowId: row.length + 1, 
+                                    id: element.id,
+                                    name: element.name, 
+                                    unitPrice: element.unitPrice,
+                                    quantity: element.quantity, 
+                                    serviceChargePercentage: element.serviceChargePercentage, 
+                                    serviceCharge: element.serviceCharge, 
+                                    gstPercentage: element.gstPercentage, 
+                                    gstCharge: element.gstCharge, 
+                                    totalPrice: element.unitPrice * element.quantity,
+                                    despatchDate: element.despatchDate
+                                }
+            
+                    row.push(object);
+                });
+            }
+            setRowData(row);
 
-        setRowData(row);
+            gridRef.current.api.setRowData(row);
+            gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+            gridRef.current.api.refreshCells();
+            gridRef.current.api.redrawRows();
+
+            params.api.sizeColumnsToFit();
         
-        gridRef.current.api.setRowData(row);
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-
-        params.api.sizeColumnsToFit();
-
-        window.addEventListener('resize', function () {
-            setTimeout(function () {
-              params.api.sizeColumnsToFit();
+            window.addEventListener("resize", function () {
+                setTimeout(function () {params.api.sizeColumnsToFit();});
             });
-          });
 
-        gridRef.current.api.sizeColumnsToFit();
+            gridRef.current.api.sizeColumnsToFit();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = () => {
-        calculateSum();
+        try {
+            calculateSum();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: load empty data to grid
 
@@ -182,71 +193,68 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const handleCellValueChanged = () => {
         let dataRows = [];    
 
-        gridRef.current.api.forEachNode((gridRow) => {
-            if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
-                dataRows.push({
-                            id: gridRow.data.id, 
-                            name: gridRow.data.name,
-                            unitPrice: gridRow.data.unitPrice,
-                            quantity: gridRow.data.quantity,
-                            serviceChargePercentage: gridRow.data.serviceChargePercentage,
-                            serviceCharge: gridRow.data.serviceCharge,
-                            gstPercentage: gridRow.data.gstPercentage,
-                            gstCharge: gridRow.data.gstCharge,
-                            totalPrice: gridRow.data.totalPrice,
-                            despatchDate: undefined
-                        });
-            }
-        });
+        try {
+            gridRef.current.api.forEachNode((gridRow) => {
+                if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
+                    dataRows.push({
+                                id: gridRow.data.id, 
+                                name: gridRow.data.name,
+                                unitPrice: gridRow.data.unitPrice,
+                                quantity: gridRow.data.quantity,
+                                serviceChargePercentage: gridRow.data.serviceChargePercentage,
+                                serviceCharge: gridRow.data.serviceCharge,
+                                gstPercentage: gridRow.data.gstPercentage,
+                                gstCharge: gridRow.data.gstCharge,
+                                totalPrice: gridRow.data.totalPrice,
+                                despatchDate: gridRow.data.despatchDate
+                            });
+                }
+            });
               
-        onChange(dataRows);
-        calculateSum();
+            onChange(dataRows);
+            calculateSum();
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
-            await doFetch();
-          })();
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+          })()
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
 
     useEffect(() => {
-        data && calculateSum();
+        try {
+            data && calculateSum();
+        } catch (err) {
+            console.log(err);
+        }
     }, [data]);
 
     // Start:: set add empty row grid
     useEffect(() => {
-        if (pState !== "VIEW") data && addRow();
+        try {
+            if (pState !== "VIEW") data && addRow();
+        } catch (err) {
+            console.log(err);
+        }
     }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: set add empty row grid
 
-    // Start:: calculate sum on change tariff
-    const calculateSum = useCallback (() => {
-        let total = 0;
-        let emptyCount = 0;
-
-        // calculate total expance
-        gridRef.current.api.forEachNode((rowNode) => {
-            total += rowNode.data.totalPrice;
-        });
-        
-        //calculate empty row
-        gridRef.current.api.forEachNode((rowNode) => {
-            if (rowNode.data.name === "Select item") emptyCount ++;
-        });
-
-        pinnedRowData[0].totalPrice = total;
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        setEmptyRowCount(emptyCount);
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: calculate sum on change tariff
-    
     const addRow = useCallback (() => {
-        if (emptyRowCount <= 0) {
-            let emptyRow = rowData;
+        try {
+            if (emptyRowCount <= 0) {
+                let emptyRow = rowData;
 
-            emptyRow.push({rowId: emptyRow.length + 1, 
+                emptyRow.push({
+                            rowId: emptyRow.length + 1, 
                             id: "", 
                             name: "Select item", 
                             unitPrice: 0,
@@ -256,30 +264,61 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                             gstPercentage: data.foodGstPercentage,
                             gstCharge: 0,
                             totalPrice: 0,
-                            despatchDate: undefined});
+                            despatchDate: undefined
+                        });
 
-            setRowData(emptyRow);
-            gridRef.current.api.setRowData(rowData);
-            gridRef.current.api.sizeColumnsToFit();
+                setRowData(emptyRow);
+                gridRef.current.api.setRowData(emptyRow);
+                gridRef.current.api.sizeColumnsToFit();
 
-            setEmptyRowCount(0);
+                setEmptyRowCount(0);
+            }
+        } catch (err) {
+            console.log(err);
         }
     }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
-
     
+    // Start:: calculate sum on change tariff
+    const calculateSum = useCallback (() => {
+        let total = 0;
+        let emptyCount = 0;
+
+        try {
+            // calculate total expance
+            gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+                total += rowNode.data.totalPrice;
+            });
+
+            //calculate empty row
+            gridRef.current.api.forEachNode((rowNode) => {
+                if (rowNode.data.name === "Select item") emptyCount ++;
+            });
+
+            pinnedRowData[0].totalPrice = total;
+            gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+            setEmptyRowCount(emptyCount);
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: calculate sum on change tariff
+    
+
 	return (
-        <div className="col-12 ag-theme-alpine grid-height-400">
-            <AgGridReact	
-                ref={gridRef}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowData={null}
-                rowSelection={"single"}
-                onGridReady={handleGridReady}
-                onFirstDataRendered={handleFirstDataRendered}
-                onCellValueChanged={handleCellValueChanged}/>
+        <div className = "col-12 ag-theme-alpine grid-height-400">
+            <div style = {style}>
+                <AgGridReact	
+                    ref = {gridRef}
+                    columnDefs = {columnDefs}
+                    defaultColDef = {defaultColDef}
+                    rowData = {null}
+                    rowSelection = {"single"}
+                    onGridReady = {handleGridReady}
+                    onFirstDataRendered = {handleFirstDataRendered}
+                    onCellValueChanged = {handleCellValueChanged} />
+            </div>
         </div>
     );
-}
+};
  
 export default ServiceOrderGrid;

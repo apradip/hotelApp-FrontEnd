@@ -1,9 +1,9 @@
-import React, {useEffect, useState, useRef, useMemo, useCallback, forwardRef, useImperativeHandle} from "react";
-import {AgGridReact} from "ag-grid-react"; 
+import React, { useEffect, useState, useRef, useMemo, useCallback, forwardRef, useImperativeHandle } from "react";
+import { AgGridReact } from "ag-grid-react"; 
 
-import {Modal, NavLink} from "react-bootstrap";
-import {useStateContext} from "../../contexts/ContextProvider";
-import {formatDDMMYYYY} from "../common/Common";
+import { Modal, NavLink } from "react-bootstrap";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { formatDDMMYYYY } from "../common/Common";
 import NumericEditor from "../common/NumericEditor";
 import DateEditor from "../common/DateEditor";
 import RoomEditor from "../common/RoomEditor";
@@ -380,25 +380,27 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     const handleGridReady = useCallback(() => {
         let rows = [];
 
-        pData.forEach(element => {
-            rows.push({
-                        rowId: rows.length + 1, 
-                        occupancyDate: element.occupancyDate,
-                        room: element.no, 
-                        extraPerson: element.extraPerson,
-                        extraBed: element.extraBed,
-                        discount: element.discount,
-                        gstCharge: element.gstCharge, 
-                        finalTariff: element.finalTariff,
-                        id: element.id,
-                        itemTransactionId: element.itemTransactionId,
-                        tariff: element.tariff,
-                        extraPersonTariff: element.extraPersonTariff, 
-                        extraBedTariff: element.extraBedTariff, 
-                        maxDiscount: element.maxDiscount,
-                        gstPercentage: element.gstPercentage
-                    });
-        });
+        if (pData) { 
+            pData.forEach(element => {
+                rows.push({
+                            rowId: rows.length + 1, 
+                            occupancyDate: element.occupancyDate,
+                            room: element.no, 
+                            extraPerson: element.extraPerson,
+                            extraBed: element.extraBed,
+                            discount: element.discount,
+                            gstCharge: element.gstCharge, 
+                            finalTariff: element.finalTariff,
+                            id: element.id,
+                            itemTransactionId: element.itemTransactionId,
+                            tariff: element.tariff,
+                            extraPersonTariff: element.extraPersonTariff, 
+                            extraBedTariff: element.extraBedTariff, 
+                            maxDiscount: element.maxDiscount,
+                            gstPercentage: element.gstPercentage
+                        });
+            });
+        }
 
         gridRef.current.api.setRowData(rows);
         gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
@@ -418,7 +420,8 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         if (pData) handleAddRow();
     
         // raise on change event for parent component 
-        onChange(rows);
+        // onChange(rows);
+
     }, [pData]);
     // End:: load empty data to grid
     

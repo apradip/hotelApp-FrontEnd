@@ -11,8 +11,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, 
-                pCorporateName, pCorporateAddress, pGST, 
+const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporateAddress, pGST, 
                 pShow,
                 onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
@@ -35,27 +34,23 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         validationSchema: guestSmallSchema,
         validateOnChange,
         onSubmit: async (values, action) => {
-            try {
-                const payload = {   
-                    option: "S",
-                    name: values.keyInputName.toUpperCase(), 
-                    mobile: parseInt(values.keyInputMobile),
-                    guestCount: parseInt(values.keyInputGuestCount),
-                    corporateName: values.keyInputCorporateName ? values.keyInputCorporateName.toUpperCase() : "",
-                    corporateAddress: values.keyInputCorporateAddress ? values.keyInputCorporateAddress.toUpperCase() : "",
-                    gstNo: values.keyInputGST ? values.keyInputGST.toUpperCase() : ""
-                };
-            
-                await doInsert(payload);
-        
-                if (error === null) {
-                    action.resetForm();
-                    onSubmited();
-                } else {
-                    toast.error(error);
-                }
-            } catch (err) {
-                console.log(err);
+            const payload = {   
+                option: "S",
+                name: values.keyInputName.toUpperCase(), 
+                mobile: parseInt(values.keyInputMobile),
+                guestCount: parseInt(values.keyInputGuestCount),
+                corporateName: values.keyInputCorporateName ? values.keyInputCorporateName.toUpperCase() : "",
+                corporateAddress: values.keyInputCorporateAddress ? values.keyInputCorporateAddress.toUpperCase() : "",
+                gstNo: values.keyInputGST ? values.keyInputGST.toUpperCase() : ""
+            };
+
+            await doInsert(payload);
+
+            if (error === null) {
+                action.resetForm();
+                onSubmited();
+            } else {
+                toast.error(error);
             }
         }
     });
@@ -326,6 +321,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 // End:: form
 
 
+
 // Start:: Component
 // props parameters
 // pId
@@ -334,7 +330,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
 // useImperativeHandle
 // handleShowModal
-const GuestMiscellaneousEdit = forwardRef((props, ref) => {    
+const GuestServiceEdit = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -395,7 +391,7 @@ const GuestMiscellaneousEdit = forwardRef((props, ref) => {
             } catch (err) {
                 console.log("Error occured when fetching data");
             }
-        })();
+            })()
     }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
         
@@ -418,7 +414,7 @@ const GuestMiscellaneousEdit = forwardRef((props, ref) => {
                     pGST = {data.gstNo}
                     pShow = {showModal}
                     onSubmited = {handleSave} 
-                    onClosed = {handleCloseModal} />}
+                    onClosed = {handleCloseModal}/>}
             {/* End:: Edit modal */}
         </>
     );
@@ -428,4 +424,4 @@ const GuestMiscellaneousEdit = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestMiscellaneousEdit;
+export default GuestServiceEdit;

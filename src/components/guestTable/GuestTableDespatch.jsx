@@ -1,37 +1,44 @@
-import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink, Row, Col} from "react-bootstrap";
-import {useFormik} from "formik";
-import {toast} from "react-toastify";
-import {X} from "react-feather";
-import {subStr, getTables} from "../common/Common";
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink, Row, Col } from "react-bootstrap";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { X } from "react-feather";
+import { subStr, getTables } from "../common/Common";
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
-import {guestTableSchema} from "../../schemas";
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { guestTableSchema } from "../../schemas";
 import DespatchGrid from "./TableDespatchGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-
+import ErrorModal from "../ErrorModal";
 
 // Start:: form
-const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pGstNo, pTables, pData, 
+const Form = ({pGuestId, pName, pMobile, pGuestCount, 
+               pCorporateName, pCorporateAddress, pGstNo, 
+               pTransactionId, pTables, pData,
+               pShow, 
                onSubmited, onClosed}) => {
+
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [despatchData, setDespatchData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doUpdate} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
-    })
+    });         // update delivery status
 
     const handelChangeData = (gridData) => {
         let listData = [];
         
-        for(const row of gridData) {
-            listData.push({itemTransactionId: row.itemTransactionId});
-        }
+        try {
+            for(const row of gridData) {
+                listData.push({itemTransactionId: row.itemTransactionId});
+            }
 
-        setDespatchData(listData);
+            setDespatchData(listData);
+        } catch (err) {
+            console.log(err);
+        }
     }; 
 
     // Start:: Form validate and save data
@@ -47,14 +54,19 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
         },
         validationSchema: guestTableSchema,
         validateOnChange,
-        onSubmit: async (values) => {
-            despatchData && await doUpdate({deliveries: despatchData});
+        onSubmit: async () => {
+            try {
+                despatchData && await doUpdate({deliveries: despatchData});
         
-            if (error === null) {
-                resetForm();
-                onSubmited();
-            } else {
-                toast.error(error);
+                if (error === null) {
+                    resetForm();
+                    onSubmited();
+                } else {
+                    toast.error(error);
+                }
+            } catch (err) {
+                console.log(err);
+                toast.error(err);
             }
         }
     });
@@ -62,15 +74,34 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
 
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false);
-        resetForm();
-        onClosed();
+        try {
+            setValidateOnChange(false);
+            resetForm();
+            onClosed();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: close form    
 
     // Start:: Html
     return (
-        <form>
+        <Modal size =  "lg"
+            show = {pShow}>
+
+            {/* Start:: Modal header */}
+            <Modal.Header>
+                {/* Header text */}
+                <Modal.Title>Despatch -[{getTables(pTables)}]</Modal.Title>
+                
+                {/* Close button */}
+                <NavLink 
+                    className = "nav-icon" href = "#" 
+                    onClick = {handleClose}>
+                    <i className = "align-middle"><X/></i>
+                </NavLink>
+            </Modal.Header> 
+            {/* End:: Modal header */}
 
             {/* Start:: Modal body */}
             <Modal.Body>
@@ -80,36 +111,36 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <Col sx={12} md={5} className="mb-3">
-                            <label className="col-12 form-label"><b>Company</b></label>
-                            <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
+                        <Col sx = {12} md = {5} className = "mb-3">
+                            <label className = "col-12 form-label"><b>Company</b></label>
+                            <label className = "col-12 text-muted">{subStr(pCorporateName, 30)}</label>
                         </Col>
                     :
-                        <Col sx={12} md={5} className="mb-3">
-                            <label className="col-12 form-label"><b>Name</b></label>
-                            <label className="col-12 text-muted">{subStr(pName, 30)}</label>
+                        <Col sx = {12} md = {5} className = "mb-3">
+                            <label className = "col-12 form-label"><b>Name</b></label>
+                            <label className = "col-12 text-muted">{subStr(pName, 30)}</label>
                         </Col>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <Col sx={12} md={2} className="mb-3">
-                            <label className="col-12 form-label"><b>Address</b></label>
-                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        <Col sx = {12} md = {2} className = "mb-3">
+                            <label className = "col-12 form-label"><b>Address</b></label>
+                            <label className = "col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </Col>
                     :
-                        <Col sx={12} md={5} className="mb-3">
-                            <label className="col-12 form-label"><b>Mobile no.</b></label>
-                            <label className="col-12 text-muted">{pMobile}</label>
+                        <Col sx = {12} md = {5} className = "mb-3">
+                            <label className = "col-12 form-label"><b>Mobile no.</b></label>
+                            <label className = "col-12 text-muted">{pMobile}</label>
                         </Col>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column mobile no / company address */}
-                    <Col sx={12} md={2} className="mb-3">
-                        <label className="col-12 form-label"><b>Guest</b></label>
-                        <label className="col-12 text-muted">{pGuestCount} No.</label>
+                    <Col sx = {12} md = {2} className = "mb-3">
+                        <label className = "col-12 form-label"><b>Guest</b></label>
+                        <label className = "col-12 text-muted">{pGuestCount} No.</label>
                     </Col>
                     {/* End:: Column mobile no / company address */}
 
@@ -120,15 +151,15 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
                 <Row>
 
                     {/* Start:: Column service detail */}
-                    <Col sx={12} md={12}>
+                    <Col sx = {12} md = {12}>
 
                         {/* Label element */}
-                        <label className="col-12 form-label"><b>Items</b></label>
+                        <label className = "col-12 form-label"><b>Food items</b></label>
 
                         {/* Start:: Column service detail */}
                         <DespatchGrid
-                            pDefaultRowData={pData}
-                            onChange={handelChangeData}/>
+                            pDefaultRowData = {pData}
+                            onChange = {handelChangeData} />
                         {/* End:: Column service detail */}
 
                     </Col>                
@@ -145,25 +176,25 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
 
                 {/* Start:: Close button */}
                 <button
-                    type="button"
-                    className="btn btn-danger"
-                    disabled={loading}
-                    onClick={handleClose}>
+                    type = "button"
+                    className = "btn btn-danger"
+                    disabled = {loading}
+                    onClick = {handleClose} >
                     Close
-                </button>
+                </button> 
                 {/* End:: Close button */}
                 
                 {/* Start:: Save button */}
                 <button 
-                    type="button"
-                    className="btn btn-success"
-                    disabled={loading} 
-                    onClick={handleSubmit}>
+                    type = "button"
+                    className = "btn btn-success"
+                    disabled = {loading} 
+                    onClick = {handleSubmit}>
 
                     {!loading && "Confirm"}
                     {loading && 
                                 <>
-                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <span className = "spinner-border spinner-border-sm" role = "status" aria-hidden = "true"></span>
                                     Working
                                 </>}
                 </button>
@@ -172,59 +203,12 @@ const Form = ({pGuestId, pTransactionId, pName, pMobile, pGuestCount,
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </form> 
-    )
+        </Modal>
+    );
     // End:: Html
 
 };
 // End:: form
-
-
-// Start:: form error
-const FormError = ({onClosed}) => {
-    // Strat:: close form    
-    const handleClose = () => {
-        onClosed();
-    };
-    // End:: close form    
-
-    // Start:: Html
-    return (
-        <form>
-
-            {/* Start:: Modal body */}
-            <Modal.Body>
-
-                {/* Start:: Row */}
-                <div>
-                    <label className="form-label mr-2">There is no item to despatch. All ordered items has allready been despatched.</label>
-                </div>
-                {/* End:: Row */}
-
-            </Modal.Body>
-            {/* End:: Modal body */}
-
-            {/* Start:: Modal footer */}
-            <Modal.Footer>
-
-                {/* Start:: Close button */}
-                <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={handleClose}>
-                    Close
-                </button>
-                {/* End:: Close button */}
-
-            </Modal.Footer>
-            {/* End:: Modal footer */}
-
-        </form> 
-    );
-    // End:: Html
-};
-// End:: form error
-
 
 
 // Start:: Component
@@ -244,123 +228,120 @@ const FormError = ({onClosed}) => {
 const GuestTableDespatch = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const [showModal, setShowModal] = useState(false);
+    const [active, setActive] = useState(false);
+    const [showMain, setShowMain] = useState(false);
+    const modalErrorRef = useRef(null);
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
-        params: {
-            option: "N"
-        }
+        params: {option: "N"}
     });
 
     // Start:: Show modal
     const handleShowModal = () => {
-        setShowModal(true)
+        try {
+            setActive(true);
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show modal
 
     // Start:: Close modal
     const handleCloseModal = () => {
-        setShowModal(false)
-        props.onClosed()
+        try {
+            setShowMain(false);
+            setActive(false);
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Close modal
 
     // Start:: Save
     const handleSave = () => { 
-        setShowModal(false)
-        props.onSaved()
+        try {
+            setShowMain(false);
+            setActive(false);
+            props.onSaved();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Save
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal}
+        return {handleShowModal};
     });
     // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal()
-        })
-
-        return () => {document.removeEventListener("keydown", handleCloseModal)}
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
     
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
-            showModal && await doFetch()
-          })()
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
+            try {
+                active && await doFetch();
+            } catch (err) {
+                console.log("Error occured when fetching data");
+            }
+          })();
+    }, [active]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        try {
+            active &&
+                data && 
+                    data.items.length === 0 ?
+                        modalErrorRef && modalErrorRef.current.handleShowModal()
+                    :
+                        setShowMain(true)
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data]);
+    // End:: fetch id wise detail from api
+    
     // Start:: Html
     return (
         <>
             {/* Start:: Edit modal */}
-            {data && data.length ? 
-                <Modal size="lg"
-                    show={showModal}>
-
-                    {/* Start:: Modal header */}
-                    <Modal.Header>
-                        {/* Header text */}
-                        <Modal.Title>Despatch -[{getTables(props.pTables)}]</Modal.Title>
-                        
-                        {/* Close button */}
-                        <NavLink 
-                            className="nav-icon" href="#" 
-                            onClick={handleCloseModal}>
-                            <i className="align-middle"><X/></i>
-                        </NavLink>
-                    </Modal.Header>
-                    {/* End:: Modal header */}
-
+            {data && data.items.length > 0 &&
+                <>
                     {/* Start:: Form component */}
                     <Form 
-                        pGuestId={props.pGuestId}
-                        pTransactionId={props.pTransactionId}
-                        pName={props.pName}
-                        pMobile={props.pMobile}
-                        pGuestCount={props.pGuestCount}
-                        pCorporateName={props.pCorporateName}
-                        pCorporateAddress={props.pCorporateAddress}
-                        pGstNo={props.pGstNo}
-                        pTables={props.pTables}
-                        pData={data}
-                        onSubmited={handleSave} 
-                        onClosed={handleCloseModal}/>
-                        {/* End:: Form component */}
-                    
-                </Modal>
-            :
-                <Modal 
-                    size="sm"
-                    show={showModal}>
-
-                    {/* Start:: Modal header */}
-                    <Modal.Header>
-                        {/* Header text */}
-                        <Modal.Title>Error</Modal.Title>
-
-                        {/* Close button */}
-                        <NavLink 
-                            className="nav-icon" href="#" 
-                            onClick={handleCloseModal}>
-                            <i className="align-middle"><X/></i>
-                        </NavLink>
-                    </Modal.Header>
-                    {/* End:: Modal header */}
-
-                    {/* Start:: Form component */}
-                    <FormError 
-                        onClosed={handleCloseModal}/>
-                        {/* End:: Form component */}
-                </Modal>
+                        pGuestId = {props.pGuestId}
+                        pName = {data.name}
+                        pMobile = {data.mobile}
+                        pGuestCount = {data.guestCount}
+                        pCorporateName = {data.corporateName}
+                        pCorporateAddress = {data.corporateAddress}
+                        pGstNo = {data.gstNo}
+                        pTransactionId = {data.transactionId}
+                        pTables = {data.tables}
+                        pData = {data.items}
+                        pShow = {showMain}
+                        onSubmited = {handleSave} 
+                        onClosed = {handleCloseModal} />
+                    {/* End:: Form component */}
+                </>  
             }
             {/* End:: Edit modal */}
+
+            {/* Start:: Error form component */}
+            <ErrorModal 
+                ref = {modalErrorRef}
+                message = {"There is no item to despatch. All ordered items has allready been despatched."}
+                onClosed = {handleCloseModal} />
+            {/* End:: Error form component */}
         </>
     );
     // End:: Html

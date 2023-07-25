@@ -31,19 +31,16 @@ export const changePasswordSchema = Yup.object({
 export const accessLevelSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
     keyInputDescription: Yup.string()
-    //keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
 });
 
 export const idDocumentSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
     keyInputDescription: Yup.string()
-    // keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
 });
 
 export const bookingAgentSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
     keyInputDescription: Yup.string()
-    // keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
 });
 
 export const employeeSchema = Yup.object({
@@ -64,7 +61,6 @@ export const employeeSchema = Yup.object({
 export const planSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
     keyInputDescription: Yup.string()
-    // keyInputDescription: Yup.string().required("Description can't be empty!").min(10, "Invalid description!")
 });
 
 export const roomCategorySchema = Yup.object({
@@ -141,28 +137,24 @@ export const roomSchema = Yup.object({
 export const tableSchema = Yup.object({
     keyInputNo: Yup.string().required("No can't be empty!").min(1, "Invalid no!"),
     keyInputDescription: Yup.string()
-    // keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
 export const foodSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(1, "Invalid name!"),
     keyInputPrice: Yup.number().required("Price can't be empty!").positive("Invalid price!").min(3, "Invalid price!"),
     keyInputDescription: Yup.string()
-    // keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
 export const miscellaneousSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(1, "Invalid name!"),
     keyInputPrice: Yup.number().required("Price can't be empty!").positive("Invalid price!").min(3, "Invalid price!"),
     keyInputDescription: Yup.string()
-    // keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
 export const serviceSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(1, "Invalid name!"),
     keyInputPrice: Yup.number().required("Price can't be empty!").positive("Invalid price!").min(3, "Invalid price!"),
     keyInputDescription: Yup.string()
-    // keyInputDescription: Yup.string().required("Description can't be empty!").min(3, "Invalid description!")
 });
 
 export const guestRoomSchema = Yup.object({
@@ -192,15 +184,15 @@ export const guestRoomSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }
@@ -212,15 +204,15 @@ export const guestRoomSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }
@@ -243,15 +235,15 @@ export const guestTableSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }
@@ -263,15 +255,15 @@ export const guestTableSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }
@@ -281,11 +273,15 @@ export const guestTableSchema = Yup.object({
     // keyInputCheckInTime: Yup.string().required("Check In time can't be empty!")
 });
 
+export const guestTableTransactionSchema = Yup.object({
+    keyInputTables: Yup.array(),
+    keyInputCheckInDate: Yup.string().required("Check In date can't be empty!"),
+    keyInputCheckInTime: Yup.string().required("Check In time can't be empty!")
+});
+
 export const guestPaymentSchema = Yup.object({
     keyInputPaymentAmount: Yup.number().required("Payment can't be empty!").positive("Invalid payment amount!").min(1, "Invalid payment amount!"),
     keyInputNarration: Yup.string().required("Narration can't be empty!").min(5, "Invalid narration!"),
-    // keyInputTransactionDate: Yup.string().required("Transaction date can't be empty!"),
-    // keyInputTransactionTime: Yup.string().required("Transaction time can't be empty!"),
 });
 
 export const guestServiceSchema = Yup.object({
@@ -299,15 +295,15 @@ export const guestServiceSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }
@@ -319,15 +315,15 @@ export const guestServiceSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }
@@ -345,15 +341,15 @@ export const guestMiscellaneousSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }
@@ -365,15 +361,15 @@ export const guestMiscellaneousSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }
@@ -392,15 +388,15 @@ export const guestSmallSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }
@@ -412,15 +408,15 @@ export const guestSmallSchema = Yup.object({
             test: function (value) {
                 if (this.parent.keyInputCorporateName === "") {
                     if (value === "") {
-                        return true
+                        return true;
                     } else {
-                        return false
+                        return false;
                     }
                 } else {
                     if (value === "") {
-                        return false
+                        return false;
                     } else {
-                        return true
+                        return true;
                     }
                 }
             }

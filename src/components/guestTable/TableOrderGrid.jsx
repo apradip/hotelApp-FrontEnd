@@ -1,25 +1,25 @@
-import React, {useContext, useEffect, useState, useRef, useMemo, useCallback} from "react"
-import {AgGridReact} from "ag-grid-react"
+import React, { useContext, useEffect, useState, useRef, useMemo, useCallback } from "react";
+import { AgGridReact } from "ag-grid-react";
 
-import {HotelId} from "../../App"
-import {formatINR} from "../common/Common"
-import {useStateContext} from "../../contexts/ContextProvider"
-import FoodItemSelector from "../common/FoodEditor"
-import QuantityEditor from "../common/QuantityEditor"
-import useFetchWithAuth from "../common/useFetchWithAuth"
+import { HotelId } from "../../App";
+import { formatINR } from "../common/Common";
+import { useStateContext } from "../../contexts/ContextProvider";
+import FoodItemSelector from "../common/FoodEditor";
+import QuantityEditor from "../common/QuantityEditor";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
-import "ag-grid-community/styles/ag-grid.css" // Core grid CSS, always needed
-import "ag-grid-community/styles/ag-theme-alpine.css" // Optional theme CSS
+import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
+import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {    
-    const hotelId = useContext(HotelId)
-    const contextValues = useStateContext()
-    const gridRef = useRef()
-    const [rowData, setRowData] = useState()
-    const [emptyRowCount, setEmptyRowCount] = useState()
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+    const gridRef = useRef();
+    const [rowData, setRowData] = useState();
+    const [emptyRowCount, setEmptyRowCount] = useState();
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
-    })
+    });
 
     const defaultColDef = useMemo(() => {
         return {
@@ -31,7 +31,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
           hide: true,
           suppressSizeToFit: true,
         }
-    }, [])
+    }, []);
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -125,99 +125,121 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         {
             field: "despatchDate"
         }
-    ])
+    ]);
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
-    ]
+    ];
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
-        let row = []
+        let row = [];
         
-        pDefaultRowData.forEach(element => {
-            const object = {
-                            rowId: row.length + 1, 
-                            id: element.id,
-                            name: element.name, 
-                            unitPrice: element.unitPrice,
-                            quantity: element.quantity, 
-                            serviceChargePercentage: element.serviceChargePercentage, 
-                            serviceCharge: element.serviceCharge, 
-                            gstPercentage: element.gstPercentage, 
-                            gstCharge: element.gstCharge, 
-                            totalPrice: element.unitPrice * element.quantity,
-                            despatchDate: element.despatchDate
-                        }
-    
-            row.push(object)
-        });
+        try {
+            pDefaultRowData.forEach(element => {
+                const object = {
+                    rowId: row.length + 1, 
+                    id: element.id,
+                    name: element.name, 
+                    unitPrice: element.unitPrice,
+                    quantity: element.quantity, 
+                    serviceChargePercentage: element.serviceChargePercentage, 
+                    serviceCharge: element.serviceCharge, 
+                    gstPercentage: element.gstPercentage, 
+                    gstCharge: element.gstCharge, 
+                    totalPrice: element.unitPrice * element.quantity,
+                    despatchDate: element.despatchDate
+                };
+        
+                row.push(object);
+            });
 
-        setRowData(row)
+            setRowData(row);
 
-        gridRef.current.api.setRowData(row)
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData)
-        gridRef.current.api.refreshCells()
-        gridRef.current.api.redrawRows()
+            gridRef.current.api.setRowData(row);
+            gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+            gridRef.current.api.refreshCells();
+            gridRef.current.api.redrawRows();
 
-        params.api.sizeColumnsToFit()
+            params.api.sizeColumnsToFit();
 
-        window.addEventListener("resize", function () {
-            setTimeout(function () {params.api.sizeColumnsToFit()})
-          })
+            window.addEventListener("resize", function () {
+                setTimeout(function () {params.api.sizeColumnsToFit();});
+            });
 
-        gridRef.current.api.sizeColumnsToFit()
-    }
+            gridRef.current.api.sizeColumnsToFit();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = () => {
-        calculateSum()
-    }
+        try {
+            calculateSum();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: load empty data to grid
 
     // set grid data to a parent component
     const handleCellValueChanged = () => {
-        let dataRows = []    
+        let dataRows = [];    
 
-        gridRef.current.api.forEachNode((gridRow) => {
-            if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
-                dataRows.push({
-                            id: gridRow.data.id, 
-                            name: gridRow.data.name,
-                            unitPrice: gridRow.data.unitPrice,
-                            quantity: gridRow.data.quantity,
-                            serviceChargePercentage: gridRow.data.serviceChargePercentage,
-                            serviceCharge: gridRow.data.serviceCharge,
-                            gstPercentage: gridRow.data.gstPercentage,
-                            gstCharge: gridRow.data.gstCharge,
-                            totalPrice: gridRow.data.totalPrice,
-                            despatchDate: undefined
-                        })
-            }
-        })
+        try {
+            gridRef.current.api.forEachNode((gridRow) => {
+                if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
+                    dataRows.push({
+                        id: gridRow.data.id, 
+                        name: gridRow.data.name,
+                        unitPrice: gridRow.data.unitPrice,
+                        quantity: gridRow.data.quantity,
+                        serviceChargePercentage: gridRow.data.serviceChargePercentage,
+                        serviceCharge: gridRow.data.serviceCharge,
+                        gstPercentage: gridRow.data.gstPercentage,
+                        gstCharge: gridRow.data.gstCharge,
+                        totalPrice: gridRow.data.totalPrice,
+                        despatchDate: undefined
+                    });
+                }
+            });
               
-        onChange(dataRows)
-        calculateSum()
-    }
+            onChange(dataRows);
+            calculateSum();
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     // Start:: fetch hotel detail from api
     useEffect(() => {
         (async () => {
-            await doFetch()
-          })()
-    }, [])        // eslint-disable-line react-hooks/exhaustive-deps
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+          })();
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
 
     useEffect(() => {
-        data && calculateSum()
-    }, [data])
+        try {
+            data && calculateSum();
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data]);
 
     // Start:: set add empty row grid
     useEffect(() => {
-        if (pState !== "VIEW") {
-            data && addRow()
-        } 
-    }, [emptyRowCount])     // eslint-disable-line react-hooks/exhaustive-deps
+        try {
+            if (pState !== "VIEW") data && addRow();
+        } catch (err) {
+            console.log(err);
+        }
+    }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: set add empty row grid
 
     // Start:: calculate sum on change tariff
@@ -225,47 +247,55 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         let total = 0
         let emptyCount = 0
 
-        // calculate total expance
-        gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
-            total += rowNode.data.totalPrice
-        });
+        try {
+            // calculate total expance
+            gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+                total += rowNode.data.totalPrice
+            });
 
-        //calculate empty row
-        gridRef.current.api.forEachNode((rowNode) => {
-            if (rowNode.data.name === "Select item") emptyCount ++
-        });
+            //calculate empty row
+            gridRef.current.api.forEachNode((rowNode) => {
+                if (rowNode.data.name === "Select item") emptyCount ++
+            });
 
-        pinnedRowData[0].totalPrice = total
-        gridRef.current.api.setPinnedBottomRowData(pinnedRowData)
-        setEmptyRowCount(emptyCount)
-    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
+            pinnedRowData[0].totalPrice = total;
+            gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+            setEmptyRowCount(emptyCount);
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: calculate sum on change tariff
     
     const addRow = useCallback (() => {
-        if (emptyRowCount <= 0) {
-            let emptyRow = rowData
+        try {
+            if (emptyRowCount <= 0) {
+                let emptyRow = rowData;
 
-            emptyRow.push({
-                        rowId: emptyRow.length + 1, 
-                        id: "", 
-                        name: "Select item", 
-                        unitPrice: 0,
-                        quantity: 0,
-                        serviceChargePercentage: data.serviceChargePercentage,
-                        serviceCharge: 0,
-                        gstPercentage: data.foodGstPercentage,
-                        gstCharge: 0,
-                        totalPrice: 0,
-                        despatchDate: undefined
-                    })
+                emptyRow.push({
+                    rowId: emptyRow.length + 1, 
+                    id: "", 
+                    name: "Select item", 
+                    unitPrice: 0,
+                    quantity: 0,
+                    serviceChargePercentage: data.serviceChargePercentage,
+                    serviceCharge: 0,
+                    gstPercentage: data.foodGstPercentage,
+                    gstCharge: 0,
+                    totalPrice: 0,
+                    despatchDate: undefined
+                });
 
-            setRowData(emptyRow)
-            gridRef.current.api.setRowData(rowData)
-            gridRef.current.api.sizeColumnsToFit()
+                setRowData(emptyRow);
+                gridRef.current.api.setRowData(rowData);
+                gridRef.current.api.sizeColumnsToFit();
 
-            setEmptyRowCount(0)
+                setEmptyRowCount(0);
+            }
+        } catch (err) {
+            console.log(err);
         }
-    }, [emptyRowCount])        // eslint-disable-line react-hooks/exhaustive-deps
+    }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
 
     
 	return (
@@ -280,7 +310,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 onFirstDataRendered={handleFirstDataRendered}
                 onCellValueChanged={handleCellValueChanged}/>
         </div>
-    )
-}
+    );
+};
  
-export default TableOrderGrid
+export default TableOrderGrid;
