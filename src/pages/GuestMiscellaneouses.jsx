@@ -1,15 +1,15 @@
 import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Breadcrumb, Row, Col} from "react-bootstrap";
+import {Form, Breadcrumb, Row, Col} from "react-bootstrap";
 import {toast} from "react-toastify";
 
 import {HotelId} from "../App";
 import {useStateContext} from "../contexts/ContextProvider";
 import Add from "../components/guestMiscellaneous/GuestMiscellaneousAdd";
 import CardMiscellaneous from "../components/guestMiscellaneous/GuestMiscellaneousCard";
+import CardRoom from "../components/guestRoom/GuestRoomCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
-import CardRoom from "../components/guestRoom/GuestRoomCard";
 
 const Operation = {
     GuestAdd: "GUEST_ADD",
@@ -39,6 +39,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
+    const [roomOnly, setRoomOnly] = useState(false);
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -49,7 +50,10 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     const indexOfFirstItem = indexOfLastItem - itemPerPage;
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}`,
-        params: {search: search}
+        params: {
+            search: search,
+            roomonly: roomOnly
+        }
     });
 
     // Start:: Change search text
@@ -215,7 +219,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
               console.log("Error occured when fetching data");
             }
           })();
-    }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dataChanged, search, roomOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
 
     useEffect(() => {
@@ -348,7 +352,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         </div>
 
                         <div className="col-sm-8">
-                            <Breadcrumb className="breadcrumb float-sm-right">
+                            <Breadcrumb className="breadcrumb float-right">
                                 <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                                 <Breadcrumb.Item href="/">Transaction</Breadcrumb.Item>
                                 <Breadcrumb.Item active>Miscellaneous</Breadcrumb.Item>
@@ -366,13 +370,26 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
-                            {/* Start :: Display data count */}
-                            <div className="col-12 text-danger p-0">
-                                {!loading && 
-                                    data && 
-                                        `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
+                            <div className="row">
+                                {/* Start :: Display data count */}
+                                <div className="col-6 text-danger">
+                                    {!loading && 
+                                        data && 
+                                            `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
+                                </div>
+                                {/* End :: Display data count */}
+
+                                {/* Start :: display switch option */}
+                                <div className="col-6 d-flex justify-content-end">
+                                        <Form.Check 
+                                            type="switch"
+                                            id="chkRoom"
+                                            label={roomOnly ? "Show in house guests only" : "Show all guests"} 
+                                            value={roomOnly} 
+			                                onChange={(e) => {setRoomOnly(e.currentTarget.checked)}}/>
+                                </div>
+                                {/* End :: display switch option */}
                             </div>
-                            {/* End :: Display data count */}
                         </div>
                         {/* End :: Header & operational panel */}
 
