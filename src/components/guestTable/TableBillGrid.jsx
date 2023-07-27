@@ -8,7 +8,6 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const TableBillGrid = ({pData}) => {    
     const gridRef = useRef();
-    
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
@@ -17,7 +16,7 @@ const TableBillGrid = ({pData}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true
+          suppressSizeToFit: false
         };
     }, []);
     const rowClassRules = useMemo(() => {
@@ -76,9 +75,9 @@ const TableBillGrid = ({pData}) => {
         }
     ]);
     const pinnedRowData = [
-        // {rowId: "Sum", price: 0},
-        // {rowId: "Service tax", price: 0},
-        // {rowId: "GST", price: 0},
+        {rowId: "Sum", price: 0},
+        {rowId: "Service tax", price: 0},
+        {rowId: "GST", price: 0},
         {rowId: "Total", price: 0}
     ];
 
@@ -109,10 +108,10 @@ const TableBillGrid = ({pData}) => {
                 totalGst += element.gstCharge;
             });
 
-            // pinnedRowData[0].price = totalPrice;
-            // pinnedRowData[1].price = totalService;
-            // pinnedRowData[2].price = totalGst;
-            pinnedRowData[0].price = totalPrice + totalService + totalGst;
+            pinnedRowData[0].price = totalPrice;
+            pinnedRowData[1].price = totalService;
+            pinnedRowData[2].price = totalGst;
+            pinnedRowData[3].price = totalPrice + totalService + totalGst;
 
             gridRef.current.api.setRowData(rows);
             gridRef.current.api.refreshCells();

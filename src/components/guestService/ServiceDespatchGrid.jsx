@@ -24,7 +24,7 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true
+          suppressSizeToFit: false
         }
     }, []);
     const [columnDefs] = useState([

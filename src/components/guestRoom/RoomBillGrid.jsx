@@ -8,7 +8,6 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const RoomBillGrid = ({pData}) => {    
     const gridRef = useRef();
-
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
@@ -17,7 +16,7 @@ const RoomBillGrid = ({pData}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true,
+          suppressSizeToFit: false
         };
     }, []);
     const rowClassRules = useMemo(() => {
@@ -62,9 +61,9 @@ const RoomBillGrid = ({pData}) => {
         }
     ]);
     const pinnedRowData = [
-        // {rowId: "Sum", tariff: 0},
-        // {rowId: "GST", tariff: 0},
-        {rowId: "Total", triaff: 0}
+        {rowId: "Sum", tariff: 0},
+        {rowId: "GST", tariff: 0},
+        {rowId: "Total", tariff: 0}
     ];
 
     // Start:: load empty data to grid
@@ -76,25 +75,23 @@ const RoomBillGrid = ({pData}) => {
         try {
             pData.forEach(element => {
                 const row = {
-                                rowId: rows.length + 1, 
-                                no: element.no, 
-                                occupancyDate: element.occupancyDate,
-                                tariff: element.tariff + (element.extraPersonCount * element.extraPersonTariff) + (element.extraBedCount * element.extraBedTariff) - element.discount,
-                                id: element.id,
-                                gstCharge: element.gstCharge
-                            };
+                    rowId: rows.length + 1, 
+                    no: element.no, 
+                    occupancyDate: element.occupancyDate,
+                    tariff: element.tariff + (element.extraPersonCount * element.extraPersonTariff) + (element.extraBedCount * element.extraBedTariff) - element.discount,
+                    id: element.id,
+                    gstCharge: element.gstCharge
+                };
         
                 rows.push(row);
 
                 totalPrice += element.tariff;
                 totalGst += element.gstCharge;
             });
-        
-            // setTotalItemPrice(totalPrice);
-            // setTotalGstCharge(totalGst);
-            // setTotal(totalPrice + totalGst);
 
-            pinnedRowData[0].triaff = totalPrice + totalGst;
+            pinnedRowData[0].tariff = totalPrice;
+            pinnedRowData[1].tariff = totalGst;
+            pinnedRowData[2].tariff = totalPrice + totalGst;
 
             gridRef.current.api.setRowData(rows);
             gridRef.current.api.refreshCells();

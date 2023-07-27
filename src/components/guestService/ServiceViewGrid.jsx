@@ -19,7 +19,7 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true
+          suppressSizeToFit: false
         }
     }, []);
     const rowClassRules = useMemo(() => {

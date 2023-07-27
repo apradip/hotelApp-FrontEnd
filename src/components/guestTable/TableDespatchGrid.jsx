@@ -6,7 +6,6 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const TableDespatchGrid = ({pDefaultRowData, onChange}) => {    
     const gridRef = useRef();
-
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
@@ -15,10 +14,9 @@ const TableDespatchGrid = ({pDefaultRowData, onChange}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true,
+          suppressSizeToFit: false
         };
     }, []);
-
     const [columnDefs] = useState([
         {
             headerName: "", 

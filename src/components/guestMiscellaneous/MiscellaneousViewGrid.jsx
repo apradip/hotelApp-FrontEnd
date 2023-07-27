@@ -10,7 +10,6 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const MiscellaneousViewGrid = ({pDefaultRowData}) => {    
     const gridRef = useRef();
-
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
@@ -19,7 +18,7 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
           sortable: false,
           filter: false,
           hide: true,
-          suppressSizeToFit: true
+          suppressSizeToFit: false
         }
     }, []);
     const rowClassRules = useMemo(() => {
