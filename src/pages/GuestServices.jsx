@@ -291,6 +291,7 @@ const GuestServices = forwardRef((props, ref) => {
                             pIndate={pData.inDate}
                             pInTime={pData.inTime}
                             pRooms = {pData.items}
+                            pCallingFrom = {"S"}
                             onEdited = {() => {handleSuccess(Operation.GuestMod)}}
                             onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
                             onBooked={() => {handleSuccess(Operation.Booked)}}

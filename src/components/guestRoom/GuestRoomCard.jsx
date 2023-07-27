@@ -332,140 +332,234 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
+                                    {(props.pCallingFrom === "R") && 
+                                        <>
+                                            {/* Start :: Table menu */}
+                                            <Dropdown autoClose="outside">
+                                                <Dropdown.Toggle as={CustomToggle}>
+                                                    <span className="dropdown-item">
+                                                        <Coffee className="feather-16 mr-3"/>
+                                                        Table
+                                                        <ChevronsRight className="feather-16 float-right"/>
+                                                    </span>
+                                                </Dropdown.Toggle>
 
-                                    <Dropdown autoClose="outside">
-                                        <Dropdown.Toggle as={CustomToggle}>
-                                            <span className="dropdown-item">
-                                                <Coffee className="feather-16 mr-3"/>
-                                                Table
-                                                <ChevronsRight className="feather-16 float-right"/>
-                                            </span>
-                                        </Dropdown.Toggle>
+                                                <Dropdown.Menu className="dropdown-sub">
+                                                    <Dropdown.Item eventKey="10" 
+                                                        onClick={() => {handelOpenOrder("T")}}>
+                                                        <PenTool className="feather-16 mr-3" />Order
+                                                    </Dropdown.Item>
+                                                    
+                                                    <Dropdown.Item eventKey="11"
+                                                        onClick={() => {handelOpenDespatch("T")}}>
+                                                        <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                                    </Dropdown.Item>
 
-                                        <Dropdown.Menu className="dropdown-sub">
-                                            <Dropdown.Item eventKey="10" 
-                                                onClick={() => {handelOpenOrder("T")}}>
-                                                <PenTool className="feather-16 mr-3" />Order
+                                                    <Dropdown.Item eventKey="12" 
+                                                        disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                        onClick={() => {handelOpenGenerateBill("T")}}>
+                                                        <FileText className="feather-16 mr-3"/>Bill
+                                                    </Dropdown.Item>
+
+                                                    {/* <Dropdown.Item eventKey="13"
+                                                        disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                        onClick={() => {handelOpenCheckout("T")}}>
+                                                        <LogOut className="feather-16 mr-3"/>Check out
+                                                    </Dropdown.Item> */}
+
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                            {/* End :: Table menu */}
+                                                
+                                            {/* Start :: Service menu */}        
+                                            <Dropdown autoClose="outside">
+                                                <Dropdown.Toggle as={CustomToggle} drop="end" variant="secondary">
+                                                    <span className="dropdown-item">
+                                                        <Umbrella className="feather-16 mr-3" />
+                                                        Service
+                                                        <ChevronsRight className="feather-16 float-end"/>
+                                                    </span>
+                                                </Dropdown.Toggle>
+
+                                                <Dropdown.Menu className="dropdown-sub">
+                                                    <Dropdown.Item eventKey="20" 
+                                                        onClick={() => {handelOpenOrder("S")}}>
+                                                        <PenTool className="feather-16 mr-3" />Order
+                                                    </Dropdown.Item>
+                                                    
+                                                    <Dropdown.Item eventKey="21"
+                                                        onClick={() => {handelOpenDespatch("S")}}>
+                                                        <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                                    </Dropdown.Item>
+
+                                                    <Dropdown.Item eventKey="22" 
+                                                        disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                        onClick={() => {handelOpenGenerateBill("S")}}>
+                                                        <FileText className="feather-16 mr-3"/>Bill
+                                                    </Dropdown.Item>
+
+                                                    {/* <Dropdown.Item eventKey="23"
+                                                        disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                        onClick={() => {handelOpenCheckout("S")}}>
+                                                        <LogOut className="feather-16 mr-3"/>Check out
+                                                    </Dropdown.Item> */}
+
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                            {/* End :: Service menu */}        
+
+                                            {/* Start :: Miscellaneous menu */}               
+                                            <Dropdown autoClose="outside">
+                                                <Dropdown.Toggle as={CustomToggle} drop="end" variant="secondary">
+                                                    <span className="dropdown-item">
+                                                        <Wind className="feather-16 mr-3" />
+                                                        Miscellaneous
+                                                        <ChevronsRight className="feather-16 float-end"/>
+                                                    </span>
+                                                </Dropdown.Toggle>
+
+                                                <Dropdown.Menu className="dropdown-sub">
+                                                    <Dropdown.Item eventKey="30" 
+                                                        onClick={() => {handelOpenOrder("M")}}>
+                                                        <PenTool className="feather-16 mr-3" />Order
+                                                    </Dropdown.Item>
+                                                    
+                                                    <Dropdown.Item eventKey="31"
+                                                        onClick={() => {handelOpenDespatch("M")}}>
+                                                        <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                                    </Dropdown.Item>
+
+                                                    <Dropdown.Item eventKey="32" 
+                                                        onClick={() => {handelOpenGenerateBill("M")}}>
+                                                        <FileText className="feather-16 mr-3"/>Bill
+                                                    </Dropdown.Item>
+
+                                                    {/* <Dropdown.Item eventKey="33"
+                                                        onClick={() => {handelOpenCheckout("M")}}>
+                                                        <LogOut className="feather-16 mr-3"/>Check out
+                                                    </Dropdown.Item> */}
+
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                            {/* End :: Miscellaneous menu */}               
+
+                                            <Dropdown.Divider />
+
+                                            {/* Start :: Room menu */}                       
+                                            <Dropdown.Item eventKey = "1" 
+                                                onClick = {() => {handelOpenBooking()}}>
+                                                <PenTool className = "feather-16 mr-3" />Booking
                                             </Dropdown.Item>
-                                            
-                                            <Dropdown.Item eventKey="11"
-                                                onClick={() => {handelOpenDespatch("T")}}>
-                                                <ShoppingBag className="feather-16 mr-3"/>Despatch
+
+                                            <Dropdown.Item eventKey = "2" 
+                                                disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                                onClick = {() => {handelOpenGenerateBill()}}>
+                                                <FileText className = "feather-16 mr-3"/>Bill
                                             </Dropdown.Item>
 
-                                            <Dropdown.Item eventKey="12" 
-                                                disabled={props.pTransactionId !== "undefined" ? false : true}
-                                                onClick={() => {handelOpenGenerateBill("T")}}>
-                                                <FileText className="feather-16 mr-3"/>Bill
-                                            </Dropdown.Item>
-
-                                            {/* <Dropdown.Item eventKey="13"
-                                                disabled={props.pTransactionId !== "undefined" ? false : true}
-                                                onClick={() => {handelOpenCheckout("T")}}>
+                                            <Dropdown.Item eventKey = "3"
+                                                disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                                onClick = {() => {handelOpenCheckout()}}>
                                                 <LogOut className="feather-16 mr-3"/>Check out
-                                            </Dropdown.Item> */}
-
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-
-                                    <Dropdown autoClose="outside">
-                                        <Dropdown.Toggle as={CustomToggle} drop="end" variant="secondary">
-                                            <span className="dropdown-item">
-                                                <Umbrella className="feather-16 mr-3" />
-                                                Service
-                                                <ChevronsRight className="feather-16 float-end"/>
-                                            </span>
-                                        </Dropdown.Toggle>
-
-                                        <Dropdown.Menu className="dropdown-sub">
-                                            <Dropdown.Item eventKey="20" 
-                                                onClick={() => {handelOpenOrder("S")}}>
-                                                <PenTool className="feather-16 mr-3" />Order
-                                            </Dropdown.Item>
-                                            
-                                            <Dropdown.Item eventKey="21"
-                                                onClick={() => {handelOpenDespatch("S")}}>
-                                                <ShoppingBag className="feather-16 mr-3"/>Despatch
                                             </Dropdown.Item>
 
-                                            <Dropdown.Item eventKey="22" 
-                                                disabled={props.pTransactionId !== "undefined" ? false : true}
-                                                onClick={() => {handelOpenGenerateBill("S")}}>
-                                                <FileText className="feather-16 mr-3"/>Bill
+                                            <Dropdown.Divider />
+
+                                            <Dropdown.Item eventKey = "4" 
+                                                onClick = {() => {handelOpenEdit()}}>
+                                                <Edit2 className = "feather-16 mr-3"/>Edit
                                             </Dropdown.Item>
 
-                                            {/* <Dropdown.Item eventKey="23"
-                                                disabled={props.pTransactionId !== "undefined" ? false : true}
-                                                onClick={() => {handelOpenCheckout("S")}}>
-                                                <LogOut className="feather-16 mr-3"/>Check out
-                                            </Dropdown.Item> */}
-
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-
-                                    <Dropdown autoClose="outside">
-                                        <Dropdown.Toggle as={CustomToggle} drop="end" variant="secondary">
-                                            <span className="dropdown-item">
-                                                <Wind className="feather-16 mr-3" />
-                                                Miscellaneous
-                                                <ChevronsRight className="feather-16 float-end"/>
-                                            </span>
-                                        </Dropdown.Toggle>
-
-                                        <Dropdown.Menu className="dropdown-sub">
-                                            <Dropdown.Item eventKey="30" 
-                                                onClick={() => {handelOpenOrder("M")}}>
-                                                <PenTool className="feather-16 mr-3" />Order
+                                            <Dropdown.Item eventKey = "5" 
+                                                onClick = {handelOpenDelete}>
+                                                <Scissors className = "feather-16 mr-3"/>Delete
                                             </Dropdown.Item>
-                                            
-                                            <Dropdown.Item eventKey="31"
-                                                onClick={() => {handelOpenDespatch("M")}}>
-                                                <ShoppingBag className="feather-16 mr-3"/>Despatch
-                                            </Dropdown.Item>
+                                            {/* End :: Room menu */}                       
+                                        </>}
 
-                                            <Dropdown.Item eventKey="32" 
-                                                onClick={() => {handelOpenGenerateBill("M")}}>
-                                                <FileText className="feather-16 mr-3"/>Bill
-                                            </Dropdown.Item>
 
-                                            {/* <Dropdown.Item eventKey="33"
-                                                onClick={() => {handelOpenCheckout("M")}}>
-                                                <LogOut className="feather-16 mr-3"/>Check out
-                                            </Dropdown.Item> */}
+                                        {(props.pCallingFrom === "T") && 
+                                            <>
+                                                {/* Start :: Table menu */}
+                                                <Dropdown.Item eventKey="10" 
+                                                    onClick={() => {handelOpenOrder("T")}}>
+                                                    <PenTool className="feather-16 mr-3" />Order
+                                                </Dropdown.Item>
+                                                
+                                                <Dropdown.Item eventKey="11"
+                                                    onClick={() => {handelOpenDespatch("T")}}>
+                                                    <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                                </Dropdown.Item>
 
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                                                <Dropdown.Item eventKey="12" 
+                                                    disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                    onClick={() => {handelOpenGenerateBill("T")}}>
+                                                    <FileText className="feather-16 mr-3"/>Bill
+                                                </Dropdown.Item>
 
-                                    <Dropdown.Divider />
+                                                {/* <Dropdown.Item eventKey="13"
+                                                    disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                    onClick={() => {handelOpenCheckout("T")}}>
+                                                    <LogOut className="feather-16 mr-3"/>Check out
+                                                </Dropdown.Item> */}
+                                                {/* End :: Room menu */}                       
+                                            </>}                                        
 
-                                    <Dropdown.Item eventKey = "1" 
-                                        onClick = {() => {handelOpenBooking()}}>
-                                        <PenTool className = "feather-16 mr-3" />Booking
-                                    </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "2" 
-                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
-                                        onClick = {() => {handelOpenGenerateBill()}}>
-                                        <FileText className = "feather-16 mr-3"/>Bill
-                                    </Dropdown.Item>
+                                        {(props.pCallingFrom === "S") && 
+                                            <>
+                                                {/* Start :: Service menu */}        
+                                                <Dropdown.Item eventKey="20" 
+                                                    onClick={() => {handelOpenOrder("S")}}>
+                                                    <PenTool className="feather-16 mr-3" />Order
+                                                </Dropdown.Item>
+                                                
+                                                <Dropdown.Item eventKey="21"
+                                                    onClick={() => {handelOpenDespatch("S")}}>
+                                                    <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                                </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "3"
-                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
-                                        onClick = {() => {handelOpenCheckout()}}>
-                                        <LogOut className="feather-16 mr-3"/>Check out
-                                    </Dropdown.Item>
+                                                <Dropdown.Item eventKey="22" 
+                                                    disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                    onClick={() => {handelOpenGenerateBill("S")}}>
+                                                    <FileText className="feather-16 mr-3"/>Bill
+                                                </Dropdown.Item>
 
-                                    <Dropdown.Divider />
+                                                {/* <Dropdown.Item eventKey="23"
+                                                    disabled={props.pTransactionId !== "undefined" ? false : true}
+                                                    onClick={() => {handelOpenCheckout("S")}}>
+                                                    <LogOut className="feather-16 mr-3"/>Check out
+                                                </Dropdown.Item> */}
+                                                {/* End :: Service menu */}        
+                                            </>}
 
-                                    <Dropdown.Item eventKey = "4" 
-                                        onClick = {() => {handelOpenEdit()}}>
-                                        <Edit2 className = "feather-16 mr-3"/>Edit
-                                    </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "5" 
-                                        onClick = {handelOpenDelete}>
-                                        <Scissors className = "feather-16 mr-3"/>Delete
-                                    </Dropdown.Item>
+                                        {(props.pCallingFrom === "M") && 
+                                            <>
+                                                {/* Start :: Miscellaneous menu */}               
+                                                <Dropdown.Item eventKey="30" 
+                                                    onClick={() => {handelOpenOrder("M")}}>
+                                                    <PenTool className="feather-16 mr-3" />Order
+                                                </Dropdown.Item>
+                                                
+                                                <Dropdown.Item eventKey="31"
+                                                    onClick={() => {handelOpenDespatch("M")}}>
+                                                    <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                                </Dropdown.Item>
+
+                                                <Dropdown.Item eventKey="32" 
+                                                    onClick={() => {handelOpenGenerateBill("M")}}>
+                                                    <FileText className="feather-16 mr-3"/>Bill
+                                                </Dropdown.Item>
+
+                                                {/* <Dropdown.Item eventKey="33"
+                                                    onClick={() => {handelOpenCheckout("M")}}>
+                                                    <LogOut className="feather-16 mr-3"/>Check out
+                                                </Dropdown.Item> */}
+                                                {/* End :: Miscellaneous menu */}               
+                                                {/* End :: Room menu */}                       
+                                            </>}
+
                                 </Dropdown.Menu> 
                             </Dropdown>
                             {/* End:: operational menu */}
