@@ -185,13 +185,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 {/* Start:: Row */}
                 <Row>
 
-                    {/* Start:: Column day count */}
-                    <Col sx = {12} md = {5} className="mb-3">
-                        <label className="col-12 form-label"><b>Day count</b></label>
-                        <label className="col-12 text-muted">{pDayCount} day(s)</label>
-                    </Col>
-                    {/* End:: Column day count */}
-
                     {/* Start:: Column plan */}
                     <Col sx = {12} md = {5} className="mb-3">
                         <label className="col-12 form-label"><b>Plan</b></label>
@@ -200,12 +193,18 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     {/* End:: Column plan */}
 
                     {/* Start:: Column agent */}
-                    <Col sx = {12} md = {2} className="mb-3">
+                    <Col sx = {12} md = {5} className="mb-3">
                         <label className="col-12 form-label"><b>Agent</b></label>
                         <label className="col-12 text-muted">{pBookingAgent}</label>
                     </Col>
                     {/* End:: Column agent */}
 
+                    {/* Start:: Column day count */}
+                    <Col sx = {12} md = {2} className="mb-3">
+                        <label className="col-12 form-label"><b>Day count</b></label>
+                        <label className="col-12 text-muted">{pDayCount} day(s)</label>
+                    </Col>
+                    {/* End:: Column day count */}
 
                 </Row>
                 {/* End:: Row */}

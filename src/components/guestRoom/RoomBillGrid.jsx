@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react"; 
 
 import { formatINR, formatDDMMYYYY } from "../common/Common";
@@ -8,10 +8,6 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const RoomBillGrid = ({pData}) => {    
     const gridRef = useRef();
-    const [rowData, setRowData] = useState([]);
-    const [totalItemPrice, setTotalItemPrice] = useState(0);
-    const [totalGstCharge, setTotalGstCharge] = useState(0);
-    const [total, setTotal] = useState(0);
 
     const defaultColDef = useMemo(() => {
         return {
@@ -27,7 +23,6 @@ const RoomBillGrid = ({pData}) => {
     const rowClassRules = useMemo(() => {
         return {
             "ag-row-pinned_other": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId !== "Total"; },
-        
             "ag-row-pinned_total": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId === "Total"; },
         };
     }, []);  
@@ -66,88 +61,75 @@ const RoomBillGrid = ({pData}) => {
             field: "gstCharge"
         }
     ]);
-
     const pinnedRowData = [
-        {rowId: "Sum", tariff: 0},
-        {rowId: "GST", tariff: 0},
+        // {rowId: "Sum", tariff: 0},
+        // {rowId: "GST", tariff: 0},
         {rowId: "Total", triaff: 0}
     ];
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
-        gridRef.current.api.setRowData(rowData);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
+        let totalPrice = 0;
+        let totalGst = 0;
+        let rows = [];
 
-        params.api.sizeColumnsToFit();
+        try {
+            pData.forEach(element => {
+                const row = {
+                                rowId: rows.length + 1, 
+                                no: element.no, 
+                                occupancyDate: element.occupancyDate,
+                                tariff: element.tariff + (element.extraPersonCount * element.extraPersonTariff) + (element.extraBedCount * element.extraBedTariff) - element.discount,
+                                id: element.id,
+                                gstCharge: element.gstCharge
+                            };
+        
+                rows.push(row);
 
-        window.addEventListener('resize', function () {
-            setTimeout(function () {
-              params.api.sizeColumnsToFit();
+                totalPrice += element.tariff;
+                totalGst += element.gstCharge;
             });
-          });
+        
+            // setTotalItemPrice(totalPrice);
+            // setTotalGstCharge(totalGst);
+            // setTotal(totalPrice + totalGst);
 
-        gridRef.current.api.sizeColumnsToFit();
+            pinnedRowData[0].triaff = totalPrice + totalGst;
 
-        gridRef.current.api.sizeColumnsToFit();
+            gridRef.current.api.setRowData(rows);
+            gridRef.current.api.refreshCells();
+            gridRef.current.api.redrawRows();
+
+            params.api.sizeColumnsToFit();
+            gridRef.current.api.sizeColumnsToFit();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: load empty data to grid
     
     // Start:: load empty data to grid
     const handleFirstDataRendered = () => {
-        // set pinned data
-        pinnedRowData[0].tariff = totalItemPrice;
-        pinnedRowData[1].tariff = totalGstCharge;
-        pinnedRowData[2].tariff = total;
-
-        gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        gridRef.current.api.refreshCells();
-        gridRef.current.api.redrawRows();
-        gridRef.current.api.sizeColumnsToFit();
+        try {
+            gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: load empty data to grid
 
-    // Start:: format data as grid
-    useEffect(() => {
-        let totalPrice = 0;
-        let totalGst = 0;
-        let rows = [];
-
-        pData.forEach(element => {
-            const row = {
-                            rowId: rows.length + 1, 
-                            no: element.no, 
-                            occupancyDate: element.occupancyDate,
-                            tariff: element.tariff + (element.extraPersonCount * element.extraPersonTariff) + (element.extraBedCount * element.extraBedTariff) - element.discount,
-                            id: element.id,
-                            gstCharge: element.gstCharge
-                        };
-    
-            rows.push(row);
-
-            totalPrice += element.tariff;
-            totalGst += element.gstCharge;
-        });
-        
-        setTotalItemPrice(totalPrice);
-        setTotalGstCharge(totalGst);
-        setTotal(totalPrice + totalGst);
-
-        setRowData(rows);
-    }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: format data as grid
 
 	return (
         <div className="col-12 ag-theme-alpine grid-height-400">
             <AgGridReact	
-                ref={gridRef}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowData={rowData}
-                rowSelection={"single"}
-                rowClassRules={rowClassRules}
-                onGridReady={handleGridReady}
-                onFirstDataRendered={handleFirstDataRendered}/>
+                ref = {gridRef}
+                columnDefs = {columnDefs}
+                defaultColDef = {defaultColDef}
+                rowData = {null}
+                rowSelection = {"single"}
+                rowClassRules = {rowClassRules}
+                onGridReady = {handleGridReady}
+                onFirstDataRendered = {handleFirstDataRendered} />
         </div>
     );
 }

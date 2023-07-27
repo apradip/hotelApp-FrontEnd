@@ -1,7 +1,7 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { Coffee, Phone, ChevronsRight, Edit2, PenTool, ShoppingBag, FileText, CreditCard, LogOut, Scissors, MoreVertical } from "react-feather";
+import { Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
 import { subStr, formatINR } from "../common/Common";
 import TimeElapsed from "../common/TimeElapsed";
 
@@ -14,7 +14,7 @@ import GenerateBill from "./GuestMiscellaneousGenerateBill";
 import Checkout from "./GuestMiscellaneousCheckout";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
-    <NavLink to = "#" className = "dropdown" ref = {ref} 
+    <NavLink to = "#" className = "dropdown"
         onClick = {(e) => {e.preventDefault(); onClick(e);}}>
       {children}
     </NavLink>
@@ -169,7 +169,6 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 ref = {ref}
                 key = {props.pIndex}
                 index = {props.pIndex}
-                // className = {props.pOption === "R" ? "border-room" : "border"}
                 className = {"border"} 
                 border = {active ? "info" : focus ? "primary" : ""}  
                 onMouseEnter = {() => setFocus(true)}
@@ -273,64 +272,66 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
             </Card>
             {/* End :: card component */}
 
-            {/* Start :: view component */}
-            <View
-                ref = {viewRef}
-                pGuestId = {props.pGuestId} 
-                onClosed = {handleClose} />
-            {/* End :: view component */}
+            <>
+                {/* Start :: view component */}
+                <View
+                    ref = {viewRef}
+                    pGuestId = {props.pGuestId} 
+                    onClosed = {() => {handleClose()}} />
+                {/* End :: view component */}
 
-            {/* Start :: edit component */}
-            <Edit 
-                ref = {editRef}
-                pGuestId = {props.pGuestId} 
-                onSaved = {props.onEdited} 
-                onClosed = {handleClose} />
-            {/* End :: edit component */}
+                {/* Start :: edit component */}
+                <Edit 
+                    ref = {editRef}
+                    pGuestId = {props.pGuestId} 
+                    onSaved = {props.onEdited} 
+                    onClosed = {() => {handleClose()}} />
+                {/* End :: edit component */}
 
-            {/* Start :: delete employee component */}
-            <Delete 
-                ref = {deleteRef}
-                pGuestId = {props.pGuestId} 
-                pName = {props.pName}
-                onDeleted = {props.onDeleted} 
-                onClosed = {handleClose} />
-            {/* End :: delete employee component */}
+                {/* Start :: delete employee component */}
+                <Delete 
+                    ref = {deleteRef}
+                    pGuestId = {props.pGuestId} 
+                    pName = {props.pName}
+                    onDeleted = {props.onDeleted} 
+                    onClosed = {() => {handleClose()}} />
+                {/* End :: delete employee component */}
 
-            {/* Start :: miscellaneous order component */}
-            <Order 
-                ref = {orderRef}
-                pGuestId = {props.pGuestId} 
-                onSaved = {props.onOrdered} 
-                onClosed = {handleClose} />
-            {/* End :: miscellaneous order component */}
+                {/* Start :: miscellaneous order component */}
+                <Order 
+                    ref = {orderRef}
+                    pGuestId = {props.pGuestId} 
+                    onSaved = {props.onOrdered} 
+                    onClosed = {() => {handleClose()}} />
+                {/* End :: miscellaneous order component */}
 
-            {/* Start :: miscellaneous despatch component */}
-            <Despatch
-                ref = {despatchRef}
-                pGuestId = {props.pGuestId} 
-                onSaved = {props.onDespatched} 
-                onClosed = {handleClose} />
-            {/* End :: miscellaneous despatch component */}
+                {/* Start :: miscellaneous despatch component */}
+                <Despatch
+                    ref = {despatchRef}
+                    pGuestId = {props.pGuestId} 
+                    onSaved = {props.onDespatched} 
+                    onClosed = {() => {handleClose()}} />
+                {/* End :: miscellaneous despatch component */}
 
-            {/* Start :: miscellaneous generate & display summery bill component */}
-            <GenerateBill 
-                ref = {generateBillRef}
-                pGuestId = {props.pGuestId} 
-                onPaymentAdded = {props.onPaymentAdded}
-                onSaved = {props.onBillGenerated}
-                onClosed = {handleClose} />
-            {/* End :: miscellaneous generate & display summery bill component */}
+                {/* Start :: miscellaneous generate & display summery bill component */}
+                <GenerateBill 
+                    ref = {generateBillRef}
+                    pGuestId = {props.pGuestId} 
+                    onPaymentAdded = {props.onPaymentAdded}
+                    onSaved = {props.onBillGenerated}
+                    onClosed = {() => {handleClose()}} />
+                {/* End :: miscellaneous generate & display summery bill component */}
 
-            {/* Start :: miscellaneous checkout component */}
-            <Checkout
-                ref = {checkoutRef}
-                pGuestId = {props.pGuestId} 
-                pName = {props.pName}
-                pCorporateName = {props.pCorporateName}
-                onSaved = {props.onCheckedout} 
-                onClosed = {handleClose} />
-            {/* End :: miscellaneous checkout component */}
+                {/* Start :: miscellaneous checkout component */}
+                <Checkout
+                    ref = {checkoutRef}
+                    pGuestId = {props.pGuestId} 
+                    pName = {props.pName}
+                    pCorporateName = {props.pCorporateName}
+                    onSaved = {props.onCheckedout} 
+                    onClosed = {() => {handleClose()}} />
+                {/* End :: miscellaneous checkout component */}
+            </>            
         </>
     );
     // End:: Html

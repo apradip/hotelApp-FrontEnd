@@ -9,6 +9,8 @@ import CardService from "../components/guestService/GuestServiceCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
+import CardRoom from "../components/guestRoom/GuestRoomCard";
+
 const Operation = {
     GuestAdd: "GUEST_ADD",
     GuestMod: "GUEST_MOD",
@@ -272,32 +274,58 @@ const GuestServices = forwardRef((props, ref) => {
 
             return (
                 <div className="col-sm-6 col-xl-4 col-md-4" key={colKey}>
-                    {
-                        (pData.option === "S") &&
-                            <CardService className="border"
-                                ref = {(el) => cardRefs.current[itemIdx] = el}
-                                pIndex = {itemIdx}
-                                pGuestId = {pData.id} 
-                                pName = {pData.name}
-                                pMobile = {pData.mobile}
-                                pGuestCount = {pData.guestCount}
-                                pCorporateName = {pData.corporateName}
-                                pCorporateAddress = {pData.corporateAddress}
-                                pGstNo = {pData.gstNo}
-                                pBalance = {pData.balance}
-                                pOption = {pData.option}
-                                pIndate = {pData.inDate}
-                                pInTime = {pData.inTime}
-                                onEdited = {() => {handleSuccess(Operation.GuestMod)}}
-                                onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
-                                onOrdered = {() => {handleSuccess(Operation.Order)}}
-                                onDespatched = {() => {handleSuccess(Operation.Despatch)}}
-                                onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
-                                onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
-                                onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
-                                onClosed = {close} 
-                                onActivated = {handleActivated} />     
-                    }           
+                    {(pData.option === "R") && 
+                        <CardRoom 
+                            className = "border"
+                            ref = {(el) => cardRefs.current[itemIdx] = el}
+                            pIndex = {itemIdx}
+                            pGuestId = {pData.id} 
+                            pName = {pData.name}
+                            pMobile = {pData.mobile}
+                            pGuestCount = {pData.guestCount}
+                            pCorporateName = {pData.corporateName}
+                            pCorporateAddress = {pData.corporateAddress}
+                            pGstNo = {pData.gstNo}
+                            pBalance = {pData.balance}
+                            pOption = {pData.option}
+                            pIndate={pData.inDate}
+                            pInTime={pData.inTime}
+                            pRooms = {pData.items}
+                            onEdited = {() => {handleSuccess(Operation.GuestMod)}}
+                            onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
+                            onBooked={() => {handleSuccess(Operation.Booked)}}
+                            onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
+                            onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
+                            onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
+                            onOrdered = {() => {handleSuccess(Operation.Order)}}
+                            onDespatched = {() => {handleSuccess(Operation.Despatch)}}
+                            onClosed={close} 
+                            onActivated={() => {handleActivated(itemIdx)}} />}
+
+                    {(pData.option === "S") &&
+                        <CardService className="border"
+                            ref = {(el) => cardRefs.current[itemIdx] = el}
+                            pIndex = {itemIdx}
+                            pGuestId = {pData.id} 
+                            pName = {pData.name}
+                            pMobile = {pData.mobile}
+                            pGuestCount = {pData.guestCount}
+                            pCorporateName = {pData.corporateName}
+                            pCorporateAddress = {pData.corporateAddress}
+                            pGstNo = {pData.gstNo}
+                            pBalance = {pData.balance}
+                            pOption = {pData.option}
+                            pIndate = {pData.inDate}
+                            pInTime = {pData.inTime}
+                            onEdited = {() => {handleSuccess(Operation.GuestMod)}}
+                            onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
+                            onOrdered = {() => {handleSuccess(Operation.Order)}}
+                            onDespatched = {() => {handleSuccess(Operation.Despatch)}}
+                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
+                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
+                            onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
+                            onClosed = {close} 
+                            onActivated = {() => {handleActivated(itemIdx)}} />}           
                 </div>);
         } catch (err) {
             console.log(err);

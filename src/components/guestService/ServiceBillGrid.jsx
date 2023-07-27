@@ -8,11 +8,6 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const ServiceBillGrid = ({pData}) => {    
     const gridRef = useRef();
-    const [rowData, setRowData] = useState([]);
-    const [totalItemPrice, setTotalItemPrice] = useState(0);
-    const [totalServiceCharge, setTotalServiceCharge] = useState(0);
-    const [totalGstCharge, setTotalGstCharge] = useState(0);
-    const [total, setTotal] = useState(0);
 
     const defaultColDef = useMemo(() => {
         return {

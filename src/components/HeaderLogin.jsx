@@ -16,7 +16,6 @@ import Logout from "./auth/Logout"
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown"
-        ref={ref} 
         onClick={(e) => {e.preventDefault(); onClick(e);}} >
         {children}
     </NavLink>
@@ -173,45 +172,48 @@ const HeaderLogin = forwardRef((props, ref) => {
                                 <Nav className="me-auto">
                                     {getPageAttribute(selectedPage).show.search &&
                                         <Search 
-                                            onChange={handleSearch}
-                                            ref={searchRef}
-                                            currentPage={selectedPage}/>}
+                                            onChange = {handleSearch}
+                                            ref = {searchRef}
+                                            currentPage = {selectedPage}/>}
 
                                     {getPageAttribute(selectedPage).show.add &&
-                                        <OverlayTrigger
-                                            placement="bottom"
-                                            overlay={<Tooltip>new</Tooltip>}>
+                                        // <OverlayTrigger
+                                        //     placement="bottom"
+                                        //     overlay={<Tooltip>new</Tooltip>}>
                                             <button 
-                                                className="btn btn-success me-1" 
-                                                size="md" 
-                                                onClick={() => {handleOpenAdd()}}>
-                                                <Paperclip className="feather-16"/>
+                                                className = "btn btn-success me-1" 
+                                                size = "md" 
+                                                onClick = {() => {handleOpenAdd()}}>
+                                                <Paperclip className = "feather-16"/>
                                             </button>
-                                        </OverlayTrigger>}
+                                        // </OverlayTrigger>
+                                        }
 
                                     {getPageAttribute(selectedPage).show.edit &&
-                                        <OverlayTrigger
-                                            placement ="bottom"
-                                            overlay={<Tooltip>edit</Tooltip>}>
+                                        // <OverlayTrigger
+                                        //     placement ="bottom"
+                                        //     overlay={<Tooltip>edit</Tooltip>}>
                                             <button 
-                                                className="d-none d-md-block d-lg-block d-xl-block btn btn-info me-1" 
-                                                size="md" 
-                                                onClick={() => {handleOpenEdit()}}>
-                                                <Edit3 className="feather-16"/>
+                                                className = "d-none d-md-block d-lg-block d-xl-block btn btn-info me-1" 
+                                                size = "md" 
+                                                onClick = {() => {handleOpenEdit()}}>
+                                                <Edit3 className = "feather-16"/>
                                             </button>
-                                        </OverlayTrigger>}
+                                        // </OverlayTrigger>
+                                        }
 
                                     {getPageAttribute(selectedPage).show.delete &&
-                                        <OverlayTrigger
-                                            placement = "bottom"
-                                            overlay = {<Tooltip>delete</Tooltip>}>
+                                        // <OverlayTrigger
+                                        //     placement = "bottom"
+                                        //     overlay = {<Tooltip>delete</Tooltip>}>
                                             <button 
-                                                className="d-none d-md-block d-lg-block d-xl-block btn btn-danger mx-0" 
-                                                size="md" 
-                                                onClick={() => {handleOpenDel()}}>
-                                                <Scissors className="feather-16"/>
+                                                className = "d-none d-md-block d-lg-block d-xl-block btn btn-danger mx-0" 
+                                                size = "md" 
+                                                onClick = {() => {handleOpenDel()}}>
+                                                <Scissors className = "feather-16"/>
                                             </button>
-                                        </OverlayTrigger>}
+                                        // </OverlayTrigger>
+                                        }
                                 </Nav>
                             </Navbar.Collapse>
                         </div>}

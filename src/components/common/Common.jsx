@@ -389,9 +389,11 @@ export const getRooms = (roomObject) => {
     let rooms = "";
 
     if (roomObject) {
-        roomObject.map((room) => (
-            rooms.length > 0 ? rooms = rooms + ", " + room.no : rooms = room.no
-        ))
+        if (roomObject.length) {
+            roomObject.map((room) => (
+                rooms.length > 0 ? rooms = rooms + ", " + room.no : rooms = room.no
+            ));
+        }
     }
 
     return rooms;
@@ -401,9 +403,11 @@ export const getTables = (tableObject) => {
     let tables = "";
 
     if (tableObject) {
-        if (Array.isArray(tableObject) && tableObject.length > 0){
-            tableObject.map((table) => (
-                tables.length > 0 ? tables = tables + ", " + table.no : tables = table.no))
+        if (tableObject.length) {
+            if (Array.isArray(tableObject) && tableObject.length > 0){
+                tableObject.map((table) => (
+                    tables.length > 0 ? tables = tables + ", " + table.no : tables = table.no));
+            }
         }
     }
 

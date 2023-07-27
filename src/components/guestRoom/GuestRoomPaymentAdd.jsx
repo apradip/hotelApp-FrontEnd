@@ -20,7 +20,7 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pExpenseId}/${pBillId}`
+        url: `${contextValues.guestRoomAPI}/${hotelId}/${pGuestId}/${pExpenseId}/${pBillId}`
     });         //insert payment
 
     // Start:: Form validate and save data

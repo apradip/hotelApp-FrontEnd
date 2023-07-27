@@ -31,7 +31,17 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}`
     });
 
-    const handelChangeData = (gridData) => {
+    // Strat:: save assigned table 
+    const handleChangeTable = async (tables) => {
+        try {
+            await doUpdate({tables: tables});
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: save assigned table
+    
+    const handelChangeFood = (gridData) => {
         let dataList = [];
 
         try {
@@ -102,15 +112,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     });
     // End:: Form validate and save data
 
-    // Strat:: close form    
-    const handleChangeTable = async (tables) => {
-        try {
-            await doUpdate({tables: tables});
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // End:: close form    
     
     // Strat:: close form    
     const handleClose = () => {
@@ -205,9 +206,9 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             name={"keyInputTables"}
                             value={pTables}
                             onChange={(value) => {
-                                setFieldValue("keyInputTables", value)
-                                if (!value) return
-                                handleChangeTable(value)
+                                setFieldValue("keyInputTables", value);
+                                if (!value) return;
+                                handleChangeTable(value);
                             }}/>
                     </Col>
 
@@ -224,7 +225,10 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <OrderGrid
                             pState = "MOD"
                             pDefaultRowData = {pData}
-                            onChange = {handelChangeData} />
+                            onChange = {(value) => {
+                                if (!value) return;
+                                handelChangeFood(value);
+                            }} />
                         {/* End:: Column service detail */}
 
                     </Col>

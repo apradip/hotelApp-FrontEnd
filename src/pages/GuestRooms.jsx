@@ -9,6 +9,7 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
+
 const Operation = {
     GuestAdd: "GUEST_ADD",
     GuestMod: "GUEST_MOD",
@@ -278,22 +279,21 @@ const GuestRooms = forwardRef((props, ref) => {
                                 pCorporateName = {pData.corporateName}
                                 pCorporateAddress = {pData.corporateAddress}
                                 pGstNo = {pData.gstNo}
-                                // pDayCount = {pData.dayCount}
-                                // pBookingAgent={pData.bookingAgent}
-                                // pPlan={pData.plan}
-                                // pRooms={pData.rooms}
                                 pBalance = {pData.balance}
                                 pOption = {pData.option}
                                 pIndate={pData.inDate}
                                 pInTime={pData.inTime}
+                                pRooms = {pData.rooms}
                                 onEdited = {() => {handleSuccess(Operation.GuestMod)}}
                                 onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
                                 onBooked={() => {handleSuccess(Operation.Booked)}}
                                 onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
                                 onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
                                 onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
+                                onOrdered = {() => {handleSuccess(Operation.Order)}}
+                                onDespatched = {() => {handleSuccess(Operation.Despatch)}}
                                 onClosed={close} 
-                                onActivated={handleActivated} />      
+                                onActivated={() => {handleActivated(itemIdx)}} />      
                     }          
                 </Col>);
         } catch (err) {

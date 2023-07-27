@@ -39,7 +39,7 @@ const Form = ({pGuestId, pName, pCorporateName,
             {/* Start:: Modal header */}
             <Modal.Header>
                 {/* Header text */}
-                <Modal.Title>Checkout</Modal.Title>
+                <Modal.Title>Checkout [Table]</Modal.Title>
 
                 {/* Close button */}
                 <NavLink 
