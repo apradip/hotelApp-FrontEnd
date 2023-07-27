@@ -41,7 +41,7 @@ const MiscellaneousBillGrid = ({pData}) => {
             valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}` : null}
         },
         {
-            headerName: "UnitPrice", 
+            headerName: "Rate", 
             field: "unitPrice", 
             type: "rightAligned",
             width: 50,
