@@ -1,11 +1,12 @@
-import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Breadcrumb, Row, Col} from "react-bootstrap";
-import {toast} from "react-toastify";
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
+import { Breadcrumb, Row, Col, Placeholder } from "react-bootstrap";
+import { toast } from "react-toastify";
 
-import {HotelId} from "../App";
-import {useStateContext} from "../contexts/ContextProvider";
+import { HotelId } from "../App";
+import { useStateContext } from "../contexts/ContextProvider";
 import Add from "../components/guestRoom/GuestRoomAdd";
 import CardRoom from "../components/guestRoom/GuestRoomCard";
+import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
@@ -303,6 +304,69 @@ const GuestRooms = forwardRef((props, ref) => {
     };
     // End:: show all data in card format
 
+    // Start:: show all data in card format
+    const displayPlsceholder = (pData = [{},{},{},{},{},{},{},{},{},{},{},{}]) => {
+        let rowIdx = 0;
+        let colIdx = 0;
+        let rowData = [];
+
+        try {
+            return pData.map((item) => {
+                rowData.push(item);
+                colIdx++;
+
+                if ((rowData.length === itemPerRow) || (pData.length === colIdx)) {
+                    const r = rowIdx;
+                    const d = rowData;
+
+                    rowIdx++;
+                    rowData = [];
+
+                    return createPlaceholderRow(d, r);
+                } else { 
+                    return null;
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const createPlaceholderRow = (pData, rowIdx) => {
+        try {
+            const rowKey=`row_${rowIdx}`;
+
+            return (
+                <Row key={rowKey}>
+                    {
+                        pData.map((item, idx) => {
+                            const itemIdx = (rowIdx * itemPerRow) + idx;
+                            return createPlaceholderCol(item, itemIdx);
+                        })
+                    }
+                </Row>);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const createPlaceholderCol = (pData = undefined, itemIdx) => {   
+        try {
+            const colKey = `col_${pData.id}`;
+
+            return (
+                <Col xl={4} md={4} key={colKey}>
+                <CardPlaceholder 
+                    ref = {(el) => cardRefs.current[itemIdx] = el}
+                    pIndex = {itemIdx}
+                    onClosed = {close} />
+                </Col>);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: show all data in card format
+
 
     // Start:: Html
     return ( 
@@ -335,42 +399,56 @@ const GuestRooms = forwardRef((props, ref) => {
                         
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
-                            {/* Start :: Display data count */}
-                            <div className="col-12 text-danger p-0">
-                                {!loading && 
-                                    data && 
-                                        `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
-                            </div>
-                            {/* End :: Display data count */}
+                            <Row>
+                                {/* Start :: Display data count */}
+                                <Col sx={6} md={6} className="text-danger">
+                                    {loading && 
+                                        <Placeholder animation="glow">
+                                            <Placeholder xs={3} sm={3} md={3} lg={3} xl={3} bg="danger"/>
+                                        </Placeholder>}
+
+                                    {!loading && 
+                                        data && 
+                                            `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
+                                </Col>
+                                {/* End :: Display data count */}
+                            </Row>
                         </div>
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body py-0">
-                            {loading &&
-                                <div className="d-flex justify-content-center">
-                                    <div className="spinner-border text-primary" role="status"/>
-                                </div>}
+                        <div className="card-body">
+                            <Row>
+                                {loading &&
+                                    displayPlsceholder()}
 
-                            {!loading && 
-                                data && 
-                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
+                                {!loading && 
+                                    data && 
+                                        displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
+                            </Row>
                         </div>
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer p-0">
-                            {/* Start :: Pagination */}
-                            <div className="col-12 d-flex justify-content-end">
-                                {!loading && 
-                                        data && 
-                                            <Paging
-                                                itemPerPage = {itemPerPage}
-                                                totalItem = {data.length}
-                                                selectedPage = {selectedPage}
-                                                onPaging = {handlePaging} />}
-                            </div>
-                            {/* End :: Pagination */}
+                        <div className="card-footer">
+                            <Row>
+                                {/* Start :: Pagination */}
+                                <Col sx={12} md={12} className="d-flex justify-content-end">
+                                    {loading && 
+                                        <Placeholder animation="glow">
+                                            <Placeholder.Button variant="primary" xs={1} sm={1} md={1} lg={1} xl={1}/>
+                                        </Placeholder>}                                
+
+                                    {!loading && 
+                                            data && 
+                                                <Paging
+                                                    itemPerPage = {itemPerPage}
+                                                    totalItem = {data.length}
+                                                    selectedPage = {selectedPage}
+                                                    onPaging = {handlePaging} />}
+                                </Col>
+                                {/* End :: Pagination */}
+                            </Row>
                         </div>
                         {/* End :: Footer & operational panel */}
 

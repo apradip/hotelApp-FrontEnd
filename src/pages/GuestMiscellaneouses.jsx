@@ -1,12 +1,13 @@
-import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {Form, Breadcrumb, Row, Col} from "react-bootstrap";
-import {toast} from "react-toastify";
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
+import { Form, Breadcrumb, Row, Col, Placeholder } from "react-bootstrap";
+import { toast } from "react-toastify";
 
-import {HotelId} from "../App";
-import {useStateContext} from "../contexts/ContextProvider";
+import { HotelId } from "../App";
+import { useStateContext } from "../contexts/ContextProvider";
 import Add from "../components/guestMiscellaneous/GuestMiscellaneousAdd";
 import CardMiscellaneous from "../components/guestMiscellaneous/GuestMiscellaneousCard";
 import CardRoom from "../components/guestRoom/GuestRoomCard";
+import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
@@ -297,15 +298,15 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             pRooms = {pData.items}
                             pCallingFrom = {"M"}
                             onEdited = {() => {handleSuccess(Operation.GuestMod)}}
-                            onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
-                            onBooked={() => {handleSuccess(Operation.Booked)}}
-                            onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
-                            onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
-                            onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
+                            onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
+                            onBooked = {() => {handleSuccess(Operation.Booked)}}
+                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
+                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
+                            onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
                             onOrdered = {() => {handleSuccess(Operation.Order)}}
                             onDespatched = {() => {handleSuccess(Operation.Despatch)}}
-                            onClosed={close} 
-                            onActivated={() => {handleActivated(itemIdx)}} />}
+                            onActivated = {() => {handleActivated(itemIdx)}} 
+                            onClosed = {close} />}
 
                     {(pData.option === "M") && 
                         <CardMiscellaneous 
@@ -330,8 +331,71 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
                             onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
                             onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
-                            onClosed = {close} 
-                            onActivated = {() => {handleActivated(itemIdx)}} />}
+                            onActivated = {() => {handleActivated(itemIdx)}} 
+                            onClosed = {close} />}
+                </Col>);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: show all data in card format
+
+    // Start:: show all data in card format
+    const displayPlsceholder = (pData = [{},{},{},{},{},{},{},{},{},{},{},{}]) => {
+        let rowIdx = 0;
+        let colIdx = 0;
+        let rowData = [];
+
+        try {
+            return pData.map((item) => {
+                rowData.push(item);
+                colIdx++;
+
+                if ((rowData.length === itemPerRow) || (pData.length === colIdx)) {
+                    const r = rowIdx;
+                    const d = rowData;
+
+                    rowIdx++;
+                    rowData = [];
+
+                    return createPlaceholderRow(d, r);
+                } else { 
+                    return null;
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const createPlaceholderRow = (pData, rowIdx) => {
+        try {
+            const rowKey=`row_${rowIdx}`;
+
+            return (
+                <Row key={rowKey}>
+                    {
+                        pData.map((item, idx) => {
+                            const itemIdx = (rowIdx * itemPerRow) + idx;
+                            return createPlaceholderCol(item, itemIdx);
+                        })
+                    }
+                </Row>);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const createPlaceholderCol = (pData = undefined, itemIdx) => {   
+        try {
+            const colKey = `col_${pData.id}`;
+
+            return (
+                <Col xl={4} md={4} key={colKey}>
+                <CardPlaceholder 
+                    ref = {(el) => cardRefs.current[itemIdx] = el}
+                    pIndex = {itemIdx}
+                    onClosed = {close} />
                 </Col>);
         } catch (err) {
             console.log(err);
@@ -346,19 +410,19 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             {/* Seart :: Bread crumb */}
             <div className="content-header">
                 <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-sm-4 m-0">
+                    <Row>
+                        <Col sm={4} className="m-0">
                             <h1 className="text-dark">Miscellaneous</h1>
-                        </div>
+                        </Col>
 
-                        <div className="col-sm-8">
+                        <Col sm={8}>
                             <Breadcrumb className="breadcrumb float-right">
                                 <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                                 <Breadcrumb.Item href="/">Transaction</Breadcrumb.Item>
                                 <Breadcrumb.Item active>Miscellaneous</Breadcrumb.Item>
                             </Breadcrumb>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </div>
             </div>
             {/* End :: Bread crumb */}
@@ -370,47 +434,64 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
                         {/* Start :: Header & operational panel */}
                         <div className="card-header">
-                            <div className="row">
+                            <Row>
                                 {/* Start :: Display data count */}
-                                <div className="col-6 text-danger">
+                                <Col sx={6} md={6} className="text-danger">
+                                    {loading && 
+                                        <Placeholder animation="glow">
+                                            <Placeholder xs={3} sm={3} md={3} lg={3} xl={3} bg="danger"/>
+                                        </Placeholder>}
+
                                     {!loading && 
                                         data && 
                                             `item count : ${selectedPage * itemPerPage > data.length ? data.length : selectedPage * itemPerPage} of ${data.length}`}
-                                </div>
+                                </Col>
                                 {/* End :: Display data count */}
 
                                 {/* Start :: display switch option */}
-                                <div className="col-6 d-flex justify-content-end">
-                                        <Form.Check 
-                                            type="switch"
-                                            id="chkRoom"
-                                            label={roomOnly ? "Show in house guests only" : "Show all guests"} 
-                                            value={roomOnly} 
-			                                onChange={(e) => {setRoomOnly(e.currentTarget.checked)}}/>
-                                </div>
+                                <Col sx={6} md={6} className="d-flex justify-content-end">
+                                    {loading && 
+                                        <Placeholder animation="glow">
+                                            <Placeholder xs={6} sm={6} md={6} lg={6} xl={6} bg="primary"/>
+                                        </Placeholder>}
+
+                                    {!loading && 
+                                        data && 
+                                            <Form.Check 
+                                                type="switch"
+                                                id="chkRoom"
+                                                label={roomOnly ? "Show in house guests only" : "Show all guests"} 
+                                                value={roomOnly} 
+                                                onChange={(e) => {setRoomOnly(e.currentTarget.checked)}}/>}
+                                </Col>
                                 {/* End :: display switch option */}
-                            </div>
+                            </Row>
                         </div>
                         {/* End :: Header & operational panel */}
 
                         {/* Start :: Display data */}
-                        <div className="card-body py-0">
-                            {loading &&
-                                <div className="d-flex justify-content-center">
-                                    <div className="spinner-border text-primary" role="status"/>
-                                </div>}
+                        <div className="card-body">
+                            <Row>
+                                {loading &&
+                                    displayPlsceholder()}
 
-                            {!loading && 
-                                data && 
-                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
+                                {!loading && 
+                                    data && 
+                                        displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
+                            </Row>                                    
                         </div>
                         {/* End :: Display data */}
                         
                         {/* Start :: Footer & operational panel */}
-                        <div className="card-footer py-0">
-                            <div className="row">
+                        <div className="card-footer">
+                            <Row>
                                 {/* Start :: Pagination */}
-                                <div className="col-12 d-flex justify-content-end">
+                                <Col sx={12} md={12} className="d-flex justify-content-end">
+                                    {loading && 
+                                        <Placeholder animation="glow">
+                                            <Placeholder.Button variant="primary" xs={1} sm={1} md={1} lg={1} xl={1}/>
+                                        </Placeholder>}
+
                                     {!loading && 
                                             data && 
                                                 <Paging
@@ -418,9 +499,9 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                                                     totalItem = {data.length}
                                                     selectedPage = {selectedPage}
                                                     onPaging = {handlePaging} />}
-                                </div>
+                                </Col>
                                 {/* End :: Pagination */}
-                            </div>
+                            </Row>
                         </div>
                         {/* End :: Footer & operational panel */}
 
