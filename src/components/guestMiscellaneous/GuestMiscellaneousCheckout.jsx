@@ -6,7 +6,6 @@ import { X } from "react-feather";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import ErrorModal from "../ErrorModal";
 
 // Start:: form
 const Form = ({pGuestId, pName, pCorporateName, 
@@ -33,8 +32,8 @@ const Form = ({pGuestId, pName, pCorporateName,
     // Start:: Html
     return (
         <Modal 
-            size = "sm"
-            show = {pShow} >
+            size="sm"
+            show={pShow}>
 
             {/* Start:: Modal header */}
             <Modal.Header>
@@ -43,17 +42,17 @@ const Form = ({pGuestId, pName, pCorporateName,
 
                 {/* Close button */}
                 <NavLink 
-                    className = "nav-icon" 
-                    href = "#" 
-                    onClick = {onClosed}>
-                    <i className = "align-middle"><X/></i>
+                    className="nav-icon" 
+                    href="#" 
+                    onClick={onClosed}>
+                    <i className="align-middle"><X/></i>
                 </NavLink>
             </Modal.Header>
             {/* End:: Modal header */}
 
             {/* Start:: Modal body */}
             <Modal.Body>
-                <label className = "form-label">Are you really want to check out guest <mark><code>{ pName ? pName : pCorporateName }</code></mark> ?</label>
+                <label className="form-label">Are you really want to check out guest <mark><code>{ pName ? pName : pCorporateName }</code></mark> ?</label>
             </Modal.Body>
             {/* End:: Modal body */}
 
@@ -63,21 +62,21 @@ const Form = ({pGuestId, pName, pCorporateName,
                 {/* Start:: Close button */}
                 <button 
                     autoFocus
-                    type = "button"   
-                    className = "btn btn-danger"
-                    disabled = {loading}
-                    ref = {inputRef} 
-                    onClick = {onClosed} >
+                    type="button"   
+                    className="btn btn-danger"
+                    disabled={loading}
+                    ref={inputRef} 
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
 
                 {/* Start:: Save button */}
                 <button 
-                    type = "button"
-                    className = "btn btn-success"
-                    disabled = {loading || error}
-                    onClick = {handleSave} >
+                    type="button"
+                    className="btn btn-success"
+                    disabled={loading || error}
+                    onClick={handleSave}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -111,7 +110,6 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const modalErrorRef = useRef(null);
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
     }); 
@@ -187,8 +185,7 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
 
             data && 
                 data.balance !== 0 && 
-                    modalErrorRef && 
-                        modalErrorRef.current.handleShowModal();
+                    toast.error("Guest can't be checked out, because there is some due.");
         } catch (err) {
             console.log(err);
         }
@@ -197,21 +194,16 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
     // Start:: Html
     return (
         <>
-            <ErrorModal 
-                ref = {modalErrorRef}
-                message = {<span>Guest <mark><code>{props.pCorporateName ? props.pCorporateName : props.pName}</code></mark> can't be checked out, because there is some due.</span>}
-                onClosed = {handleCloseModal}/>                        
-
             {/* Start:: Delete modal */}
             {data && 
                 data.balance === 0 && 
                     <Form 
-                        pGuestId = {props.pGuestId} 
-                        pName = {props.pName}
-                        pCorporateName = {props.pCorporateName}
-                        pShow = {showModal}
-                        onSubmited = {handleSave} 
-                        onClosed = {handleCloseModal} />
+                        pGuestId={props.pGuestId} 
+                        pName={props.pName}
+                        pCorporateName={props.pCorporateName}
+                        pShow={showModal}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal}/>
             }
             {/* End:: Delete modal */}
         </>

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Modal, NavLink, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { X } from "react-feather";
 import { subStr } from "../common/Common";
 
@@ -8,10 +9,8 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import BillGrid from "./RoomBillGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 import AddPayment from "./GuestRoomPaymentAdd";
-import ErrorModal from "../ErrorModal";
 
 import {formatDDMMYYYY, formatTime12Hour, formatBillNo} from "../common/Common";
-
 
 // Start:: form
 const Form = ({pGuestId, pName, pMobile, pGuestCount, 
@@ -260,7 +259,6 @@ const GuestRoomGenerateBill = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const modalErrorRef = useRef(null);
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
@@ -317,9 +315,7 @@ const GuestRoomGenerateBill = forwardRef((props, ref) => {
         try {
             data && 
                 data.rooms.length === 0 &&
-                    modalErrorRef && 
-                        modalErrorRef.current && 
-                            modalErrorRef.current.handleShowModal();
+                    toast.error("All ordered items not delivered! Please despatch all ordered items them generate bill.");
         } catch (err) {
             console.log(err);
         }
@@ -343,14 +339,6 @@ const GuestRoomGenerateBill = forwardRef((props, ref) => {
                     onPaymentAdded = {props.onPaymentAdded}
                     onClosed={handleCloseModal} />}
             {/* End:: Edit modal */}
-
-            {/* Start:: Error form component */}
-            <ErrorModal 
-                ref = {modalErrorRef}
-                message = {"All ordered items not delivered! Please despatch all ordered items them generate bill."}
-                onClosed = {handleCloseModal} />
-            {/* End:: Error form component */}
-
         </>
     )
     // End:: Html

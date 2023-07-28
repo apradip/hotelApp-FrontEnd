@@ -6,7 +6,6 @@ import { X } from "react-feather";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import ErrorModal from "../ErrorModal";
 
 // Start:: form
 const Form = ({pGuestId, pName, 
@@ -111,7 +110,6 @@ const GuestMiscellaneousDelete = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const modalErrorRef = useRef(null);
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
     });     //get guest details
@@ -183,8 +181,7 @@ const GuestMiscellaneousDelete = forwardRef((props, ref) => {
                     data.miscellaneaDetail.length !== 0 ||
                     data.servicesDetail.length !== 0 ||
                     data.expensesPaymentsDetail.length !== 0) && 
-                        modalErrorRef && 
-                            modalErrorRef.current.handleShowModal();
+                        toast.error("Guest can't be deleted, because there is some activity.");
         } catch (err) {
             console.log(err);
         }
@@ -193,11 +190,6 @@ const GuestMiscellaneousDelete = forwardRef((props, ref) => {
     // Start:: Html
     return (
         <>
-            <ErrorModal 
-                ref = {modalErrorRef}
-                message = {<span>Guest <mark><code>{props.pName}</code></mark>can't be deleted, because there is some activity.</span>}
-                onClosed = {handleCloseModal} />                        
-
             {/* Start:: Delete modal */}
             {data && 
                 (data.balance === 0 && 

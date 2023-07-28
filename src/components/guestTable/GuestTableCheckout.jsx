@@ -6,7 +6,6 @@ import { X } from "react-feather";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import ErrorModal from "../ErrorModal";
 
 // Start:: form
 const Form = ({pGuestId, pName, pCorporateName, 
@@ -111,7 +110,6 @@ const GuestTableCheckout = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const modalErrorRef = useRef(null);
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
     });
@@ -176,19 +174,13 @@ const GuestTableCheckout = forwardRef((props, ref) => {
     useEffect(() => {
         error && toast.error(error);
         data && 
-                data.balance !== 0 && 
-                    modalErrorRef && 
-                        modalErrorRef.current.handleShowModal();
+            data.balance !== 0 && 
+                    toast.error("Guest can't be checked out, because there is some due.");
     }, [data, error, loading]);
 
     // Start:: Html
     return (
         <>
-            <ErrorModal 
-                ref = {modalErrorRef}
-                message = {<span>Guest <mark><code>{props.pCorporateName ? props.pCorporateName : props.pName}</code></mark> can't be checked out, because there is some due.</span>}
-                onClosed = {handleCloseModal}/>                        
-
             {/* Start:: Delete modal */}
             {data && 
                 data.balance === 0 && 

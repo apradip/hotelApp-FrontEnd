@@ -10,7 +10,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { guestTableSchema } from "../../schemas";
 import DespatchGrid from "./TableDespatchGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import ErrorModal from "../ErrorModal";
+
 
 // Start:: form
 const Form = ({pGuestId, pName, pMobile, pGuestCount, 
@@ -230,7 +230,6 @@ const GuestTableDespatch = forwardRef((props, ref) => {
     const contextValues = useStateContext();
     const [active, setActive] = useState(false);
     const [showMain, setShowMain] = useState(false);
-    const modalErrorRef = useRef(null);
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
@@ -301,7 +300,7 @@ const GuestTableDespatch = forwardRef((props, ref) => {
             active &&
                 data && 
                     data.items.length === 0 ?
-                        modalErrorRef && modalErrorRef.current.handleShowModal()
+                        toast.error("There is no item to despatch. All ordered items has allready been despatched.")
                     :
                         setShowMain(true)
         } catch (err) {
@@ -335,13 +334,6 @@ const GuestTableDespatch = forwardRef((props, ref) => {
                 </>  
             }
             {/* End:: Edit modal */}
-
-            {/* Start:: Error form component */}
-            <ErrorModal 
-                ref = {modalErrorRef}
-                message = {"There is no item to despatch. All ordered items has allready been despatched."}
-                onClosed = {handleCloseModal} />
-            {/* End:: Error form component */}
         </>
     );
     // End:: Html
