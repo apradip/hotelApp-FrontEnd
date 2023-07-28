@@ -32,8 +32,8 @@ const Form = ({pGuestId, pName,
     // Start:: Html
     return (
         <Modal 
-            size = "sm"
-            show = {pShow}>
+            size="sm"
+            show={pShow}>
 
             {/* Start:: Modal header */}
             <Modal.Header>
@@ -72,10 +72,10 @@ const Form = ({pGuestId, pName,
 
                 {/* Start:: Save button */}
                 <button 
-                    type = "button"
-                    className = "btn btn-success"
-                    disabled = {loading || error}
-                    onClick = {handleSave} >
+                    type="button"
+                    className="btn btn-success"
+                    disabled={loading || error}
+                    onClick={handleSave}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -109,7 +109,6 @@ const GuestServiceDelete = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const modalErrorRef = useRef(null);
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pId}`
     });

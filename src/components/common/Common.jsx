@@ -423,11 +423,15 @@ export const formatYYYYMMDD = (longDateTime) => {
 };
 
 export const formatDDMMYYYY = (longDateTime) => {
-    let dt = new Date(longDateTime),
-      mon = ("0" + (dt.getMonth() + 1)).slice(-2),
-      day = ("0" + dt.getDate()).slice(-2);
+    if (longDateTime.length > 0) {
+        let dt = new Date(longDateTime),
+        mon = ("0" + (dt.getMonth() + 1)).slice(-2),
+        day = ("0" + dt.getDate()).slice(-2);
     
-    return [day, mon, dt.getFullYear()].join("/");
+        return [day, mon, dt.getFullYear()].join("/");
+    } else {
+        return "";
+    }
 };
 
 export const formatHHMM = (longDateTime) => {
@@ -440,7 +444,7 @@ export const formatHHMM = (longDateTime) => {
 export const formatTime12Hour = (time) => {
     // Check correct time format and split into components
     time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
-    
+        
     if (time.length > 1) { // If time format correct
         time = time.slice (1); // Remove full string match value
         time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
@@ -448,6 +452,7 @@ export const formatTime12Hour = (time) => {
     }
 
     return time.join (''); // return adjusted time or original string
+    
 };
 
 export const formatINR = (number) => {

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
 
-import { formatINR } from "../common/Common";
+import { formatINR, formatDDMMYYYY, formatTime12Hour } from "../common/Common";
 import ItemSelector from "../common/MiscellaneousEditor";
 import QuantityEditor from "../common/QuantityEditor";
 
@@ -21,9 +21,9 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
           suppressSizeToFit: false
         }
     }, []);
-    const rowClassRules = useMemo(() => {
-        return {"ag-row-order": "data.despatchDate === undefined"};
-    }, []);
+    // const rowClassRules = useMemo(() => {
+    //     return {"ag-row-order": "data.despatchDate === undefined"};
+    // }, []);
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -31,6 +31,12 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
             width: 20,
             hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}.` : "Total"}
+        },
+        {
+            headerName: "Delivery", 
+            field: "despatchDate",
+            hide: false,
+            width: 100,
         },
         {
             headerName: "Item", 
@@ -46,7 +52,7 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
             field: "unitPrice",
             type: "rightAligned",
             width: 50,
-            hide: false,
+            hide: true,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
             valueGetter: (params) => {return params.data.unitPrice}
         },
@@ -85,9 +91,6 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
         {
             field: "gstCharge"
         },
-        {
-            field: "despatchDate"
-        }
     ]);
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
@@ -115,7 +118,8 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
                     gstPercentage: element.gstPercentage, 
                     gstCharge: element.gstCharge, 
                     totalPrice: element.unitPrice * element.quantity,
-                    despatchDate: element.despatchDate};
+                    despatchDate: formatDDMMYYYY(element.despatchDate) + " - " + formatTime12Hour(element.despatchTime)
+                };
                 
                 sum += data.totalPrice;                       
                 row.push(data);
@@ -130,11 +134,11 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
 
             params.api.sizeColumnsToFit();
 
-            window.addEventListener("resize", function () {
-                setTimeout(function () {params.api.sizeColumnsToFit()});
-            });
+            // window.addEventListener("resize", function () {
+            //     setTimeout(function () {params.api.sizeColumnsToFit();});
+            // });
 
-            gridRef.current.api.sizeColumnsToFit();
+            // gridRef.current.api.sizeColumnsToFit();
         } catch (err) {
             console.log(err);
         }
@@ -148,7 +152,7 @@ const MiscellaneousViewGrid = ({pDefaultRowData}) => {
                     ref = {gridRef}
                     columnDefs = {columnDefs}
                     defaultColDef = {defaultColDef}
-                    rowClassRules = {rowClassRules}
+                    // rowClassRules = {rowClassRules}
                     rowData = {null}
                     rowSelection = {"single"}
                     onGridReady = {handleGridReady} />

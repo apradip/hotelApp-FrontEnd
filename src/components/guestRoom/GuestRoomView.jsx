@@ -25,7 +25,7 @@ const Form = ({pName, pMobile, pGuestCount,
             {/* Start:: Modal header */}
             <Modal.Header>
                 {/* Header text */}
-                <Modal.Title>Room list</Modal.Title>
+                <Modal.Title>Room</Modal.Title>
                 
                 {/* Close button */}
                 <NavLink 

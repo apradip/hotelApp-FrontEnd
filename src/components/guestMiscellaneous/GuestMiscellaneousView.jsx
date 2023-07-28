@@ -32,7 +32,8 @@ const Form = ({pName, pMobile, pGuestCount,
                         gstPercentage: element.gstPercentage, 
                         gstCharge: element.gstCharge, 
                         totalPrice: element.unitPrice * element.quantity,
-                        despatchDate: element.despatchDate
+                        despatchDate: element.despatchDate ? element.despatchDate : "",
+                        despatchTime: element.despatchTime ? element.despatchTime : ""
                     };
             
                     defaultRowData.push(rowData);
@@ -45,20 +46,19 @@ const Form = ({pName, pMobile, pGuestCount,
         }
     }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
 
-
     // Start:: Html
     return (
-        <Modal size = "lg"
-            show = {pShow}>
+        <Modal size="lg"
+            show={pShow}>
 
             {/* Start:: Modal header */}
             <Modal.Header>
                 <Modal.Title>Orders</Modal.Title>
-                
                 <NavLink 
-                    className = "nav-icon" href = "#" 
-                    onClick = {onClosed}>
-                    <i className = "align-middle"><X/></i>
+                    className="nav-icon" 
+                    href="#" 
+                    onClick={onClosed}>
+                    <i className="align-middle"><X/></i>
                 </NavLink>
             </Modal.Header>
             {/* End:: Modal header */}
@@ -71,12 +71,12 @@ const Form = ({pName, pMobile, pGuestCount,
 
                     {/* Start:: Column name / company */}
                     {pCorporateName ? 
-                        <Col sx = {12} md = {5} className = "mb-3">
+                        <Col sx={12} md={5} className="mb-3">
                             <label className = "col-12 form-label"><b>Company</b></label>
                             <label className = "col-12 text-muted">{subStr(pCorporateName, 30)}</label>
                         </Col>
                     :
-                        <Col sx = {12} md = {5} className = "mb-3">
+                        <Col sx={12} md={5} className="mb-3">
                             <label className = "col-12 form-label"><b>Name</b></label>
                             <label className = "col-12 text-muted">{subStr(pName, 30)}</label>
                         </Col>
@@ -85,22 +85,22 @@ const Form = ({pName, pMobile, pGuestCount,
 
                     {/* Start:: Column mobile no / company address */}
                     {pCorporateName ? 
-                        <Col sx = {12} md = {5} className = "mb-3">
-                            <label className = "col-12 form-label"><b>Address</b></label>
-                            <label className = "col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                        <Col sx={12} md={5} className="mb-3">
+                            <label className="col-12 form-label"><b>Address</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </Col>
                     :
-                        <Col sx = {12} md = {5} className = "mb-3">
-                            <label className = "col-12 form-label"><b>Mobile no.</b></label>
-                            <label className = "col-12 text-muted">{pMobile}</label>
+                        <Col sx={12} md={5} className = "mb-3">
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
+                            <label className="col-12 text-muted">{pMobile}</label>
                         </Col>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column mobile no / company address */}
-                    <Col sx = {12} md = {2} className = "mb-3">
-                        <label className = "col-12 form-label"><b>Guest count</b></label>
-                        <label className = "col-12 text-muted">{pGuestCount} No.</label>
+                    <Col sx={12} md={2} className="mb-3">
+                        <label className="col-12 form-label"><b>Guest count</b></label>
+                        <label className="col-12 text-muted">{pGuestCount} No.</label>
                     </Col>
                     {/* End:: Column mobile no / company address */}
 
@@ -109,9 +109,9 @@ const Form = ({pName, pMobile, pGuestCount,
 
                 {/* Start:: Row */}
                 <Row>
-                    <Col sx = {12} md = {12}>
+                    <Col sx={12} md={12}>
                         {/* Label element */}
-                        <label className = "col-12 form-label"><b>Miscellaneous items</b></label>
+                        <label className="col-12 form-label"><b>Miscellaneous items</b></label>
 
                         {/* Start:: Column room detail */}
                         <ViewGrid
@@ -130,9 +130,9 @@ const Form = ({pName, pMobile, pGuestCount,
                 {/* Start:: Close button */}
                 <button
                     autoFocus
-                    type = "button"
-                    className = "btn btn-danger"
-                    onClick = {onClosed} >
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -161,7 +161,7 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
-        params: {option: "A"}
+        params: {option: "GA"}
     });
 
     // Start :: Show modal 

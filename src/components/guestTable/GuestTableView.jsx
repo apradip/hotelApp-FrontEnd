@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { X } from "react-feather";
-import { subStr, getTables } from "../common/Common";
+import { subStr } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
@@ -32,8 +32,8 @@ const Form = ({pName, pMobile, pGuestCount,
                         gstPercentage: element.gstPercentage, 
                         gstCharge: element.gstCharge, 
                         totalPrice: element.unitPrice * element.quantity,
-                        despatchDate: element.despatchDate, 
-                        despatchTime: element.despatchTime
+                        despatchDate: element.despatchDate ? element.despatchDate : "",
+                        despatchTime: element.despatchTime ? element.despatchTime : ""
                     };
 
                     defaultRowData.push(rowData);
@@ -54,7 +54,7 @@ const Form = ({pName, pMobile, pGuestCount,
             {/* Start:: Modal header */}
             <Modal.Header>
                 {/* Header text */}
-                <Modal.Title>Food list - [{getTables(pTables)}]</Modal.Title>
+                <Modal.Title>Orders</Modal.Title>
                 {/* Close button */}
                 <NavLink 
                     className="nav-icon" href="#" 
@@ -164,7 +164,7 @@ const GuestTableView = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
-        params: {option: "A"}
+        params: {option: "GA"}
     });
 
     // Start :: Show modal 

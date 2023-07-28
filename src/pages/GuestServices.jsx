@@ -385,7 +385,7 @@ const GuestServices = forwardRef((props, ref) => {
 
     const createPlaceholderCol = (pData = undefined, itemIdx) => {   
         try {
-            const colKey = `col_${pData.id}`;
+            const colKey = `col_${itemIdx}`;
 
             return (
                 <Col xl={4} md={4} key={colKey}>

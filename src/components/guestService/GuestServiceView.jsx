@@ -28,7 +28,8 @@ const Form = ({pName, pMobile, pGuestCount,
                 gstPercentage: element.gstPercentage, 
                 gstCharge: element.gstCharge, 
                 totalPrice: element.unitPrice * element.quantity,
-                despatchDate: element.despatchDate
+                despatchDate: element.despatchDate ? element.despatchDate : "",
+                despatchTime: element.despatchTime ? element.despatchTime : ""
             };
     
             defaultRowData.push(rowData);
@@ -102,7 +103,7 @@ const Form = ({pName, pMobile, pGuestCount,
                 <Row>
                     <Col sx = {12} md = {12}>
                         {/* Label element */}
-                        <label className = "col-12 form-label"><b>Serviceable items</b></label>
+                        <label className = "col-12 form-label"><b>Service items</b></label>
 
                         {/* Start:: Column room detail */}
                         <ViewGrid
@@ -152,7 +153,7 @@ const GuestServiceView = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false)
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
-        params: {option: "A"}
+        params: {option: "GA"}
     })
 
     // Start :: Show modal 
