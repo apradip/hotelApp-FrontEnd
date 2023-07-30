@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { Modal, NavLink, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { X } from "react-feather";
 import { subStr } from "../common/Common";
 
@@ -13,35 +14,11 @@ const Form = ({pName, pMobile, pGuestCount,
                pCorporateName, pCorporateAddress, pData, 
                pShow, 
                onClosed}) => {
-    const [defaultRowData, setDefaultRowData] = useState([]);
-                
-    useEffect(() => {
-        pData.forEach(element => {
-            const rowData = {
-                rowId: defaultRowData.length + 1, 
-                id: element.id,
-                name: element.name, 
-                unitPrice: element.unitPrice,
-                quantity: element.quantity, 
-                serviceChargePercentage: element.serviceChargePercentage, 
-                serviceCharge: element.serviceCharge, 
-                gstPercentage: element.gstPercentage, 
-                gstCharge: element.gstCharge, 
-                totalPrice: element.unitPrice * element.quantity,
-                despatchDate: element.despatchDate ? element.despatchDate : "",
-                despatchTime: element.despatchTime ? element.despatchTime : ""
-            };
-    
-            defaultRowData.push(rowData);
-        });
-
-        setDefaultRowData(defaultRowData);
-    }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: Html
     return (
-        <Modal size = "lg"
-            show = {pShow}>
+        <Modal size="lg"
+            show={pShow}>
 
             {/* Start:: Modal header */}
             <Modal.Header>
@@ -101,13 +78,13 @@ const Form = ({pName, pMobile, pGuestCount,
 
                 {/* Start:: Row */}
                 <Row>
-                    <Col sx = {12} md = {12}>
+                    <Col sx={12} md={12}>
                         {/* Label element */}
-                        <label className = "col-12 form-label"><b>Service items</b></label>
+                        <label className="col-12 form-label"><b>Service items</b></label>
 
                         {/* Start:: Column room detail */}
                         <ViewGrid
-                            pDefaultRowData = {defaultRowData} />
+                            pDefaultRowData = {pData}/>
                         {/* End:: Column room detail */}
                     </Col>
                 </Row>
@@ -122,9 +99,9 @@ const Form = ({pName, pMobile, pGuestCount,
                 {/* Start:: Close button */}
                 <button
                     autoFocus
-                    type = "button"
-                    className = "btn btn-danger"
-                    onClick = {onClosed} >
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -151,15 +128,16 @@ const GuestServiceView = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId)
     const contextValues = useStateContext()
     const [showModal, setShowModal] = useState(false)
-    const {data, doFetch} = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "GA"}
     })
 
     // Start :: Show modal 
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -191,16 +169,14 @@ const GuestServiceView = forwardRef((props, ref) => {
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
-          })()
-    }, [showModal]);         // eslint-disable-line react-hooks/exhaustive-deps
+        try {
+            error && toast.error(error);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, loading, error]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
-
+    
     // Start:: Html
     return (
         <>

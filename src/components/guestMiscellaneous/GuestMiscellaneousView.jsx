@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { Modal, NavLink, Row, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { X } from "react-feather";
 import { subStr } from "../common/Common";
 
@@ -19,7 +20,7 @@ const Form = ({pName, pMobile, pGuestCount,
     
     useEffect(() => {
         try {
-            if (pData) {
+            pData &&
                 pData.forEach(element => {
                     const rowData = {
                         rowId: defaultRowData.length + 1, 
@@ -38,8 +39,7 @@ const Form = ({pName, pMobile, pGuestCount,
             
                     defaultRowData.push(rowData);
                 });
-            }
-            
+                        
             setDefaultRowData(defaultRowData);
         } catch (err) {
             console.log("Error occured when fetching data");
@@ -159,15 +159,16 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const {data, doFetch} = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "GA"}
     });
 
     // Start :: Show modal 
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -199,14 +200,12 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
-          })();
-    }, [showModal]);         // eslint-disable-line react-hooks/exhaustive-deps
+        try {
+            error && toast.error(error);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, loading, error]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Html
@@ -221,8 +220,7 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
                     pCorporateAddress = {data.corporateAddress}
                     pData = {data.items}
                     pShow = {showModal}
-                    onClosed = {handleCloseModal} />
-            }
+                    onClosed = {handleCloseModal}/>}
         </>
     );
     // End:: Html

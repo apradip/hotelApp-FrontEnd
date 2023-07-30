@@ -103,28 +103,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
     };
     // End:: Show order modal 
 
-    // // Start:: Show generate bill modal 
-    // const handelOpenGenerateBill = () => {
-    //     try {
-    //         generateBillRef && 
-    //             generateBillRef.current.handleShowModal();
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // // End:: Show generate bill modal 
-
-    // // Start:: Show checkout modal 
-    // const handelOpenCheckout = () => {
-    //     try {
-    //         checkoutRef && 
-    //             checkoutRef.current.handleShowModal();
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // // End:: Show checkout modal 
-
     // Start:: Show edit modal 
     const handelOpenEdit = () => {
         try {

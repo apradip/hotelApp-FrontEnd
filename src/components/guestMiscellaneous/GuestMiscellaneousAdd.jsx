@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import React, { useContext, useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -21,7 +21,7 @@ const Form = ({pShow,
     });
 
     // Start:: Form validate and save data
-    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
+    const {values, errors, touched, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputName: "",
             keyInputMobile: "",

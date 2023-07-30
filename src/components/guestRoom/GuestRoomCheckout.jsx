@@ -1,22 +1,22 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Modal, NavLink } from "react-bootstrap"
-import { toast } from "react-toastify"
-import { X } from "react-feather"
+import { Modal, NavLink } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { X } from "react-feather";
 
-import { HotelId } from "../../App"
-import { useStateContext } from "../../contexts/ContextProvider"
-import useFetchWithAuth from "../common/useFetchWithAuth"
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
 const Form = ({pGuestId, pName, pCorporateName, 
                 pShow,
                 onSubmited, onClosed}) => {
-    const hotelId = useContext(HotelId)
-    const contextValues = useStateContext()
-    const inputRef = useRef(null)
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+    const inputRef = useRef(null);
     const {loading, error, doDelete} = useFetchWithAuth({
         url: `${contextValues.guestRoomAPI}/${hotelId}/${pGuestId}`
-    })
+    });
 
     // Start:: Call delete api
     const handleSave = async () => {
@@ -94,8 +94,7 @@ const Form = ({pGuestId, pName, pCorporateName,
     );
     // End:: Html
 
-
-}
+};
 // End:: form
 
 
@@ -113,12 +112,13 @@ const GuestRoomCheckout = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
-    })
+    });
 
     // Start :: Show modal 
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -150,7 +150,7 @@ const GuestRoomCheckout = forwardRef((props, ref) => {
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
         return {handleShowModal}
-    })
+    });
     // End:: forward reff show modal function
 
     // Start:: forward reff show modal function
@@ -165,18 +165,6 @@ const GuestRoomCheckout = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
-          })();
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     useEffect(() => {
         try {
@@ -210,15 +198,15 @@ const GuestRoomCheckout = forwardRef((props, ref) => {
                         pCorporateName = {props.pCorporateName}
                         pShow = {showModal}
                         onSubmited = {handleSave} 
-                        onClosed = {handleCloseModal} />
+                        onClosed = {handleCloseModal}/>
             }
             {/* End:: Delete modal */}
         </>
     );
     // End:: Html
 
-})
+});
 // End:: Component
 
 
-export default GuestRoomCheckout
+export default GuestRoomCheckout;

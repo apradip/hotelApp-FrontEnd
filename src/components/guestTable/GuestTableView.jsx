@@ -15,36 +15,36 @@ const Form = ({pName, pMobile, pGuestCount,
                pShow, 
                onClosed}) => {
                     
-    const [defaultRowData, setDefaultRowData] = useState([]);
+    // const [defaultRowData, setDefaultRowData] = useState([]);
 
-    useEffect(() => {
-        try {
-            if (pData) {
-                pData.forEach(element => {
-                    const rowData = {
-                        rowId: defaultRowData.length + 1, 
-                        id: element.id,
-                        name: element.name, 
-                        unitPrice: element.unitPrice,
-                        quantity: element.quantity, 
-                        serviceChargePercentage: element.serviceChargePercentage, 
-                        serviceCharge: element.serviceCharge, 
-                        gstPercentage: element.gstPercentage, 
-                        gstCharge: element.gstCharge, 
-                        totalPrice: element.unitPrice * element.quantity,
-                        despatchDate: element.despatchDate ? element.despatchDate : "",
-                        despatchTime: element.despatchTime ? element.despatchTime : ""
-                    };
+    // useEffect(() => {
+    //     try {
+    //         if (pData) {
+    //             pData.forEach(element => {
+    //                 const rowData = {
+    //                     rowId: defaultRowData.length + 1, 
+    //                     id: element.id,
+    //                     name: element.name, 
+    //                     unitPrice: element.unitPrice,
+    //                     quantity: element.quantity, 
+    //                     serviceChargePercentage: element.serviceChargePercentage, 
+    //                     serviceCharge: element.serviceCharge, 
+    //                     gstPercentage: element.gstPercentage, 
+    //                     gstCharge: element.gstCharge, 
+    //                     totalPrice: element.unitPrice * element.quantity,
+    //                     despatchDate: element.despatchDate ? element.despatchDate : "",
+    //                     despatchTime: element.despatchTime ? element.despatchTime : ""
+    //                 };
 
-                    defaultRowData.push(rowData);
-                });
-            }
+    //                 defaultRowData.push(rowData);
+    //             });
+    //         }
 
-            setDefaultRowData(defaultRowData);
-        } catch (err) {
-            console.log("Error occured when fetching data");
-        }
-    }, [pData])        // eslint-disable-line react-hooks/exhaustive-deps
+    //         setDefaultRowData(defaultRowData);
+    //     } catch (err) {
+    //         console.log("Error occured when fetching data");
+    //     }
+    // }, [pData])        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: Html
     return (
@@ -117,7 +117,9 @@ const Form = ({pName, pMobile, pGuestCount,
 
                         {/* Start:: Column room detail */}
                         <ViewGrid
-                            pDefaultRowData={defaultRowData}/>
+                            pDefaultRowData={pData}/>
+                            {/* pDefaultRowData={defaultRowData}/> */}
+
                         {/* End:: Column room detail */}
 
                     </Col>                
@@ -168,9 +170,10 @@ const GuestTableView = forwardRef((props, ref) => {
     });
 
     // Start :: Show modal 
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -199,18 +202,6 @@ const GuestTableView = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-              console.log("Error occured when fetching data");
-            }
-          })();
-    }, [showModal]);         // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     // Start:: Html
     return (

@@ -130,7 +130,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
     ];
-    const [style, setStyle] = useState({
+    const [style] = useState({
         height: "100%",
         width: "100%"
     });

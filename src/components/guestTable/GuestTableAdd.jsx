@@ -379,7 +379,7 @@ const GuestTableAdd = forwardRef((props, ref) => {
             <Form
                 pShow = {showModal}
                 onSubmited = {handleSave} 
-                onClosed = {handleCloseModal} />
+                onClosed = {handleCloseModal}/>
             {/* End:: Form component */}
         </>            
     );

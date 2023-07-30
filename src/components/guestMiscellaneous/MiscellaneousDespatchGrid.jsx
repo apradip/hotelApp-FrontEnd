@@ -1,20 +1,11 @@
-import React, { useContext, useEffect, useState, useRef, useMemo, useCallback } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
-
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../common/useFetchWithAuth";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
     const gridRef = useRef();
-    const {doFetch} = useFetchWithAuth({
-        url: `${contextValues.hotelAPI}/${hotelId}`
-    });
 
     const defaultColDef = useMemo(() => {
         return {
@@ -119,18 +110,6 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
         }
     }, []);
     // End:: on row selection change set selected 
-
-    // Start:: fetch hotel detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-          })();
-    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch hotel detail from api
     
 	return (
         <div className = "col-12 ag-theme-alpine grid-height-400">
@@ -142,7 +121,7 @@ const MiscellaneousDespatchGrid = ({pDefaultRowData, onChange}) => {
                 rowSelection = {"multiple"}
                 onGridReady = {handleGridReady}
                 onFirstDataRendered = {handleFirstDataRendered}
-                onSelectionChanged = {onSelectionChanged} />
+                onSelectionChanged = {onSelectionChanged}/>
         </div>
     );
 };

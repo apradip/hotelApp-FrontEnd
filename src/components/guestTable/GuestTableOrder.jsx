@@ -112,7 +112,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     });
     // End:: Form validate and save data
 
-    
     // Strat:: close form    
     const handleClose = () => {
         try {

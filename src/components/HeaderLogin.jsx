@@ -1,13 +1,14 @@
 import React, {useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle} from "react"
-import {Nav, Navbar, OverlayTrigger, Tooltip} from "react-bootstrap"
-import Dropdown from "react-bootstrap/Dropdown"
-import {useNavigate, NavLink} from "react-router-dom"
-import {toast} from "react-toastify"
-import {Menu, Paperclip, Edit3, Scissors, User, MoreVertical} from "react-feather"
+// import {Nav, Navbar, OverlayTrigger, Tooltip} from "react-bootstrap"
+import { Nav, Navbar, Dropdown } from "react-bootstrap"
+// import Dropdown from "react-bootstrap/Dropdown"
+import { useNavigate, NavLink } from "react-router-dom"
+import { toast } from "react-toastify"
+import { Menu, Paperclip, Edit3, Scissors, User, MoreVertical } from "react-feather"
 
-import {HotelId} from "../App"
-import {useStateContext} from "../contexts/ContextProvider"
-import {getFirstName, getPageAttribute} from "./common/Common"
+import { HotelId } from "../App"
+import { useStateContext } from "../contexts/ContextProvider"
+import { getFirstName, getPageAttribute } from "./common/Common"
 import useFetchWithAuth from "./common/useFetchWithAuth"
 import Search from "./Search"
 import Profile from "./auth/Profile"
@@ -181,10 +182,11 @@ const HeaderLogin = forwardRef((props, ref) => {
                                         //     placement="bottom"
                                         //     overlay={<Tooltip>new</Tooltip>}>
                                             <button 
-                                                className = "btn btn-success me-1" 
-                                                size = "md" 
-                                                onClick = {() => {handleOpenAdd()}}>
-                                                <Paperclip className = "feather-16"/>
+                                                aria-label="add master"
+                                                className="btn btn-success me-1" 
+                                                size="md" 
+                                                onClick={() => {handleOpenAdd()}}>
+                                                <Paperclip className="feather-16"/>
                                             </button>
                                         // </OverlayTrigger>
                                         }
@@ -194,10 +196,11 @@ const HeaderLogin = forwardRef((props, ref) => {
                                         //     placement ="bottom"
                                         //     overlay={<Tooltip>edit</Tooltip>}>
                                             <button 
-                                                className = "d-none d-md-block d-lg-block d-xl-block btn btn-info me-1" 
-                                                size = "md" 
-                                                onClick = {() => {handleOpenEdit()}}>
-                                                <Edit3 className = "feather-16"/>
+                                                aria-label="mod master"
+                                                className="d-none d-md-block d-lg-block d-xl-block btn btn-info me-1" 
+                                                size="md" 
+                                                onClick={() => {handleOpenEdit()}}>
+                                                <Edit3 className="feather-16"/>
                                             </button>
                                         // </OverlayTrigger>
                                         }
@@ -207,10 +210,11 @@ const HeaderLogin = forwardRef((props, ref) => {
                                         //     placement = "bottom"
                                         //     overlay = {<Tooltip>delete</Tooltip>}>
                                             <button 
-                                                className = "d-none d-md-block d-lg-block d-xl-block btn btn-danger mx-0" 
-                                                size = "md" 
-                                                onClick = {() => {handleOpenDel()}}>
-                                                <Scissors className = "feather-16"/>
+                                                aria-label="delete master"
+                                                className="d-none d-md-block d-lg-block d-xl-block btn btn-danger mx-0" 
+                                                size="md" 
+                                                onClick={() => {handleOpenDel()}}>
+                                                <Scissors className="feather-16"/>
                                             </button>
                                         // </OverlayTrigger>
                                         }

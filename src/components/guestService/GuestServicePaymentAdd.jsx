@@ -305,7 +305,7 @@ const GuestServicePaymentAdd = forwardRef((props, ref) => {
                 pBalance = {props.pBalance}
                 pShow = {showModal}
                 onSubmited = {handleSave} 
-                onClosed = {handleCloseModal} />
+                onClosed = {handleCloseModal}/>
             {/* End:: Form component */}
 
         </>

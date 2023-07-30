@@ -114,9 +114,10 @@ const GuestServiceCheckout = forwardRef((props, ref) => {
     }); 
 
     // Start :: Show modal 
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -157,18 +158,6 @@ const GuestServiceCheckout = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
-          })()
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     useEffect(() => {
         try {

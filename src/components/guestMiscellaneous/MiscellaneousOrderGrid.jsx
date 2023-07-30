@@ -10,6 +10,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+import { toast } from "react-toastify";
 
 const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {    
     const hotelId = useContext(HotelId);
@@ -17,7 +18,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const gridRef = useRef();
     const [rowData, setRowData] = useState();
     const [emptyRowCount, setEmptyRowCount] = useState();
-    const {data, doFetch} = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.hotelAPI}/${hotelId}`
     });
 
@@ -130,7 +131,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
     ];
-    const [style, setStyle] = useState({
+    const [style] = useState({
         height: "100%",
         width: "100%"
     });
@@ -226,17 +227,18 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             } catch (err) {
                 console.log(err);
             }
-          })()
+          })();
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch hotel detail from api
 
     useEffect(() => {
         try {
+            error && toast.error(error);
             data && calculateSum();
         } catch (err) {
             console.log(err);
         }
-    }, [data]);
+    }, [data, loading, error]);
 
     // Start:: set add empty row grid
     useEffect(() => {
@@ -254,18 +256,18 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 let emptyRow = rowData;
 
                 emptyRow.push({
-                            rowId: emptyRow.length + 1, 
-                            id: "", 
-                            name: "Select item", 
-                            unitPrice: 0,
-                            quantity: 0,
-                            serviceChargePercentage: data.serviceChargePercentage,
-                            serviceCharge: 0,
-                            gstPercentage: data.foodGstPercentage,
-                            gstCharge: 0,
-                            totalPrice: 0,
-                            despatchDate: undefined
-                        });
+                    rowId: emptyRow.length + 1, 
+                    id: "", 
+                    name: "Select item", 
+                    unitPrice: 0,
+                    quantity: 0,
+                    serviceChargePercentage: data.serviceChargePercentage,
+                    serviceCharge: 0,
+                    gstPercentage: data.foodGstPercentage,
+                    gstCharge: 0,
+                    totalPrice: 0,
+                    despatchDate: undefined
+                });
 
                 setRowData(emptyRow);
                 gridRef.current.api.setRowData(emptyRow);

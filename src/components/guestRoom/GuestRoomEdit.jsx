@@ -113,8 +113,8 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
 
     // Start:: Html
     return (
-        <Modal size = "lg"
-            show = {pShow} >
+        <Modal size="lg"
+            show={pShow}>
 
             {/* Start:: Modal header */}
             <Modal.Header>
@@ -840,9 +840,10 @@ const GuestRoomEdit = forwardRef(( props, ref ) => {
     });
 
     // Start:: Show modal
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -883,23 +884,10 @@ const GuestRoomEdit = forwardRef(( props, ref ) => {
         return () => {document.removeEventListener("keydown", handleCloseModal)};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
-        })();
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     useEffect(() => {
         error && toast.error(error);
     }, [data, error, loading]);
-
 
     // Start:: Html
     return (

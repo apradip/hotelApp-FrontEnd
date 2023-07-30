@@ -21,11 +21,6 @@ const TableOrderGrid = ({pDefaultRowData}) => {
           suppressSizeToFit: false
         }
     }, []);
-    // const rowClassRules = useMemo(() => {
-    //     return {
-    //       "ag-row-order": "data.despatchDate === undefined",
-    //     };
-    // }, []);
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -129,13 +124,7 @@ const TableOrderGrid = ({pDefaultRowData}) => {
         gridRef.current.api.refreshCells();
         gridRef.current.api.redrawRows();
 
-        params.api.sizeColumnsToFit()
-
-        // window.addEventListener("resize", function () {
-        //     setTimeout(function () {params.api.sizeColumnsToFit()})
-        //   })
-
-        // gridRef.current.api.sizeColumnsToFit()
+        gridRef.current.api.sizeColumnsToFit()
     }
     // End:: load empty data to grid
     
@@ -145,7 +134,6 @@ const TableOrderGrid = ({pDefaultRowData}) => {
                 ref={gridRef}
                 columnDefs={columnDefs}
                 defaultColDef={defaultColDef}
-                // rowClassRules={rowClassRules}
                 rowData={null}
                 rowSelection={"single"}
                 onGridReady={handleGridReady}/>

@@ -265,9 +265,10 @@ const GuestRoomGenerateBill = forwardRef((props, ref) => {
     });         // get all non delivered items
 
     // Start:: Show modal
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -297,18 +298,6 @@ const GuestRoomGenerateBill = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-          })();
-    }, [showModal]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     // Start:: fetch id wise detail from api
     useEffect(() => {

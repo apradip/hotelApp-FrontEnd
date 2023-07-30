@@ -115,9 +115,10 @@ const GuestMiscellaneousDelete = forwardRef((props, ref) => {
     });     //get guest details
 
     // Start :: Show modal 
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -158,18 +159,6 @@ const GuestMiscellaneousDelete = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-              console.log("Error occured when fetching data");
-            }
-          })();
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     useEffect(() => {
         try {
@@ -180,7 +169,7 @@ const GuestMiscellaneousDelete = forwardRef((props, ref) => {
                     data.tablesDetail.length !== 0 ||
                     data.miscellaneaDetail.length !== 0 ||
                     data.servicesDetail.length !== 0 ||
-                    data.expensesPaymentsDetail.length !== 0) && 
+                    data.expensesPaymentsDetail.length !== 0) &&
                         toast.error("Guest can't be deleted, because there is some activity.");
         } catch (err) {
             console.log(err);

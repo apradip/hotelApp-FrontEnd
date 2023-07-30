@@ -112,7 +112,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     // Start:: Html
     return (
         <Modal size="lg"
-            show = {pShow}>
+            show={pShow}>
 
             {/* Start:: Modal header */}
             <Modal.Header>
@@ -256,15 +256,16 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const {data, doFetch} = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
     });         // get all non delivered items
 
     // Start:: Show modal
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -305,17 +306,15 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
+
     // Start:: fetch id wise detail from api
     useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
-        })();
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
+        try {
+            error && toast.error(error);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, error, loading]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Html
@@ -335,8 +334,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
                     pData = {data.items}
                     pShow = {showModal}
                     onSubmited = {handleSave} 
-                    onClosed = {handleCloseModal} />
-                }
+                    onClosed = {handleCloseModal}/>}
             {/* End:: Edit modal */}
         </>
     );

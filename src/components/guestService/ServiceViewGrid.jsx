@@ -22,9 +22,6 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
           suppressSizeToFit: false
         }
     }, []);
-    // const rowClassRules = useMemo(() => {
-    //     return {"ag-row-order": "data.despatchDate === undefined"};
-    // }, []);
     const [columnDefs] = useState([
         {
             headerName: "#", 
@@ -96,10 +93,34 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
     ];
-    const [style, setStyle] = useState({
+    const [style] = useState({
         height: "100%",
         width: "100%"
     });
+
+
+        // useEffect(() => {
+    //     pData.forEach(element => {
+    //         const rowData = {
+    //             rowId: defaultRowData.length + 1, 
+    //             id: element.id,
+    //             name: element.name, 
+    //             unitPrice: element.unitPrice,
+    //             quantity: element.quantity, 
+    //             serviceChargePercentage: element.serviceChargePercentage, 
+    //             serviceCharge: element.serviceCharge, 
+    //             gstPercentage: element.gstPercentage, 
+    //             gstCharge: element.gstCharge, 
+    //             totalPrice: element.unitPrice * element.quantity,
+    //             despatchDate: element.despatchDate ? element.despatchDate : "",
+    //             despatchTime: element.despatchTime ? element.despatchTime : ""
+    //         };
+    
+    //         defaultRowData.push(rowData);
+    //     });
+
+    //     setDefaultRowData(defaultRowData);
+    // }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
@@ -133,13 +154,13 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
             gridRef.current.api.refreshCells();
             gridRef.current.api.redrawRows();
 
-            params.api.sizeColumnsToFit();
+            // params.api.sizeColumnsToFit();
 
             // window.addEventListener("resize", function () {
             //     setTimeout(function () {params.api.sizeColumnsToFit()});
             // });
 
-            // gridRef.current.api.sizeColumnsToFit();
+            gridRef.current.api.sizeColumnsToFit();
         } catch (err) {
             console.log(err);
         }

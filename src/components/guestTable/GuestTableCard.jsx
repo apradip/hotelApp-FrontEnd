@@ -186,7 +186,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                                 }}> 
 
                 {/* Start:: card body */}
-                <Card.Body className = "text-sm p-1"> 
+                <Card.Body className="text-sm p-1"> 
 
                     <Row className = "m-1">
                         <Col xs = {8} sm = {8} md = {8} lg = {8} xl = {8} className = "p-0">

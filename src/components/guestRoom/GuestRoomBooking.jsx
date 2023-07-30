@@ -29,16 +29,28 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     const handelChangeData = (gridData) => {
         let dataList = [];
 
-        for(const g of gridData) {
-            let found = false;
-            let operation = "A";
+        try {
+            for(const g of gridData) {
+                let found = false;
+                let operation = "A";
 
-            if (g.id !== "") {
-                for(const d of pData) {
-                    if (g.id === d.id) {
-                        found = true;
-                        operation = "M";
+                if (g.id !== "") {
+                    for(const d of pData) {
+                        if (g.id === d.id) {
+                            found = true;
+                            operation = "M";
 
+                            dataList.push({
+                                id: g.id, 
+                                extraPerson: g.extraPerson, 
+                                extraBed: g.extraBed, 
+                                discount: g.discount,
+                                occupancyDate: g.occupancyDate,
+                                operation: operation});
+                        }
+                    }
+
+                    if (!found) {
                         dataList.push({
                             id: g.id, 
                             extraPerson: g.extraPerson, 
@@ -48,42 +60,34 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             operation: operation});
                     }
                 }
-
-                if (!found) {
-                    dataList.push({
-                        id: g.id, 
-                        extraPerson: g.extraPerson, 
-                        extraBed: g.extraBed, 
-                        discount: g.discount,
-                        occupancyDate: g.occupancyDate,
-                        operation: operation});
-                }
             }
-        }
 
-        for(const d of pData) {
-            let found = false;
+            for(const d of pData) {
+                let found = false;
 
-            if (d.id !== "") {
-                for (const g of gridData) {
-                    if (d.id === g.id) {
-                        found = true;
+                if (d.id !== "") {
+                    for (const g of gridData) {
+                        if (d.id === g.id) {
+                            found = true;
+                        }
+                    }
+
+                    if (!found) {
+                        dataList.push({
+                            id: d.id, 
+                            extraPerson: d.extraPerson, 
+                            extraBed: d.extraBed, 
+                            discount: d.discount,
+                            occupancyDate: d.occupancyDate,
+                            operation: "R"});
                     }
                 }
-
-                if (!found) {
-                    dataList.push({
-                        id: d.id, 
-                        extraPerson: d.extraPerson, 
-                        extraBed: d.extraBed, 
-                        discount: d.discount,
-                        occupancyDate: d.occupancyDate,
-                        operation: "R"});
-                }
             }
-        }
 
-        setBookingData(dataList);
+            setBookingData(dataList);
+        } catch (err) {
+            console.log(err);
+        }
     }; 
 
     // Start:: Form validate and save data
@@ -113,9 +117,13 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false);
-        resetForm();
-        onClosed();
+        try {
+            setValidateOnChange(false);
+            resetForm();
+            onClosed();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: close form    
 
@@ -297,22 +305,35 @@ const GuestRoomBooking = forwardRef((props, ref) => {
     });
 
     // Start:: Show modal
-    const handleShowModal = () => {
-        setShowModal(true);
+    const handleShowModal = async () => {
+        try {
+            setShowModal(true);
+            await doFetch();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show modal
 
     // Start:: Close modal
     const handleCloseModal = () => {
-        setShowModal(false);
-        props.onClosed();
+        try {
+            setShowModal(false);
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Close modal
 
     // Start:: Save
     const handleSave = () => { 
-        setShowModal(false);
-        props.onSaved();
+        try {
+            setShowModal(false);
+            props.onSaved();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Save
 
@@ -328,18 +349,6 @@ const GuestRoomBooking = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
-        })();
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     // Start:: Html
     return (

@@ -493,12 +493,12 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                                         </Placeholder>}
 
                                     {!loading && 
-                                            data && 
-                                                <Paging
-                                                    itemPerPage = {itemPerPage}
-                                                    totalItem = {data.length}
-                                                    selectedPage = {selectedPage}
-                                                    onPaging = {handlePaging} />}
+                                        data && 
+                                            <Paging
+                                                itemPerPage = {itemPerPage}
+                                                totalItem = {data.length}
+                                                selectedPage = {selectedPage}
+                                                onPaging = {handlePaging}/>}
                                 </Col>
                                 {/* End :: Pagination */}
                             </Row>

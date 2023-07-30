@@ -165,7 +165,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                                     
                                     {/* Start:: Column miscellaneous detail */}
                                     <BillGrid
-                                        pData = {data.services} />
+                                        pData={data.services}/>
                                     {/* End:: Column miscellaneous detail */}
 
                                 </Col>                
@@ -182,18 +182,18 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                             {/* Start:: Close button */}
                             <button
-                                type = "button"
-                                className = "btn btn-danger"
-                                onClick = {handleClose} >
+                                type="button"
+                                className="btn btn-danger"
+                                onClick={handleClose} >
                                 Close
                             </button>
                             {/* End:: Close button */}
 
                             {/* Start:: Print button */}
                             <button 
-                                type = "button"
-                                className = "btn btn-info"
-                                onClick = {handlePrint} >
+                                type="button"
+                                className="btn btn-info"
+                                onClick={handlePrint}>
                                 Print    
                             </button>
                             {/* End:: Print button */}
@@ -202,9 +202,9 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                                 <>
                                     {/* Start:: Payment button */}
                                     <button
-                                        type = "button"
-                                        className = "btn btn-success"
-                                        onClick = {handelOpenPayment} >
+                                        type="button"
+                                        className="btn btn-success"
+                                        onClick={handelOpenPayment}>
                                         Payment
                                     </button>
                                     {/* End:: Payment button */}
@@ -259,15 +259,16 @@ const GuestServiceGenerateBill = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const {data, doFetch} = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
     });     // get all non delivered items
 
     // Start:: Show modal
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -297,29 +298,18 @@ const GuestServiceGenerateBill = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-          })();
-    }, [showModal]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
         try {
+            error && toast.error(error);
             data && 
                 data.items.length > 0 &&
                     toast.error("All ordered items not delivered! Please despatch all ordered items them generate bill.");
         } catch (err) {
             console.log(err);
         }
-    }, [data]);      // eslint-disable-line react-hooks/exhaustive-deps
+    }, [data, loading, error]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Html
@@ -337,8 +327,7 @@ const GuestServiceGenerateBill = forwardRef((props, ref) => {
                     pTransactionId = {data.transactionId}
                     pShow = {showModal}
                     onPaymentAdded = {props.onPaymentAdded}
-                    onClosed = {handleCloseModal} />                        
-            }
+                    onClosed = {handleCloseModal}/>}
             {/* End:: Bill modal */}
         </>
     );

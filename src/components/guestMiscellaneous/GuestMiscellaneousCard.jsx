@@ -284,7 +284,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 <Edit 
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {props.onEdited} 
+                    onSaved = {() => {props.onEdited()}} 
                     onClosed = {() => {handleClose()}} />
                 {/* End :: edit component */}
 
@@ -293,7 +293,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     ref = {deleteRef}
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
-                    onDeleted = {props.onDeleted} 
+                    onDeleted = {() => {props.onDeleted()}} 
                     onClosed = {() => {handleClose()}} />
                 {/* End :: delete employee component */}
 
@@ -301,7 +301,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 <Order 
                     ref = {orderRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {props.onOrdered} 
+                    onSaved = {() => {props.onOrdered()}} 
                     onClosed = {() => {handleClose()}} />
                 {/* End :: miscellaneous order component */}
 
@@ -309,7 +309,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {props.onDespatched} 
+                    onSaved = {() => {props.onDespatched()}} 
                     onClosed = {() => {handleClose()}} />
                 {/* End :: miscellaneous despatch component */}
 
@@ -317,9 +317,10 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 <GenerateBill 
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {props.onPaymentAdded}
-                    onSaved = {props.onBillGenerated}
-                    onClosed = {() => {handleClose()}} />
+                    onPaymentAdded = {() => {props.onPaymentAdded()}}
+                    onSaved = {() => {props.onBillGenerated()}}
+                    onClosed = {() => {handleClose()}} 
+                    />
                 {/* End :: miscellaneous generate & display summery bill component */}
 
                 {/* Start :: miscellaneous checkout component */}
@@ -327,8 +328,8 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     ref = {checkoutRef}
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
-                    pCorporateName = {props.pCorporateName}
-                    onSaved = {props.onCheckedout} 
+                    pCorporateName = {() => {props.pCorporateName()}}
+                    onSaved = {() => {props.onCheckedout()}} 
                     onClosed = {() => {handleClose()}} />
                 {/* End :: miscellaneous checkout component */}
             </>            

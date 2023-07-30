@@ -3,7 +3,7 @@ import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
-import { subStr, getTables } from "../common/Common";
+import { subStr } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
@@ -92,7 +92,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             {/* Start:: Modal header */}
             <Modal.Header>
                 {/* Header text */}
-                <Modal.Title>Despatch -[{getTables(pTables)}]</Modal.Title>
+                <Modal.Title>Despatch</Modal.Title>
                 
                 {/* Close button */}
                 <NavLink 
@@ -228,7 +228,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 const GuestTableDespatch = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const [active, setActive] = useState(false);
     const [showMain, setShowMain] = useState(false);
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
@@ -236,9 +235,10 @@ const GuestTableDespatch = forwardRef((props, ref) => {
     });
 
     // Start:: Show modal
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
-            setActive(true);
+            setShowMain(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -249,7 +249,6 @@ const GuestTableDespatch = forwardRef((props, ref) => {
     const handleCloseModal = () => {
         try {
             setShowMain(false);
-            setActive(false);
             props.onClosed();
         } catch (err) {
             console.log(err);
@@ -261,7 +260,6 @@ const GuestTableDespatch = forwardRef((props, ref) => {
     const handleSave = () => { 
         try {
             setShowMain(false);
-            setActive(false);
             props.onSaved();
         } catch (err) {
             console.log(err);
@@ -281,28 +279,15 @@ const GuestTableDespatch = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                active && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
-          })();
-    }, [active]);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
         try {
-            active &&
-                data && 
-                    data.items.length === 0 ?
-                        toast.error("There is no item to despatch. All ordered items has allready been despatched.")
-                    :
-                        setShowMain(true)
+            data && 
+                data.items.length === 0 ?
+                    toast.error("There is no item to despatch. All ordered items has allready been despatched.")
+                :
+                    setShowMain(true)
         } catch (err) {
             console.log(err);
         }

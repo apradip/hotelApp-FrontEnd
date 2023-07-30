@@ -224,17 +224,17 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 const GuestServiceDespatch = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const [active, setActive] = useState(false);
     const [showMain, setShowMain] = useState(false);
-    const {data, doFetch} = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
     });         // get all non delivered items
 
     // Start:: Show modal
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
-            setActive(true);
+            setShowMain(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -245,7 +245,6 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
     const handleCloseModal = () => {
         try {
             setShowMain(false);
-            setActive(false);
             props.onClosed();
         } catch (err) {
             console.log(err);
@@ -257,7 +256,6 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
     const handleSave = () => { 
         try {
             setShowMain(false);
-            setActive(false);
             props.onSaved();
         } catch (err) {
             console.log(err);
@@ -277,32 +275,18 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);
     // End:: close modal on key press esc    
-    
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                active && await doFetch();
-            } catch (err) {
-                console.log("Error occured when fetching data");
-            }
-          })();
-    }, [active]);
-    // End:: fetch id wise detail from api
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
         try {
-            active &&
-                data && 
-                    data.items.length === 0 ?
-                        toast.error("There is no item to despatch. All ordered items has allready been despatched.")
-                    :
-                        setShowMain(true)
+            error && toast.error(error);
+            data && 
+                data.items.length === 0 &&
+                    toast.error("There is no item to despatch. All ordered items has allready been despatched.");
         } catch (err) {
             console.log(err);
         }
-    }, [data]);
+    }, [data, loading, error]);
     // End:: fetch id wise detail from api
     
     // Start:: Html
