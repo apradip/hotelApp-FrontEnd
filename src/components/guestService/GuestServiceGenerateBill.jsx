@@ -5,9 +5,9 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import BillGrid from "./ServiceBillGrid";
+import BillGrid from "../common/ItemBillGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import AddPayment from "./GuestServicePaymentAdd";
+import AddPayment from "../common/GuestPaymentAdd";
 
 import { subStr, formatDDMMYYYY, formatTime12Hour, formatBillNo } from "../common/Common";
 
@@ -23,6 +23,18 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     });     //generate and display bill
           
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        (async () => {
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+        })()
+    }, [pTransactionId]);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch id wise detail from api
+
     const handelOpenPayment = () => {
         try {
             addPaymentRef && 
@@ -49,18 +61,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     };
     // End:: print form    
 
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-        })()
-    }, [pTransactionId]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
-
     // Start:: Html
     return (
         <>
@@ -72,7 +72,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         {/* Start:: Modal header */}
                         <Modal.Header>
                             {/* Header text */}
-                            <Modal.Title>Bill detail</Modal.Title>
+                            <Modal.Title>Bill</Modal.Title>
                             
                             {/* Close button */}
                             <NavLink 
@@ -165,7 +165,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                                     
                                     {/* Start:: Column miscellaneous detail */}
                                     <BillGrid
-                                        pData={data.services}/>
+                                        pData = {data.services}/>
                                     {/* End:: Column miscellaneous detail */}
 
                                 </Col>                
@@ -227,7 +227,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         pCorporateName = {pCorporateName}
                         pCorporateAddress = {pCorporateAddress}
                         pBalance = {data.expense.expenseAmount * -1}    
-                        onSaved = {onPaymentAdded} />
+                        onSaved = {onPaymentAdded}/>
                     {/* End :: add payment component */}
                 </>
             }
@@ -264,6 +264,26 @@ const GuestServiceGenerateBill = forwardRef((props, ref) => {
         params: {option: "N"}
     });     // get all non delivered items
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        try {
+            error && toast.error(error);
+            data && 
+                data.items.length > 0 &&
+                    toast.error("All ordered items not delivered! Please despatch all ordered items them generate bill.");
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, loading, error]);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch id wise detail from api
+
     // Start:: Show modal
     const handleShowModal = async () => {
         try {
@@ -291,26 +311,6 @@ const GuestServiceGenerateBill = forwardRef((props, ref) => {
         return {handleShowModal};
     });
     // End:: forward reff show modal function
-    
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
-
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        try {
-            error && toast.error(error);
-            data && 
-                data.items.length > 0 &&
-                    toast.error("All ordered items not delivered! Please despatch all ordered items them generate bill.");
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data, loading, error]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     // Start:: Html
     return (

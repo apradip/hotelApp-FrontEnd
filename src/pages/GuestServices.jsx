@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
-import Add from "../components/guestService/GuestServiceAdd";
+import Add from "../components/common/GuestAddSmall";
 import CardService from "../components/guestService/GuestServiceCard";
 import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
@@ -128,7 +128,7 @@ const GuestServices = forwardRef((props, ref) => {
 
                 case Operation.GuestMod:
                     toast.success("Guest successfully changed");
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;
         
@@ -140,24 +140,24 @@ const GuestServices = forwardRef((props, ref) => {
                         
                 case Operation.Order:
                     toast.success("Item successfully ordered");
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;               
 
                 case Operation.Despatch:
                     toast.success("Item successfully despatched");
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;                
 
                 case Operation.BillGenerate:
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;                
                         
                 case Operation.PaymentAdd:
                     toast.success("Payment successfully added");
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;
 
@@ -510,6 +510,7 @@ const GuestServices = forwardRef((props, ref) => {
             {/* Start :: add component */}
             <Add 
                 ref = {addRef}   
+                pOption = {"S"}
                 onAdded = {() => {handleSuccess(Operation.GuestAdd)}}
                 onClosed = {close} />
             {/* End :: add component */}

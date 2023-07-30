@@ -59,7 +59,7 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
         onSubmit: async (values) => {
             try {
                 const payload = {   
-                    option: "D",
+                    option: "R",
                     idDocumentId: values.keyInputIDDocumentId, 
                     idNo: values.keyInputIDNo.toUpperCase(), 
                     name: values.keyInputName.toUpperCase(), 

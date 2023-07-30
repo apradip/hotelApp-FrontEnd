@@ -5,18 +5,18 @@ import { X } from "react-feather";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import useFetchWithAuth from "./useFetchWithAuth";
 
 // Start:: form
-const Form = ({pGuestId, pName, 
+const Form = ({pGuestId, pName, pCorporateName, 
                 pShow,
                 onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const inputRef = useRef(null);
     const {loading, error, doDelete} = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}/${pGuestId}`
-    });
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}`
+    });     //checkout guest
 
     // Start:: Call delete api
     const handleSave = async () => {
@@ -38,11 +38,12 @@ const Form = ({pGuestId, pName,
             {/* Start:: Modal header */}
             <Modal.Header>
                 {/* Header text */}
-                <Modal.Title>Delete</Modal.Title>
+                <Modal.Title>Checkout</Modal.Title>
 
                 {/* Close button */}
                 <NavLink 
-                    className="nav-icon" href="#" 
+                    className="nav-icon" 
+                    href="#" 
                     onClick={onClosed}>
                     <i className="align-middle"><X/></i>
                 </NavLink>
@@ -51,7 +52,7 @@ const Form = ({pGuestId, pName,
 
             {/* Start:: Modal body */}
             <Modal.Body>
-                <label className="form-label">Are you really want to delete <mark><code>{pName}</code></mark> ?</label>
+                <label className="form-label">Are you really want to check out guest <mark><code>{ pName ? pName : pCorporateName }</code></mark> ?</label>
             </Modal.Body>
             {/* End:: Modal body */}
 
@@ -61,21 +62,21 @@ const Form = ({pGuestId, pName,
                 {/* Start:: Close button */}
                 <button 
                     autoFocus
-                    type = "button"   
-                    className = "btn btn-danger"
-                    disabled = {loading}
-                    ref = {inputRef} 
-                    onClick = {onClosed}>
+                    type="button"   
+                    className="btn btn-danger"
+                    disabled={loading}
+                    ref={inputRef} 
+                    onClick={onClosed}>
                     Close
                 </button>
                 {/* End:: Close button */}
 
                 {/* Start:: Save button */}
                 <button 
-                    type = "button"
-                    className = "btn btn-success"
-                    disabled = {loading || error}
-                    onClick = {handleSave}>
+                    type="button"
+                    className="btn btn-success"
+                    disabled={loading || error}
+                    onClick={handleSave}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -96,7 +97,7 @@ const Form = ({pGuestId, pName,
 };
 // End:: form
 
-
+ 
 // Start:: Component
 // props parameters
 // pId
@@ -105,13 +106,40 @@ const Form = ({pGuestId, pName,
 
 // useImperativeHandle
 // handleShowModal
-const GuestTableDelete = forwardRef((props, ref) => {
+const GuestCheckout = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
-    });
+    }); 
+
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+
+    useEffect(() => {
+        try {
+            error && toast.error(error);
+
+            // data && 
+            //         (data.balance !== 0 || 
+            //         data.roomsDetail.length !== 0 ||
+            //         data.tablesDetail.length !== 0 ||
+            //         data.miscellaneaDetail.length !== 0 ||
+            //         data.servicesDetail.length !== 0 ||
+            //         data.expensesPaymentsDetail.length !== 0) && 
+
+            data && 
+                data.balance !== 0 && 
+                    toast.error("Guest can't be checked out, because there is some due.");
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, loading, error]);
 
     // Start :: Show modal 
     const handleShowModal = async () => {
@@ -139,7 +167,7 @@ const GuestTableDelete = forwardRef((props, ref) => {
     const handleSave = () => {
         try {
             setShowModal(false);
-            props.onDeleted();
+            props.onSaved();
         } catch (err) {
             console.log(err);
         }
@@ -152,48 +180,22 @@ const GuestTableDelete = forwardRef((props, ref) => {
     });
     // End:: forward reff show modal function
 
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
-
-    useEffect(() => {
-        try {
-            error && toast.error(error);
-            data && 
-                    (data.balance !== 0 || 
-                    data.roomsDetail.length !== 0 ||
-                    data.tablesDetail.length !== 0 ||
-                    data.miscellaneaDetail.length !== 0 ||
-                    data.servicesDetail.length !== 0 ||
-                    data.expensesPaymentsDetail.length !== 0) && 
-                        toast.error("Guest can't be deleted, because there is some activity.");
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data, error, loading]);
-
     // Start:: Html
     return (
         <>
             {/* Start:: Delete modal */}
             {data && 
-                (data.balance === 0 && 
-                data.roomsDetail.length === 0 && 
-                data.tablesDetail.length === 0 && 
-                data.miscellaneaDetail.length === 0 && 
-                data.servicesDetail.length === 0 && 
-                data.expensesPaymentsDetail.length === 0) && 
+                data.balance === 0 && 
                     <Form 
-                        pGuestId = {props.pGuestId} 
-                        pName = {props.pName}
-                        pShow = {showModal}
-                        onSubmited = {handleSave} 
-                        onClosed = {handleCloseModal}/>}
+                        pGuestId={props.pGuestId} 
+                        pName={props.pName}
+                        pCorporateName={props.pCorporateName}
+                        pShow={showModal}
+                        onSubmited={handleSave} 
+                        onClosed={handleCloseModal}/>
+            }
             {/* End:: Delete modal */}
-        </>        
+        </>
     );
     // End:: Html
 
@@ -201,4 +203,4 @@ const GuestTableDelete = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestTableDelete;
+export default GuestCheckout;

@@ -1,17 +1,23 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
+import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { Row, Col, Card, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
 import { subStr, formatINR } from "../common/Common";
 import TimeElapsed from "../common/TimeElapsed";
 
 import View from "./GuestMiscellaneousView";
-import Edit from "./GuestMiscellaneousEdit";
-import Delete from "./GuestMiscellaneousDelete";
+import Edit from "../common/GuestEditSmall";
+import Delete from "../common/GuestDeleteSmall";
 import Order from "./GuestMiscellaneousOrder";
 import Despatch from "./GuestMiscellaneousDespatch";
 import GenerateBill from "./GuestMiscellaneousGenerateBill";
-import Checkout from "./GuestMiscellaneousCheckout";
+import Checkout from "../common/GuestCheckout";
+
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import useFetchWithAuth from "../common/useFetchWithAuth";
+
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to = "#" className = "dropdown"
@@ -43,6 +49,9 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handelOpenCheckout
 // handelOpenDelete
 const GuestMiscellaneousCard = forwardRef((props, ref) => {
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
@@ -51,8 +60,33 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
     const generateBillRef = useRef(null);
     const checkoutRef = useRef(null);
     
+    const [corporateName, setCorporateName] = useState(props.pCorporateName);
+    const [corporateAddress, setCorporateAddress] = useState(props.pCorporateAddress);
+    const [name, setName] = useState(props.pName);
+    const [mobile, setMobile] = useState(props.pMobile);
+    const [guestCount, setGuestCount] = useState(props.pGuestCount);
+    const [balance, setBalance] = useState(props.pBalance);
+    const [indate, setIndate] = useState(props.pIndate);
+    const [inTime, setInTime] = useState(props.pInTime);
+
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
+
+    const {data, loading, error, doFetch} = useFetchWithAuth({
+        url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
+    });
+
+    useEffect(() => {
+        error && toast.error(error);
+        data && setCorporateName(data.corporateName);
+        data && setCorporateAddress(data.corporateAddress); 
+        data && setName(data.name);
+        data && setMobile(data.mobile);
+        data && setGuestCount(data.guestCount);  
+        data && setBalance(data.balance);
+        data && setIndate(data.inDate);
+        data && setInTime(data.inTime);  
+    }, [data, error, loading]);
 
     // Start:: Show view modal 
     const handelOpenView = () => {
@@ -110,10 +144,10 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
     // End:: Show checkout modal 
     
     // Start:: Show edit modal 
-    const handelOpenEdit = () => {
+    const handelOpenEdit = (option) => {
         try {
             editRef && 
-                editRef.current.handleShowModal();
+                editRef.current.handleShowModal(option);
         } catch (err) {
             console.log(err);
         }
@@ -184,40 +218,42 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                 }}> 
 
                 {/* Start:: card body */}
-                <Card.Body className = "text-sm p-1"> 
-                    <Row className = "m-1">
-                        <Col xs = {8} sm = {8} md = {8} lg = {8} xl = {8} className = "p-0">
-                            <b>{props.pCorporateName ? subStr(props.pCorporateName, 20): subStr(props.pName, 20)}</b>
-                            {props.pOption === "R" &&
-                            <Badge pill bg = "danger">R</Badge>}
+                <Card.Body className="text-sm p-1"> 
+                    <Row className="m-1">
+                        <Col xs={8} sm={8} md={8} lg={8} xl={8} className="p-0">
+                            <b>
+                                {corporateName ? subStr(corporateName, 20): subStr(name, 20)}
+                            </b>
                         </Col>
-                        <Col xs = {4} sm = {4} md = {4} lg = {4} xl = {4} className = "text-right text-danger p-0">
-                            <b>{formatINR(props.pBalance)}</b>
+                        <Col xs={4} sm={4} md={4} lg={4} xl={4} className="text-right text-danger p-0">
+                            <b>
+                                {formatINR(balance)}
+                            </b>
                         </Col>
                     </Row>
 
-                    <Row className = "d-none d-md-block d-lg-block d-xl-block m-1">
-                        {props.pCorporateName ?
-                            <Col xs = {12} sm = {12} md = {12} lg = {12} xl = {12} className = "p-0">
-                                {subStr(props.pCorporateAddress, 30)}
+                    <Row className="d-none d-md-block d-lg-block d-xl-block m-1">
+                        {corporateName ?
+                            <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
+                                {subStr(corporateAddress, 30)}
                             </Col>
                             :
-                            <Col xs = {12} sm = {12} md = {12} lg = {12} xl = {12} className = "p-0">
-                                Mobile no. {props.pMobile}
+                            <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
+                                Mobile no. {mobile}
                             </Col>
                         }
                     </Row>
 
-                    <Row className = "m-1">
-                        <Col xs = {10} sm = {10} md = {6} lg = {6} xl = {6} className = "p-0">
-                            {props.pGuestCount} no of guest(s) 
+                    <Row className="m-1">
+                        <Col xs={10} sm={10} md={6} lg={6} xl={6} className="p-0">
+                            {guestCount} no of guest(s) 
                         </Col>
-                        <Col xs = {0} sm = {0} md = {5} lg = {5} xl = {5} className = "d-none d-md-block d-lg-block d-xl-block text-right p-0">
+                        <Col xs={0} sm={0} md={5} lg={5} xl={5} className="d-none d-md-block d-lg-block d-xl-block text-right p-0">
                             <TimeElapsed
-                                pInDate = {props.pIndate}
-                                pInTime = {props.pInTime}/>
+                                pInDate={indate}
+                                pInTime={inTime}/>
                         </Col>
-                        <Col xs = {2} sm = {2} md = {1} lg = {1} xl = {1} className = "text-right p-0">
+                        <Col xs={2} sm={2} md={1} lg={1} xl={1} className="text-right p-0">
                             {/* Start:: operational menu */}
                             <Dropdown>
 
@@ -277,15 +313,16 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 <View
                     ref = {viewRef}
                     pGuestId = {props.pGuestId} 
-                    onClosed = {() => {handleClose()}} />
+                    onClosed = {() => {handleClose();}}/>
                 {/* End :: view component */}
 
                 {/* Start :: edit component */}
                 <Edit 
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onEdited()}} 
-                    onClosed = {() => {handleClose()}} />
+                    pOption = {"M"}
+                    onSaved = {async () => {await doFetch(); props.onEdited();}} 
+                    onClosed = {() => {handleClose();}}/>
                 {/* End :: edit component */}
 
                 {/* Start :: delete employee component */}
@@ -293,34 +330,33 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     ref = {deleteRef}
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
-                    onDeleted = {() => {props.onDeleted()}} 
-                    onClosed = {() => {handleClose()}} />
+                    onDeleted = {() => {props.onDeleted();}} 
+                    onClosed = {() => {handleClose();}}/>
                 {/* End :: delete employee component */}
 
                 {/* Start :: miscellaneous order component */}
                 <Order 
                     ref = {orderRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onOrdered()}} 
-                    onClosed = {() => {handleClose()}} />
+                    onSaved = {() => {props.onOrdered();}} 
+                    onClosed = {() => {handleClose();}}/>
                 {/* End :: miscellaneous order component */}
 
                 {/* Start :: miscellaneous despatch component */}
                 <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onDespatched()}} 
-                    onClosed = {() => {handleClose()}} />
+                    onSaved = {() => {props.onDespatched();}} 
+                    onClosed = {() => {handleClose();}}/>
                 {/* End :: miscellaneous despatch component */}
 
                 {/* Start :: miscellaneous generate & display summery bill component */}
                 <GenerateBill 
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {() => {props.onPaymentAdded()}}
-                    onSaved = {() => {props.onBillGenerated()}}
-                    onClosed = {() => {handleClose()}} 
-                    />
+                    onPaymentAdded = {async () => {await doFetch(); props.onPaymentAdded();}}
+                    onSaved = {async () => {await doFetch(); props.onBillGenerated();}}
+                    onClosed = {() => {handleClose();}}/>
                 {/* End :: miscellaneous generate & display summery bill component */}
 
                 {/* Start :: miscellaneous checkout component */}
@@ -328,9 +364,9 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     ref = {checkoutRef}
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
-                    pCorporateName = {() => {props.pCorporateName()}}
-                    onSaved = {() => {props.onCheckedout()}} 
-                    onClosed = {() => {handleClose()}} />
+                    pCorporateName = {props.pCorporateName}
+                    onSaved = {() => {props.onCheckedout();}} 
+                    onClosed = {() => {handleClose();}}/>
                 {/* End :: miscellaneous checkout component */}
             </>            
         </>

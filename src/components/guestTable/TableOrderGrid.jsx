@@ -130,6 +130,36 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         {rowId: "Total", totalPrice: 0}
     ];
 
+    // Start:: fetch hotel detail from api
+    useEffect(() => {
+        (async () => {
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+          })();
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch hotel detail from api
+
+    useEffect(() => {
+        try {
+            data && calculateSum();
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data]);
+
+    // Start:: set add empty row grid
+    useEffect(() => {
+        try {
+            if (pState !== "VIEW") data && addRow();
+        } catch (err) {
+            console.log(err);
+        }
+    }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: set add empty row grid
+
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
         let row = [];
@@ -211,36 +241,6 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             console.log(err);
         }
     };
-
-    // Start:: fetch hotel detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-          })();
-    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch hotel detail from api
-
-    useEffect(() => {
-        try {
-            data && calculateSum();
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data]);
-
-    // Start:: set add empty row grid
-    useEffect(() => {
-        try {
-            if (pState !== "VIEW") data && addRow();
-        } catch (err) {
-            console.log(err);
-        }
-    }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: set add empty row grid
 
     // Start:: calculate sum on change tariff
     const calculateSum = useCallback (() => {

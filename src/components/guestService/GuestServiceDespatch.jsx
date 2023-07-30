@@ -8,7 +8,7 @@ import { subStr } from "../common/Common";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { guestServiceSchema } from "../../schemas";
-import DespatchGrid from "./ServiceDespatchGrid";
+import DespatchGrid from "../common/ItemDespatchGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
@@ -230,6 +230,26 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
         params: {option: "N"}
     });         // get all non delivered items
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);
+    // End:: close modal on key press esc    
+
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        try {
+            error && toast.error(error);
+            data && 
+                data.items.length === 0 &&
+                    toast.error("There is no item to despatch. All ordered items has allready been despatched.");
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, loading, error]);
+    // End:: fetch id wise detail from api
+
     // Start:: Show modal
     const handleShowModal = async () => {
         try {
@@ -268,26 +288,6 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
         return {handleShowModal}
     });
     // End:: forward reff show modal function
-
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);
-    // End:: close modal on key press esc    
-
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        try {
-            error && toast.error(error);
-            data && 
-                data.items.length === 0 &&
-                    toast.error("There is no item to despatch. All ordered items has allready been despatched.");
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data, loading, error]);
-    // End:: fetch id wise detail from api
     
     // Start:: Html
     return (

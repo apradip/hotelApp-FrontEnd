@@ -7,12 +7,13 @@ import { X } from "react-feather";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { guestSmallSchema } from "../../schemas";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import useFetchWithAuth from "./useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporateAddress, pGST, 
-                pShow,
+const Form = ({pGuestId, pName, pMobile, pGuestCount, 
+                pCorporateName, pCorporateAddress, pGST, 
+                pOption, pShow,
                 onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
@@ -34,23 +35,27 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
         validationSchema: guestSmallSchema,
         validateOnChange,
         onSubmit: async (values, action) => {
-            const payload = {   
-                option: "S",
-                name: values.keyInputName.toUpperCase(), 
-                mobile: parseInt(values.keyInputMobile),
-                guestCount: parseInt(values.keyInputGuestCount),
-                corporateName: values.keyInputCorporateName ? values.keyInputCorporateName.toUpperCase() : "",
-                corporateAddress: values.keyInputCorporateAddress ? values.keyInputCorporateAddress.toUpperCase() : "",
-                gstNo: values.keyInputGST ? values.keyInputGST.toUpperCase() : ""
-            };
-
-            await doInsert(payload);
-
-            if (error === null) {
-                action.resetForm();
-                onSubmited();
-            } else {
-                toast.error(error);
+            try {
+                const payload = {   
+                    option: pOption,
+                    name: values.keyInputName.toUpperCase(), 
+                    mobile: parseInt(values.keyInputMobile),
+                    guestCount: parseInt(values.keyInputGuestCount),
+                    corporateName: values.keyInputCorporateName ? values.keyInputCorporateName.toUpperCase() : "",
+                    corporateAddress: values.keyInputCorporateAddress ? values.keyInputCorporateAddress.toUpperCase() : "",
+                    gstNo: values.keyInputGST ? values.keyInputGST.toUpperCase() : ""
+                };
+            
+                await doInsert(payload);
+        
+                if (error === null) {
+                    action.resetForm();
+                    onSubmited();
+                } else {
+                    toast.error(error);
+                }
+            } catch (err) {
+                console.log(err);
             }
         }
     });
@@ -321,7 +326,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
 // End:: form
 
 
-
 // Start:: Component
 // props parameters
 // pId
@@ -330,13 +334,24 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount, pCorporateName, pCorporate
 
 // useImperativeHandle
 // handleShowModal
-const GuestServiceEdit = forwardRef((props, ref) => {    
+const GuestEditSmall = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
     });
+    
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal()});
+        return () => {document.removeEventListener("keydown", handleCloseModal)};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+        
+    useEffect(() => {
+        error && toast.error(error);
+    }, [data, error, loading]);
     
     // Start:: Show modal
     const handleShowModal = async () => {
@@ -377,16 +392,6 @@ const GuestServiceEdit = forwardRef((props, ref) => {
     });
     // End:: forward reff show modal function
 
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal()});
-        return () => {document.removeEventListener("keydown", handleCloseModal)};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
-        
-    useEffect(() => {
-        error && toast.error(error);
-    }, [data, loading, error]);
     
     // Start:: Html
     return (
@@ -401,6 +406,7 @@ const GuestServiceEdit = forwardRef((props, ref) => {
                     pCorporateName = {data.corporateName}
                     pCorporateAddress = {data.corporateAddress}
                     pGST = {data.gstNo}
+                    pOption = {props.pOption}
                     pShow = {showModal}
                     onSubmited = {handleSave} 
                     onClosed = {handleCloseModal}/>}
@@ -413,4 +419,4 @@ const GuestServiceEdit = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestServiceEdit;
+export default GuestEditSmall;

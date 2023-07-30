@@ -5,7 +5,7 @@ import { subStr } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import ViewGrid from "./TableViewGrid";
+import ViewGrid from "../common/ItemViewGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
@@ -15,38 +15,7 @@ const Form = ({pName, pMobile, pGuestCount,
                pShow, 
                onClosed}) => {
                     
-    // const [defaultRowData, setDefaultRowData] = useState([]);
-
-    // useEffect(() => {
-    //     try {
-    //         if (pData) {
-    //             pData.forEach(element => {
-    //                 const rowData = {
-    //                     rowId: defaultRowData.length + 1, 
-    //                     id: element.id,
-    //                     name: element.name, 
-    //                     unitPrice: element.unitPrice,
-    //                     quantity: element.quantity, 
-    //                     serviceChargePercentage: element.serviceChargePercentage, 
-    //                     serviceCharge: element.serviceCharge, 
-    //                     gstPercentage: element.gstPercentage, 
-    //                     gstCharge: element.gstCharge, 
-    //                     totalPrice: element.unitPrice * element.quantity,
-    //                     despatchDate: element.despatchDate ? element.despatchDate : "",
-    //                     despatchTime: element.despatchTime ? element.despatchTime : ""
-    //                 };
-
-    //                 defaultRowData.push(rowData);
-    //             });
-    //         }
-
-    //         setDefaultRowData(defaultRowData);
-    //     } catch (err) {
-    //         console.log("Error occured when fetching data");
-    //     }
-    // }, [pData])        // eslint-disable-line react-hooks/exhaustive-deps
-
-    // Start:: Html
+        // Start:: Html
     return (
         <Modal size="lg"
             show={pShow}>
@@ -146,7 +115,7 @@ const Form = ({pName, pMobile, pGuestCount,
             {/* End:: Modal footer */}
 
         </Modal>
-    )
+    );
     // End:: Html
 
 };
@@ -168,6 +137,13 @@ const GuestTableView = forwardRef((props, ref) => {
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "GA"}
     });
+
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
 
     // Start :: Show modal 
     const handleShowModal = async () => {
@@ -195,13 +171,6 @@ const GuestTableView = forwardRef((props, ref) => {
         return {handleShowModal};
     });
     // End:: forward reff show modal function
-
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);}
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
 
     // Start:: Html
     return (

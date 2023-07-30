@@ -8,7 +8,7 @@ import { subStr } from "../common/Common";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { guestTableSchema } from "../../schemas";
-import DespatchGrid from "./TableDespatchGrid";
+import DespatchGrid from "../common/ItemDespatchGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -234,6 +234,27 @@ const GuestTableDespatch = forwardRef((props, ref) => {
         params: {option: "N"}
     });
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        try {
+            data && 
+                data.items.length === 0 ?
+                    toast.error("There is no item to despatch. All ordered items has allready been despatched.")
+                :
+                    setShowMain(true)
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data]);
+    // End:: fetch id wise detail from api
+
     // Start:: Show modal
     const handleShowModal = async () => {
         try {
@@ -272,27 +293,6 @@ const GuestTableDespatch = forwardRef((props, ref) => {
         return {handleShowModal};
     });
     // End:: forward reff show modal function
-
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
-
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        try {
-            data && 
-                data.items.length === 0 ?
-                    toast.error("There is no item to despatch. All ordered items has allready been despatched.")
-                :
-                    setShowMain(true)
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data]);
-    // End:: fetch id wise detail from api
     
     // Start:: Html
     return (

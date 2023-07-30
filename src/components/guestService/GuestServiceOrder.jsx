@@ -264,6 +264,13 @@ const GuestServiceOrder = forwardRef((props, ref) => {
         params: {option: "N"}
     });
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+
     // Start:: Show modal
     const handleShowModal = async () => {
         try {
@@ -302,13 +309,6 @@ const GuestServiceOrder = forwardRef((props, ref) => {
         return {handleShowModal};
     });
     // End:: forward reff show modal function
-
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
 
     // Start:: Html
     return (

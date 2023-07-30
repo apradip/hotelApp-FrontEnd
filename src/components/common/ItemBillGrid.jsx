@@ -1,12 +1,12 @@
 import React, { useState, useRef, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react"; 
 
-import { formatINR } from "../common/Common";
+import { formatINR } from "./Common";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const ServiceBillGrid = ({pData}) => {    
+const ItemBillGrid = ({pData}) => {    
     const gridRef = useRef();
     const defaultColDef = useMemo(() => {
         return {
@@ -21,9 +21,9 @@ const ServiceBillGrid = ({pData}) => {
     }, []);
     const rowClassRules = useMemo(() => {
         return {
-            "ag-row-pinned_other": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId !== "Total"; },
-            "ag-row-pinned_total": (params) => {return params.node.rowPinned === "bottom" && params.data.rowId === "Total"; },
-        };
+            "ag-row-pinned_other" : (params) => {return params.node.rowPinned === "bottom" && params.data.rowId !== "Total";},
+            "ag-row-pinned_total" : (params) => {return params.node.rowPinned === "bottom" && params.data.rowId === "Total";}
+        }
     }, []);  
     const [columnDefs] = useState([
         {
@@ -114,27 +114,15 @@ const ServiceBillGrid = ({pData}) => {
             pinnedRowData[3].price = totalPrice + totalService + totalGst;
 
             gridRef.current.api.setRowData(rows);
+            gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
             gridRef.current.api.refreshCells();
             gridRef.current.api.redrawRows();
-
-            params.api.sizeColumnsToFit();
             gridRef.current.api.sizeColumnsToFit();
         } catch (err) {
             console.log(err);
         }
     };
     // End:: load empty data to grid
-    
-    // Start:: load empty data to grid
-    const handleFirstDataRendered = () => {
-        try {
-            gridRef.current.api && gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // End:: load empty data to grid
-
 
 	return (
         <div className = "col-12 ag-theme-alpine grid-height-400">
@@ -145,10 +133,9 @@ const ServiceBillGrid = ({pData}) => {
                 rowData = {null}
                 rowSelection = {"single"}
                 rowClassRules = {rowClassRules}
-                onGridReady = {handleGridReady}
-                onFirstDataRendered = {handleFirstDataRendered} />
+                onGridReady = {handleGridReady}/>
         </div>
     );
 };
  
-export default ServiceBillGrid;
+export default ItemBillGrid;

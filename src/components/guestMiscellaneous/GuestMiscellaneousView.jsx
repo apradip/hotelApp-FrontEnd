@@ -6,7 +6,7 @@ import { subStr } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import ViewGrid from "./MiscellaneousViewGrid";
+import ViewGrid from "../common/ItemViewGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -164,6 +164,23 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
         params: {option: "GA"}
     });
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        try {
+            error && toast.error(error);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, loading, error]);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch id wise detail from api
+
     // Start :: Show modal 
     const handleShowModal = async () => {
         try {
@@ -190,23 +207,6 @@ const GuestMiscellaneousView = forwardRef((props, ref) => {
         return {handleShowModal};
     });
     // End:: forward reff show modal function
-
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);}
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
-
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        try {
-            error && toast.error(error);
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data, loading, error]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     // Start:: Html
     return (

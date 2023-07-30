@@ -114,6 +114,20 @@ const GuestTableCheckout = forwardRef((props, ref) => {
         url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
     });
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);}
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+
+    useEffect(() => {
+        error && toast.error(error);
+        data && 
+            data.balance !== 0 && 
+                    toast.error("Guest can't be checked out, because there is some due.");
+    }, [data, error, loading]);
+
     // Start :: Show modal 
     const handleShowModal = async () => {
         try {
@@ -152,20 +166,6 @@ const GuestTableCheckout = forwardRef((props, ref) => {
         return {handleShowModal};
     });
     // End:: forward reff show modal function
-
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);}
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
-
-    useEffect(() => {
-        error && toast.error(error);
-        data && 
-            data.balance !== 0 && 
-                    toast.error("Guest can't be checked out, because there is some due.");
-    }, [data, error, loading]);
 
     // Start:: Html
     return (

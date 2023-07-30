@@ -15,17 +15,17 @@ import Delete from "./GuestRoomDelete";
 import OrderTable from "../guestTable/GuestTableOrder";
 import DespatchTable from "../guestTable/GuestTableDespatch";
 import GenerateBillTable from "../guestTable/GuestTableGenerateBill";
-import CheckoutTable from "../guestTable/GuestTableCheckout";
+import CheckoutTable from "../common/GuestCheckout";
 
 import OrderService from "../guestService/GuestServiceOrder";
 import DespatchService from "../guestService/GuestServiceDespatch";
 import GenerateBillService from "../guestService/GuestServiceGenerateBill";
-import CheckoutService from "../guestService/GuestServiceCheckout";
+import CheckoutService from "../common/GuestCheckout";
 
 import OrderMiscellaneous from "../guestMiscellaneous/GuestMiscellaneousOrder";
 import DespatchMiscellaneous from "../guestMiscellaneous/GuestMiscellaneousDespatch";
 import GenerateBillMiscellaneous from "../guestMiscellaneous/GuestMiscellaneousGenerateBill";
-import CheckoutMiscellaneous from "../guestMiscellaneous/GuestMiscellaneousCheckout";
+import CheckoutMiscellaneous from "../common/GuestCheckout";
 
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (

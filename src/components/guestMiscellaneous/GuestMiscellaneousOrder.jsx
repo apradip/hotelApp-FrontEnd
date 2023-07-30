@@ -261,6 +261,23 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
         params: {option: "N"}
     });         // get all non delivered items
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        try {
+            error && toast.error(error);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, error, loading]);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch id wise detail from api
+
     // Start:: Show modal
     const handleShowModal = async () => {
         try {
@@ -299,23 +316,6 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
         return {handleShowModal};
     });
     // End:: forward reff show modal function
-
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
-
-    // Start:: fetch id wise detail from api
-    useEffect(() => {
-        try {
-            error && toast.error(error);
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data, error, loading]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch id wise detail from api
 
     // Start:: Html
     return (

@@ -3,12 +3,12 @@ import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
-import { subStr } from "../common/Common";
+import { subStr } from "./Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { guestPaymentSchema } from "../../schemas";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import useFetchWithAuth from "./useFetchWithAuth";
 
 
 // Start:: form
@@ -20,7 +20,7 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}/${pExpenseId}/${pBillId}`
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pExpenseId}/${pBillId}`
     });         //insert payment
 
     // Start:: Form validate and save data
@@ -68,8 +68,8 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
     
     // Start:: Html
     return (
-        <Modal size = "md"
-            show = {pShow} >
+        <Modal size="md"
+            show={pShow}>
 
             {/* Start:: Modal header */}
             <Modal.Header>
@@ -77,9 +77,9 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
                 <Modal.Title>Payment</Modal.Title>
 
                 {/* Close button */}
-                <NavLink className = "nav-icon" href="#" 
-                    onClick = {handleClose} >
-                    <i className = "align-middle"><X/></i>
+                <NavLink className="nav-icon" href="#" 
+                    onClick={handleClose}>
+                    <i className="align-middle"><X/></i>
                 </NavLink>
             </Modal.Header>
             {/* End:: Modal header */}
@@ -92,14 +92,14 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
 
                     {/* End:: Column name / corporate name */}
                     {pCorporateName ?
-                        <Col sx = {12} md = {6} className = "mb-3">
-                            <label className = "col-12 form-label"><b>Company</b></label>
-                            <label className = "col-12 text-muted">{subStr(pCorporateName, 20)}</label>
+                        <Col sx={12} md={6} className="mb-3">
+                            <label className="col-12 form-label"><b>Company</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateName, 20)}</label>
                         </Col>
                     :
-                        <Col sx = {12} md = {6} className="mb-3">
-                            <label className = "col-12 form-label"><b>Name</b></label>
-                            <label className = "col-12 text-muted">{subStr(pName, 20)}</label>
+                        <Col sx={12} md={6} className="mb-3">
+                            <label className="col-12 form-label"><b>Name</b></label>
+                            <label className="col-12 text-muted">{subStr(pName, 20)}</label>
                         </Col>
                     }
                     {/* End:: Column name / corporate name */}
@@ -107,13 +107,13 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
                     {/* Start:: Column mobile no. / corporate address */}
                     {pCorporateName ?
                         <Col sx={12} md={6} className="mb-3">
-                            <label className = "col-12 form-label"><b>Address</b></label>
-                            <label className = "col-12 text-muted">{subStr(pCorporateAddress, 20)}</label>
+                            <label className="col-12 form-label"><b>Address</b></label>
+                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 20)}</label>
                         </Col>
                         :
-                        <Col sx = {12} md = {6} className = "mb-3">
-                            <label className = "col-12 form-label"><b>Mobile no.</b></label>
-                            <label className = "col-12 text-muted">{pMobile}</label>
+                        <Col sx={12} md={6} className="mb-3">
+                            <label className="col-12 form-label"><b>Mobile no.</b></label>
+                            <label className="col-12 text-muted">{pMobile}</label>
                         </Col>
                     }
                     {/* End:: Column mobile no. / corporate address */}
@@ -125,28 +125,28 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
                 <Row>
 
                     {/* Start:: Column payment amount */}
-                    <Col sx = {12} md = {12} className = "mb-3">
+                    <Col sx={12} md={12} className="mb-3">
 
                         {/* Label element */}
-                        <label className = "col-12 form-label" 
-                            htmlFor = {"keyInputPaymentAmount"}><b>Amount</b></label>
+                        <label className="col-12 form-label" 
+                            htmlFor={"keyInputPaymentAmount"}><b>Amount</b></label>
 
-                        <div className = "col-12">
+                        <div className="col-12">
 
                             {/* Input element select*/}
                             <input 
-                                type = "text" 
-                                name = "keyInputPaymentAmount"
-                                placeholder = "Payment amount"
-                                className = "col-12 form-control"
-                                autoComplete = "off"
-                                disabled = "disabled"
-                                value = {values.keyInputPaymentAmount} />
+                                type="text" 
+                                name="keyInputPaymentAmount"
+                                placeholder="Payment amount"
+                                className="col-12 form-control"
+                                autoComplete="off"
+                                disabled="disabled"
+                                value={values.keyInputPaymentAmount}/>
                         
                             {/* Validation message */}
                             {errors.keyInputPaymentAmount && 
                                 touched.keyInputPaymentAmount ? 
-                                    (<small className = "text-danger">{errors.keyInputPaymentAmount}</small>) : 
+                                    (<small className="text-danger">{errors.keyInputPaymentAmount}</small>) : 
                                         null}
                         </div>
                     </Col>
@@ -159,31 +159,31 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
                 <Row>
 
                     {/* Start:: Column narration */}
-                    <Col sx = {12} md = {12} className = "mb-3">
+                    <Col sx={12} md={12} className="mb-3">
 
                         {/* Label element */}
-                        <label className = "col-12 form-label" 
-                            htmlFor = {"keyInputGST"}><b>Narration</b></label>
+                        <label className="col-12 form-label" 
+                            htmlFor={"keyInputGST"}><b>Narration</b></label>
 
-                        <div className = "col-12">
+                        <div className="col-12">
 
                             {/* Input element select*/}
                             <textarea
+                                name={"keyInputNarration"}
+                                rows={"5"}
+                                placeholder="Narration"
+                                className="form-control"
+                                autoComplete="off"
                                 autoFocus
-                                name = {"keyInputNarration"}
-                                rows = {"5"}
-                                placeholder = "Narration"
-                                className = "form-control"
-                                autoComplete = "off"
-                                maxLength = {1000}
-                                disabled = {loading}
-                                value = {values.keyInputNarration} 
-                                onChange = {handleChange} />
+                                maxLength={1000}
+                                disabled={loading}
+                                value={values.keyInputNarration} 
+                                onChange={handleChange}/>
 
                             {/* Validation message */}
                             {errors.keyInputNarration && 
                                 touched.keyInputNarration ? 
-                                    (<small className = "text-danger">{errors.keyInputNarration}</small>) : 
+                                    (<small className="text-danger">{errors.keyInputNarration}</small>) : 
                                         null}
                         </div>
                     </Col>
@@ -201,20 +201,21 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
 
                     {/* Start:: Close button */}
                     <button 
-                        type = "button"
-                        className = "btn btn-danger"
-                        disabled = {loading}
-                        onClick = {handleClose} >
+                        type="button"
+                        // className="btn btn-danger pull-right"
+                        className="btn btn-danger"
+                        disabled={loading}
+                        onClick={handleClose} >
                         Close
                     </button>
                     {/* End:: Close button */}
 
                     {/* Start:: Save button */}
                     <button 
-                        type = "button"
-                        className = "btn btn-success"
-                        disabled = {loading} 
-                        onClick = {handleSubmit} >
+                        type="button"
+                        className="btn btn-success"
+                        disabled={loading} 
+                        onClick={handleSubmit} >
 
                         {!loading && "Confirm"}
                         {loading && 
@@ -228,7 +229,7 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </Modal>
+        </Modal>                            
     );
     // End:: Html
 
@@ -243,9 +244,16 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
 
 // useImperativeHandle
 // handleShowModal
-const GuestServicePaymentAdd = forwardRef((props, ref) => {
+const GuestPaymentAdd = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+    
     // Start:: Show modal
     const handleShowModal = () => {
         try {
@@ -283,13 +291,6 @@ const GuestServicePaymentAdd = forwardRef((props, ref) => {
     });
     // End:: forward reff show modal function
 
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
-
     // Start:: Html
     return (
         <>
@@ -307,7 +308,6 @@ const GuestServicePaymentAdd = forwardRef((props, ref) => {
                 onSubmited = {handleSave} 
                 onClosed = {handleCloseModal}/>
             {/* End:: Form component */}
-
         </>
     );
     // End:: Html
@@ -316,4 +316,4 @@ const GuestServicePaymentAdd = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestServicePaymentAdd;
+export default GuestPaymentAdd;

@@ -135,6 +135,36 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         width: "100%"
     });
 
+    // Start:: fetch hotel detail from api
+    useEffect(() => {
+        (async () => {
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+          })()
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch hotel detail from api
+
+    useEffect(() => {
+        try {
+            data && calculateSum();
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data]);
+
+    // Start:: set add empty row grid
+    useEffect(() => {
+        try {
+            if (pState !== "VIEW") data && addRow();
+        } catch (err) {
+            console.log(err);
+        }
+    }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: set add empty row grid
+
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
         let row = [];
@@ -218,36 +248,6 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         }
     };
 
-    // Start:: fetch hotel detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-          })()
-    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch hotel detail from api
-
-    useEffect(() => {
-        try {
-            data && calculateSum();
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data]);
-
-    // Start:: set add empty row grid
-    useEffect(() => {
-        try {
-            if (pState !== "VIEW") data && addRow();
-        } catch (err) {
-            console.log(err);
-        }
-    }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: set add empty row grid
-
     const addRow = useCallback (() => {
         try {
             if (emptyRowCount <= 0) {
@@ -302,7 +302,6 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         }
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: calculate sum on change tariff
-    
 
 	return (
         <div className = "col-12 ag-theme-alpine grid-height-400">

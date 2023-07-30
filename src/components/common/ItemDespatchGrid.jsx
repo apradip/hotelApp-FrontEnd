@@ -1,21 +1,11 @@
-import React, { useContext, useEffect, useState, useRef, useMemo, useCallback } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
-
-import { HotelId } from "../../App";
-import { useStateContext } from "../../contexts/ContextProvider";
-import useFetchWithAuth from "../common/useFetchWithAuth";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
+const ItemDespatchGrid = ({pDefaultRowData, onChange}) => {    
     const gridRef = useRef();
-    const {data, doFetch} = useFetchWithAuth({
-        url: `${contextValues.hotelAPI}/${hotelId}`
-    });
-
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
@@ -78,29 +68,17 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
         try {
             pDefaultRowData.forEach(element => {
                 const object = {
-                                rowId: row.length + 1, 
-                                id: element.id,
-                                name: element.name, 
-                                quantity: element.quantity, 
-                                itemTransactionId: element.itemTransactionId
-                            };
+                    rowId: row.length + 1, 
+                    id: element.id,
+                    name: element.name, 
+                    quantity: element.quantity, 
+                    itemTransactionId: element.itemTransactionId
+                };
         
                 row.push(object);
             });
 
             gridRef.current.api.setRowData(row);
-            gridRef.current.api.refreshCells();
-            gridRef.current.api.redrawRows();
-            gridRef.current.api.sizeColumnsToFit();
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // End:: load empty data to grid
-    
-    // Start:: load empty data to grid
-    const handleFirstDataRendered = () => {
-        try {
             gridRef.current.api.refreshCells();
             gridRef.current.api.redrawRows();
             gridRef.current.api.sizeColumnsToFit();
@@ -119,19 +97,6 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
         }
     }, []);
     // End:: on row selection change set selected 
-
-    // Start:: fetch hotel detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-          })();
-    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch hotel detail from api
-
     
 	return (
         <div className = "col-12 ag-theme-alpine grid-height-400">
@@ -142,11 +107,9 @@ const ServiceDespatchGrid = ({pDefaultRowData, onChange}) => {
                 rowData = {null}
                 rowSelection = {"multiple"}
                 onGridReady = {handleGridReady}
-                onFirstDataRendered = {handleFirstDataRendered}
-                onSelectionChanged = {onSelectionChanged} />
+                onSelectionChanged = {onSelectionChanged}/>
         </div>
     );
-
 };
  
-export default ServiceDespatchGrid;
+export default ItemDespatchGrid;

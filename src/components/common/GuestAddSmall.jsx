@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import React, { useContext, useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -7,11 +7,11 @@ import { X } from "react-feather";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { guestSmallSchema } from "../../schemas";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import useFetchWithAuth from "./useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pShow, 
+const Form = ({pOption, pShow,
                 onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
@@ -35,7 +35,7 @@ const Form = ({pShow,
         onSubmit: async (values) => {
             try {
                 const payload = {   
-                    option: "T",
+                    option: pOption,
                     name: values.keyInputName.toUpperCase(), 
                     mobile: parseInt(values.keyInputMobile),
                     guestCount: parseInt(values.keyInputGuestCount),
@@ -54,6 +54,7 @@ const Form = ({pShow,
                 }
             } catch (err) {
                 console.log(err);
+                toast.error(err);
             }
         }
     });
@@ -97,51 +98,51 @@ const Form = ({pShow,
                 <Row>
 
                     {/* Start:: Column name */}
-                    <Col sx = {12} md = {4} className = "mb-3">
+                    <Col sx={12} md={4} className="mb-3">
                         {/* Label element */}
-                        <label className = "col-12 form-label" 
-                            htmlFor = {"keyInputName"}><b>Name</b></label>
+                        <label className="col-12 form-label" 
+                            htmlFor={"keyInputName"}><b>Name</b></label>
 
-                        <div className = "col-12">
+                        <div className="col-12">
                             {/* Input element text*/}
                             <input 
-                                type = "text"
-                                name = "keyInputName"
-                                placeholder = "Name"
-                                className = "form-control"
-                                autoComplete = "off"
-                                maxLength = {100}
-                                disabled = {loading} 
-                                value = {values.keyInputName} 
-                                onChange = {handleChange} />
+                                type="text"
+                                name="keyInputName"
+                                placeholder="Name"
+                                className="form-control"
+                                autoComplete="off"
+                                maxLength={100}
+                                disabled={loading} 
+                                value={values.keyInputName} 
+                                onChange={handleChange}/>
 
                             {/* Validation message */}
                             {errors.keyInputName && 
                                 touched.keyInputName ? 
-                                    (<small className = "text-danger">{errors.keyInputName}</small>) : 
+                                    (<small className="text-danger">{errors.keyInputName}</small>) : 
                                         null}
                         </div>
                     </Col>
                     {/* End:: Column name */}
 
                     {/* Start:: Column mobile */}
-                    <Col sx = {12} md = {4} className = "mb-3">
+                    <Col sx={12} md={4} className="mb-3">
                         {/* Label element */}
-                        <label className = "col-12 form-label"
-                            htmlFor = {"keyInputMobile"}><b>Mobile no.</b></label>
+                        <label className="col-12 form-label"
+                            htmlFor={"keyInputMobile"}><b>Mobile no.</b></label>
 
-                        <div className = "col-12">
+                        <div className="col-12">
                             {/* Input element text*/}
                             <input 
-                                type = "text"
-                                name = "keyInputMobile"
-                                placeholder = "Mobile no."
-                                className = "form-control"
-                                autoComplete = "off"
-                                maxLength = {100}
-                                disabled = {loading} 
-                                value = {values.keyInputMobile} 
-                                onChange = {handleChange} />
+                                type="text"
+                                name="keyInputMobile"
+                                placeholder="Mobile no."
+                                className="form-control"
+                                autoComplete="off"
+                                maxLength={100}
+                                disabled={loading} 
+                                value={values.keyInputMobile} 
+                                onChange={handleChange}/>
 
                             {/* Validation message */}
                             {errors.keyInputMobile && 
@@ -324,8 +325,15 @@ const Form = ({pShow,
 
 // useImperativeHandle
 // handleShowModal
-const GuestTableAdd = forwardRef((props, ref) => {
+const GuestAddSmall = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
+
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
 
     // Start:: Show modal
     const handleShowModal = () => {
@@ -365,18 +373,12 @@ const GuestTableAdd = forwardRef((props, ref) => {
     });
     // End:: forward reff show modal function
 
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
-
     // Start:: Html
     return (
         <>
             {/* Start:: Form component */}
             <Form
+                pOption = {props.pOption}
                 pShow = {showModal}
                 onSubmited = {handleSave} 
                 onClosed = {handleCloseModal}/>
@@ -389,4 +391,4 @@ const GuestTableAdd = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestTableAdd;
+export default GuestAddSmall;

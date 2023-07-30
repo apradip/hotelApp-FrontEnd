@@ -1,16 +1,15 @@
 import React, { useState, useRef, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
 
-import { formatINR, formatDDMMYYYY, formatTime12Hour } from "../common/Common";
-import ItemSelector from "../common/ServiceEditor";
-import QuantityEditor from "../common/QuantityEditor";
+import { formatINR, formatDDMMYYYY, formatTime12Hour } from "./Common";
+import ItemSelector from "./MiscellaneousEditor";
+import QuantityEditor from "./QuantityEditor";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-const ServiceViewGrid = ({pDefaultRowData}) => {    
+const ItemViewGrid = ({pDefaultRowData}) => {    
     const gridRef = useRef();
-
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
@@ -88,7 +87,7 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
         },
         {
             field: "gstCharge"
-        }
+        },
     ]);
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
@@ -98,32 +97,8 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
         width: "100%"
     });
 
-
-        // useEffect(() => {
-    //     pData.forEach(element => {
-    //         const rowData = {
-    //             rowId: defaultRowData.length + 1, 
-    //             id: element.id,
-    //             name: element.name, 
-    //             unitPrice: element.unitPrice,
-    //             quantity: element.quantity, 
-    //             serviceChargePercentage: element.serviceChargePercentage, 
-    //             serviceCharge: element.serviceCharge, 
-    //             gstPercentage: element.gstPercentage, 
-    //             gstCharge: element.gstCharge, 
-    //             totalPrice: element.unitPrice * element.quantity,
-    //             despatchDate: element.despatchDate ? element.despatchDate : "",
-    //             despatchTime: element.despatchTime ? element.despatchTime : ""
-    //         };
-    
-    //         defaultRowData.push(rowData);
-    //     });
-
-    //     setDefaultRowData(defaultRowData);
-    // }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
-
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
+    const handleGridReady = () => {
         let row = [];
         let sum = 0;
         
@@ -153,20 +128,12 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
             gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
             gridRef.current.api.refreshCells();
             gridRef.current.api.redrawRows();
-
-            // params.api.sizeColumnsToFit();
-
-            // window.addEventListener("resize", function () {
-            //     setTimeout(function () {params.api.sizeColumnsToFit()});
-            // });
-
             gridRef.current.api.sizeColumnsToFit();
         } catch (err) {
             console.log(err);
         }
     };
     // End:: load empty data to grid
-  
     
 	return (
         <div className = "col-12 ag-theme-alpine grid-height-400">
@@ -175,13 +142,12 @@ const ServiceViewGrid = ({pDefaultRowData}) => {
                     ref = {gridRef}
                     columnDefs = {columnDefs}
                     defaultColDef = {defaultColDef}
-                    // rowClassRules = {rowClassRules}
                     rowData = {null}
                     rowSelection = {"single"}
-                    onGridReady = {handleGridReady} />
+                    onGridReady = {handleGridReady}/>
             </div>
         </div>
     );
 };
  
-export default ServiceViewGrid;
+export default ItemViewGrid;

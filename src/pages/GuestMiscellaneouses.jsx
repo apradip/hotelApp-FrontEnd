@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
-import Add from "../components/guestMiscellaneous/GuestMiscellaneousAdd";
+import Add from "../components/common/GuestAddSmall";
 import CardMiscellaneous from "../components/guestMiscellaneous/GuestMiscellaneousCard";
 import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
@@ -56,6 +56,23 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             roomonly: roomOnly
         }
     });
+
+    // Start:: fetch data list from api
+    useEffect(() => {
+        (async () => {
+            try {
+              await doFetch();
+              setDataChanged(false);
+            } catch (err) {
+              console.log("Error occured when fetching data");
+            }
+          })();
+    }, [dataChanged, search, roomOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch data list from api
+
+    useEffect(() => {
+        error && toast.error(error);
+    }, [data, error, loading]);
 
     // Start:: Change search text
     const changeSearch = (search) => {
@@ -130,7 +147,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
                 case Operation.GuestMod:
                     toast.success("Guest successfully changed");
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;
 
@@ -142,24 +159,24 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         
                 case Operation.Order:
                     toast.success("Item successfully ordered");
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;               
 
                 case Operation.Despatch:
                     toast.success("Item successfully despatched");
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;                
 
                 case Operation.BillGenerate:
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;                
                         
                 case Operation.PaymentAdd:
                     toast.success("Payment successfully added");
-                    setDataChanged(true);
+                    // setDataChanged(true);
                     props.onSuccess();
                     break;
 
@@ -209,23 +226,6 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         return {changeSearch, openAdd, openEdit, openDelete, close};
     });
     // End:: forward reff change search and open add/edit/delete modal
-
-    // Start:: fetch data list from api
-    useEffect(() => {
-        (async () => {
-            try {
-              await doFetch();
-              setDataChanged(false);
-            } catch (err) {
-              console.log("Error occured when fetching data");
-            }
-          })();
-    }, [dataChanged, search, roomOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch data list from api
-
-    useEffect(() => {
-        error && toast.error(error);
-    }, [data, error, loading]);
 
     // Start:: show all data in card format
     const displayData = (pData = []) => {
@@ -332,7 +332,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
                             onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
                             onActivated = {() => {handleActivated(itemIdx)}} 
-                            onClosed = {close} />}
+                            onClosed = {close}/>}
                 </Col>);
         } catch (err) {
             console.log(err);
@@ -395,7 +395,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                 <CardPlaceholder 
                     ref = {(el) => cardRefs.current[itemIdx] = el}
                     pIndex = {itemIdx}
-                    onClosed = {close} />
+                    onClosed = {close}/>
                 </Col>);
         } catch (err) {
             console.log(err);
@@ -513,8 +513,9 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             {/* Start :: add component */}
             <Add 
                 ref = {addRef}   
+                pOption = {"M"}
                 onAdded = {() => {handleSuccess(Operation.GuestAdd)}}
-                onClosed = {close} />
+                onClosed = {close}/>
             {/* End :: add component */}
 
         </div>
