@@ -1,25 +1,17 @@
-import React, { useContext, useEffect, useState, useRef, useMemo, useCallback } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
 
-import { HotelId } from "../../App";
 import { formatINR } from "../common/Common";
-import { useStateContext } from "../../contexts/ContextProvider";
 import FoodItemSelector from "../common/FoodEditor";
 import QuantityEditor from "../common/QuantityEditor";
-import useFetchWithAuth from "../common/useFetchWithAuth";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
     const gridRef = useRef();
-    const [rowData, setRowData] = useState();
-    const [emptyRowCount, setEmptyRowCount] = useState();
-    const {data, doFetch} = useFetchWithAuth({
-        url: `${contextValues.hotelAPI}/${hotelId}`
-    });
+    const [emptyRowCount, setEmptyRowCount] = useState(0);
+    let rowData = [];
 
     const defaultColDef = useMemo(() => {
         return {
@@ -129,83 +121,43 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     const pinnedRowData = [
         {rowId: "Total", totalPrice: 0}
     ];
-
-    // Start:: fetch hotel detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-          })();
-    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch hotel detail from api
-
-    useEffect(() => {
-        try {
-            data && calculateSum();
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data]);
-
-    // Start:: set add empty row grid
-    useEffect(() => {
-        try {
-            if (pState !== "VIEW") data && addRow();
-        } catch (err) {
-            console.log(err);
-        }
-    }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: set add empty row grid
+    const [style] = useState({
+        height: "100%",
+        width: "100%"
+    });
 
     // Start:: load empty data to grid
-    const handleGridReady = (params) => {
+    const handleGridReady = () => {
         let row = [];
         
         try {
-            pDefaultRowData.forEach(element => {
-                const object = {
-                    rowId: row.length + 1, 
-                    id: element.id,
-                    name: element.name, 
-                    unitPrice: element.unitPrice,
-                    quantity: element.quantity, 
-                    serviceChargePercentage: element.serviceChargePercentage, 
-                    serviceCharge: element.serviceCharge, 
-                    gstPercentage: element.gstPercentage, 
-                    gstCharge: element.gstCharge, 
-                    totalPrice: element.unitPrice * element.quantity,
-                    despatchDate: element.despatchDate
-                };
-        
-                row.push(object);
-            });
-
-            setRowData(row);
+            if (pDefaultRowData) {
+                pDefaultRowData.forEach(element => {
+                    const object = {
+                        rowId: row.length + 1, 
+                        id: element.id,
+                        name: element.name, 
+                        unitPrice: element.unitPrice,
+                        quantity: element.quantity, 
+                        serviceChargePercentage: element.serviceChargePercentage, 
+                        serviceCharge: element.serviceCharge, 
+                        gstPercentage: element.gstPercentage, 
+                        gstCharge: element.gstCharge, 
+                        totalPrice: element.unitPrice * element.quantity,
+                        despatchDate: element.despatchDate
+                    };
+            
+                    row.push(object);
+                });
+            }
 
             gridRef.current.api.setRowData(row);
             gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
             gridRef.current.api.refreshCells();
             gridRef.current.api.redrawRows();
-
-            params.api.sizeColumnsToFit();
-
-            window.addEventListener("resize", function () {
-                setTimeout(function () {params.api.sizeColumnsToFit();});
-            });
-
             gridRef.current.api.sizeColumnsToFit();
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // End:: load empty data to grid
-    
-    // Start:: load empty data to grid
-    const handleFirstDataRendered = () => {
-        try {
+            
+            rowData = row;
             calculateSum();
         } catch (err) {
             console.log(err);
@@ -255,12 +207,14 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
             //calculate empty row
             gridRef.current.api.forEachNode((rowNode) => {
-                if (rowNode.data.name === "Select item") emptyCount ++
+                if (rowNode.data.name === "Select item") emptyCount ++;
             });
 
             pinnedRowData[0].totalPrice = total;
             gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
             setEmptyRowCount(emptyCount);
+
+            if (emptyCount <= 0) addRow();
         } catch (err) {
             console.log(err);
         }
@@ -268,28 +222,28 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     // End:: calculate sum on change tariff
     
     const addRow = useCallback (() => {
-        try {
-            if (emptyRowCount <= 0) {
-                let emptyRow = rowData;
+        let emptyRow = rowData;
 
+        try {
+            if (pState !== "VIEW") {
                 emptyRow.push({
                     rowId: emptyRow.length + 1, 
                     id: "", 
                     name: "Select item", 
                     unitPrice: 0,
                     quantity: 0,
-                    serviceChargePercentage: data.serviceChargePercentage,
+                    serviceChargePercentage: 0,
                     serviceCharge: 0,
-                    gstPercentage: data.foodGstPercentage,
+                    gstPercentage: 0,
                     gstCharge: 0,
                     totalPrice: 0,
                     despatchDate: undefined
                 });
 
-                setRowData(emptyRow);
-                gridRef.current.api.setRowData(rowData);
+                gridRef.current.api.setRowData(emptyRow);
                 gridRef.current.api.sizeColumnsToFit();
 
+                rowData = emptyRow;
                 setEmptyRowCount(0);
             }
         } catch (err) {
@@ -300,15 +254,16 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     
 	return (
         <div className="col-12 ag-theme-alpine grid-height-400">
-            <AgGridReact	
-                ref={gridRef}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowData={null}
-                rowSelection={"single"}
-                onGridReady={handleGridReady}
-                onFirstDataRendered={handleFirstDataRendered}
-                onCellValueChanged={handleCellValueChanged}/>
+            <div style = {style}>
+                <AgGridReact	
+                    ref = {gridRef}
+                    columnDefs = {columnDefs}
+                    defaultColDef = {defaultColDef}
+                    rowData = {null}
+                    rowSelection = {"single"}
+                    onGridReady = {() => {handleGridReady()}}
+                    onCellValueChanged = {() => {handleCellValueChanged()}}/>
+            </div>
         </div>
     );
 };

@@ -1,26 +1,17 @@
-import React, { useContext, useEffect, useState, useRef, useMemo, useCallback } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
 
-import { HotelId } from "../../App";
 import { formatINR } from "../common/Common";
-import { useStateContext } from "../../contexts/ContextProvider";
 import ItemSelector from "../common/MiscellaneousEditor";
 import QuantityEditor from "../common/QuantityEditor";
-import useFetchWithAuth from "../common/useFetchWithAuth";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-import { toast } from "react-toastify";
 
 const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {    
-    const hotelId = useContext(HotelId);
-    const contextValues = useStateContext();
     const gridRef = useRef();
-    const [rowData, setRowData] = useState();
     const [emptyRowCount, setEmptyRowCount] = useState();
-    const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.hotelAPI}/${hotelId}`
-    });
+    let rowData = [];
 
     const defaultColDef = useMemo(() => {
         return {
@@ -136,37 +127,6 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         width: "100%"
     });
 
-    // Start:: fetch hotel detail from api
-    useEffect(() => {
-        (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-          })();
-    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch hotel detail from api
-
-    useEffect(() => {
-        try {
-            error && toast.error(error);
-            data && calculateSum();
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data, loading, error]);
-
-    // Start:: set add empty row grid
-    useEffect(() => {
-        try {
-            if (pState !== "VIEW") data && addRow();
-        } catch (err) {
-            console.log(err);
-        }
-    }, [emptyRowCount]);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: set add empty row grid
-
     // Start:: load empty data to grid
     const handleGridReady = (params) => {
         let row = [];
@@ -175,45 +135,30 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             if (pDefaultRowData) {
                 pDefaultRowData.forEach(element => {
                     const object = {
-                                    rowId: row.length + 1, 
-                                    id: element.id,
-                                    name: element.name, 
-                                    unitPrice: element.unitPrice,
-                                    quantity: element.quantity, 
-                                    serviceChargePercentage: element.serviceChargePercentage, 
-                                    serviceCharge: element.serviceCharge, 
-                                    gstPercentage: element.gstPercentage, 
-                                    gstCharge: element.gstCharge, 
-                                    totalPrice: element.unitPrice * element.quantity,
-                                    despatchDate: element.despatchDate
-                                }
+                        rowId: row.length + 1, 
+                        id: element.id,
+                        name: element.name, 
+                        unitPrice: element.unitPrice,
+                        quantity: element.quantity, 
+                        serviceChargePercentage: element.serviceChargePercentage, 
+                        serviceCharge: element.serviceCharge, 
+                        gstPercentage: element.gstPercentage, 
+                        gstCharge: element.gstCharge, 
+                        totalPrice: element.unitPrice * element.quantity,
+                        despatchDate: element.despatchDate
+                    }
             
                     row.push(object);
                 });
             }
-            setRowData(row);
 
             gridRef.current.api.setRowData(row);
             gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
             gridRef.current.api.refreshCells();
             gridRef.current.api.redrawRows();
-
-            params.api.sizeColumnsToFit();
-            
-            window.addEventListener("resize", function () {
-                setTimeout(function () {params.api.sizeColumnsToFit();});
-            });
-
             gridRef.current.api.sizeColumnsToFit();
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // End:: load empty data to grid
-    
-    // Start:: load empty data to grid
-    const handleFirstDataRendered = () => {
-        try {
+
+            rowData = row;
             calculateSum();
         } catch (err) {
             console.log(err);
@@ -229,17 +174,17 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             gridRef.current.api.forEachNode((gridRow) => {
                 if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
                     dataRows.push({
-                                id: gridRow.data.id, 
-                                name: gridRow.data.name,
-                                unitPrice: gridRow.data.unitPrice,
-                                quantity: gridRow.data.quantity,
-                                serviceChargePercentage: gridRow.data.serviceChargePercentage,
-                                serviceCharge: gridRow.data.serviceCharge,
-                                gstPercentage: gridRow.data.gstPercentage,
-                                gstCharge: gridRow.data.gstCharge,
-                                totalPrice: gridRow.data.totalPrice,
-                                despatchDate: gridRow.data.despatchDate
-                            });
+                        id: gridRow.data.id, 
+                        name: gridRow.data.name,
+                        unitPrice: gridRow.data.unitPrice,
+                        quantity: gridRow.data.quantity,
+                        serviceChargePercentage: gridRow.data.serviceChargePercentage,
+                        serviceCharge: gridRow.data.serviceCharge,
+                        gstPercentage: gridRow.data.gstPercentage,
+                        gstCharge: gridRow.data.gstCharge,
+                        totalPrice: gridRow.data.totalPrice,
+                        despatchDate: gridRow.data.despatchDate
+                    });
                 }
             });
               
@@ -249,36 +194,6 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             console.log(err);
         }
     };
-
-    const addRow = useCallback (() => {
-        try {
-            if (emptyRowCount <= 0) {
-                let emptyRow = rowData;
-
-                emptyRow.push({
-                    rowId: emptyRow.length + 1, 
-                    id: "", 
-                    name: "Select item", 
-                    unitPrice: 0,
-                    quantity: 0,
-                    serviceChargePercentage: data.serviceChargePercentage,
-                    serviceCharge: 0,
-                    gstPercentage: data.foodGstPercentage,
-                    gstCharge: 0,
-                    totalPrice: 0,
-                    despatchDate: undefined
-                });
-
-                setRowData(emptyRow);
-                gridRef.current.api.setRowData(emptyRow);
-                gridRef.current.api.sizeColumnsToFit();
-
-                setEmptyRowCount(0);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
 
     // Start:: calculate sum on change tariff
     const calculateSum = useCallback (() => {
@@ -293,17 +208,50 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
             //calculate empty row
             gridRef.current.api.forEachNode((rowNode) => {
-                if (rowNode.data.name === "Select item") emptyCount ++;
+                if (rowNode.data.name === "Select item") 
+                    emptyCount ++;
             });
 
             pinnedRowData[0].totalPrice = total;
             gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
             setEmptyRowCount(emptyCount);
+
+            if (emptyCount <= 0) addRow();
         } catch (err) {
             console.log(err);
         }
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: calculate sum on change tariff
+
+    const addRow = useCallback (() => {
+        let emptyRow = rowData;
+
+        try {
+            if (pState !== "VIEW") {
+                emptyRow.push({
+                    rowId: emptyRow.length + 1, 
+                    id: "", 
+                    name: "Select item", 
+                    unitPrice: 0,
+                    quantity: 0,
+                    serviceChargePercentage: 0,
+                    serviceCharge: 0,
+                    gstPercentage: 0,
+                    gstCharge: 0,
+                    totalPrice: 0,
+                    despatchDate: undefined
+                });
+
+                gridRef.current.api.setRowData(emptyRow);
+                gridRef.current.api.sizeColumnsToFit();
+
+                rowData = emptyRow;
+                setEmptyRowCount(0);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
 
     
 	return (
@@ -315,9 +263,8 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                     defaultColDef = {defaultColDef}
                     rowData = {null}
                     rowSelection = {"single"}
-                    onGridReady = {handleGridReady}
-                    onFirstDataRendered = {handleFirstDataRendered}
-                    onCellValueChanged = {handleCellValueChanged} />
+                    onGridReady = {() => {handleGridReady()}}
+                    onCellValueChanged = {() => {handleCellValueChanged()}}/>
             </div>
         </div>
     );

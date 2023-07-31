@@ -450,19 +450,12 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
                                 {/* Start :: display switch option */}
                                 <Col sx={6} md={6} className="d-flex justify-content-end">
-                                    {loading && 
-                                        <Placeholder animation="glow">
-                                            <Placeholder xs={6} sm={6} md={6} lg={6} xl={6} bg="primary"/>
-                                        </Placeholder>}
-
-                                    {!loading && 
-                                        data && 
-                                            <Form.Check 
-                                                type="switch"
-                                                id="chkRoom"
-                                                label={roomOnly ? "Show in house guests only" : "Show all guests"} 
-                                                value={roomOnly} 
-                                                onChange={(e) => {setRoomOnly(e.currentTarget.checked)}}/>}
+                                    <Form.Check 
+                                        type="switch"
+                                        id="chkRoom"
+                                        label={roomOnly ? "In-house guests" : "All guests"} 
+                                        value={roomOnly} 
+                                        onChange={(e) => {setRoomOnly(e.currentTarget.checked);}}/>
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>

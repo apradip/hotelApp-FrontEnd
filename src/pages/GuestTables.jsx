@@ -403,19 +403,19 @@ const GuestTables = forwardRef((props, ref) => {
             {/* Seart :: Bread crumb */}
             <div className="content-header">
                 <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-sm-4 m-0">
+                    <Row>
+                        <Col sm={4} className="m-0">
                             <h1 className="text-dark">Table</h1>
-                        </div>
+                        </Col>
 
-                        <div className="col-sm-8">
-                            <Breadcrumb className="breadcrumb float-sm-right">
-                                <Breadcrumb.Item href = "/">Home</Breadcrumb.Item>
-                                <Breadcrumb.Item href = "/">Transaction</Breadcrumb.Item>
+                        <Col sm={8}>
+                            <Breadcrumb className="breadcrumb float-right">
+                                <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+                                <Breadcrumb.Item href="/">Transaction</Breadcrumb.Item>
                                 <Breadcrumb.Item active>Table</Breadcrumb.Item>
                             </Breadcrumb>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </div>
             </div>
             {/* End :: Bread crumb */}
@@ -443,19 +443,12 @@ const GuestTables = forwardRef((props, ref) => {
 
                                 {/* Start :: display switch option */}
                                 <Col sx={6} md={6} className="d-flex justify-content-end">
-                                    {loading && 
-                                        <Placeholder animation="glow">
-                                            <Placeholder xs={6} sm={6} md={6} lg={6} xl={6} bg="primary"/>
-                                        </Placeholder>}
-
-                                    {!loading && 
-                                        data && 
-                                            <Form.Check 
-                                                type="switch"
-                                                id="chkRoom"
-                                                label={roomOnly ? "Show in house guests only" : "Show all guests"} 
-                                                value={roomOnly} 
-                                                onChange={(e) => {setRoomOnly(e.currentTarget.checked)}}/>}
+                                    <Form.Check 
+                                        type="switch"
+                                        id="chkRoom"
+                                        label={roomOnly ? "In-house guests" : "All guests"} 
+                                        value={roomOnly} 
+                                        onChange={(e) => {setRoomOnly(e.currentTarget.checked)}}/>
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>
@@ -486,12 +479,12 @@ const GuestTables = forwardRef((props, ref) => {
                                         </Placeholder>}
 
                                     {!loading && 
-                                            data && 
-                                                <Paging
-                                                    itemPerPage = {itemPerPage}
-                                                    totalItem ={data.length}
-                                                    selectedPage = {selectedPage}
-                                                    onPaging = {handlePaging} />}
+                                        data && 
+                                            <Paging
+                                                itemPerPage = {itemPerPage}
+                                                totalItem ={data.length}
+                                                selectedPage = {selectedPage}
+                                                onPaging = {handlePaging}/>}
                                 </Col>
                                 {/* End :: Pagination */}
                             </Row>

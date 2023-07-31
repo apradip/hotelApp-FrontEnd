@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
+import { Row, Col, Card, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { PenTool, ShoppingBag, FileText, Edit2, LogOut, Scissors, MoreVertical } from "react-feather";

@@ -115,7 +115,7 @@ const ItemViewGrid = ({pDefaultRowData}) => {
                     gstPercentage: element.gstPercentage, 
                     gstCharge: element.gstCharge, 
                     totalPrice: element.unitPrice * element.quantity,
-                    despatchDate: formatDDMMYYYY(element.despatchDate) + " - " + formatTime12Hour(element.despatchTime)
+                    despatchDate: element.despatchDate && element.despatchTime ? formatDDMMYYYY(element.despatchDate) + " - " + formatTime12Hour(element.despatchTime) : ""
                 };
                 
                 sum += data.totalPrice;                       
@@ -126,8 +126,8 @@ const ItemViewGrid = ({pDefaultRowData}) => {
 
             gridRef.current.api.setRowData(row);
             gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-            gridRef.current.api.refreshCells();
-            gridRef.current.api.redrawRows();
+            // gridRef.current.api.refreshCells();
+            // gridRef.current.api.redrawRows();
             gridRef.current.api.sizeColumnsToFit();
         } catch (err) {
             console.log(err);
