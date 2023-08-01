@@ -5,11 +5,27 @@ label:not(.form-check-label):not(.custom-file-label) {
 .dropdown {
   text-decoration: none;
   color: #869099;
+  /* height: 16px;
+  width: 16px; */
 }
 
 .dropdown:hover {
   text-decoration: none;
   color: #47b9c1;
+}
+
+.dropdown .round {
+  /* background-color: #c3c8cd; */
+  /* border-width: 5px; */
+  /* border-radius: 50%; */
+  /* border-color: #c3c8cd; */
+  /* border-width: 5px; */
+  /* border: solid 5px #c3c8cd; */
+
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);  
 }
 
 .dropdown-item {

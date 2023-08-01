@@ -34,7 +34,8 @@ export const ContextProvider = ({children}) => {
   const guestTableAPI = "/guestTables";
   const guestServiceAPI = "/guestServices";
   const guestMiscellaneousAPI = "/guestMiscellaneouses";
-  const guestPaymentAPI = "/guestExpensesPayments";
+  const guestPaymentAPI = "/guestPayments";
+  const guestExpensePaymentAPI = "/guestExpensesPayments";
   const itemPerRow = 3;
   const itemPerPage = itemPerRow * 3;
 
@@ -66,7 +67,7 @@ export const ContextProvider = ({children}) => {
   return (
     <StateContext.Provider value={{initialState, refreshTokenAPI, forgetAPI, loginAPI, logoutAPI, changePasswordAPI,
       hotelAPI, accessLevelAPI, gstAPI, employeeAPI, idDocumentAPI, planAPI, roomCategoryAPI, roomAPI, tableAPI, foodAPI, itemAPI, serviceAPI, miscellaneousAPI, bookingAgentAPI,
-      guestAPI, guestRoomAPI, guestTableAPI, guestServiceAPI, guestMiscellaneousAPI, guestPaymentAPI,
+      guestAPI, guestRoomAPI, guestTableAPI, guestServiceAPI, guestMiscellaneousAPI, guestPaymentAPI, guestExpensePaymentAPI,
       screenSize, setScreenSize, currentColor, setCurrentColor, 
       currentMode, setCurrentMode, themeSettings, setThemeSettings, 
       activeMenu, setActiveMenu, showMenu, setShowMenu,

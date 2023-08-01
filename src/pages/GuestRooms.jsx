@@ -282,19 +282,19 @@ const GuestRooms = forwardRef((props, ref) => {
                                 pGstNo = {pData.gstNo}
                                 pBalance = {pData.balance}
                                 pOption = {pData.option}
-                                pIndate={pData.inDate}
-                                pInTime={pData.inTime}
+                                pIndate = {pData.inDate}
+                                pInTime = {pData.inTime}
                                 pRooms = {pData.rooms}
                                 pCallingFrom = {"R"}
                                 onEdited = {() => {handleSuccess(Operation.GuestMod)}}
-                                onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
-                                onBooked={() => {handleSuccess(Operation.Booked)}}
-                                onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
-                                onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
-                                onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
+                                onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
+                                onBooked = {() => {handleSuccess(Operation.Booked)}}
+                                onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
+                                onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
+                                onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
                                 onOrdered = {() => {handleSuccess(Operation.Order)}}
                                 onDespatched = {() => {handleSuccess(Operation.Despatch)}}
-                                onClosed={close} 
+                                onClosed = {close} 
                                 onActivated={() => {handleActivated(itemIdx)}} />      
                     }          
                 </Col>);
@@ -356,10 +356,10 @@ const GuestRooms = forwardRef((props, ref) => {
 
             return (
                 <Col xl={4} md={4} key={colKey}>
-                <CardPlaceholder 
-                    ref = {(el) => cardRefs.current[itemIdx] = el}
-                    pIndex = {itemIdx}
-                    onClosed = {close} />
+                    <CardPlaceholder 
+                        ref = {(el) => cardRefs.current[itemIdx] = el}
+                        pIndex = {itemIdx}
+                        onClosed = {close} />
                 </Col>);
         } catch (err) {
             console.log(err);

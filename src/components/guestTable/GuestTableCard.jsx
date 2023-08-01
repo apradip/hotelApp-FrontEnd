@@ -225,7 +225,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                         <Col xs={8} sm={8} md={8} lg={8} xl={8} className="p-0">
                             <b>{corporateName ? subStr(corporateName, 20): subStr(name, 20)}</b>
                         </Col>
-                        <Col xs={4} sm={4} md={4} lg={4} xl={4} className="text-right text-danger p-0">
+                        <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
                         </Col>
                     </Row>

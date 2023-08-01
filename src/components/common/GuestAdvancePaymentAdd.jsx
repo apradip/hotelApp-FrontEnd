@@ -3,30 +3,30 @@ import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
-import { subStr } from "../common/Common";
+import { subStr } from "./Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { guestPaymentSchema } from "../../schemas";
-import useFetchWithAuth from "../common/useFetchWithAuth";
+import useFetchWithAuth from "./useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile, 
-               pCorporateName, pCorporateAddress, pBalance, 
+const Form = ({pGuestId, pName, pMobile, 
+               pCorporateName, pCorporateAddress, 
                pShow,
                onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.guestRoomAPI}/${hotelId}/${pGuestId}/${pExpenseId}/${pBillId}`
+        url: `${contextValues.guestPaymentAPI}/${hotelId}/${pGuestId}`
     });         //insert payment
 
     // Start:: Form validate and save data
     const {values, errors, touched, handleChange, handleSubmit, resetForm} = useFormik({
         initialValues: {
-            keyInputPaymentAmount: pBalance,
+            keyInputPaymentAmount: 0,
             keyInputNarration: ""
         },
         validationSchema: guestPaymentSchema,
@@ -135,13 +135,14 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
 
                             {/* Input element select*/}
                             <input 
+                                autoFocus
                                 type="text" 
                                 name="keyInputPaymentAmount"
                                 placeholder="Payment amount"
                                 className="col-12 form-control"
                                 autoComplete="off"
-                                // disabled = "disabled"
-                                value={values.keyInputPaymentAmount}/>
+                                value={values.keyInputPaymentAmount}
+                                onChange={handleChange}/>
                         
                             {/* Validation message */}
                             {errors.keyInputPaymentAmount && 
@@ -169,7 +170,6 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
 
                             {/* Input element select*/}
                             <textarea
-                                autoFocus
                                 name={"keyInputNarration"}
                                 rows={"5"}
                                 placeholder="Narration"
@@ -201,25 +201,25 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
 
                     {/* Start:: Close button */}
                     <button 
-                        type = "button"
-                        className = "btn btn-danger"
-                        disabled = {loading}
-                        onClick = {handleClose} >
+                        type="button"
+                        className="btn btn-danger"
+                        disabled={loading}
+                        onClick={handleClose}>
                         Close
                     </button>
                     {/* End:: Close button */}
 
                     {/* Start:: Save button */}
                     <button 
-                        type = "button"
-                        className = "btn btn-success"
-                        disabled = {loading} 
-                        onClick = {handleSubmit} >
+                        type="button"
+                        className="btn btn-success"
+                        disabled={loading} 
+                        onClick={handleSubmit}>
 
                         {!loading && "Confirm"}
                         {loading && 
                             <>
-                                <span className = "spinner-border spinner-border-sm" role = "status" aria-hidden = "true"></span>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Working
                             </> }
                     </button>
@@ -243,8 +243,15 @@ const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile,
 
 // useImperativeHandle
 // handleShowModal
-const GuestRoomPaymentAdd = forwardRef((props, ref) => {
+const GuestAdvancePaymentAdd = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
+
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
 
     // Start:: Show modal
     const handleShowModal = () => {
@@ -283,26 +290,17 @@ const GuestRoomPaymentAdd = forwardRef((props, ref) => {
     });
     // End:: forward reff show modal function
 
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
 
     // Start:: Html
     return (
         <>
             {/* Start:: Form component */}
             <Form
-                pExpenseId = {props.pExpenseId}
-                pBillId = {props.pBillId}
                 pGuestId = {props.pGuestId}
                 pName = {props.pName}
                 pMobile = {props.pMobile}
                 pCorporateName = {props.pCorporateName}
                 pCorporateAddress = {props.pCorporateAddress}
-                pBalance = {props.pBalance}
                 pShow = {showModal}
                 onSubmited = {handleSave} 
                 onClosed = {handleCloseModal}/>
@@ -315,4 +313,4 @@ const GuestRoomPaymentAdd = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestRoomPaymentAdd;
+export default GuestAdvancePaymentAdd;
