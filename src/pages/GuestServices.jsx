@@ -11,6 +11,10 @@ import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:3001");
+
 const Operation = {
     GuestAdd: "GUEST_ADD",
     GuestMod: "GUEST_MOD",
@@ -117,7 +121,7 @@ const GuestServices = forwardRef((props, ref) => {
     // End:: Close modal
 
     // Start:: on data operation successfully
-    const handleSuccess = (operation) => {
+    const handleSuccess = (operation, guestId = "") => {
         try {
             switch (operation) {
                 case Operation.GuestAdd:
@@ -141,6 +145,9 @@ const GuestServices = forwardRef((props, ref) => {
                 case Operation.Order:
                     toast.success("Item successfully ordered");
                     // setDataChanged(true);
+                    
+                    // send it to server only
+                    socket.emit("S_order", guestId);
                     props.onSuccess();
                     break;               
 
@@ -295,16 +302,16 @@ const GuestServices = forwardRef((props, ref) => {
                             pInTime={pData.inTime}
                             pRooms = {pData.items}
                             pCallingFrom = {"S"}
-                            onEdited = {() => {handleSuccess(Operation.GuestMod)}}
-                            onDeleted={() => {handleSuccess(Operation.GuestDel)}} 
-                            onBooked={() => {handleSuccess(Operation.Booked)}}
-                            onBillGenerated={() => {handleSuccess(Operation.BillGenerate)}}
-                            onPaymentAdded={() => {handleSuccess(Operation.PaymentAdd)}} 
-                            onCheckedout={() => {handleSuccess(Operation.Checkout)}} 
-                            onOrdered = {() => {handleSuccess(Operation.Order)}}
-                            onDespatched = {() => {handleSuccess(Operation.Despatch)}}
-                            onClosed={close} 
-                            onActivated={() => {handleActivated(itemIdx)}} />}
+                            onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
+                            onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 
+                            onBooked = {() => {handleSuccess(Operation.Booked, pData.id)}}
+                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
+                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
+                            onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 
+                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id, pData.id)}}
+                            onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
+                            onActivated = {() => {handleActivated(itemIdx)}}
+                            onClosed = {close} />}
 
                     {(pData.option === "S") &&
                         <CardService className="border"
@@ -321,15 +328,15 @@ const GuestServices = forwardRef((props, ref) => {
                             pOption = {pData.option}
                             pIndate = {pData.inDate}
                             pInTime = {pData.inTime}
-                            onEdited = {() => {handleSuccess(Operation.GuestMod)}}
-                            onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
-                            onOrdered = {() => {handleSuccess(Operation.Order)}}
-                            onDespatched = {() => {handleSuccess(Operation.Despatch)}}
-                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
-                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
-                            onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
-                            onClosed = {close} 
-                            onActivated = {() => {handleActivated(itemIdx)}} />}           
+                            onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
+                            onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 
+                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id)}}
+                            onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
+                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
+                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
+                            onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 
+                            onActivated = {() => {handleActivated(itemIdx)}} 
+                            onClosed = {close}/>}           
                 </div>);
         } catch (err) {
             console.log(err);

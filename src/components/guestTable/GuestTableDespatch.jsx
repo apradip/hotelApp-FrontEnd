@@ -156,11 +156,13 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         {/* Label element */}
                         <label className = "col-12 form-label"><b>Food items</b></label>
 
-                        {/* Start:: Column service detail */}
-                        <DespatchGrid
-                            pDefaultRowData = {pData}
-                            onChange = {handelChangeData} />
-                        {/* End:: Column service detail */}
+                        <div className = "ag-theme-alpine grid-height-400">
+                            {/* Start:: Column service detail */}
+                            <DespatchGrid
+                                pDefaultRowData = {pData}
+                                onChange = {handelChangeData} />
+                            {/* End:: Column service detail */}
+                        </div>
 
                     </Col>                
                     {/* End:: Column service detail */}
@@ -229,7 +231,7 @@ const GuestTableDespatch = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showMain, setShowMain] = useState(false);
-    const {data, doFetch} = useFetchWithAuth({
+    const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
     });

@@ -261,6 +261,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
         params: {option: "N"}
     });         // get all non delivered items
 
+
     // Strat:: close modal on key press esc    
     useEffect(() => {
         document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});

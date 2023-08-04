@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef, forwardRef, useImperati
 import { Row, Col, Card, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
-import { PenTool, ShoppingBag, FileText, Edit2, LogOut, Scissors, MoreVertical } from "react-feather";
+import { Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
 import { subStr, formatINR, getTables } from "../common/Common";
 import TimeElapsed from "../common/TimeElapsed";
 
@@ -79,6 +79,7 @@ const GuestTableCard = forwardRef((props, ref) => {
 
     useEffect(() => {
         error && toast.error(error);
+
         data && setCorporateName(data.corporateName);
         data && setCorporateAddress(data.corporateAddress); 
         data && setName(data.name);
@@ -267,24 +268,24 @@ const GuestTableCard = forwardRef((props, ref) => {
                                 
                                 <Dropdown.Menu>
 
-                                    <Dropdown.Item eventKey = "2" 
+                                    <Dropdown.Item eventKey = "1" 
                                         onClick = {() => {handelOpenOrder()}}>
                                         <PenTool className = "feather-16 mr-3" />Order
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "3"
+                                    <Dropdown.Item eventKey = "2"
                                         disabled = {props.pTransactionId !== "undefined" ? false : true}
                                         onClick = {() => {handelOpenDespatch()}}>
                                         <ShoppingBag className="feather-16 mr-3"/>Despatch
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "4" 
+                                    <Dropdown.Item eventKey = "3" 
                                         disabled = {props.pTransactionId !== "undefined" ? false : true}
                                         onClick = {() => {handelOpenGenerateBill()}}>
                                         <FileText className="feather-16 mr-3"/>Bill
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "5"
+                                    <Dropdown.Item eventKey = "4"
                                         disabled = {props.pTransactionId !== "undefined" ? false : true}
                                         onClick = {() => {handelOpenCheckout()}}>
                                         <LogOut className="feather-16 mr-3"/>Check out
@@ -292,12 +293,12 @@ const GuestTableCard = forwardRef((props, ref) => {
 
                                     <Dropdown.Divider />
 
-                                    <Dropdown.Item eventKey = "6" 
+                                    <Dropdown.Item eventKey = "5" 
                                         onClick = {() => {handelOpenEdit()}}>
                                         <Edit2 className = "feather-16 mr-3"/>Edit
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "7"
+                                    <Dropdown.Item eventKey = "6"
                                         onClick = {() => {handelOpenDelete()}}>
                                         <Scissors className = "feather-16 mr-3"/>Delete
                                     </Dropdown.Item>
@@ -319,7 +320,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 <View
                     ref = {viewRef}
                     pGuestId = {props.pGuestId} 
-                    onClosed = {() => {handleClose();}} />
+                    onClosed = {() => {handleClose();}}/>
                 {/* End :: view component */}
 
                 {/* Start :: edit component */}
@@ -352,7 +353,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onDespatched();}} 
+                    onSaved = {async () => {await doFetch(); props.onDespatched();}} 
                     onClosed = {() => {handleClose();}}/>
                 {/* End :: despatch component */}
 

@@ -11,6 +11,10 @@ import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
 
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:3001");
+
 
 const Operation = {
     GuestAdd: "GUEST_ADD",
@@ -56,6 +60,20 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             roomonly: roomOnly
         }
     });
+
+
+    // const [room, setRoom] = useState("");
+    // const [messages, setMessages] = useState("");
+    
+    // useEffect(() => {
+    //     socket.on("receive_message", (data) => {
+    //         console.log(data);
+    //         setMessages([...messages, data]);
+    //     });
+    // }, [messages]);
+
+
+
 
     // Start:: fetch data list from api
     useEffect(() => {
@@ -136,7 +154,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     // End:: Close modal
 
     // Start:: on data operation successfully
-    const handleSuccess = (operation) => {
+    const handleSuccess = (operation, guestId = "") => {
         try {
             switch (operation) {
                 case Operation.GuestAdd:
@@ -160,6 +178,9 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                 case Operation.Order:
                     toast.success("Item successfully ordered");
                     // setDataChanged(true);
+
+                    // send it to server only
+                    socket.emit("M_order", guestId);
                     props.onSuccess();
                     break;               
 
@@ -297,14 +318,14 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             pInTime={pData.inTime}
                             pRooms = {pData.items}
                             pCallingFrom = {"M"}
-                            onEdited = {() => {handleSuccess(Operation.GuestMod)}}
-                            onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
-                            onBooked = {() => {handleSuccess(Operation.Booked)}}
-                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
-                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
-                            onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
-                            onOrdered = {() => {handleSuccess(Operation.Order)}}
-                            onDespatched = {() => {handleSuccess(Operation.Despatch)}}
+                            onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
+                            onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 
+                            onBooked = {() => {handleSuccess(Operation.Booked, pData.id)}}
+                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
+                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
+                            onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 
+                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id)}}
+                            onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
                             onActivated = {() => {handleActivated(itemIdx)}} 
                             onClosed = {close} />}
 
@@ -324,13 +345,13 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             pOption = {pData.option}
                             pIndate = {pData.inDate}
                             pInTime = {pData.inTime}
-                            onEdited = {() => {handleSuccess(Operation.GuestMod)}}
-                            onDeleted = {() => {handleSuccess(Operation.GuestDel)}}
-                            onOrdered = {() => {handleSuccess(Operation.Order)}}
-                            onDespatched = {() => {handleSuccess(Operation.Despatch)}}
-                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
-                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
-                            onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
+                            onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
+                            onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}}
+                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id, pData.id)}}
+                            onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
+                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
+                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
+                            onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 
                             onActivated = {() => {handleActivated(itemIdx)}} 
                             onClosed = {close}/>}
                 </Col>);
@@ -406,7 +427,11 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     // Start:: Html
     return ( 
         <div className="content-wrapper">
-            
+
+            {/* <h1> Message:</h1> */}
+            {/* {messages} */}
+
+
             {/* Seart :: Bread crumb */}
             <div className="content-header">
                 <div className="container-fluid">

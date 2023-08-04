@@ -44,16 +44,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             console.log(err);
         }
     };
-    
-    // Strat:: close form    
-    const handleClose = () => {
-        try {
-            onClosed();
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // End:: close form    
 
     // Strat:: print form    
     const handlePrint = () => {
@@ -66,8 +56,8 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         <>
             {data &&
                 <>
-                    <Modal size = "lg"
-                        show = {pShow}>
+                    <Modal size="lg"
+                        show={pShow}>
 
                         {/* Start:: Modal header */}
                         <Modal.Header>
@@ -78,7 +68,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             <NavLink 
                                 className = "nav-icon" 
                                 href = "#" 
-                                onClick = {handleClose}>
+                                onClick = {() => {onClosed();}}>
                                 <i className = "align-middle"><X/></i>
                             </NavLink>
                         </Modal.Header>
@@ -90,23 +80,23 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             {/* Start:: Row */}
                             <Row>
                                 {/* Start:: Column bill no */}
-                                <Col sx = {12} md = {5} className = "mb-3">
-                                    <label className = "col-12 form-label"><b>Bill No.</b></label>
-                                    <label className = "col-12 form-label">{formatBillNo(data.expense.billNo)}</label>
+                                <Col sx={12} md={5} className="mb-3">
+                                    <label className="col-12 form-label"><b>Bill No.</b></label>
+                                    <label className="col-12 form-label">{formatBillNo(data.expense.billNo)}</label>
                                 </Col>
                                 {/* End:: Column bill no */}
 
                                 {/* Start:: Column transaction date */}
-                                <Col sx = {12} md = {5} className = "mb-3">
-                                    <label className = "col-12 form-label"><b>Date</b></label>
-                                    <label className = "col-12 text-muted">{formatDDMMYYYY(data.expense.transactionDate)}</label>
+                                <Col sx={12} md={5} className="mb-3">
+                                    <label className="col-12 form-label"><b>Date</b></label>
+                                    <label className="col-12 text-muted">{formatDDMMYYYY(data.expense.transactionDate)}</label>
                                 </Col>
                                 {/* End:: Column transaction date */}
 
                                 {/* Start:: Column transaction time */}
-                                <Col sx = {12} md = {2} className = "mb-3">
-                                    <label className = "col-12 form-label"><b>Time</b></label>
-                                    <label className = "col-12 text-muted">{formatTime12Hour(data.expense.transactionTime)}</label>
+                                <Col sx={12} md={2} className="mb-3">
+                                    <label className="col-12 form-label"><b>Time</b></label>
+                                    <label className="col-12 text-muted">{formatTime12Hour(data.expense.transactionTime)}</label>
                                 </Col>
                                 {/* End:: Column transaction time */}
 
@@ -132,22 +122,22 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                                 {/* Start:: Column mobile no / company address */}
                                 {pCorporateName ? 
-                                    <Col sx = {12} md = {5} className = "mb-3">
-                                        <label className = "col-12 form-label"><b>Address</b></label>
-                                        <label className = "col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                                    <Col sx={12} md={5} className="mb-3">
+                                        <label className="col-12 form-label"><b>Address</b></label>
+                                        <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                                     </Col>
                                 :
-                                    <Col sx = {12} md = {5} className = "mb-3">
-                                        <label className = "col-12 form-label"><b>Mobile no.</b></label>
-                                        <label className = "col-12 text-muted">{pMobile}</label>
+                                    <Col sx={12} md={5} className="mb-3">
+                                        <label className="col-12 form-label"><b>Mobile no.</b></label>
+                                        <label className="col-12 text-muted">{pMobile}</label>
                                     </Col>
                                 }
                                 {/* End:: Column mobile no / company address */}
 
                                 {/* Start:: Column mobile no / company address */}
-                                <Col sx = {12} md = {2} className = "mb-3">
-                                    <label className = "col-12 form-label"><b>Guest count</b></label>
-                                    <label className = "col-12 text-muted">{pGuestCount} No.</label>
+                                <Col sx={12} md={2} className="mb-3">
+                                    <label className="col-12 form-label"><b>Guest count</b></label>
+                                    <label className="col-12 text-muted">{pGuestCount} No.</label>
                                 </Col>
                                 {/* End:: Column mobile no / company address */}
 
@@ -158,10 +148,10 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             <Row>
 
                                 {/* Start:: Column miscellaneous detail */}
-                                <Col sx = {12} md = {12}>
+                                <Col sx={12} md={12}>
 
                                     {/* Label element */}
-                                    <label className = "col-12 form-label"><b>Serviceable items</b></label>
+                                    <label className="col-12 form-label"><b>Serviceable items</b></label>
                                     
                                     {/* Start:: Column miscellaneous detail */}
                                     <BillGrid
@@ -184,7 +174,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             <button
                                 type="button"
                                 className="btn btn-danger"
-                                onClick={handleClose} >
+                                onClick={() => {onClosed();}}>
                                 Close
                             </button>
                             {/* End:: Close button */}
@@ -227,7 +217,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         pCorporateName = {pCorporateName}
                         pCorporateAddress = {pCorporateAddress}
                         pBalance = {data.expense.expenseAmount * -1}    
-                        onSaved = {onPaymentAdded}/>
+                        onSaved = {async () => {await doFetch(); onPaymentAdded();}}/>
                     {/* End :: add payment component */}
                 </>
             }
@@ -316,18 +306,20 @@ const GuestServiceGenerateBill = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Bill modal */}
-            {data && data.transactionId !== "undefined" && data.items.length === 0 &&
-                <Form
-                    pGuestId = {data.id}
-                    pName = {data.name}
-                    pMobile = {data.mobile}
-                    pGuestCount = {data.guestCount}
-                    pCorporateName = {data.corporateName}
-                    pCorporateAddress = {data.corporateAddress}
-                    pTransactionId = {data.transactionId}
-                    pShow = {showModal}
-                    onPaymentAdded = {props.onPaymentAdded}
-                    onClosed = {handleCloseModal}/>}
+            {data && 
+                data.transactionId !== "undefined" && 
+                    data.items.length === 0 &&
+                        <Form
+                            pGuestId = {data.id}
+                            pName = {data.name}
+                            pMobile = {data.mobile}
+                            pGuestCount = {data.guestCount}
+                            pCorporateName = {data.corporateName}
+                            pCorporateAddress = {data.corporateAddress}
+                            pTransactionId = {data.transactionId}
+                            pShow = {showModal}
+                            onPaymentAdded = {props.onPaymentAdded}
+                            onClosed = {handleCloseModal}/>}
             {/* End:: Bill modal */}
         </>
     );

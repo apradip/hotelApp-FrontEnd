@@ -77,6 +77,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
 
     useEffect(() => {
         error && toast.error(error);
+
         data && setCorporateName(data.corporateName);
         data && setCorporateAddress(data.corporateAddress); 
         data && setName(data.name);
@@ -325,7 +326,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                     ref = {deleteRef}
                     pId = {props.pGuestId} 
                     pName = {props.pName}
-                    onDeleted = {props.onDeleted} 
+                    onDeleted = {() => {props.onDeleted()}} 
                     onClosed = {() => {handleClose();}} />
                 {/* End :: delete employee component */}
 
@@ -341,7 +342,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId}
-                    onSaved = {() => {props.onDespatched();}} 
+                    onSaved = {async () => {await doFetch(); props.onDespatched();}} 
                     onClosed = {() => {handleClose()}} />
                 {/* End :: despatch component */}
 

@@ -153,11 +153,13 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         {/* Label element */}
                         <label className="col-12 form-label"><b>Miscellaneous items</b></label>
 
-                        {/* Start:: Column miscellaneous detail */}
-                        <DespatchGrid
-                            pDefaultRowData={pData}
-                            onChange={handelChangeData}/>
-                        {/* End:: Column miscellaneous detail */}
+                        <div className = "ag-theme-alpine grid-height-400">
+                            {/* Start:: Column miscellaneous detail */}
+                            <DespatchGrid
+                                pDefaultRowData={pData}
+                                onChange={handelChangeData}/>
+                            {/* End:: Column miscellaneous detail */}
+                        </div>
                     </Col>                
                     {/* End:: Column miscellaneous detail */}
 

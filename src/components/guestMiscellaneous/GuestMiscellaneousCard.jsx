@@ -20,7 +20,6 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
-    // <NavLink to="#" className="dropdown round"
     <NavLink to="#" className="dropdown"
         onClick={(e) => {e.preventDefault(); onClick(e);}}>
       {children}
@@ -79,6 +78,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
 
     useEffect(() => {
         error && toast.error(error);
+
         data && setCorporateName(data.corporateName);
         data && setCorporateAddress(data.corporateAddress); 
         data && setName(data.name);
@@ -347,7 +347,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onDespatched();}} 
+                    onSaved = {async () => {await doFetch(); props.onDespatched();}} 
                     onClosed = {() => {handleClose();}}/>
                 {/* End :: miscellaneous despatch component */}
 

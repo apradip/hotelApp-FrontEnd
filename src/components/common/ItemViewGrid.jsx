@@ -89,9 +89,9 @@ const ItemViewGrid = ({pDefaultRowData}) => {
             field: "gstCharge"
         },
     ]);
-    const pinnedRowData = [
-        {rowId: "Total", totalPrice: 0}
-    ];
+    // const pinnedRowData = [
+    //     {rowId: "Total", totalPrice: 0}
+    // ];
     const [style] = useState({
         height: "100%",
         width: "100%"
@@ -122,12 +122,12 @@ const ItemViewGrid = ({pDefaultRowData}) => {
                 row.push(data);
             });
 
-            pinnedRowData[0].totalPrice = sum;
+            // pinnedRowData[0].totalPrice = sum;
 
             gridRef.current.api.setRowData(row);
-            gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
-            // gridRef.current.api.refreshCells();
-            // gridRef.current.api.redrawRows();
+            // gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
+            gridRef.current.api.refreshCells();
+            gridRef.current.api.redrawRows();
             gridRef.current.api.sizeColumnsToFit();
         } catch (err) {
             console.log(err);

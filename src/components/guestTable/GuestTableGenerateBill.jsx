@@ -229,7 +229,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         pCorporateName = {pCorporateName}
                         pCorporateAddress = {pCorporateAddress}
                         pBalance = {data.expense.expenseAmount * -1}    
-                        onSaved = {onPaymentAdded}/>
+                        onSaved = {async () => {await doFetch(); onPaymentAdded();}}/>
                     {/* End :: add payment component */}
                 </>
             }

@@ -69,7 +69,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             <NavLink 
                                 className="nav-icon" 
                                 href="#" 
-                                onClick={() => {onClosed()}}>
+                                onClick={() => {onClosed();}}>
                                 <i className="align-middle"><X/></i>
                             </NavLink>
                         </Modal.Header>
@@ -81,23 +81,23 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             {/* Start:: Row */}
                             <Row>
                                 {/* Start:: Column bill no */}
-                                <Col sx = {12} md = {5} className = "mb-3">
-                                    <label className = "col-12 form-label"><b>Bill No.</b></label>
-                                    <label className = "col-12 form-label">{formatBillNo(data.expense.billNo)}</label>
+                                <Col sx={12} md={5} className="mb-3">
+                                    <label className="col-12 form-label"><b>Bill No.</b></label>
+                                    <label className="col-12 form-label">{formatBillNo(data.expense.billNo)}</label>
                                 </Col>
                                 {/* End:: Column bill no */}
 
                                 {/* Start:: Column transaction date */}
-                                <Col sx = {12} md = {5} className = "mb-3">
-                                    <label className = "col-12 form-label"><b>Date</b></label>
-                                    <label className = "col-12 text-muted">{formatDDMMYYYY(data.expense.transactionDate)}</label>
+                                <Col sx={12} md={5} className="mb-3">
+                                    <label className="col-12 form-label"><b>Date</b></label>
+                                    <label className="col-12 text-muted">{formatDDMMYYYY(data.expense.transactionDate)}</label>
                                 </Col>
                                 {/* End:: Column transaction date */}
 
                                 {/* Start:: Column transaction time */}
-                                <Col sx = {12} md = {2} className = "mb-3">
-                                    <label className = "col-12 form-label"><b>Time</b></label>
-                                    <label className = "col-12 text-muted">{formatTime12Hour(data.expense.transactionTime)}</label>
+                                <Col sx={12} md={2} className="mb-3">
+                                    <label className="col-12 form-label"><b>Time</b></label>
+                                    <label className="col-12 text-muted">{formatTime12Hour(data.expense.transactionTime)}</label>
                                 </Col>
                                 {/* End:: Column transaction time */}
 
@@ -109,36 +109,36 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
                                 {/* Start:: Column name / company */}
                                 {pCorporateName ? 
-                                    <Col sx = {12} md = {5} className = "mb-3">
-                                        <label className = "col-12 form-label"><b>Company</b></label>
-                                        <label className = "col-12 text-muted">{subStr(pCorporateName, 30)}</label>
+                                    <Col sx={12} md={5} className="mb-3">
+                                        <label className="col-12 form-label"><b>Company</b></label>
+                                        <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
                                     </Col>
                                 :
-                                    <Col sx = {12} md = {5} className = "mb-3">
-                                        <label className = "col-12 form-label"><b>Name</b></label>
-                                        <label className = "col-12 text-muted">{subStr(pName, 30)}</label>
+                                    <Col sx={12} md={5} className="mb-3">
+                                        <label className="col-12 form-label"><b>Name</b></label>
+                                        <label className="col-12 text-muted">{subStr(pName, 30)}</label>
                                     </Col>
                                 }
                                 {/* End:: Column name / company */}
 
                                 {/* Start:: Column mobile no / company address */}
                                 {pCorporateName ? 
-                                    <Col sx = {12} md = {5} className = "mb-3">
-                                        <label className = "col-12 form-label"><b>Address</b></label>
-                                        <label className = "col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                                    <Col sx={12} md={5} className="mb-3">
+                                        <label className="col-12 form-label"><b>Address</b></label>
+                                        <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                                     </Col>
                                 :
-                                    <Col sx = {12} md = {5} className = "mb-3">
-                                        <label className = "col-12 form-label"><b>Mobile no.</b></label>
-                                        <label className = "col-12 text-muted">{pMobile}</label>
+                                    <Col sx={12} md={5} className="mb-3">
+                                        <label className="col-12 form-label"><b>Mobile no.</b></label>
+                                        <label className="col-12 text-muted">{pMobile}</label>
                                     </Col>
                                 }
                                 {/* End:: Column mobile no / company address */}
 
                                 {/* Start:: Column mobile no / company address */}
-                                <Col sx = {12} md = {2} className = "mb-3">
-                                    <label className = "col-12 form-label"><b>Guest count</b></label>
-                                    <label className = "col-12 text-muted">{pGuestCount} No.</label>
+                                <Col sx={12} md={2} className="mb-3">
+                                    <label className="col-12 form-label"><b>Guest count</b></label>
+                                    <label className="col-12 text-muted">{pGuestCount} No.</label>
                                 </Col>
                                 {/* End:: Column mobile no / company address */}
 
@@ -149,14 +149,14 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             <Row>
 
                                 {/* Start:: Column miscellaneous detail */}
-                                <Col sx = {12} md = {12}>
+                                <Col sx={12} md={12}>
 
                                     {/* Label element */}
-                                    <label className = "col-12 form-label"><b>Miscellaneous items</b></label>
+                                    <label className="col-12 form-label"><b>Miscellaneous items</b></label>
                                     
                                     {/* Start:: Column miscellaneous detail */}
                                     <BillGrid
-                                        pData = {data.miscellanea} />
+                                        pData = {data.miscellanea}/>
                                     {/* End:: Column miscellaneous detail */}
 
                                 </Col>                
@@ -218,7 +218,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         pCorporateName = {pCorporateName}
                         pCorporateAddress = {pCorporateAddress}
                         pBalance = {data.expense.expenseAmount * -1}    
-                        onSaved = {onPaymentAdded}/>
+                        onSaved = {async () => {await doFetch(); onPaymentAdded();}}/>
                     {/* End :: add payment component */}
                 </>
             }
@@ -253,6 +253,13 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
     });     // get all non delivered items
+
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
 
     // Start:: fetch id wise detail from api
     useEffect(() => {

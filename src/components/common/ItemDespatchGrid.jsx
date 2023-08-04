@@ -99,7 +99,7 @@ const ItemDespatchGrid = ({pDefaultRowData, onChange}) => {
     // End:: on row selection change set selected 
     
 	return (
-        <div className = "col-12 ag-theme-alpine grid-height-400">
+        // <div className = "col-12 ag-theme-alpine grid-height-400">
             <AgGridReact	
                 ref = {gridRef}
                 columnDefs = {columnDefs}
@@ -108,7 +108,7 @@ const ItemDespatchGrid = ({pDefaultRowData, onChange}) => {
                 rowSelection = {"multiple"}
                 onGridReady = {handleGridReady}
                 onSelectionChanged = {onSelectionChanged}/>
-        </div>
+        // </div>
     );
 };
  

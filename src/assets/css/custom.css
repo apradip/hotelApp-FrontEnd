@@ -44,6 +44,35 @@ label:not(.form-check-label):not(.custom-file-label) {
   color: #869099;
 }
 
+.bullet {
+  display: inline-block;
+  background-color: #b5b5c3;
+  border-radius: 6px;
+  width: 8px;
+  height: 4px;
+  flex-shrink: 0
+}
+
+.bullet-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 100%!important
+}
+
+.bullet-vertical {
+  width: 4px;
+  height: 8px
+}
+
+.bullet-line {
+  width: 5px;
+  height: 1px;
+  border-radius: none
+}
+
+.animation-blink {
+  animation: animationBlink 1s steps(5,start) infinite;
+}
 
 .sidebar {
   min-width: 100% !important;
@@ -113,6 +142,30 @@ label:not(.form-check-label):not(.custom-file-label) {
 
 /* customization of ag-grid */
 .grid {
+  flex: 1 1 0px;
+  width: 100%;
+  height: 300px;
+}
+
+.grid-height-100 {
+  flex: 1 1 0px;
+  width: 100%;
+  height: 100px;
+}
+
+.grid-height-150 {
+  flex: 1 1 0px;
+  width: 100%;
+  height: 150px;
+}
+
+.grid-height-200 {
+  flex: 1 1 0px;
+  width: 100%;
+  height: 200px;
+}
+
+.grid-height-300 {
   flex: 1 1 0px;
   width: 100%;
   height: 300px;
