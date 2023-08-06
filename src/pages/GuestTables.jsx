@@ -261,7 +261,7 @@ const GuestTables = forwardRef((props, ref) => {
         }
     };
     
-    const createRow = ( pData, rowIdx ) => {
+    const createRow = (pData, rowIdx) => {
         const rowKey=`row_${rowIdx}`;
 
         return (
@@ -311,7 +311,7 @@ const GuestTables = forwardRef((props, ref) => {
                 
                 {(pData.option === "T") &&
                     <CardTable 
-                        ref={(el) => cardRefs.current[itemIdx] = el}
+                        ref = {(el) => cardRefs.current[itemIdx] = el}
                         pIndex = {itemIdx}
                         pGuestId = {pData.id} 
                         pName = {pData.name}

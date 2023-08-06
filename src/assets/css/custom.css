@@ -44,9 +44,13 @@ label:not(.form-check-label):not(.custom-file-label) {
   color: #869099;
 }
 
+.offcanvas {
+  width: 30% !important;
+}
+
 .bullet {
   display: inline-block;
-  background-color: #b5b5c3;
+  /* background-color: #b5b5c3; */
   border-radius: 6px;
   width: 8px;
   height: 4px;
@@ -54,25 +58,46 @@ label:not(.form-check-label):not(.custom-file-label) {
 }
 
 .bullet-dot {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
   border-radius: 100%!important
 }
-
-.bullet-vertical {
-  width: 4px;
-  height: 8px
+   
+/* .blink {
+  animation: blink-animation 1s infinite;
 }
 
-.bullet-line {
-  width: 5px;
-  height: 1px;
-  border-radius: none
-}
+@keyframes blink-animation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+} */
 
-.animation-blink {
+/* .animation-blink {
   animation: animationBlink 1s steps(5,start) infinite;
+} */
+
+.blink {
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
 }
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
 
 .sidebar {
   min-width: 100% !important;
