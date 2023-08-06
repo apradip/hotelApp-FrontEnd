@@ -62,19 +62,6 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     });
 
 
-    // const [room, setRoom] = useState("");
-    // const [messages, setMessages] = useState("");
-    
-    // useEffect(() => {
-    //     socket.on("receive_message", (data) => {
-    //         console.log(data);
-    //         setMessages([...messages, data]);
-    //     });
-    // }, [messages]);
-
-
-
-
     // Start:: fetch data list from api
     useEffect(() => {
         (async () => {

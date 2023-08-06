@@ -74,10 +74,6 @@ const HeaderLogin = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);     
     const contextValues = useStateContext();
 
-    // const miscellaneousCardRef = useRef(null);
-    // const serviceCardRef = useRef(null);
-    // const tableCardRef = useRef(null);
-
     const [miscellaneousCardComponents, setMiscellaneousCardComponents] = useState([]);
     const [serviceCardComponents, setServiceCardComponents] = useState([]);
     const [tableCardComponents, setTableCardComponents] = useState([]);
@@ -253,12 +249,12 @@ const HeaderLogin = forwardRef((props, ref) => {
             switch (option) {
                 case "M":
                     const MGuests = orders.filter((order) => (order.items.length > 0));
-                    const tmpMCards = MGuests.map((element) => (
-                        <CardMiscellaneousOrder
-                            className = "border"
-                            key = {`M_${element.id}`}
-                            pGuestId = {element.id}/>
-                    ));
+                    const tmpMCards = MGuests.map((element) => {
+                        return (<CardMiscellaneousOrder
+                                    className = "border"
+                                    key = {`M_${element.id}`}
+                                    pGuestId = {element.id}/>);
+                    });
                       
                     setMiscellaneousCardComponents(tmpMCards);
                     setMiscellaneousOrderCount(MGuests.length);
@@ -267,12 +263,12 @@ const HeaderLogin = forwardRef((props, ref) => {
 
                 case "S":
                     const SGuests = orders.filter((order) => (order.items.length > 0));
-                    const tmpSCards = SGuests.map((element) => (
-                        <CardServiceOrder
-                            className = "border"
-                            key = {`S_${element.id}`}
-                            pGuestId = {element.id}/>
-                    ));
+                    const tmpSCards = SGuests.map((element) => {
+                        return (<CardServiceOrder
+                                    className = "border"
+                                    key = {`S_${element.id}`}
+                                    pGuestId = {element.id}/>);
+                    });
                       
                     setServiceCardComponents(tmpSCards);
                     setServiceOrderCount(SGuests.length);
@@ -281,12 +277,12 @@ const HeaderLogin = forwardRef((props, ref) => {
 
                 case "T":
                     const TGuests = orders.filter((order) => (order.items.length > 0));
-                    const tmpTCards = TGuests.map((element) => (
-                        <CardTableOrder
-                            className = "border"
-                            key = {`T_${element.id}`}
-                            pGuestId = {element.id}/>
-                    ));
+                    const tmpTCards = TGuests.map((element) => {
+                        return (<CardTableOrder
+                                    className = "border"
+                                    key = {`T_${element.id}`}
+                                    pGuestId = {element.id}/>);
+                    });
                       
                     setTableCardComponents(tmpTCards);
                     setTableOrderCount(TGuests.length);
