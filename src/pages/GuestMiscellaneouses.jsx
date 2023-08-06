@@ -316,7 +316,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             pOption = {pData.option}
                             pIndate={pData.inDate}
                             pInTime={pData.inTime}
-                            pRooms = {pData.items}
+                            pRooms = {pData.rooms}
                             pCallingFrom = {"M"}
                             onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
                             onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 

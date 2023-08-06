@@ -252,7 +252,8 @@ const HeaderLogin = forwardRef((props, ref) => {
         try {
             switch (option) {
                 case "M":
-                    const tmpMCards = orders.map((element) => (
+                    const MGuests = orders.filter((order) => (order.items.length > 0));
+                    const tmpMCards = MGuests.map((element) => (
                         <CardMiscellaneousOrder
                             className = "border"
                             key = {`M_${element.id}`}
@@ -260,12 +261,13 @@ const HeaderLogin = forwardRef((props, ref) => {
                     ));
                       
                     setMiscellaneousCardComponents(tmpMCards);
-                    setMiscellaneousOrderCount(orders.length);
+                    setMiscellaneousOrderCount(MGuests.length);
 
                     break;
 
                 case "S":
-                    const tmpSCards = orders.map((element) => (
+                    const SGuests = orders.filter((order) => (order.items.length > 0));
+                    const tmpSCards = SGuests.map((element) => (
                         <CardServiceOrder
                             className = "border"
                             key = {`S_${element.id}`}
@@ -273,12 +275,13 @@ const HeaderLogin = forwardRef((props, ref) => {
                     ));
                       
                     setServiceCardComponents(tmpSCards);
-                    setServiceOrderCount(orders.length);
+                    setServiceOrderCount(SGuests.length);
 
                     break;
 
                 case "T":
-                    const tmpTCards = orders.map((element) => (
+                    const TGuests = orders.filter((order) => (order.items.length > 0));
+                    const tmpTCards = TGuests.map((element) => (
                         <CardTableOrder
                             className = "border"
                             key = {`T_${element.id}`}
@@ -286,7 +289,7 @@ const HeaderLogin = forwardRef((props, ref) => {
                     ));
                       
                     setTableCardComponents(tmpTCards);
-                    setTableOrderCount(orders.length);
+                    setTableOrderCount(TGuests.length);
 
                     break;
                         
