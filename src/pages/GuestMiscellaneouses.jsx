@@ -15,7 +15,6 @@ import io from "socket.io-client";
 
 const socket = io.connect("http://localhost:3001");
 
-
 const Operation = {
     GuestAdd: "GUEST_ADD",
     GuestMod: "GUEST_MOD",
@@ -61,7 +60,6 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         }
     });
 
-
     // Start:: fetch data list from api
     useEffect(() => {
         (async () => {
@@ -93,7 +91,8 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     // Start:: Open add modal
     const openAdd = () => {
         try {
-            addRef.current.handleShowModal();
+            addRef.current && 
+                addRef.current.handleShowModal();
         } catch (err) {
             console.log(err);
         }
@@ -106,7 +105,8 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
                     if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
+                        cardRefs.current[idx] && 
+                            cardRefs.current[idx].handelOpenEdit();
                 });
             }
         } catch (err) {
@@ -121,7 +121,8 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
                     if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
+                        cardRefs.current[idx] && 
+                            cardRefs.current[idx].handelOpenDelete();
                 });
             }
         } catch (err) {
@@ -152,7 +153,6 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
                 case Operation.GuestMod:
                     toast.success("Guest successfully changed");
-                    // setDataChanged(true);
                     props.onSuccess();
                     break;
 
@@ -164,27 +164,22 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                         
                 case Operation.Order:
                     toast.success("Item successfully ordered");
-                    // setDataChanged(true);
-
-                    // send it to server only
                     socket.emit("M_order", guestId);
                     props.onSuccess();
                     break;               
 
                 case Operation.Despatch:
                     toast.success("Item successfully despatched");
-                    // setDataChanged(true);
+                    socket.emit("M_order", guestId);
                     props.onSuccess();
                     break;                
 
                 case Operation.BillGenerate:
-                    // setDataChanged(true);
                     props.onSuccess();
                     break;                
                         
                 case Operation.PaymentAdd:
                     toast.success("Payment successfully added");
-                    // setDataChanged(true);
                     props.onSuccess();
                     break;
 
@@ -208,9 +203,11 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         try {
             setSelectedCardIndex(index);
 
-            cardRefs.current && cardRefs.current.forEach((item, idx) => {
+            cardRefs.current && 
+                cardRefs.current.forEach((item, idx) => {
                 if (index !== idx) 
-                    cardRefs.current[idx] && cardRefs.current[idx].handleDeSelect();
+                    cardRefs.current[idx] && 
+                        cardRefs.current[idx].handleDeSelect();
             });
         } catch (err) {
             console.log(err);
@@ -267,8 +264,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         try {
             const rowKey=`row_${rowIdx}`;
 
-            return (
-                <Row key={rowKey}>
+            return (<Row key={rowKey}>
                     {
                         pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
@@ -415,10 +411,6 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     return ( 
         <div className="content-wrapper">
 
-            {/* <h1> Message:</h1> */}
-            {/* {messages} */}
-
-
             {/* Seart :: Bread crumb */}
             <div className="content-header">
                 <div className="container-fluid">
@@ -476,14 +468,12 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
                         {/* Start :: Display data */}
                         <div className="card-body">
-                            <Row>
-                                {loading &&
-                                    displayPlsceholder()}
+                            {loading &&
+                                displayPlsceholder()}
 
-                                {!loading && 
-                                    data && 
-                                        displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
-                            </Row>                                    
+                            {!loading && 
+                                data && 
+                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
                         </div>
                         {/* End :: Display data */}
                         

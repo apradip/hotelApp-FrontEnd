@@ -100,58 +100,70 @@ const HeaderLogin = forwardRef((props, ref) => {
     });
 
     useEffect(() => {
-        socket.on("M_order", (guestId) => {
-            miscellaneousOrderListRef.current && 
-                miscellaneousOrderListRef.current.Refresh();
-        });
+        try {
+            socket.on("M_order", (guestId) => {
+                miscellaneousOrderListRef.current && 
+                    miscellaneousOrderListRef.current.Refresh();
+            });
 
-        socket.on("S_order", (guestId) => {
-            serviceOrderListRef.current && 
-                serviceOrderListRef.current.Refresh();
-        });
+            socket.on("S_order", (guestId) => {
+                serviceOrderListRef.current && 
+                    serviceOrderListRef.current.Refresh();
+            });
 
-        socket.on("T_order", (guestId) => {
-            tableOrderListRef.current && 
-                tableOrderListRef.current.Refresh();
-        });
+            socket.on("T_order", (guestId) => {
+                tableOrderListRef.current && 
+                    tableOrderListRef.current.Refresh();
+            });
+        } catch (err) {
+            console.log(err);
+        }
     },[]);
 
     useEffect(() => {
-        contextValues.setMenuStatus(menuState);
-        props.onToggleSideBar(menuState);
+        try {
+            contextValues.setMenuStatus(menuState);
+            props.onToggleSideBar(menuState);
+        } catch (err) {
+            console.log(err);
+        }
     }, [menuState]);    // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleToggleKitchenAlert = (offcanvasName) => {
-        const newItems = alertOptions.map((item, idx) => {
-            if (item.name === offcanvasName) {
-                if (offcanvasName === alertOptions[0].name) {
-                    if (!showKitchenAlert[idx]) {
-                        tableOrderListRef.current && 
-                            tableOrderListRef.current.Refresh();
+        try {
+            const newItems = alertOptions.map((item, idx) => {
+                if (item.name === offcanvasName) {
+                    if (offcanvasName === alertOptions[0].name) {
+                        if (!showKitchenAlert[idx]) {
+                            tableOrderListRef.current && 
+                                tableOrderListRef.current.Refresh();
+                        }
                     }
+
+                    if (offcanvasName === alertOptions[1].name) {
+                        if (!showKitchenAlert[idx]) {
+                            serviceOrderListRef.current && 
+                                serviceOrderListRef.current.Refresh();
+                        }
+                    }
+
+                    if (offcanvasName === alertOptions[2].name) {
+                        if (!showKitchenAlert[idx]) {
+                            miscellaneousOrderListRef.current && 
+                                miscellaneousOrderListRef.current.Refresh();
+                        }
+                    }
+
+                    return showKitchenAlert[idx] ? false : true;
                 }
 
-                if (offcanvasName === alertOptions[1].name) {
-                    if (!showKitchenAlert[idx]) {
-                        serviceOrderListRef.current && 
-                            serviceOrderListRef.current.Refresh();
-                    }
-                }
+                return showKitchenAlert[idx];
+            });
 
-                if (offcanvasName === alertOptions[2].name) {
-                    if (!showKitchenAlert[idx]) {
-                        miscellaneousOrderListRef.current && 
-                            miscellaneousOrderListRef.current.Refresh();
-                    }
-                }
-
-                return showKitchenAlert[idx] ? false : true;
-            }
-
-            return showKitchenAlert[idx];
-        });
-
-        setShowKitchenAlert(newItems);
+            setShowKitchenAlert(newItems);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     // Start:: on success of user options
@@ -233,14 +245,19 @@ const HeaderLogin = forwardRef((props, ref) => {
 
     // Start:: on successfull operation
     const success = () => {
-        searchRef.current.setFocus();
+        searchRef.current &&
+            searchRef.current.setFocus();
     };
     // End:: on successfull operation
     // End:: handle page component search/add/edit/delete 
 
     // Start:: forward reff change page
     const changePage = (page) => {
-        setSelectedPage(page);
+        try {
+            setSelectedPage(page);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     // Start:: populate offcanvas with pending orders
@@ -403,7 +420,6 @@ const HeaderLogin = forwardRef((props, ref) => {
                 <li className="nav-item dropdown">
                     <Dropdown className="d-flex align-items-center ms-3 ms-lg-3" >
                         <Dropdown.Toggle 
-                            
                             as={CustomToggle} 
                             onClick={() => {handleToggleKitchenAlert(alertOptions[0].name)}}>
                             <Coffee size={20} className="d-none d-sm-inline-block"/>

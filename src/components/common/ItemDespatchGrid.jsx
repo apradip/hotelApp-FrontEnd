@@ -38,7 +38,7 @@ const ItemDespatchGrid = ({pDefaultRowData, onChange}) => {
             headerName: "Quantity",
             field: "quantity", 
             type: "rightAligned",
-            width: 40,
+            width: 60,
             hide: false,
             valueFormatter: (params) => {return `${Number(params.value)}`},
             valueGetter: (params) => {return params.data.quantity},

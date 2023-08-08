@@ -212,8 +212,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                     if (e.detail === 1) {
                                         setActive(!active);
                                         props.onActivated(props.pIndex);
-                                    }    
-                                    else if (e.detail === 2) {
+                                    } else if (e.detail === 2) {
                                         handelOpenView();
                                     }  
                                 }}> 
@@ -222,14 +221,10 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 <Card.Body className="text-sm p-1"> 
                     <Row className="m-1">
                         <Col xs={8} sm={8} md={8} lg={8} xl={8} className="p-0">
-                            <b>
-                                {corporateName ? subStr(corporateName, 20): subStr(name, 20)}
-                            </b>
+                            <b>{corporateName ? subStr(corporateName, 20): subStr(name, 20)}</b>
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
-                            <b>
-                                {formatINR(balance)}
-                            </b>
+                            <b>{formatINR(balance)}</b>
                         </Col>
                     </Row>
 

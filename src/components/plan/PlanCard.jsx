@@ -1,15 +1,15 @@
-import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
-import {NavLink, Card, Stack, Dropdown} from "react-bootstrap";
+import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
+import { NavLink, Card, Dropdown, Row, Col } from "react-bootstrap";
 
-import {MoreVertical, Edit3, Scissors} from "react-feather";
-import {subStr} from "../common/Common";
+import { MoreVertical, Edit3, Scissors } from "react-feather";
+import { subStr } from "../common/Common";
 import View from "./PlanView";
 import Edit from "./PlanEdit";
 import Delete from "./PlanDelete";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
-    <NavLink to="#" className="dropdown" ref={ref} 
-        onClick={(e) => {e.preventDefault(); onClick(e);}} >
+    <NavLink to="#" className="dropdown"
+        onClick={(e) => {e.preventDefault(); onClick(e);}}>
       {children}
     </NavLink>
 ));
@@ -35,32 +35,55 @@ const PlanCard = forwardRef((props, ref) => {
 
     // Start:: Show view modal 
     const handelOpenView = () => {
-        viewRef && viewRef.current.handleShowModal();
+        try {
+            viewRef.current 
+                && viewRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show view modal 
 
     // Start:: Show edit modal 
     const handelOpenEdit = () => {
-        editRef && editRef.current.handleShowModal();
+        try {
+            editRef.current && 
+                editRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show edit modal 
 
     // Start:: Show delete modal 
     const handelOpenDelete = () => {
-        deleteRef && deleteRef.current.handleShowModal();
+        try {
+            deleteRef.current && 
+                deleteRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show delete modal 
 
     // Start:: Close all modal 
     const handleClose = () => {
-        props.onClosed();
+        try {
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Close all modal 
 
     // Start:: de-select card 
     const handleDeSelect = () => {
-        setActive(false);
-        setFocus(false);
+        try {
+            setActive(false);
+            setFocus(false);
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: de-select card
     
@@ -75,87 +98,82 @@ const PlanCard = forwardRef((props, ref) => {
         <>
             {/* Start :: card component */}
             <Card 
-                key={props.pIndex}
-                index={props.pIndex}
-                className={"border"}
+                ref = {ref}
+                key = {props.pIndex}
+                index = {props.pIndex}
+                className = {"border"}
                 border={active ? "info" : focus ? "primary" : ""}  
-                ref={ref}
-                onMouseEnter={() => setFocus(true)}
-                onMouseLeave={() => setFocus(false)} 
-                onClick={(e) => { 
-                                    if (e.detail === 1) {
-                                        setActive(!active)
-                                        props.onActivated(props.pIndex)
-                                    }    
-                                    else if (e.detail === 2) {
-                                        handelOpenView()
-                                    }  
-                                }}>
+                onMouseEnter = {() => setFocus(true)}
+                onMouseLeave = {() => setFocus(false)} 
+                onClick = {(e) => {if (e.detail === 1) {
+                                        setActive(!active);
+                                        props.onActivated(props.pIndex);
+                                    } else if (e.detail === 2) {
+                                        handelOpenView();
+                                    }}}>
 
                 <Card.Body className="text-sm p-1">
-                    <Stack gap={0}>
-                        <Stack direction="horizontal" gap={0}>
-                            <span className="col-11 text-left pl-1">
-                                <b>{subStr(props.pName, 25)}</b>
-                            </span>
+                    <Row className="m-1">
+                        <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
+                            <b>{subStr(props.pName, 25)}</b>
+                        </Col>
+                    </Row>
 
-                            {/* Start:: Column menu */}
-                            <span className="col-1 text-right p-0">
-                                {/* Start:: operational menu */}
-                                <Dropdown>
-                                    <Dropdown.Toggle as={CustomToggle}>
-                                        <MoreVertical size={16} />
-                                    </Dropdown.Toggle>
-                                    
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item eventKey="1" 
-                                            onClick={handelOpenEdit}>
-                                            <Edit3 className="feather-16 mr-3"/>Edit
-                                        </Dropdown.Item>
+                    <Row className="m-1">
+                        <Col xs={10} sm={10} md={11} lg={11} xl={11} className="p-0 m-0">
+                            {subStr(props.pDescription, 40)}
+                        </Col>
 
-                                        <Dropdown.Item eventKey="2"
-                                            onClick={handelOpenDelete}>
-                                            <Scissors className="feather-16 mr-3"/>Delete
-                                        </Dropdown.Item>
+                        {/* Start:: Column menu */}
+                        <Col xs={2} sm={2} md={1} lg={1} xl={1} className="text-right p-0 m-0">
+                            {/* Start:: operational menu */}
+                            <Dropdown>
+                                <Dropdown.Toggle as={CustomToggle}>
+                                    <MoreVertical size={16} />
+                                </Dropdown.Toggle>
+                                
+                                <Dropdown.Menu>
+                                    <Dropdown.Item eventKey="1" 
+                                        onClick={handelOpenEdit}>
+                                        <Edit3 className="feather-16 mr-3"/>Edit
+                                    </Dropdown.Item>
 
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                {/* End:: operational menu */}
-                            </span>
-                            {/* End:: Column menu */}
-                        </Stack>
+                                    <Dropdown.Item eventKey="2"
+                                        onClick={handelOpenDelete}>
+                                        <Scissors className="feather-16 mr-3"/>Delete
+                                    </Dropdown.Item>
 
-                        <Stack gap={0}>
-                            <span className="col-12 text-left px-1">
-                                {subStr(props.pDescription, 40)}
-                            </span>
-                        </Stack>
-                    </Stack>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            {/* End:: operational menu */}
+                        </Col>
+                        {/* End:: Column menu */}
+                    </Row>
                 </Card.Body>
             </Card>
             {/* End :: card component */}
 
             {/* Start :: view employee component */}
             <View
-                ref={viewRef}
-                pId={props.pId} 
-                onClosed={handleClose}/>
+                ref = {viewRef}
+                pId = {props.pId} 
+                onClosed = {() => {handleClose()}}/>
             {/* End :: view employee component */}
 
             {/* Start :: edit employee component */}
             <Edit 
-                ref={editRef}
-                pId={props.pId} 
-                onEdited={props.onEdited} 
-                onClosed={handleClose}/>
+                ref = {editRef}
+                pId = {props.pId} 
+                onEdited = {props.onEdited} 
+                onClosed = {() => {handleClose()}}/>
             {/* End :: edit employee component */}
 
             {/* Start :: delete employee component */}
             <Delete 
-                ref={deleteRef}
-                pId={props.pId} 
-                onDeleted={props.onDeleted} 
-                onClosed={handleClose}/>
+                ref = {deleteRef}
+                pId = {props.pId} 
+                onDeleted = {props.onDeleted} 
+                onClosed = {() => {handleClose()}}/>
             {/* End :: delete employee component */}
         </>
     );
@@ -163,6 +181,5 @@ const PlanCard = forwardRef((props, ref) => {
 
 });
 // End:: Component
-
 
 export default PlanCard;

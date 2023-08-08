@@ -132,7 +132,6 @@ const GuestServices = forwardRef((props, ref) => {
 
                 case Operation.GuestMod:
                     toast.success("Guest successfully changed");
-                    // setDataChanged(true);
                     props.onSuccess();
                     break;
         
@@ -144,27 +143,21 @@ const GuestServices = forwardRef((props, ref) => {
                         
                 case Operation.Order:
                     toast.success("Item successfully ordered");
-                    // setDataChanged(true);
-                    
-                    // send it to server only
                     socket.emit("S_order", guestId);
                     props.onSuccess();
                     break;               
 
                 case Operation.Despatch:
                     toast.success("Item successfully despatched");
-                    // setDataChanged(true);
                     props.onSuccess();
                     break;                
 
                 case Operation.BillGenerate:
-                    // setDataChanged(true);
                     props.onSuccess();
                     break;                
                         
                 case Operation.PaymentAdd:
                     toast.success("Payment successfully added");
-                    // setDataChanged(true);
                     props.onSuccess();
                     break;
 
