@@ -1,12 +1,10 @@
 import React from "react";
 import { Breadcrumb, Row, Col } from "react-bootstrap";
-// import { NavLink } from "react-router-dom";
-// import { ChevronsRight, Coffee, Umbrella, Wind, ShoppingBag, PenTool, FileText, Edit2, LogOut, Scissors, MoreVertical } from "react-feather";
-// import { subStr, formatINR } from "../components/common/Common"
 
 import GuestList from "../components/dashboard/GuestRoomList"
-import GuestRoomList from "../components/dashboard/GuestRoomStatusList"
-import GuestTableList from "../components/dashboard/GuestTableStatusList"
+import RoomList from "../components/dashboard/RoomStatusList"
+import TableList from "../components/dashboard/TableStatusList"
+import TableOrderList from "../components/dashboard/TableOrderList"
 
 const Dashboard = () => {
 
@@ -283,91 +281,7 @@ const Dashboard = () => {
 
                                 {/* Room status */}
                                 <div className="col-xl-4 h-50">
-                                    <GuestRoomList/>
-
-                                    {/* <div className="card card-xl-stretch mb-5 mb-xl-8 dashboard-card">
-                                        <div className="dashboard-card-header border-0">
-                                            <h3 className="card-title align-items-start flex-column">
-                                                <span className="text-dark fs-4 mb-1">Room status</span>
-                                                <span className="text-muted mt-1 fs-8 d-block">25 no. of gust at room</span>
-                                            </h3>
-                                        </div>
-                                        <div className="card-body py-1 px-4 scrollable">
-                                            <div className="row mb-2">
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">101</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-success fs-8 fw-bold p-3">102</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">103</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">104</span></h2>
-                                                </div>    
-                                            </div>
-
-                                            <div className="row mb-2">
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-success fs-8 fw-bold p-3">105</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-success fs-8 fw-bold p-3">106</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">107</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">108</span></h2>
-                                                </div>    
-                                            </div>
-
-                                            <div className="row mb-2">
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">201</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">202</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">203</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">204</span></h2>
-                                                </div>    
-                                            </div>
-
-                                            <div className="row mb-2">
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">205</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">206</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">207</span></h2>
-                                                </div>
-
-                                                <div className="col-xl-3 align-items-center">
-                                                    <h2><span className="badge badge-light-danger fs-8 fw-bold p-3">208</span></h2>
-                                                </div>    
-                                            </div>
-
-
-                                        </div>
-                                    </div> */}
+                                    <RoomList/>
                                 </div>
                             </div>
 
@@ -376,130 +290,12 @@ const Dashboard = () => {
 
                                 {/* Table status */}
                                 <div className="col-xl-4 h-50">
-                                    <GuestTableList/>
+                                    <TableList/>
                                 </div>
 
                                 {/* Food orders                 */}
                                 <div className="col-xl-4 h-50">
-                                    <div className="card card-xl-stretch mb-5 mb-xl-8 dashboard-card">
-                                        <div className="dashboard-card-header border-0">
-                                            <h3 className="card-title align-items-start flex-column">
-                                                <span className="text-dark fs-4 mb-1">Order details</span>
-                                                <span className="text-muted mt-1 fs-8 d-block">Total 13 no of orders</span>
-                                            </h3>
-                                        </div>
-                                        <div className="card-body py-1 px-4 scrollable">
-
-                                            <div className="d-flex bg-light-warning rounded p-1 mb-3">
-                                                <div className="col-xl-2 p-0 m-0">
-                                                    <div className="rounded-circle-warning">
-                                                        <span className="fw-bolder text-warning">
-                                                            T1
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xl-10 p-1">
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-warning p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Bisleri water (1Lt)</Col>
-                                                        <Col className="col-xl-3 text-end p-0">1</Col>
-                                                    </Row>
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-warning p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Chicken fried rice</Col>
-                                                        <Col className="col-xl-3 text-end p-0">2</Col>
-                                                    </Row>
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-warning p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Chilli chiken</Col>
-                                                        <Col className="col-xl-3 text-end p-0">1</Col>
-                                                    </Row>
-                                                </div>
-                                            </div>
-
-                                            <div className="d-flex bg-light-info rounded p-1 mb-3">
-                                                <div className="col-xl-2 p-0 m-0">
-                                                    <div className="rounded-circle-info">
-                                                        <span className="fw-bolder text-info">
-                                                            T2
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xl-10 p-1">
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-info p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Bisleri water (1Lt)</Col>
-                                                        <Col className="col-xl-3 text-end p-0">1</Col>
-                                                    </Row>
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-info p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Chicken fried rice</Col>
-                                                        <Col className="col-xl-3 text-end p-0">2</Col>
-                                                    </Row>
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-info p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Chilli chiken</Col>
-                                                        <Col className="col-xl-3 text-end p-0">1</Col>
-                                                    </Row>
-                                                </div>
-                                            </div>
-
-                                            <div className="d-flex bg-light-warning rounded p-1 mb-3">
-                                                <div className="col-xl-2 p-0 m-0">
-                                                    <div className="rounded-circle-warning">
-                                                        <span className="fw-bolder text-warning">
-                                                            T3
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xl-10 p-1">
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-warning p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Bisleri water (1Lt)</Col>
-                                                        <Col className="col-xl-3 text-end p-0">1</Col>
-                                                    </Row>
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-warning p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Chicken fried rice</Col>
-                                                        <Col className="col-xl-3 text-end p-0">2</Col>
-                                                    </Row>
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-warning p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Chilli chiken</Col>
-                                                        <Col className="col-xl-3 text-end p-0">1</Col>
-                                                    </Row>
-                                                </div>
-                                            </div>
-
-                                            <div className="d-flex bg-light-info rounded p-1 mb-3">
-                                                <div className="col-xl-2 p-0 m-0">
-                                                    <div className="rounded-circle-info">
-                                                        <span className="fw-bolder text-info">
-                                                            T2
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xl-10 p-1">
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-info p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Bisleri water (1Lt)</Col>
-                                                        <Col className="col-xl-3 text-end p-0">1</Col>
-                                                    </Row>
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-info p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Chicken fried rice</Col>
-                                                        <Col className="col-xl-3 text-end p-0">2</Col>
-                                                    </Row>
-                                                    <Row className="text-muted fs-8 mx-1">
-                                                        <Col className="col-xl-1 p-0"><span className="bullet bullet-vertical h-6px bg-info p-0 m-0"></span></Col>
-                                                        <Col className="col-xl-8 text-start p-0">Chilli chiken</Col>
-                                                        <Col className="col-xl-3 text-end p-0">1</Col>
-                                                    </Row>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
+                                    <TableOrderList/>
                                 </div>
 
                                 {/* Payment status                             */}

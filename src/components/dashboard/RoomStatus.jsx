@@ -7,7 +7,7 @@ import React, { forwardRef } from "react";
 // pNo
 // pGuestCount
 // pStatus
-const GuestTableStatus = forwardRef((props, ref) => {
+const RoomStatus = forwardRef((props, ref) => {
 
     // Start:: Html
     return (<div className="col-xl-3 align-items-center">
@@ -31,4 +31,4 @@ const GuestTableStatus = forwardRef((props, ref) => {
 });
 
 
-export default GuestTableStatus;
+export default RoomStatus;

@@ -54,7 +54,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
-const GuestRoomRow = forwardRef((props, ref) => {
+const GuestRoom = forwardRef((props, ref) => {
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
@@ -633,4 +633,4 @@ const GuestRoomRow = forwardRef((props, ref) => {
 });
 
 
-export default GuestRoomRow;
+export default GuestRoom;

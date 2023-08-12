@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import GuestTable from "../dashboard/GuestTableStatus";
+import Room from "./RoomStatus";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
@@ -21,15 +21,15 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // useImperativeHandle
 // handleShowModal
-const GuestTableStatusList = forwardRef((props, ref) => {    
+const RoomStatusList = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const itemPerRow = contextValues.dashboardTableItemPerRow;
+    const itemPerRow = contextValues.dashboardRoomItemPerRow;
     const [dataChanged, setDataChanged] = useState(false);
-    const [guestCount, setGuestCount] = useState(0);
+    const [roomCount, setRoomCount] = useState(0);
     let cardRefs = useRef([]);
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.tableAPI}/${hotelId}`,
+        url: `${contextValues.roomAPI}/${hotelId}`,
         params: { option: "A", search: ""}
     });
 
@@ -51,13 +51,13 @@ const GuestTableStatusList = forwardRef((props, ref) => {
 
         let count = 0;
         data && data.map((object) => {
-            count += object.guestCount;
+            if (!object.isOccupied)
+                count ++;
         });
-        data && setGuestCount(count);
+        data && setRoomCount(count);
     }, [data, error, loading]);
 
     // Start:: show all data in card format
-
     const displayData = (pData = []) => {
         let rowIdx = 0;
         let colIdx = 0;
@@ -106,11 +106,11 @@ const GuestTableStatusList = forwardRef((props, ref) => {
         try {
             cardRefs.current.push();
                 
-            return (<GuestTable
+            return (<Room
                         ref = {(el) => cardRefs.current[itemIdx] = el}
-                        key = {`guest_table_obj_${pData._id}`}
+                        key = {`guest_room_obj_${pData._id}`}
                         pIndex = {itemIdx}
-                        pTableId = {pData._id} 
+                        pRoomId = {pData._id} 
                         pNo = {pData.no}
                         pGuestCount = {pData.guestCount}
                         pStatus = {pData.isOccupied}/>);
@@ -126,8 +126,8 @@ const GuestTableStatusList = forwardRef((props, ref) => {
         <div className="card card-xl-stretch mb-5 mb-xl-8 dashboard-card">
             <div className="dashboard-card-header border-0">
                 <h3 className="card-title align-items-start flex-column">
-                    <span className="text-dark fs-4 mb-1">Table status</span>
-                    <span className="text-muted mt-1 fs-8 d-block">{guestCount} no of guest at restaurent</span>
+                    <span className="text-dark fs-4 mb-1">Room status</span>
+                    <span className="text-muted mt-1 fs-8 d-block">Total {roomCount} no of room(s) are unoccupied</span>
                 </h3>
             </div>
             <div className="card-body py-1 px-4 scrollable">
@@ -142,4 +142,4 @@ const GuestTableStatusList = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestTableStatusList;
+export default RoomStatusList;

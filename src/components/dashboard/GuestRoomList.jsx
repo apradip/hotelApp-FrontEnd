@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import GuestRow from "./GuestRoomRow";
+import Guest from "./GuestRoom";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 // import AddPayment from "./GuestRoomPaymentAdd";
 
@@ -139,7 +139,7 @@ const GuestRoomList = forwardRef((props, ref) => {
             return pData.map((object, idx) => {
                 cardRefs.current.push();
                 
-                return (<GuestRow
+                return (<Guest
                     ref = {(el) => cardRefs.current[idx] = el}
                     key = {`_guest_room_row_${idx}`}
                     pIndex = {idx}
@@ -178,7 +178,7 @@ const GuestRoomList = forwardRef((props, ref) => {
             <div className="dashboard-card-header">
                 <h3 className="card-title align-items-start flex-column">
                     <span className="text-dark fs-4 mb-1">
-                        Room status</span>
+                        Guest list</span>
                     <span className="text-muted mt-1 fs-8 d-block">Total {guestCount} guest at present</span>
                 </h3>
             </div>

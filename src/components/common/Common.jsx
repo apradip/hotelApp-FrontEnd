@@ -6,6 +6,15 @@ export const subStr = (text, len) => {
     return t
 };
 
+export const properCase = (text) => { 
+    const properCaseStr = text.replace(
+        /\w\S*/g,
+        (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+      );
+
+      return properCaseStr;
+}
+
 export const  getPage = (baseURL, url) => {
     let component = ''
     const params = url.replace(baseURL, '')
