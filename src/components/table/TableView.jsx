@@ -8,7 +8,7 @@ import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
-const Form = ({pNo, pDescription, onClosed}) => {
+const Form = ({pNo, pAccommodation, pDescription, onClosed}) => {
     const buttonRef = useRef(null);
 
     // Start:: Html
@@ -19,13 +19,23 @@ const Form = ({pNo, pDescription, onClosed}) => {
 
                 {/* Start:: Row */}
                 <div className="row">
-                    {/* Start:: Column name */}
-                    <div className="col-12 mb-3">
+
+                    {/* Start:: Column no */}
+                    <div className="col-xs-12 col-md-6 mb-3">
                         {/* Label element */}
                         <label className="col-12 form-label"><b>No.</b></label>
                         <label className="col-12 text-muted">{pNo}</label>
                     </div>
-                    {/* Start:: Column name */}
+                    {/* Start:: Column no */}
+
+                    {/* Start:: Column accommodation */}
+                    <div className="col-xs-12 col-md-6 mb-3">
+                        {/* Label element */}
+                        <label className="col-12 form-label"><b>Seat</b></label>
+                        <label className="col-12 text-muted">{pAccommodation}</label>
+                    </div>
+                    {/* Start:: Column accommodation */}
+
                 </div>
                 {/* End:: Row */}
 
@@ -156,6 +166,7 @@ const TableView = forwardRef((props, ref) => {
                     {/* Start:: Form component */}
                     <Form 
                         pNo={data.no}
+                        pAccommodation={data.accommodation}
                         pDescription={data.description}
                         onClosed={handleCloseModal}/>
                     {/* End:: Form component */}

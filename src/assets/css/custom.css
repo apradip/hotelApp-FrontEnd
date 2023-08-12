@@ -15,13 +15,6 @@ label:not(.form-check-label):not(.custom-file-label) {
 }
 
 .dropdown .round {
-  /* background-color: #c3c8cd; */
-  /* border-width: 5px; */
-  /* border-radius: 50%; */
-  /* border-color: #c3c8cd; */
-  /* border-width: 5px; */
-  /* border: solid 5px #c3c8cd; */
-
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -48,9 +41,101 @@ label:not(.form-check-label):not(.custom-file-label) {
   width: 35% !important;
 }
 
+
+
+.bg-light-info {
+  background-color: #ebeaeda2 !important;
+}
+.bg-light-info
+.rounded-circle-info {
+  border-radius: .2rem;
+  border-color: #bda3f5;
+  background-color: #bda3f5;
+  overflow: hidden; 
+  padding: .6rem;
+  visibility: visible;
+  text-align: center;
+  margin: .3rem;
+}
+.bg-light-info
+.rounded-circle-info
+.text-info {
+  color: #9c7fdb !important;
+}
+.bg-light-info
+.bg-info {
+  background-color: #9c7fdb !important;
+}
+
+
+
+.bg-light-success {
+  background-color: #e8fff3!important;
+}
+.bg-light-success
+.rounded-circle-success {
+  border-radius: .2rem;
+  border-color: #a4e7c2;
+  background-color: #a4e7c2;
+  overflow: hidden; 
+  padding: .6rem;
+  visibility: visible;
+  text-align: center;
+  margin: .3rem;
+}
+
+
+.bg-light-danger {
+  background-color: #fff5f8!important;
+  border-color: #faefc5;
+  border-radius: .2rem;
+  overflow: hidden; 
+  padding: .6rem;
+  visibility: visible;
+  text-align: center;
+  margin: .3rem;
+}
+.bg-light-danger 
+.text-danger {
+  color: #fe9fb7 !important;
+}
+
+
+/* .bg-light-info {
+  background-color: #f8f5fe!important;
+}
+.bg-light-info 
+.rounded-circle-info {
+  border-radius: .2rem;
+  border-color: #faefc5;
+  background-color: #feeeae;
+  overflow: hidden; 
+  padding: .6rem;
+  visibility: visible;
+  text-align: center;
+  margin: .3rem;
+} */
+
+
+.bg-light-warning {
+  background-color: #fff8dd!important;
+}
+.bg-light-warning 
+.rounded-circle-warning {
+  border-radius: .2rem;
+  border-color: #faefc5;
+  background-color: #feeeae;
+  overflow: hidden; 
+  padding: .6rem;
+  visibility: visible;
+  text-align: center;
+  margin: .3rem;
+}
+
+
+
 .bullet {
   display: inline-block;
-  /* background-color: #b5b5c3; */
   border-radius: 6px;
   width: 8px;
   height: 4px;
@@ -62,26 +147,31 @@ label:not(.form-check-label):not(.custom-file-label) {
   height: 8px;
   border-radius: 100%!important
 }
-   
-/* .blink {
-  animation: blink-animation 1s infinite;
+
+.bullet-vertical {
+  width: 4px;
+  height: 8px;
 }
 
-@keyframes blink-animation {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-} */
+.bg-success {
+  --bg-color: 80,205,137;
+}
 
-/* .animation-blink {
-  animation: animationBlink 1s steps(5,start) infinite;
-} */
+.bg-danger {
+  --bg-color: 241,65,108;
+}
+
+.h-6px {
+  height: 6px!important;
+}
+
+.h-20px {
+  height: 20px!important;
+}
+
+.h-40px {
+  height: 40px!important;
+}
 
 .blink {
   animation: blink-animation 1s steps(5, start) infinite;
@@ -119,6 +209,52 @@ label:not(.form-check-label):not(.custom-file-label) {
   margin: 3px;
 }
 
+.badge-light-success {
+  color: #50cd89;
+  background-color: #e8fff3;
+}
+
+.badge-light-success-border {
+  color: #50cd89;
+  background-color: #e8fff3;
+  border: solid 1px #aafdd0;
+}
+
+.badge-light-primary {
+  color: #009ef7;
+  background-color: #f1faff;
+}
+
+.badge-light-warning {
+  color: #ffc700;
+  background-color: #fff8dd;
+}
+
+.badge-light-danger {
+  color: #f1416c;
+  background-color: #fff5f8;
+}
+
+.badge-light-danger-border {
+  color: #f1416c;
+  background-color: #fff5f8;
+  border: solid 1px #fadfe7;
+}
+
+
+.dashboard-card {
+  height: 500px;
+  background-color: hsla(210, 60%, 98%, 0.461);
+  border: solid 2px hsla(210, 4%, 91%, 0.795);
+}
+
+.dashboard-card-header {
+  padding: .75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: #fbfcfe;
+  border-bottom: 0 solid transparent;
+}
+
 .card-element {
   cursor: pointer!important;
 }
@@ -127,6 +263,18 @@ label:not(.form-check-label):not(.custom-file-label) {
   cursor: pointer!important;
   background-color: rgb(248, 248, 248)!important;
 }
+
+
+
+
+.scrollable {
+  overflow: auto;
+}
+
+.timeline-item-title {
+  font-size: small !important;
+}
+
 
 .border {
   background: #e9ecef !important;

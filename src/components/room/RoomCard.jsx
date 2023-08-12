@@ -140,8 +140,12 @@ const RoomCard = forwardRef(( props, ref ) => {
 
                 <Card.Body className="text-sm p-1">
                     <Row className="m-1">
-                        <Col xs={10} sm={10} md={11} lg={11} xl={11} className="p-0">
+                        <Col xs={5} sm={5} md={7} lg={7} xl={7} className="p-0">
                             <b>{subStr(props.pNo, 20)} ({subStr(categoryName, 20)})</b>
+                        </Col>
+
+                        <Col xs={5} sm={5} md={4} lg={4} xl={4} className="text-end p-0">
+                            {props.pAccommodation} bedded
                         </Col>
 
                         {/* Start:: Column menu */}

@@ -1,12 +1,12 @@
-import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink} from "react-bootstrap";
-import {useFormik} from "formik";
-import {toast} from "react-toastify";
-import {X} from "react-feather";
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink } from "react-bootstrap";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { X } from "react-feather";
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
-import {tableSchema} from "../../schemas";
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { tableSchema } from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
@@ -19,36 +19,42 @@ const Form = ({onSubmited, onClosed}) => {
     });
 
     // Start:: Form validate and save data
-    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
-        initialValues: {
-            keyInputNo: "",
-            keyInputDescription: "",
-        },
+    const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({        
+        initialValues: {keyInputNo: "",
+                        keyInputAccommodation: 1,
+                        keyInputDescription: ""},
         validationSchema: tableSchema,
         validateOnChange,
         onSubmit: async (values, action) => {
-            const payload = {   
-                            no: values.keyInputNo.toUpperCase(),
-                            description: values.keyInputDescription
-                        };
+            try {
+                const payload = { no: values.keyInputNo.toUpperCase(),
+                                accommodation: values.keyInputAccommodation,
+                                description: values.keyInputDescription};
 
-            await doInsert(payload);
+                await doInsert(payload);
         
-            if (error === null) {
-                action.resetForm();
-                onSubmited();
-            } else {
-                toast.error(error);
-            }
+                if (error === null) {
+                    action.resetForm();
+                    onSubmited();
+                } else {
+                    toast.error(error);
+                }
+            } catch (err) {
+                console.log(err);
+            }            
         }
     });
     // End:: Form validate and save data
     
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false);
-        resetForm();
-        onClosed();
+        try {
+            setValidateOnChange(false);
+            resetForm();
+            onClosed();
+        } catch (err) {
+            console.log(err);
+        }            
     };
     // End:: close form    
 
@@ -63,7 +69,7 @@ const Form = ({onSubmited, onClosed}) => {
                 <div className="row">
                     
                     {/* Start:: Column no */}
-                    <div className="col-12 mb-3">
+                    <div className="col-xs-12 col-md-6 mb-3">
                         {/* Label element */}
                         <label className="form-label" 
                              htmlFor={"keyInputNo"}><b>No.</b></label>
@@ -79,7 +85,7 @@ const Form = ({onSubmited, onClosed}) => {
                              maxLength={10}
                              disabled={loading} 
                              value={values.keyInputNo} 
-                             onChange={handleChange} />
+                             onChange={handleChange}/>
 
                         {/* Validation message */}
                         {errors.keyInputNo && 
@@ -88,6 +94,33 @@ const Form = ({onSubmited, onClosed}) => {
                                      null}
                     </div>
                     {/* End:: Column no */}
+
+                    {/* Start:: Column accommodation */}
+                    <div className="col-xs-12 col-md-6 mb-3">
+                        {/* Label element */}
+                        <label className="form-label" 
+                             htmlFor={"keyInputAccommodation"}><b>Seat</b></label>
+                        
+                        {/* Input element text*/}
+                        <input 
+                             type="text" 
+                             name={"keyInputAccommodation"}
+                             placeholder="Accommodation"
+                             className="form-control"
+                             autoComplete="off"
+                             maxLength={2}
+                             disabled={loading} 
+                             value={values.keyInputAccommodation} 
+                             onChange={handleChange} />
+
+                        {/* Validation message */}
+                        {errors.keyInputAccommodation && 
+                             touched.keyInputAccommodation ? 
+                                 (<small className="text-danger">{errors.keyInputAccommodation}</small>) : 
+                                     null}
+                    </div>
+                    {/* End:: accommodation */}
+
                 </div>
                 {/* End:: Row */}
 
@@ -177,32 +210,6 @@ const Form = ({onSubmited, onClosed}) => {
 const TableAdd = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
 
-    // Start:: Show modal
-    const handleShowModal = () => {
-        setShowModal(true);
-    };
-    // End:: Show modal
-
-    // Start:: Close modal
-    const handleCloseModal = () => {
-        setShowModal(false);
-        props.onClosed();
-    };
-    // End:: Close modal
-    
-    // Start:: Save
-    const handleSave = () => {
-        props.onAdded();
-        setShowModal(false);
-    };
-    // End:: Save
-
-    // Start:: forward reff show modal function
-    useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    });
-    // End:: forward reff show modal function
-
     // Strat:: close modal on key press esc    
     useEffect(() => {
         document.addEventListener("keydown", (event) => {
@@ -212,6 +219,45 @@ const TableAdd = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
+
+    // Start:: Show modal
+    const handleShowModal = () => {
+        try {
+            setShowModal(true);
+        } catch (err) {
+            console.log(err);
+        }            
+    };
+    // End:: Show modal
+
+    // Start:: Close modal
+    const handleCloseModal = () => {
+        try {
+            setShowModal(false);
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }            
+    };
+    // End:: Close modal
+    
+    // Start:: Save
+    const handleSave = () => {
+        try {
+            setShowModal(false);
+            props.onAdded();
+        } catch (err) {
+            console.log(err);
+        }            
+    };
+    // End:: Save
+
+    // Start:: forward reff show modal function
+    useImperativeHandle(ref, () => {
+        return {handleShowModal};
+    });
+    // End:: forward reff show modal function
+
 
     // Start:: Html
     return (
@@ -227,7 +273,9 @@ const TableAdd = forwardRef((props, ref) => {
                     <Modal.Title>New</Modal.Title>
 
                     {/* Close button */}
-                    <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>
+                    <NavLink className="nav-icon" 
+                        href="#" 
+                        onClick={handleCloseModal}>
                         <i className="align-middle"><X/></i>
                     </NavLink>
                 </Modal.Header>

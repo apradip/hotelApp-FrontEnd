@@ -15,7 +15,7 @@ const Form = ({pGuestId, pName, pCorporateName,
     const contextValues = useStateContext();
     const inputRef = useRef(null);
     const {loading, error, doDelete} = useFetchWithAuth({
-        url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}`
+        url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}`
     });         //checkout guest
 
     // Start:: Call delete api
@@ -106,7 +106,7 @@ const Form = ({pGuestId, pName, pCorporateName,
 
 // useImperativeHandle
 // handleShowModal
-const GuestTableCheckout = forwardRef((props, ref) => {
+const GuestServiceCheckout = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
@@ -190,4 +190,4 @@ const GuestTableCheckout = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestTableCheckout;
+export default GuestServiceCheckout;

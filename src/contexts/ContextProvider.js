@@ -38,6 +38,8 @@ export const ContextProvider = ({children}) => {
   const guestExpensePaymentAPI = "/guestExpensesPayments";
   const itemPerRow = 3;
   const itemPerPage = itemPerRow * 3;
+  const dashboardRoomItemPerRow = 4;
+  const dashboardTableItemPerRow = 4;
 
   const [screenSize, setScreenSize] = useState(undefined);
   const [currentColor, setCurrentColor] = useState("#03C9D7");
@@ -72,10 +74,9 @@ export const ContextProvider = ({children}) => {
       currentMode, setCurrentMode, themeSettings, setThemeSettings, 
       activeMenu, setActiveMenu, showMenu, setShowMenu,
       isClicked, setIsClicked, itemPerRow, 
-      itemPerPage, setColor, setMode, 
-      setMenuStatus, handleClick}} >
-
-      { children }
+      itemPerPage, dashboardRoomItemPerRow, dashboardTableItemPerRow, setColor, setMode, 
+      setMenuStatus, handleClick}}>
+      {children}
     </StateContext.Provider>
   );
 };

@@ -12,53 +12,59 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubmited, onClosed}) => {
+const Form = ({pId, pCategoryId, pNo, pAccommodation, pTariff, pDiscount, pExtraBedTariff, pExtraPersonTariff, onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const {loading, error, doUpdate} = useFetchWithAuth({
+    const {data, loading, error, doUpdate} = useFetchWithAuth({
         url: `${contextValues.roomAPI}/${hotelId}/${pId}`
     });
 
     // Start:: Form validate and save data
     const { values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm } = useFormik({
-        initialValues: {
-            keyInputNo: pNo,
-            keyInputCategoryId: pCategoryId,
-            keyInputTariff: pTariff,
-            keyInputDiscount: pDiscount,
-            keyInputBed: pBed,   
-            keyInputPerson: pPerson
-        },
+        initialValues: {keyInputCategoryId: pCategoryId,
+                        keyInputNo: pNo,
+                        keyInputAccommodation: pAccommodation,
+                        keyInputTariff: pTariff,
+                        keyInputDiscount: pDiscount,
+                        keyInputExtraBedTariff: pExtraBedTariff,   
+                        keyInputExtraPersonTariff: pExtraPersonTariff},
         validationSchema: roomSchema,
         validateOnChange,
         onSubmit: async (values, action) => {
-            const payload = {   
+            try {
+                const payload = {categoryId: values.keyInputCategoryId,
                                 no: values.keyInputNo.toUpperCase(), 
-                                categoryId: values.keyInputCategoryId,
+                                accommodation: values.keyInputAccommodation,
                                 tariff: parseFloat(Number.isNaN(values.keyInputTariff) ? 0 : values.keyInputTariff, 10), 
                                 maxDiscount: parseFloat(Number.isNaN(values.keyInputDiscount) ? 0 : values.keyInputDiscount, 10), 
-                                extraBedTariff: parseFloat(Number.isNaN(values.keyInputBed) ? 0 : values.keyInputBed, 10), 
-                                extraPersonTariff: parseFloat(Number.isNaN(values.keyInputPerson) ? 0 : values.keyInputPerson, 10)
-                            };
+                                extraBedTariff: parseFloat(Number.isNaN(values.keyInputExtraBedTariff) ? 0 : values.keyInputExtraBedTariff, 10), 
+                                extraPersonTariff: parseFloat(Number.isNaN(values.keyInputExtraPersonTariff) ? 0 : values.keyInputExtraPersonTariff, 10)};
 
-            await doUpdate(payload);
-        
-            if (error === null) {
-                action.resetForm();
-                onSubmited();
-            } else {
-                toast.error(error);
-            }
+                await doUpdate(payload);
+
+                if (error === null) {
+                    action.resetForm();
+                    onSubmited();
+                } else {
+                    toast.error(error);
+                }
+            } catch (err) {
+                console.log(err);
+            }            
         }
     });
     // End:: Form validate and save data
 
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false);
-        resetForm();
-        onClosed();
+        try {
+            setValidateOnChange(false);
+            resetForm();
+            onClosed();
+        } catch (err) {
+            console.log(err);
+        }            
     };
     // End:: close form    
 
@@ -71,24 +77,6 @@ const Form = ({pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubmi
 
                 {/* Start:: Row */}
                 <div className="row">
-
-                    {/* Start:: Column no */}
-                    <div className="col-xs-12 col-md-6 mb-3">
-                        
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor="keyInputNo"><b>Room No.</b></label>
-
-                        {/* Input element text*/}
-                        <input 
-                            type='text' 
-                            id='keyInputNo'
-                            placeholder='Room no.' 
-                            className='form-control'
-                            disabled={true}
-                            value={values.keyInputNo}/>
-                    </div>
-                    {/* End:: Column no */}
 
                     {/* Start:: Column room category */}
                     <div className="col-xs-12 col-md-6 mb-3">
@@ -105,6 +93,50 @@ const Form = ({pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubmi
                             onChange={(value) => {setFieldValue('keyInputCategoryId', value)}}/>
                     </div>
                     {/* End:: Column room category */}
+
+                    {/* Start:: Column no */}
+                    <div className="col-xs-12 col-md-3 mb-3">
+                        
+                        {/* Label element */}
+                        <label className="form-label" 
+                            htmlFor="keyInputNo"><b>Room No.</b></label>
+
+                        {/* Input element text*/}
+                        <input 
+                            type='text' 
+                            id='keyInputNo'
+                            placeholder='Room no.' 
+                            className='form-control'
+                            disabled={true}
+                            value={values.keyInputNo}/>
+                    </div>
+                    {/* End:: Column no */}
+
+                    {/* Start:: Column accommodation */}
+                    <div className="col-xs-12 col-md-3 mb-3">
+                        {/* Label element */}
+                        <label className="form-label" 
+                             htmlFor={"keyInputAccommodation"}><b>Bed</b></label>
+                        
+                        {/* Input element text*/}
+                        <input 
+                             type="text" 
+                             name={"keyInputAccommodation"}
+                             placeholder="Accommodation"
+                             className="form-control"
+                             autoComplete="off"
+                             maxLength={2}
+                             disabled={loading} 
+                             value={values.keyInputAccommodation} 
+                             onChange={handleChange} />
+
+                        {/* Validation message */}
+                        {errors.keyInputAccommodation && 
+                             touched.keyInputAccommodation ? 
+                                 (<small className="text-danger">{errors.keyInputAccommodation}</small>) : 
+                                     null}
+                    </div>
+                    {/* End:: accommodation */}
 
                  </div>
                 {/* End:: Row */}
@@ -173,22 +205,22 @@ const Form = ({pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubmi
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputBed"><b>Extra bed tariff</b></label>
+                            htmlFor="keyInputExtraBedTariff"><b>Extra bed tariff</b></label>
                         
                         {/* Input element text*/}
                         <input 
                             type="number"
-                            id="keyInputBed"
+                            id="keyInputExtraBedTariff"
                             placeholder="extra bed tariff" 
                             className="form-control"
                             disabled={loading || error !== null}
-                            value={values.keyInputBed} 
+                            value={values.keyInputExtraBedTariff} 
                             onChange={handleChange}/>
 
                         {/* Validation message */}
-                        {errors.keyInputBed && 
-                            touched.keyInputBed ? 
-                                (<small className="text-danger">{ errors.keyInputBed }</small>) : 
+                        {errors.keyInputExtraBedTariff && 
+                            touched.keyInputExtraBedTariff ? 
+                                (<small className="text-danger">{errors.keyInputExtraBedTariff}</small>) : 
                                     null}
                     </div>
                     {/* End:: Column ext. bed tariff */}
@@ -198,22 +230,22 @@ const Form = ({pId, pCategoryId, pNo, pTariff, pDiscount, pBed, pPerson, onSubmi
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor="keyInputPerson"><b>Extra person tariff</b></label>
+                            htmlFor="keyInputExtraPersonTariff"><b>Extra person tariff</b></label>
                         
                         {/* Input element text*/}
                         <input 
                             type="number"
-                            id="keyInputPerson"
+                            id="keyInputExtraPersonTariff"
                             placeholder="ext. person tariff" 
                             className="form-control"
                             disabled={loading || error !== null}
-                            value={values.keyInputPerson} 
+                            value={values.keyInputExtraPersonTariff} 
                             onChange={handleChange}/>
 
                         {/* Validation message */}
-                        {errors.keyInputPerson && 
-                            touched.keyInputPerson ? 
-                                (<small className="text-danger">{ errors.keyInputPerson }</small>) : 
+                        {errors.keyInputExtraPersonTariff && 
+                            touched.keyInputExtraPersonTariff ? 
+                                (<small className="text-danger">{errors.keyInputExtraPersonTariff}</small>) : 
                                     null}
                     </div>
                     {/* End:: Column ext. person tariff */}
@@ -279,32 +311,6 @@ const RoomEdit = forwardRef((props, ref) => {
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.roomAPI}/${hotelId}/${props.pId}`
     });
-    
-    // Start:: Show modal
-    const handleShowModal = () => {
-        setShowModal(true);
-    };
-    // End:: Show modal
-
-    // Start:: Close modal
-    const handleCloseModal = () => {
-        setShowModal(false);
-        props.onClosed();
-    };    
-    // End:: Close modal
-
-    // Start:: Save
-    const handleSave = () => { 
-        setShowModal(false);
-        props.onEdited();
-    };
-    // End:: Save
-    
-    // Start:: forward reff show modal function
-    useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    });
-    // End:: forward reff show modal function
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
@@ -332,6 +338,49 @@ const RoomEdit = forwardRef((props, ref) => {
         error && toast.error(error);
     }, [data, error, loading]);
     
+    // Start:: Show modal
+    const handleShowModal = () => {
+        try {
+            setShowModal(true);
+        } catch (err) {
+            console.log(err);
+        }            
+    };
+    // End:: Show modal
+
+    // Start:: Close modal
+    const handleCloseModal = () => {
+        try {
+            setShowModal(false);
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }            
+    };    
+    // End:: Close modal
+
+    // Start:: Save
+    const handleSave = () => { 
+        try {
+            setShowModal(false);
+            props.onEdited();
+        } catch (err) {
+            console.log(err);
+        }            
+    };
+    // End:: Save
+    
+    // Start:: forward reff show modal function
+    useImperativeHandle(ref, () => {
+        try {
+            return {handleShowModal};
+        } catch (err) {
+            console.log(err);
+        }            
+    });
+    // End:: forward reff show modal function
+
+    
     // Start:: Html
     return (
         <>
@@ -357,12 +406,13 @@ const RoomEdit = forwardRef((props, ref) => {
                     {/* Start:: Form component */}
                     <Form 
                         pId={data._id}
-                        pNo={data.no}
                         pCategoryId={data.categoryId}
+                        pNo={data.no}
+                        pAccommodation={data.accommodation}
                         pTariff={parseFloat(data.tariff, 10).toFixed(2)}
                         pDiscount={parseFloat(data.maxDiscount, 10).toFixed(2)}
-                        pBed={parseFloat(data.extraBedTariff, 10).toFixed(2)}
-                        pPerson={parseFloat(data.extraPersonTariff, 10).toFixed(2)}
+                        pExtraBedTariff={parseFloat(data.extraBedTariff, 10).toFixed(2)}
+                        pExtraPersonTariff={parseFloat(data.extraPersonTariff, 10).toFixed(2)}
                         onSubmited={handleSave} 
                         onClosed={handleCloseModal}/>
                         {/* End:: Form component */}

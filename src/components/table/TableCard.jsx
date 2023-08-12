@@ -114,8 +114,11 @@ const TableCard = forwardRef((props, ref) => {
 
                 <Card.Body className="text-sm p-1">
                     <Row className="m-1">
-                        <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
+                        <Col xs={12} sm={12} md={6} lg={6} xl={6} className="p-0">
                             <b>{subStr(props.pNo, 25)}</b>
+                        </Col>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={6} className="text-end p-0">
+                            {props.pAccommodation} sitter
                         </Col>
                     </Row>
 

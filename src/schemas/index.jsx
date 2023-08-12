@@ -101,6 +101,7 @@ export const roomCategorySchema = Yup.object({
 export const roomSchema = Yup.object({
     keyInputCategoryId: Yup.string().required("Category can't be empty!").min(1, "Invalid category!"),
     keyInputNo: Yup.string().required("No can't be empty!").min(1, "Invalid no!"),
+    keyInputAccommodation: Yup.number().required("Bed can't be empty!").positive("Invalid bed!").min(1, "Invalid bed!"),
     keyInputTariff: Yup.number().required("Tariff can't be empty!").positive("Invalid tariff!").min(3, "Invalid tariff!"),
     keyInputDiscount: Yup.number().required("Maximum discount can't be empty!").min(0, "Invalid maximum discount!")
         .test({
@@ -112,7 +113,7 @@ export const roomSchema = Yup.object({
                 return value <= parseFloat(this.parent.keyInputTariff)
             }
         }),
-    keyInputBed: Yup.number().required("Extra bed tariff can't be empty!").min(0, "Invalid extra bed tariff!")
+    keyInputExtraBedTariff: Yup.number().required("Extra bed tariff can't be empty!").min(0, "Invalid extra bed tariff!")
         .test({
             name: 'max',
             exclusive: false,
@@ -122,7 +123,7 @@ export const roomSchema = Yup.object({
                 return value <= parseFloat(this.parent.keyInputTariff)
             }
         }),
-    keyInputPerson: Yup.number().required("Extra person tariff can't be empty!").min(0, "Invalid extra person tariff!")
+    keyInputExtraPersonTariff: Yup.number().required("Extra person tariff can't be empty!").min(0, "Invalid extra person tariff!")
         .test({
             name: 'max',
             exclusive: false,
@@ -136,6 +137,7 @@ export const roomSchema = Yup.object({
 
 export const tableSchema = Yup.object({
     keyInputNo: Yup.string().required("No can't be empty!").min(1, "Invalid no!"),
+    keyInputAccommodation: Yup.number().required("Seat can't be empty!").positive("Invalid seat!").min(1, "Invalid seat!"),
     keyInputDescription: Yup.string()
 });
 

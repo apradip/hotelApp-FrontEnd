@@ -9,7 +9,7 @@ import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
-const Form = ({pNo, pCategoryId, pTariff, pDiscount, pBed, pPerson, onClosed}) => {
+const Form = ({pCategoryId, pNo, pAccommodation, pTariff, pDiscount, pExtraBedTariff, pExtraPersonTariff, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [categoryName, setCategoryName] = useState("");
@@ -41,12 +41,26 @@ const Form = ({pNo, pCategoryId, pTariff, pDiscount, pBed, pPerson, onClosed}) =
                 {/* Start:: Row */}
                 <div className="row">
 
-                    {/* Start:: Column no & category*/}
-                    <div className="col-12 mb-3">
-                        <label className="col-12 form-label"><b>Room No & Category</b></label>
-                        <label className="col-12 text-muted">{pNo} ({categoryName})</label>
+                    {/* Start:: Column category*/}
+                    <div className="col-xs-12 col-md-6 mb-3">
+                        <label className="col-12 form-label"><b>Category</b></label>
+                        <label className="col-12 text-muted">{categoryName}</label>
                     </div>
-                    {/* End:: Column no & category*/}
+                    {/* End:: Column category*/}
+
+                    {/* Start:: Column no*/}
+                    <div className="col-xs-12 col-md-3 mb-3">
+                        <label className="col-12 form-label"><b>No.</b></label>
+                        <label className="col-12 text-muted">{pNo}</label>
+                    </div>
+                    {/* End:: Column no*/}
+
+                    {/* Start:: Column no*/}
+                    <div className="col-xs-12 col-md-3 mb-3">
+                        <label className="col-12 form-label"><b>Bed</b></label>
+                        <label className="col-12 text-muted">{pAccommodation}</label>
+                    </div>
+                    {/* End:: Column no*/}
 
                  </div>
                 {/* End:: Row */}
@@ -77,14 +91,14 @@ const Form = ({pNo, pCategoryId, pTariff, pDiscount, pBed, pPerson, onClosed}) =
                     {/* Start:: Column ext. bed tariff */}
                     <div className="col-xs-12 col-md-6 mb-3">
                         <label className="col-12 form-label"><b>Ext. bed tariff</b></label>
-                        <label className="col-12 text-muted">{formatINR(pBed)}</label>
+                        <label className="col-12 text-muted">{formatINR(pExtraBedTariff)}</label>
                     </div>
                     {/* End:: Column ext. bed tariff */}
 
                     {/* Start:: Column ext. person tariff */}
                     <div className="col-xs-12 col-md-6 mb-3">
                         <label className="col-12 form-label"><b>Ext. person tariff</b></label>
-                        <label className="col-12 text-muted">{formatINR(pPerson)}</label>
+                        <label className="col-12 text-muted">{formatINR(pExtraPersonTariff)}</label>
                     </div>
                     {/* End:: Column ext. person tariff */}
 
@@ -134,25 +148,6 @@ const RoomView = forwardRef((props, ref) => {
         url: `${contextValues.roomAPI}/${hotelId}/${props.pId}`
     });
 
-    // Start :: Show modal 
-    const handleShowModal = () => {
-        setShowModal(true);
-    };
-    // End :: Show modal 
-
-    // Start :: Close modal 
-    const handleCloseModal = () => {
-        setShowModal(false);
-        props.onClosed();
-    };
-    // End :: Close modal 
-
-    // Start:: forward reff show modal function
-    useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    });
-    // End:: forward reff show modal function
-
     // Strat:: close modal on key press esc    
     useEffect(() => {
         document.addEventListener("keydown", (event) => {
@@ -179,6 +174,34 @@ const RoomView = forwardRef((props, ref) => {
         error && toast.error(error);
     }, [data, error, loading]);
 
+    // Start :: Show modal 
+    const handleShowModal = () => {
+        try {
+            setShowModal(true);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End :: Show modal 
+
+    // Start :: Close modal 
+    const handleCloseModal = () => {
+        try {
+            setShowModal(false);
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End :: Close modal 
+
+    // Start:: forward reff show modal function
+    useImperativeHandle(ref, () => {
+        return {handleShowModal};
+    });
+    // End:: forward reff show modal function
+
+
     // Start:: Html
     return (
         <>
@@ -204,12 +227,13 @@ const RoomView = forwardRef((props, ref) => {
 
                     {/* Start:: Form component */}
                     <Form 
-                        pNo={data.no}
                         pCategoryId={data.categoryId}
+                        pNo={data.no}
+                        pAccommodation={data.accommodation}
                         pTariff={parseFloat(data.tariff, 10).toFixed(2)}
                         pDiscount={parseFloat(data.maxDiscount, 10).toFixed(2)}
-                        pBed={parseFloat(data.extraBedTariff, 10).toFixed(2)}
-                        pPerson={parseFloat(data.extraPersonTariff, 10).toFixed(2)}
+                        pExtraBedTariff={parseFloat(data.extraBedTariff, 10).toFixed(2)}
+                        pExtraPersonTariff={parseFloat(data.extraPersonTariff, 10).toFixed(2)}
                         onClosed={handleCloseModal}/>
                     {/* End:: Form component */}
                     

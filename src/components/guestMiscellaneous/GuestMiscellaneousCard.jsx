@@ -12,7 +12,7 @@ import Delete from "../common/GuestDeleteSmall";
 import Order from "./GuestMiscellaneousOrder";
 import Despatch from "./GuestMiscellaneousDespatch";
 import GenerateBill from "./GuestMiscellaneousGenerateBill";
-import Checkout from "../common/GuestCheckout";
+import Checkout from "./GuestMiscellaneousCheckout";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";

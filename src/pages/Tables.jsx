@@ -249,9 +249,10 @@ const Tables = forwardRef(( props, ref ) => {
                             pIndex={itemIdx}
                             pId={pData._id}
                             pNo={pData.no}
+                            pAccommodation={pData.accommodation}
                             pDescription={pData.description}
-                            onEdited={() => {handleSuccess("edit")}}
-                            onDeleted={() => {handleSuccess("delete")}} 
+                            onEdited={() => {handleSuccess(Operation.Mod)}}
+                            onDeleted={() => {handleSuccess(Operation.Del)}} 
                             onClosed={close} 
                             onActivated={handleActivated}/>                
                     </Col>);

@@ -250,6 +250,7 @@ const Rooms = forwardRef(( props, ref ) => {
                             pId = {pData._id}
                             pCategoryId = {pData.categoryId} 
                             pNo = {pData.no}
+                            pAccommodation = {pData.accommodation}
                             pTariff = {parseFloat(pData.tariff, 10).toFixed(2)}
                             pDiscount = {parseFloat(pData.maxDiscount, 10).toFixed(2)}
                             pBed = {parseFloat(pData.extraBedTariff, 10).toFixed(2)}

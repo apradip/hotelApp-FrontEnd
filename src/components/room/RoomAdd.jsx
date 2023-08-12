@@ -1,13 +1,13 @@
-import React, {useContext, useEffect, useState, forwardRef, useImperativeHandle} from "react";
-import {Modal, NavLink} from "react-bootstrap";
-import {useFormik} from "formik";
-import {toast} from "react-toastify";
-import {X} from "react-feather";
+import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import { Modal, NavLink } from "react-bootstrap";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { X } from "react-feather";
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
 import RoomCategorySelect from '../common/RoomCategorySelect';
-import {roomSchema} from "../../schemas";
+import { roomSchema } from "../../schemas";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 // Start:: form
@@ -21,43 +21,49 @@ const Form = ({onSubmited, onClosed}) => {
 
     // Start:: Form validate and save data
     const {values, errors, touched, setFieldValue, handleChange, handleSubmit, resetForm} = useFormik({
-        initialValues: {
-            keyInputNo: "",
-            keyInputCategoryId: "",
-            keyInputTariff: 0 ,
-            keyInputDiscount: 0,
-            keyInputBed: 0,
-            keyInputPerson: 0
-        },
+        initialValues: {keyInputCategoryId: "",
+                        keyInputNo: "",
+                        keyInputAccommodation: 0,
+                        keyInputTariff: 0 ,
+                        keyInputDiscount: 0,
+                        keyInputExtraBedTariff: 0,
+                        keyInputExtraPersonTariff: 0},
         validationSchema: roomSchema,
         validateOnChange,
         onSubmit: async (values, action) => {
-            const payload = {   
-                            no: values.keyInputNo.toUpperCase(), 
-                            categoryId: values.keyInputCategoryId, 
-                            tariff: parseFloat(Number.isNaN(values.keyInputTariff) ? 0 : values.keyInputTariff, 10), 
-                            maxDiscount: parseFloat(Number.isNaN(values.keyInputDiscount) ? 0 : values.keyInputDiscount, 10), 
-                            extraBedTariff: parseFloat(Number.isNaN(values.keyInputBed) ? 0 : values.keyInputBed, 10), 
-                            extraPersonTariff: parseFloat(Number.isNaN(values.keyInputPerson) ? 0 : values.keyInputPerson, 10),
-                        };
+            try {
+                const payload = {categoryId: values.keyInputCategoryId, 
+                                no: values.keyInputNo.toUpperCase(), 
+                                accommodation: values.keyInputAccommodation,
+                                tariff: parseFloat(Number.isNaN(values.keyInputTariff) ? 0 : values.keyInputTariff, 10), 
+                                maxDiscount: parseFloat(Number.isNaN(values.keyInputDiscount) ? 0 : values.keyInputDiscount, 10), 
+                                extraBedTariff: parseFloat(Number.isNaN(values.keyInputExtraBedTariff) ? 0 : values.keyInputExtraBedTariff, 10), 
+                                extraPersonTariff: parseFloat(Number.isNaN(values.keyInputExtraPersonTariff) ? 0 : values.keyInputExtraPersonTariff, 10)};
 
-            await doInsert(payload);
-        
-            if (error === null) {
-                action.resetForm();
-                onSubmited();
-            } else {
-                toast.error(error);
-            }
+                await doInsert(payload);
+            
+                if (error === null) {
+                    action.resetForm();
+                    onSubmited();
+                } else {
+                    toast.error(error);
+                }
+            } catch (err) {
+                console.log(err);
+            }            
         }
     });
     // End:: Form validate and save data
     
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false);
-        resetForm();
-        onClosed();
+        try {
+            setValidateOnChange(false);
+            resetForm();
+            onClosed();
+        } catch (err) {
+            console.log(err);
+        }                    
     };
     // End:: close form    
 
@@ -70,9 +76,31 @@ const Form = ({onSubmited, onClosed}) => {
 
                 {/* Start:: Row */}
                 <div className="row">
-                    
-                    {/* Start:: Column no */}
+
+                    {/* Start:: Column category */}
                     <div className="col-xs-12 col-md-6 mb-3">
+                        
+                        {/* Label element */}
+                        <label className="form-label" 
+                                 htmlFor={"keyInputCategoryId"}><b>Category</b></label>
+
+                        {/* Input element text*/}
+                        <RoomCategorySelect 
+                            autoFocus
+                             name={"keyInputCategoryId"}
+                             value={values.keyInputCategoryId} 
+                             onChange={(value) => {setFieldValue("keyInputCategoryId", value)}} />
+
+                        {/* Validation message */}
+                        {errors.keyInputCategoryId && 
+                             touched.keyInputCategoryId ? 
+                                 (<small className="text-danger">{errors.keyInputCategoryId}</small>) : 
+                                     null}
+                    </div>
+                    {/* End:: Column category */}
+
+                    {/* Start:: Column no */}
+                    <div className="col-xs-12 col-md-3 mb-3">
                         
                         {/* Label element */}
                         <label className="form-label" 
@@ -85,7 +113,6 @@ const Form = ({onSubmited, onClosed}) => {
                              placeholder="Room no."
                              className="form-control"
                              autoComplete="off"
-                             autoFocus
                              maxLength={10}
                              disabled={loading} 
                              value={values.keyInputNo} 
@@ -99,26 +126,31 @@ const Form = ({onSubmited, onClosed}) => {
                     </div>
                     {/* End:: Column no */}
 
-                    {/* Start:: Column category */}
-                    <div className="col-xs-12 col-md-6 mb-3">
-                        
+                    {/* Start:: Column accommodation */}
+                    <div className="col-xs-12 col-md-3 mb-3">
                         {/* Label element */}
                         <label className="form-label" 
-                                 htmlFor={"keyInputCategoryId"}><b>Category</b></label>
-
+                             htmlFor={"keyInputAccommodation"}><b>Bed</b></label>
+                        
                         {/* Input element text*/}
-                        <RoomCategorySelect 
-                             name={"keyInputCategoryId"}
-                             value={values.keyInputCategoryId} 
-                             onChange={(value) => {setFieldValue("keyInputCategoryId", value)}} />
+                        <input 
+                             type="text" 
+                             name={"keyInputAccommodation"}
+                             placeholder="Accommodation"
+                             className="form-control"
+                             autoComplete="off"
+                             maxLength={2}
+                             disabled={loading} 
+                             value={values.keyInputAccommodation} 
+                             onChange={handleChange} />
 
                         {/* Validation message */}
-                        {errors.keyInputCategoryId && 
-                             touched.keyInputCategoryId ? 
-                                 (<small className="text-danger">{errors.keyInputCategoryId}</small>) : 
+                        {errors.keyInputAccommodation && 
+                             touched.keyInputAccommodation ? 
+                                 (<small className="text-danger">{errors.keyInputAccommodation}</small>) : 
                                      null}
                     </div>
-                    {/* End:: Column category */}
+                    {/* End:: accommodation */}
 
                 </div>
                 {/* End:: Row */}
@@ -191,24 +223,24 @@ const Form = ({onSubmited, onClosed}) => {
                          
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputBed"}><b>Extra bed tariff</b></label>
+                            htmlFor={"keyInputExtraBedTariff"}><b>Extra bed tariff</b></label>
                             
                         {/* Input element text*/} 
                         <input
                             type="number"
-                            name={"keyInputBed"}
+                            name={"keyInputExtraBedTariff"}
                             placeholder="Extra bed tariff" 
                             className="form-control"
                             autoComplete="off"
                             maxLength={8}
                             disabled={loading}
-                            value={values.keyInputBed} 
-                            onChange={handleChange} />
+                            value={values.keyInputExtraBedTariff} 
+                            onChange={handleChange}/>
 
                         {/* Validation message */}
-                        {errors.keyInputBed && 
-                            touched.keyInputBed ? 
-                                (<small className="text-danger">{ errors.keyInputBed }</small>) : 
+                        {errors.keyInputExtraBedTariff && 
+                            touched.keyInputExtraBedTariff ? 
+                                (<small className="text-danger">{errors.keyInputExtraBedTariff}</small>) : 
                                     null}
                     </div>
                     {/* End:: Column ext. bed teriff */}
@@ -217,25 +249,25 @@ const Form = ({onSubmited, onClosed}) => {
                     <div className="col-xs-12 col-md-6 mb-3">
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputPerson"}><b>Extra person tariff</b></label>
+                            htmlFor={"keyInputExtraPersonTariff"}><b>Extra person tariff</b></label>
                          
                         {/* Input element text*/} 
                         <input 
                             type="number"
-                            name={"keyInputPerson"}
+                            name={"keyInputExtraPersonTariff"}
                             placeholder="Extra person tariff" 
                             className="form-control"
                             autoComplete="off"
                             maxLength={8}
                             disabled={loading}
-                            value={values.keyInputPerson} 
+                            value={values.keyInputExtraPersonTariff} 
                             onChange={handleChange}/>
 
                         {/* Validation message */}
-                        {errors.addPerson && 
-                            touched.addPerson ? 
-                                (<small className="text-danger">{errors.addPerson}</small>) : 
-                                    null}    
+                        {errors.keyInputExtraPersonTariff && 
+                            touched.keyInputExtraPersonTariff ? 
+                                (<small className="text-danger">{errors.keyInputExtraPersonTariff}</small>) : 
+                                    null}
                     </div>
                     {/* End:: Column ext. person teriff */}
 
@@ -295,32 +327,6 @@ const Form = ({onSubmited, onClosed}) => {
 const RoomAdd = forwardRef((props, ref) => {
     const [showModal, setShowModal] = useState(false);
 
-    // Start:: Show modal
-    const handleShowModal = () => {
-        setShowModal(true);
-    };
-    // End:: Show modal
-
-    // Start:: Close modal
-    const handleCloseModal = () => {
-        setShowModal(false);
-        props.onClosed();
-    };
-    // End:: Close modal
-    
-    // Start:: Save
-    const handleSave = () => {
-        props.onAdded();
-        setShowModal(false);
-    };
-    // End:: Save
-
-    // Start:: forward reff show modal function
-    useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    });
-    // End:: forward reff show modal function
-
     // Strat:: close modal on key press esc    
     useEffect(() => {
         document.addEventListener("keydown", (event) => {
@@ -330,6 +336,45 @@ const RoomAdd = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);}
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
+    
+    // Start:: Show modal
+    const handleShowModal = () => {
+        try {
+            setShowModal(true);
+        } catch (err) {
+            console.log(err);
+        }            
+    };
+    // End:: Show modal
+
+    // Start:: Close modal
+    const handleCloseModal = () => {
+        try {
+            setShowModal(false);
+            props.onClosed();
+        } catch (err) {
+            console.log(err);
+        }                    
+    };
+    // End:: Close modal
+    
+    // Start:: Save
+    const handleSave = () => {
+        try {
+            setShowModal(false);
+            props.onAdded();
+        } catch (err) {
+            console.log(err);
+        }            
+    };
+    // End:: Save
+
+    // Start:: forward reff show modal function
+    useImperativeHandle(ref, () => {
+        return {handleShowModal};
+    });
+    // End:: forward reff show modal function
+
 
     // Start:: Html
     return (

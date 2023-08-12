@@ -3,101 +3,86 @@ import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
-import { subStr, getTables } from "../common/Common";
+import { subStr } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { guestTableSchema } from "../../schemas";
-import TableSelect from "../common/TableSelect";
-import OrderGrid from "./TableOrderGrid";
+import { guestMiscellaneousSchema } from "../../schemas";
+import OrderGrid from "./MiscellaneousOrderGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, pGuestCount,
-    pCorporateName, pCorporateAddress, pGstNo, 
-    pTransactionId, pTables, pData, 
-    pShow,
-    onSubmited, onClosed}) => {
-
+const Form = ({pGuestId, pName, pMobile, pGuestCount, 
+                pCorporateName, pCorporateAddress, pGstNo, 
+                pTransactionId, pData, 
+                pShow, 
+                onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [orderData, setOrderData] = useState(null);
     const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
-    });
-    const {doUpdate} = useFetchWithAuth({
-        url: `${contextValues.guestTableAPI}/${hotelId}/${pGuestId}`
-    });
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
+    });         //update order items
 
-    // Strat:: save assigned table 
-    const handleChangeTable = async (tables, guestCount) => {
-        try {
-            await doUpdate({tables: tables, guestCount: guestCount});
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // End:: save assigned table
-    
-    const handelChangeFood = (gridData) => {
+    const handelChangeData = (gridData) => {
         let dataList = [];
-
+                
         try {
-            for (const row of gridData) {
+            for(const row of gridData) {
                 let operation = "A";
 
-                for (const od of pData) {
-                    if (od.id === row.id) operation = "M";
+                if (pData) {
+                    for(const od of pData) {
+                        if (od.id === row.id) 
+                            operation = "M";
+                    };
                 }
 
-                dataList.push({
-                    id: row.id,
-                    quantity: row.quantity,
-                    operation: operation
-                });
-            }
+                dataList.push({id: row.id, 
+                    quantity: row.quantity, 
+                    operation: operation});
+            };
+        
+            if (pData) {
+                for(const od of pData) {
+                    let found = false;
 
-            for (const od of pData) {
-                let found = false;
+                    for (const e of dataList) {
+                        if (e.id === od.id) 
+                            found = true;
+                    }
 
-                for (const e of gridData) {
-                    if (e.id === od.id) found = true;
-                }
-
-                if (!found) {
-                    dataList.push({
-                        id: od.id,
-                        quantity: od.quantity,
-                        operation: "R"
-                    });
-                }
+                    if (!found) 
+                        dataList.push({id: od.id, 
+                            quantity: od.quantity, 
+                            operation: "R"});
+                };
             }
 
             setOrderData(dataList);
         } catch (err) {
             console.log(err);
         }
-    };
+    }; 
 
     // Start:: Form validate and save data
-    const {setFieldValue, handleSubmit, resetForm} = useFormik({
+    const {handleSubmit, resetForm} = useFormik({
         initialValues: {
             keyInputName: pName,
             keyInputMobile: pMobile,
             keyInputGuestCount: pGuestCount,
             keyInputCorporateName: pCorporateName,
             keyInputCorporateAddress: pCorporateAddress,
-            keyInputGstNo: pGstNo,
-            keyInputTables: pTables
+            keyInputGstNo: pGstNo
         },
-        validationSchema: guestTableSchema,
+        validationSchema: guestMiscellaneousSchema,
         validateOnChange,
         onSubmit: async () => {
             try {
                 orderData && await doInsert({orders: orderData});
-
+            
                 if (error === null) {
                     resetForm();
                     onSubmited();
@@ -132,17 +117,18 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             {/* Start:: Modal header */}
             <Modal.Header>
                 {/* Header text */}
-                <Modal.Title>Order - [{getTables(pTables)}]</Modal.Title>
-
+                <Modal.Title>Orders</Modal.Title>
+                
                 {/* Close button */}
-                <NavLink
-                    className="nav-icon" href="#"
-                    onClick={handleClose}>
-                    <i className="align-middle"><X /></i>
+                <NavLink 
+                    className = "nav-icon" 
+                    href = "#" 
+                    onClick = {handleClose}>
+                    <i className = "align-middle"><X/></i>
                 </NavLink>
             </Modal.Header>
             {/* End:: Modal header */}
-    
+
             {/* Start:: Modal body */}
             <Modal.Body>
 
@@ -150,89 +136,61 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 <Row>
 
                     {/* Start:: Column name / company */}
-                    {pCorporateName ?
-                        <Col sx={12} md={5}>
-                            <label className="col-12 form-label"><b>Company</b></label>
-                            <label className="col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
+                    {pCorporateName ? 
+                        <Col sx = {12} sm = {12} md = {12} lg = {5} xl = {5} xxl = {5} className = "mb-3">
+                            <label className = "col-12 form-label"><b>Company</b></label>
+                            <label className = "col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
                         </Col>
-                        :
-                        <Col sx={12} md={5}>
-                            <label className="col-12 form-label"><b>Name</b></label>
-                            <label className="col-12 text-muted">{subStr(pName, 30)}</label>
+                    :
+                        <Col sx = {12} sm = {12} md = {12} lg = {5} xl = {5} xxl = {5} className = "mb-3">
+                            <label className = "col-12 form-label"><b>Name</b></label>
+                            <label className = "col-12 text-muted">{subStr(pName, 30)}</label>
                         </Col>
                     }
                     {/* End:: Column name / company */}
 
                     {/* Start:: Column mobile no / company address */}
-                    {pCorporateName ?
-                        <Col sx={12} md={5}>
-                            <label className="col-12 form-label"><b>Address</b></label>
-                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                    {pCorporateName ? 
+                        <Col sx = {12} sm = {12} md = {12} lg = {5} xl = {5} xxxl = {5} className = "mb-3">
+                            <label className = "col-12 form-label"><b>Address</b></label>
+                            <label className = "col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
                         </Col>
-                        :
-                        <Col sx={12} md={5}>
-                            <label className="col-12 form-label"><b>Mobile no.</b></label>
-                            <label className="col-12 text-muted">{pMobile}</label>
+                    :
+                        <Col sx = {12} sm = {12} md = {12} lg = {5} xl = {5} xxxl = {5} className = "mb-3">
+                            <label className = "col-12 form-label"><b>Mobile no.</b></label>
+                            <label className = "col-12 text-muted">{pMobile}</label>
                         </Col>
                     }
                     {/* End:: Column mobile no / company address */}
 
                     {/* Start:: Column guest count */}
-                    <Col sx={12} md={2}>
-                        <label className="col-12 form-label"><b>Guest count</b></label>
-                        <label className="col-12 text-muted">{pGuestCount} No.</label>
+                    <Col sx = {12} sm = {12} md = {12} lg = {2} xl = {2} xxxl = {2} className = "mb-3">
+                        <label className = "col-12 form-label"><b>Guest count</b></label>
+                        <label className = "col-12 text-muted">{pGuestCount} No.</label>
                     </Col>
                     {/* End:: Column guest count */}
 
                 </Row>
                 {/* End:: Row */}
 
-
                 {/* Start:: Row */}
                 <Row>
 
-                    <Col sx={5} md={5}>
+                    {/* Start:: Column miscellaneous detail */}
+                    <Col sx = {12} md = {12}>
+
                         {/* Label element */}
-                        <label className="col-12 form-label"><b>Food items</b></label>
-                    </Col>
+                        <label className = "col-12 form-label"><b>Miscellaneous items</b></label>
 
-                    <Col sx={7} md={7}>
-                        {/* Label element */}
-                        <label className="col-12 form-label"><b>Tables</b></label>
-
-                        {/* Input element select*/}
-                        <TableSelect
-                            name = {"keyInputTables"}
-                            value = {pTables}
-                            onChange = {(value) => {
-                                setFieldValue("keyInputTables", value);
-                                if (!value) return;
-                        <label className="col-12 text-muted">{pGuestCount} No.</label>
-                                handleChangeTable(value, pGuestCount);
-                            }}/>
-                    </Col>
-
-                </Row>
-                {/* End:: Row */}
-
-                {/* Start:: Row */}
-                <Row className="mt-2">
-
-                    {/* Start:: Column service detail */}
-                    <Col sx={12} md={12}>
-
-                        {/* Start:: Column service detail */}
+                        {/* Start:: Column miscellaneous detail */}
                         <OrderGrid
                             pState = "MOD"
                             pDefaultRowData = {pData}
-                            onChange = {(value) => {
-                                if (!value) return;
-                                handelChangeFood(value);
-                            }} />
-                        {/* End:: Column service detail */}
+                            onChange = {handelChangeData}/>
+                        {/* End:: Column miscellaneous detail */}
 
-                    </Col>
-                    {/* End:: Column service detail */}
+                    </Col>                
+                    {/* End:: Column miscellaneous detail */}
 
                 </Row>
                 {/* End:: Row */}
@@ -240,28 +198,28 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             </Modal.Body>
             {/* End:: Modal body */}
 
-            {/* Start:: Modal footer */}
+            {/* Start:: Modal footer */} 
             <Modal.Footer>
 
                 {/* Start:: Close button */}
                 <button
-                    type="button"
-                    className="btn btn-danger"
-                    disabled={loading}
-                    onClick={handleClose}>
+                    type = "button"
+                    className = "btn btn-danger"
+                    disabled = {loading}
+                    onClick = {handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
-
+                
                 {/* Start:: Save button */}
-                <button
-                    type="button"
-                    className="btn btn-success"
-                    disabled={loading}
-                    onClick={handleSubmit}>
+                <button 
+                    type = "button"
+                    className = "btn btn-success"
+                    disabled = {loading} 
+                    onClick = {handleSubmit}>
 
                     {!loading && "Confirm"}
-                    {loading &&
+                    {loading && 
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Working
@@ -272,7 +230,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </Modal>
+        </Modal> 
     );
     // End:: Html
 
@@ -283,7 +241,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 // Start:: Component
 // props parameters
 // pGuestId
-// pTransactionId
 // pName
 // pMobile
 // pGuestCount
@@ -295,14 +252,15 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 
 // useImperativeHandle
 // handleShowModal
-const GuestTableOrder = forwardRef((props, ref) => {
+const GuestMiscellaneousOrder = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const {data, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
+    const {data, loading, error, doFetch} = useFetchWithAuth({
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
-    });
+    });         // get all non delivered items
+
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
@@ -310,23 +268,22 @@ const GuestTableOrder = forwardRef((props, ref) => {
         return () => {document.removeEventListener("keydown", handleCloseModal);};
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
-    
+
     // Start:: fetch id wise detail from api
     useEffect(() => {
-        (async () => {
-            try {
-                showModal && await doFetch();
-            } catch (err) {
-                console.log(err);
-            }
-        })();
-    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
+        try {
+            error && toast.error(error);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [data, error, loading]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Show modal
-    const handleShowModal = () => {
+    const handleShowModal = async () => {
         try {
             setShowModal(true);
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -345,7 +302,7 @@ const GuestTableOrder = forwardRef((props, ref) => {
     // End:: Close modal
 
     // Start:: Save
-    const handleSave = () => {
+    const handleSave = () => { 
         try {
             setShowModal(false);
             props.onSaved();
@@ -366,8 +323,8 @@ const GuestTableOrder = forwardRef((props, ref) => {
         <>
             {/* Start:: Edit modal */}
             {data &&
-                <Form
-                    pGuestId = {props.pGuestId}
+                <Form 
+                    pGuestId = {data.id}
                     pName = {data.name}
                     pMobile = {data.mobile}
                     pGuestCount = {data.guestCount}
@@ -375,11 +332,10 @@ const GuestTableOrder = forwardRef((props, ref) => {
                     pCorporateAddress = {data.corporateAddress}
                     pGstNo = {data.gstNo}
                     pTransactionId = {data.transactionId}
-                    pTables = {data.tables}
                     pData = {data.items}
                     pShow = {showModal}
-                    onSubmited = {handleSave}
-                    onClosed = {handleCloseModal} />}
+                    onSubmited = {handleSave} 
+                    onClosed = {handleCloseModal}/>}
             {/* End:: Edit modal */}
         </>
     );
@@ -389,4 +345,4 @@ const GuestTableOrder = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestTableOrder;
+export default GuestMiscellaneousOrder;
