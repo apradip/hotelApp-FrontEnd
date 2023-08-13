@@ -65,20 +65,21 @@ const MenuLogin = forwardRef((props, ref) => {
 
                                 {/* Dashboard */}
                                 <li className={`nav-item has-treeview ${menuParentSelected === 'dashboard' ? menuIsOpen ? 'menu-open' : '' : ''}`}>
-                                    <NavLink to="#" className="nav-link"
-                                        onClick={() => {toggleParentMenuItem('dashboard')}}>
+                                    <NavLink to="/dashboard" className="nav-link"
+                                        // onClick={() => {toggleParentMenuItem('dashboard')}}>
+                                        onClick={() => {handelClickMenuItem('dashboard')}}>
                                         <Grid size={24}/>
                                         <p><b className="mx-2">DASHBOARD</b></p>
-                                        {menuParentSelected === 'dashboard' ? menuIsOpen ? <ChevronDown size={24} className="right" /> : <ChevronLeft size={24} className="right" /> : <ChevronLeft size={24} className="right" />}
+                                        {/* {menuParentSelected === 'dashboard' ? menuIsOpen ? <ChevronDown size={24} className="right" /> : <ChevronLeft size={24} className="right" /> : <ChevronLeft size={24} className="right" />} */}
                                     </NavLink>
-                                    <ul className="nav nav-treeview">
+                                    {/* <ul className="nav nav-treeview">
                                         <li className="nav-item"
                                             onClick={() => {handelClickMenuItem('dashboard')}}>
                                             <NavLink to="/dashboard" className={`nav-link ${menuSelected === 'dashboard' ? 'active' : ''}`}>
                                                 <Link size={16}/> <p>Dashboard</p>
                                             </NavLink>
                                         </li>
-                                    </ul>
+                                    </ul> */}
                                 </li>
 
                                 {/* Master */}

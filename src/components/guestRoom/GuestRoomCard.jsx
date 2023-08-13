@@ -278,7 +278,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                         <Col xs={8} sm={8} md={8} lg={8} xl={8} className="p-0">
                             <b>{props.pCorporateName ? subStr(props.pCorporateName, 20): subStr(props.pName, 20)}</b>
                             {props.pOption === "R" &&
-                            <Badge pill bg = "danger">R</Badge>}
+                            <Badge pill bg = "primary">R</Badge>}
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (props.pBalance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(props.pBalance)}</b>
