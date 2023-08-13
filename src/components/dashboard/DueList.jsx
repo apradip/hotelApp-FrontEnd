@@ -43,7 +43,7 @@ const DueList = forwardRef((props, ref) => {
         let total = 0;            
         data && 
             data.filter((item) => item.balance < 0).map((object) => {
-                total += object.balance * -1
+                total += object.balance * -1;
             }); 
         data && setTotalDue(total);    
     }, [data, error, loading]);
@@ -62,7 +62,7 @@ const DueList = forwardRef((props, ref) => {
                     pGuestId = {object._d}
                     pGuestName = {object.name}
                     pGuestMobile = {object.mobile}
-                    pBalance = {object.balance}/>);
+                    pBalance = {object.balance * -1}/>);
             });
         } catch (err) {
             console.log(err);

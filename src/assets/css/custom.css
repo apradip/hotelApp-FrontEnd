@@ -283,7 +283,9 @@ label:not(.form-check-label):not(.custom-file-label) {
   background-color: #9c7fdb !important;
 }
 
-
+.bg-warning, .bg-warning > a {
+  color: #fff !important;
+}
 
 .dashboard-card {
   height: 500px;

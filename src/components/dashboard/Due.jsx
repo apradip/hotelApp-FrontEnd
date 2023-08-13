@@ -18,23 +18,23 @@ const Due = forwardRef((props, ref) => {
     return (
         <div className="d-flex align-items-center p-1 mb-3">
             {props.pOption === "R" &&
-                <span className="bullet bullet-vertical h-40px bg-info me-3"></span>}
-            {props.pOption === "T" &&
-                <span className="bullet bullet-vertical h-40px bg-warning me-3"></span>}
-            {props.pOption === "S" &&                
                 <span className="bullet bullet-vertical h-40px bg-primary me-3"></span>}
-            {props.pOption === "M" &&
+            {props.pOption === "T" &&
+                <span className="bullet bullet-vertical h-40px bg-secondary me-3"></span>}
+            {props.pOption === "S" &&                
                 <span className="bullet bullet-vertical h-40px bg-success me-3"></span>}
+            {props.pOption === "M" &&
+                <span className="bullet bullet-vertical h-40px bg-warning me-3"></span>}
             <div className="flex-grow-1">
                 <span className="text-muted fw-bold fs-8 d-block">{properCase(subStr(props.pGuestName, 20))}
                 {props.pOption === "R" &&
-                            <Badge pill bg="info">R</Badge>}
+                            <Badge pill bg="primary">R</Badge>}
                 {props.pOption === "T" &&
-                            <Badge pill bg="warning">T</Badge>}
+                            <Badge pill bg="secondary">T</Badge>}
                 {props.pOption === "S" &&
-                            <Badge pill bg="primary">S</Badge>}
+                            <Badge pill bg="success">S</Badge>}
                 {props.pOption === "M" &&
-                            <Badge pill bg="success">M</Badge>}
+                            <Badge pill bg="warning">M</Badge>}
 
                 </span>
                 <span className="text-muted d-block">
