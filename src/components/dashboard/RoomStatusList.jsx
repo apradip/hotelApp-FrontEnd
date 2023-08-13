@@ -127,7 +127,7 @@ const RoomStatusList = forwardRef((props, ref) => {
             <div className="dashboard-card-header border-0">
                 <h3 className="card-title align-items-start flex-column">
                     <span className="text-dark fs-4 mb-1">Room status</span>
-                    <span className="text-muted mt-1 fs-8 d-block">Total {roomCount} no of room(s) are unoccupied</span>
+                    <span className="text-muted mt-1 fs-8 d-block">Total <b>{roomCount}</b> no of room(s) are unoccupied</span>
                 </h3>
             </div>
             <div className="card-body py-1 px-4 scrollable">

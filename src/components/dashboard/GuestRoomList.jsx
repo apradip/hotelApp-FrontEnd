@@ -5,9 +5,6 @@ import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import Guest from "./GuestRoom";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-// import AddPayment from "./GuestRoomPaymentAdd";
-
-// import {formatDDMMYYYY, formatTime12Hour, formatBillNo} from "../common/Common";
 
 const Operation = {
     GuestAdd: "GUEST_ADD",
@@ -132,7 +129,6 @@ const GuestRoomList = forwardRef((props, ref) => {
     };
     // End:: on data operation successfully
 
-
     // Start:: show all data in card format
     const displayData = (pData = []) => {
         try {
@@ -179,7 +175,7 @@ const GuestRoomList = forwardRef((props, ref) => {
                 <h3 className="card-title align-items-start flex-column">
                     <span className="text-dark fs-4 mb-1">
                         Guest list</span>
-                    <span className="text-muted mt-1 fs-8 d-block">Total {guestCount} guest at present</span>
+                    <span className="text-muted mt-1 fs-8 d-block">Total <b>{guestCount}</b> guest at present</span>
                 </h3>
             </div>
             <div className="card-body py-3 scrollable">

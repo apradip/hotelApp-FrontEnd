@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import { subStr } from "../common/Common";
+import { subStr, properCase } from "../common/Common";
 
 // Start:: Component
 // props parameters
@@ -57,7 +57,7 @@ const TableOrder = forwardRef((props, ref) => {
                                         <Col className="col-xl-1 p-0">
                                             <span className="bullet bullet-vertical h-6px bg-warning p-0 m-0"></span>
                                         </Col>
-                                        <Col className="col-xl-8 text-start p-0">{subStr(food.name, 20)}</Col>
+                                        <Col className="col-xl-8 text-start p-0">{properCase(subStr(food.name, 20))}</Col>
                                         <Col className="col-xl-3 text-end p-0">{food.quantity}</Col>
                                     </Row>)})}
                     </div>
@@ -79,7 +79,7 @@ const TableOrder = forwardRef((props, ref) => {
                                         <Col className="col-xl-1 p-0">
                                             <span className="bullet bullet-vertical h-6px bg-info p-0 m-0"></span>
                                         </Col>
-                                        <Col className="col-xl-8 text-start p-0">{subStr(food.name, 20)}</Col>
+                                        <Col className="col-xl-8 text-start p-0">{properCase(subStr(food.name, 20))}</Col>
                                         <Col className="col-xl-3 text-end p-0">{food.quantity}</Col>
                                     </Row>)})}
                     </div>

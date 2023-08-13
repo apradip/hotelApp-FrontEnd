@@ -1,8 +1,8 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { ChevronsRight, Coffee, Umbrella, Wind, ShoppingBag, PenTool, FileText, Edit2, LogOut, Scissors, MoreVertical } from "react-feather";
-import { subStr, formatINR, formatDDMMYYYY, getRooms } from "../common/Common";
+import { ChevronsRight, Coffee, Umbrella, Wind, ShoppingBag, PenTool, FileText, Edit2, LogOut, Scissors, MoreVertical, Phone } from "react-feather";
+import { subStr, properCase, formatINR, formatDDMMYYYY, getRooms } from "../common/Common";
 
 import View from "../guestRoom/GuestRoomView";
 import Edit from "../guestRoom/GuestRoomEdit";
@@ -261,8 +261,8 @@ const GuestRoom = forwardRef((props, ref) => {
                 <td>
                     <div className="d-flex align-items-center text-muted fs-8">
                         <div className="d-flex justify-content-start flex-column">
-                            <span className="fw-bold d-block">{props.pName ? subStr(props.pName, 20) : subStr(props.pCorporateName, 20)}</span>
-                            <span className="d-block">{props.pName ? props.pMobile : subStr(props.pCorporateAddress, 20)}  <Badge bg="secondary">{props.pGuestCount}</Badge></span>
+                            <span className="fw-bold d-block">{props.pName ? properCase(subStr(props.pName, 20)) : properCase(subStr(props.pCorporateName, 20))}</span>
+                            <span className="d-block"><Phone className="feather-16 mr-2"/>{props.pName ? props.pMobile : properCase(subStr(props.pCorporateAddress, 20))}  <Badge bg="secondary">{props.pGuestCount}</Badge></span>
                         </div>
                     </div>
                 </td>

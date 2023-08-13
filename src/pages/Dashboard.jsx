@@ -5,6 +5,7 @@ import GuestList from "../components/dashboard/GuestRoomList"
 import RoomList from "../components/dashboard/RoomStatusList"
 import TableList from "../components/dashboard/TableStatusList"
 import TableOrderList from "../components/dashboard/TableOrderList"
+import DueList from "../components/dashboard/DueList";
 
 const Dashboard = () => {
 
@@ -298,23 +299,17 @@ const Dashboard = () => {
                                     <TableOrderList/>
                                 </div>
 
-                                {/* Payment status                             */}
+                                {/* Due list                     */}
                                 <div className="col-xl-4 h-50">
-                                    <div className="card dashboard-card mb-5 mb-xl-8">
+                                    <DueList/>
+                                    {/* <div className="card dashboard-card mb-5 mb-xl-8">
                                         <div className="dashboard-card-header border-0">
                                             <h3 className="card-title align-items-start flex-column">
-                                                <span className="text-dark fs-4 mb-1">Payment position</span>
+                                                <span className="text-dark fs-4 mb-1">Due list</span>
                                                 <span className="text-muted mt-1 fs-8 d-block">Total 13040.00/- payment today</span>
                                             </h3>
                                         </div>
                                         <div className="card-body py-1 px-4 scrollable">
-                                            {/* <Chrono
-                                                items={paymentData}
-                                                mode="VERTICAL"
-                                                slideShow
-                                                cardHeight={90}
-                                                cardWidth={240}
-                                                hideControls={true}/> */}
 
                                             <div className="d-flex align-items-center p-1 mb-3">
                                                 <span className="bullet bullet-vertical h-40px bg-success me-3"></span>
@@ -371,7 +366,7 @@ const Dashboard = () => {
                                             </div>          
 
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                             </div>
