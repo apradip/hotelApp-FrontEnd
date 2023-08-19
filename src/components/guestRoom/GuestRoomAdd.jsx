@@ -250,7 +250,7 @@ const Form = ({pShow,
 
                         {/* Label element */}
                         <label className = "col-12 form-label" 
-                            htmlFor = {"keyInputFatherName"}>Father's name</label>
+                            htmlFor = {"keyInputFatherName"}>Guardian's name</label>
 
                         <div className = "col-12">
                             {/* Input element text*/}
@@ -628,6 +628,7 @@ const Form = ({pShow,
                             {/* Label element */}
                             <BookingAgentSelect 
                                 name = {"keyInputBookingAgentId"}
+                                // defaultValue = {values.keyInputBookingAgentId}
                                 value = {values.keyInputBookingAgentId} 
                                 onChange = {(value) => {setFieldValue("keyInputBookingAgentId", value)}}/>
 

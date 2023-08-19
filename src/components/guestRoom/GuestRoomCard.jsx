@@ -1,8 +1,8 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { ChevronsRight, Coffee, Umbrella, Wind, ShoppingBag, PenTool, FileText, Edit2, LogOut, Scissors, MoreVertical } from "react-feather";
-import { subStr, formatINR, getRooms } from "../common/Common";
+import { Users, MapPin, Home, Calendar, Phone, ChevronsRight, Coffee, Umbrella, Wind, ShoppingBag, PenTool, FileText, Edit2, LogOut, Scissors, MoreVertical } from "react-feather";
+import { getRooms, subStr, properCase, formatDDMMYYYY, formatINR } from "../common/Common";
 import TimeElapsed from "../common/TimeElapsed";
 
 import View from "./GuestRoomView";
@@ -225,7 +225,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
         }
     };
     // End:: Show checkout modal 
-        
 
     // Start:: de-select card 
     const handleDeSelect = () => {
@@ -276,40 +275,63 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <Card.Body className="text-sm p-1">
                     <Row className="m-1">
                         <Col xs={8} sm={8} md={8} lg={8} xl={8} className="p-0">
-                            <b>{props.pCorporateName ? subStr(props.pCorporateName, 20): subStr(props.pName, 20)}</b>
-                            {props.pOption === "R" &&
-                            <Badge pill bg = "primary">R</Badge>}
+                            {props.pCorporateName ?
+                                <>
+                                    <MapPin className="feather-16 mr-2"/>
+                                    <b>{properCase(subStr(props.pCorporateName, 20))}</b>
+                                </>
+                            :
+                                <>
+                                    <Users className="feather-16 mr-2"/>
+                                    <b>{properCase(subStr(props.pName, 20))}</b>
+                                </>
+                            }
+
+                            <Badge pill bg = "primary">R</Badge>
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (props.pBalance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(props.pBalance)}</b>
                         </Col>
                     </Row>
 
-                    <Row className="d-none d-md-block d-lg-block d-xl-block m-1">
+                    <Row className="d-none d-md-block d-lg-block d-xl-block text-mutedl m-1">
                         {props.pRooms ? 
                             <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                                Room(s): {getRooms(props.pRooms)}
+                                <Home className="feather-16 mr-2"/>
+                                {getRooms(props.pRooms)}
+                                {/* Room(s): {getRooms(props.pRooms)} */}
                             </Col>
                         :
                             props.pCorporateName ?
                                 <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                                    {subStr(props.pCorporateAddress, 30)}
+                                    {properCase(subStr(props.pCorporateAddress, 30))}
                                 </Col>
                                 :
                                 <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                                    Mobile no. {props.pMobile}
+                                    <Phone className="feather-16 mr-2"/>
+                                    {props.pMobile}
                                 </Col>
                         }
                     </Row>        
 
+                    <Row className="text-mutedl p-0 m-1">
+                        <Col xs={12} sm={12} md={6} lg={6} xl={6} className="p-0">
+                            <Calendar className="feather-16 mr-2"/>
+                            {formatDDMMYYYY(props.pInDate)}
+                        </Col>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={6} className="text-right p-0">
+                            <Calendar className="feather-16 mr-2"/>
+                            {formatDDMMYYYY(props.pOutDate)}
+                        </Col>
+                    </Row>        
+
                     <Row className="m-1">
                         <Col xs={10} sm={10} md={6} lg={6} xl={6} className="p-0">
-                            {props.pGuestCount} no of guest(s)
+                            {props.pGuestCount} guest(s)
                         </Col>
                         <Col xs={0} sm={0} md={5} lg={5} xl={5} className="d-none d-md-block d-lg-block d-xl-block text-right p-0">
                             <TimeElapsed
-                                pInDate={props.pIndate}
-                                pInTime={props.pInTime}/>
+                                pInDate={props.pInDate}/>
                         </Col>
                         <Col xs={2} sm={2} md={1} lg={1} xl={1} className="text-right p-0">
 
@@ -322,6 +344,45 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                 <Dropdown.Menu>
                                     {(props.pCallingFrom === "R") && 
                                         <>
+                                            {/* Start :: Room menu */}                       
+                                            <Dropdown.Item eventKey = "1" 
+                                                onClick = {() => {handelOpenBooking()}}>
+                                                <PenTool className = "feather-16 mr-3" />Booking
+                                            </Dropdown.Item>
+
+                                            <Dropdown.Item eventKey = "2" 
+                                                disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                                onClick = {() => {handelOpenGenerateBill()}}>
+                                                <FileText className = "feather-16 mr-3"/>Bill
+                                            </Dropdown.Item>
+
+                                            <Dropdown.Item eventKey = "3" 
+                                                disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                                onClick = {() => {handelOpenPayment()}}>
+                                                <FileText className = "feather-16 mr-3"/>Payment
+                                            </Dropdown.Item>
+
+                                            <Dropdown.Item eventKey = "4"
+                                                disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                                onClick = {() => {handelOpenCheckout()}}>
+                                                <LogOut className="feather-16 mr-3"/>Check out
+                                            </Dropdown.Item>
+
+                                            <Dropdown.Divider />
+
+                                            <Dropdown.Item eventKey = "5" 
+                                                onClick = {() => {handelOpenEdit()}}>
+                                                <Edit2 className = "feather-16 mr-3"/>Edit
+                                            </Dropdown.Item>
+
+                                            <Dropdown.Item eventKey = "6" 
+                                                onClick = {handelOpenDelete}>
+                                                <Scissors className = "feather-16 mr-3"/>Delete
+                                            </Dropdown.Item>
+                                            {/* End :: Room menu */}        
+
+                                            <Dropdown.Divider />
+
                                             {/* Start :: Table menu */}
                                             <Dropdown autoClose="outside">
                                                 <Dropdown.Toggle as={CustomToggle}>
@@ -430,47 +491,8 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                                 </Dropdown.Menu>
                                             </Dropdown>
                                             {/* End :: Miscellaneous menu */}               
-
-                                            <Dropdown.Divider />
-
-                                            {/* Start :: Room menu */}                       
-                                            <Dropdown.Item eventKey = "1" 
-                                                onClick = {() => {handelOpenBooking()}}>
-                                                <PenTool className = "feather-16 mr-3" />Booking
-                                            </Dropdown.Item>
-
-                                            <Dropdown.Item eventKey = "2" 
-                                                disabled = {props.pTransactionId !== "undefined" ? false : true}
-                                                onClick = {() => {handelOpenGenerateBill()}}>
-                                                <FileText className = "feather-16 mr-3"/>Bill
-                                            </Dropdown.Item>
-
-                                            <Dropdown.Item eventKey = "3" 
-                                                disabled = {props.pTransactionId !== "undefined" ? false : true}
-                                                onClick = {() => {handelOpenPayment()}}>
-                                                <FileText className = "feather-16 mr-3"/>Payment
-                                            </Dropdown.Item>
-
-                                            <Dropdown.Item eventKey = "4"
-                                                disabled = {props.pTransactionId !== "undefined" ? false : true}
-                                                onClick = {() => {handelOpenCheckout()}}>
-                                                <LogOut className="feather-16 mr-3"/>Check out
-                                            </Dropdown.Item>
-
-                                            <Dropdown.Divider />
-
-                                            <Dropdown.Item eventKey = "5" 
-                                                onClick = {() => {handelOpenEdit()}}>
-                                                <Edit2 className = "feather-16 mr-3"/>Edit
-                                            </Dropdown.Item>
-
-                                            <Dropdown.Item eventKey = "6" 
-                                                onClick = {handelOpenDelete}>
-                                                <Scissors className = "feather-16 mr-3"/>Delete
-                                            </Dropdown.Item>
-                                            {/* End :: Room menu */}                       
+               
                                         </>}
-
 
                                         {(props.pCallingFrom === "T") && 
                                             <>
@@ -499,7 +521,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                                 {/* End :: Room menu */}                       
                                             </>}                                        
 
-
                                         {(props.pCallingFrom === "S") && 
                                             <>
                                                 {/* Start :: Service menu */}        
@@ -526,7 +547,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                                 </Dropdown.Item> */}
                                                 {/* End :: Service menu */}        
                                             </>}
-
 
                                         {(props.pCallingFrom === "M") && 
                                             <>
@@ -557,12 +577,12 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                 </Dropdown.Menu> 
                             </Dropdown>
                             {/* End:: operational menu */}
+
                         </Col>
                     </Row>
                 </Card.Body>
             </Card>
             {/* End :: card component */}
-
 
             {/* Start :: Room component */}
             <>
@@ -631,7 +651,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
             </>
             {/* End :: Room component */}
 
-
             {/* Start :: Table components */}            
             <>
                 {/* Start :: order component */}
@@ -671,7 +690,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
             </>
             {/* End :: Table components */}            
 
-
             {/* Start :: Service components */}
             <>
                 {/* Start :: order component */}
@@ -710,7 +728,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 {/* End :: checkout component */}
             </>            
             {/* End :: Service components */}            
-
 
             {/* Start :: miscellaneous components */}            
             <>

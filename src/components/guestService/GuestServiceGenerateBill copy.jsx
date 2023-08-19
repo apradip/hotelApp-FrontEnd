@@ -7,23 +7,22 @@ import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import BillGrid from "../common/ItemBillGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import AddPayment from "./GuestMiscellaneousPaymentAdd";
+import AddPayment from "../common/GuestPaymentAdd";
 
-import { formatBillNo, subStr, properCase, formatDDMMYYYY, formatTime12Hour } from "../common/Common";
-
+import { formatBillNo , subStr, properCase, formatDDMMYYYY, formatTime12Hour } from "../common/Common";
 
 // Start:: form
 const Form = ({pGuestId, pName, pMobile, pGuestCount, 
-               pCorporateName, pCorporateAddress, pTransactionId,
-               pShow,
-               onPaymentAdded, onClosed}) => {
+                pCorporateName, pCorporateAddress, pTransactionId, 
+                pShow, 
+                onPaymentAdded, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const addPaymentRef = useRef(null);
+    const addPaymentRef=useRef(null);
     const {data, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
+        url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}/${pTransactionId}`
     });     //generate and display bill
-
+          
     // Start:: fetch id wise detail from api
     useEffect(() => {
         (async () => {
@@ -32,10 +31,10 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             } catch (err) {
                 console.log(err);
             }
-        })();
+        })()
     }, [pTransactionId]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
-    
+
     const handelOpenPayment = () => {
         try {
             addPaymentRef && 
@@ -51,7 +50,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         // onPrinted()
     };
     // End:: print form    
-    
+
     // Start:: Html
     return (
         <>
@@ -67,17 +66,17 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             
                             {/* Close button */}
                             <NavLink 
-                                className="nav-icon" 
-                                href="#" 
-                                onClick={() => {onClosed();}}>
-                                <i className="align-middle"><X/></i>
+                                className = "nav-icon" 
+                                href = "#" 
+                                onClick = {() => {onClosed();}}>
+                                <i className = "align-middle"><X/></i>
                             </NavLink>
                         </Modal.Header>
                         {/* End:: Modal header */}
 
                         {/* Start:: Modal body */}
                         <Modal.Body className = {data.isPaid && "paid"}>
-
+                            
                             {/* Start:: Row */}
                             <Row>
                                 {/* Start:: Column bill no */}
@@ -152,11 +151,11 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                                 <Col sx={12} md={12}>
 
                                     {/* Label element */}
-                                    <label className="col-12 form-label"><b>Miscellaneous items</b></label>
+                                    <label className="col-12 form-label"><b>Serviceable items</b></label>
                                     
                                     {/* Start:: Column miscellaneous detail */}
                                     <BillGrid
-                                        pData = {data.miscellanea}/>
+                                        pData = {data.services}/>
                                     {/* End:: Column miscellaneous detail */}
 
                                 </Col>                
@@ -175,7 +174,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             <button
                                 type="button"
                                 className="btn btn-danger"
-                                onClick={() => {onClosed()}}>
+                                onClick={() => {onClosed();}}>
                                 Close
                             </button>
                             {/* End:: Close button */}
@@ -226,9 +225,11 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     );
     // End:: Html
 
+
 };
 // End:: form
- 
+
+
 
 // Start:: Component
 // props parameters
@@ -239,18 +240,17 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 // pCorporateName
 // pCorporateAddress
 // pGstNo
-// onPay()
 // onSaved()
 // onClosed()
 
 // useImperativeHandle
 // handleShowModal
-const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {    
+const GuestServiceGenerateBill = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
+        url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
     });     // get all non delivered items
 
@@ -271,7 +271,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
         } catch (err) {
             console.log(err);
         }
-    }, [data, error, loading]);      // eslint-disable-line react-hooks/exhaustive-deps
+    }, [data, loading, error]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Show modal
@@ -301,12 +301,12 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
         return {handleShowModal};
     });
     // End:: forward reff show modal function
-    
+
     // Start:: Html
     return (
         <>
             {/* Start:: Bill modal */}
-            {data &&  
+            {data && 
                 data.transactionId !== "undefined" && 
                     data.items.length === 0 &&
                         <Form
@@ -329,4 +329,4 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
 // End:: Component
 
 
-export default GuestMiscellaneousGenerateBill;
+export default GuestServiceGenerateBill;

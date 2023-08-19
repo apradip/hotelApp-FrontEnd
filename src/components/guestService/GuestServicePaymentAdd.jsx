@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Modal, NavLink } from "react-bootstrap";
+import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
-import { subStr, properCase } from "../common/Common"
+import { subStr, properCase } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
@@ -12,15 +12,16 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pName, pMobile, 
-               pCorporateName, pCorporateAddress, 
-               pBalance, onSubmited, onClosed}) => {
+const Form = ({pExpenseId, pBillId, pGuestId, pName, pMobile, 
+               pCorporateName, pCorporateAddress, pBalance, 
+               pShow,
+               onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
     const {loading, error, doInsert} = useFetchWithAuth({
-        url: `${contextValues.guestPaymentAPI}/${hotelId}/${pGuestId}`
-    });
+        url: `${contextValues.guestServiceAPI}/${hotelId}/${pGuestId}/${pExpenseId}/${pBillId}`
+    });         //insert payment
 
     // Start:: Form validate and save data
     const {values, errors, touched, handleChange, handleSubmit, resetForm} = useFormik({
@@ -31,77 +32,100 @@ const Form = ({pGuestId, pName, pMobile,
         validationSchema: guestPaymentSchema,
         validateOnChange,
         onSubmit: async (values) => {
-            const payload = {   
-                amount: values.keyInputPaymentAmount, 
-                narration: values.keyInputNarration
-            }
+            try {
+                const payload = {   
+                    amount: values.keyInputPaymentAmount, 
+                    narration: values.keyInputNarration
+                };
 
-            await doInsert(payload)
-        
-            if (error === null) {
-                resetForm()
-                onSubmited()
-            } else {
-                toast.error(error)
+                await doInsert(payload);
+            
+                if (error === null) {
+                    resetForm();
+                    onSubmited();
+                } else {
+                    toast.error(error);
+                }
+            } catch (err) {
+                console.log(err);
+                toast.error(err);
             }
         }
-    })
+    });
     // End:: Form validate and save data
 
     // Strat:: close form    
     const handleClose = () => {
-        setValidateOnChange(false);
-        resetForm();
-        onClosed();
-    }
+        try {
+            setValidateOnChange(false);
+            resetForm();
+            onClosed();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: close form    
     
     // Start:: Html
     return (
-        <form>
+        <Modal size="md"
+            show={pShow}>
+
+            {/* Start:: Modal header */}
+            <Modal.Header>
+                {/* Header text */}
+                <Modal.Title>Payment</Modal.Title>
+
+                {/* Close button */}
+                <NavLink className="nav-icon" href="#" 
+                    onClick={handleClose}>
+                    <i className="align-middle"><X/></i>
+                </NavLink>
+            </Modal.Header>
+            {/* End:: Modal header */}
 
             {/* Start:: Modal body */}
             <Modal.Body>
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* End:: Column name / corporate name */}
                     {pCorporateName ?
-                        <div className="col-xs-12 col-md-6 mb-3">
+                        <Col sx={12} md={6} className="mb-3">
                             <label className="col-12 form-label"><b>Company</b></label>
                             <label className="col-12 text-muted">{properCase(subStr(pCorporateName, 20))}</label>
-                        </div>
+                        </Col>
                     :
-                        <div className="col-sx-12 col-md-6 mb-3">
+                        <Col sx={12} md={6} className="mb-3">
                             <label className="col-12 form-label"><b>Name</b></label>
                             <label className="col-12 text-muted">{properCase(subStr(pName, 20))}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column name / corporate name */}
 
                     {/* Start:: Column mobile no. / corporate address */}
                     {pCorporateName ?
-                        <div className="col-sx-12 col-md-6 mb-3">
+                        <Col sx={12} md={6} className="mb-3">
                             <label className="col-12 form-label"><b>Address</b></label>
                             <label className="col-12 text-muted">{properCase(subStr(pCorporateAddress, 20))}</label>
-                        </div>
+                        </Col>
                         :
-                        <div className="col-sx-12 col-md-6 mb-3">
+                        <Col sx={12} md={6} className="mb-3">
                             <label className="col-12 form-label"><b>Mobile no.</b></label>
                             <label className="col-12 text-muted">{pMobile}</label>
-                        </div>
+                        </Col>
                     }
                     {/* End:: Column mobile no. / corporate address */}
                     
-                </div>
+                </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column payment amount */}
-                    <div className="col-12 mb-3">
+                    <Col sx={12} md={12} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -116,11 +140,8 @@ const Form = ({pGuestId, pName, pMobile,
                                 placeholder="Payment amount"
                                 className="col-12 form-control"
                                 autoComplete="off"
-                                autoFocus
-                                maxLength={10}
-                                disabled={loading} 
-                                value={values.keyInputPaymentAmount} 
-                                onChange={handleChange}/>
+                                disabled="disabled"
+                                value={values.keyInputPaymentAmount}/>
                         
                             {/* Validation message */}
                             {errors.keyInputPaymentAmount && 
@@ -128,17 +149,17 @@ const Form = ({pGuestId, pName, pMobile,
                                     (<small className="text-danger">{errors.keyInputPaymentAmount}</small>) : 
                                         null}
                         </div>
-                    </div>
+                    </Col>
                     {/* End:: Column payment amount */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
-                <div className="row">
+                <Row>
 
                     {/* Start:: Column narration */}
-                    <div className="col-12 mb-3">
+                    <Col sx={12} md={12} className="mb-3">
 
                         {/* Label element */}
                         <label className="col-12 form-label" 
@@ -153,6 +174,7 @@ const Form = ({pGuestId, pName, pMobile,
                                 placeholder="Narration"
                                 className="form-control"
                                 autoComplete="off"
+                                autoFocus
                                 maxLength={1000}
                                 disabled={loading}
                                 value={values.keyInputNarration} 
@@ -164,10 +186,10 @@ const Form = ({pGuestId, pName, pMobile,
                                     (<small className="text-danger">{errors.keyInputNarration}</small>) : 
                                         null}
                         </div>
-                    </div>
+                    </Col>
                     {/* End:: Column narration */}
 
-                </div>
+                </Row>
                 {/* End:: Row */}
 
             </Modal.Body>
@@ -207,11 +229,11 @@ const Form = ({pGuestId, pName, pMobile,
             </Modal.Footer>
             {/* End:: Modal footer */}
 
-        </form>
-    )
+        </Modal>                            
+    );
     // End:: Html
 
-}
+};
 // End:: form
 
 
@@ -222,80 +244,76 @@ const Form = ({pGuestId, pName, pMobile,
 
 // useImperativeHandle
 // handleShowModal
-const GuestPaymentAdd = forwardRef((props, ref) => {
-    const [showModal, setShowModal] = useState(false)
+const GuestServicePaymentAdd = forwardRef((props, ref) => {
+    const [showModal, setShowModal] = useState(false);
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+    
     // Start:: Show modal
     const handleShowModal = () => {
-        setShowModal(true)
-    }
+        try {
+            setShowModal(true);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: Show modal
 
     // Start:: Close modal
     const handleCloseModal = () => {
-        setShowModal(false)
-        props.onClosed()
-    }
+        try {
+            setShowModal(false);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: Close modal
     
     // Start:: Save
     const handleSave = () => {
-        setShowModal(false)
-        props.onSaved()
-    }
+        try {
+            setShowModal(false);
+            props.onSaved();
+        } catch (err) {
+            console.log(err);
+        }
+    };
     // End:: Save
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    })
+        return {handleShowModal};
+    });
     // End:: forward reff show modal function
-
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") handleCloseModal()
-        })
-
-        return () => {document.removeEventListener("keydown", handleCloseModal)}
-    }, [])     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
 
     // Start:: Html
     return (
-        <Modal size="md"
-            show={showModal}>
-
-            {/* Start:: Modal header */}
-            <Modal.Header>
-                {/* Header text */}
-                <Modal.Title>Payment</Modal.Title>
-
-                {/* Close button */}
-                <NavLink className="nav-icon" href="#" onClick={handleCloseModal}>
-                    <i className="align-middle"><X/></i>
-                </NavLink>
-            </Modal.Header>
-            {/* End:: Modal header */}
-
+        <>
             {/* Start:: Form component */}
             <Form
+                pExpenseId = {props.pExpenseId}
+                pBillId = {props.pBillId}
                 pGuestId = {props.pGuestId}
                 pName = {props.pName}
                 pMobile = {props.pMobile}
                 pCorporateName = {props.pCorporateName}
                 pCorporateAddress = {props.pCorporateAddress}
                 pBalance = {props.pBalance}
+                pShow = {showModal}
                 onSubmited = {handleSave} 
-                onClosed = {handleCloseModal} />
+                onClosed = {handleCloseModal}/>
             {/* End:: Form component */}
-
-        </Modal>
-    )
+        </>
+    );
     // End:: Html
 
-})
+});
 // End:: Component
 
 
-export default GuestPaymentAdd
+export default GuestServicePaymentAdd;

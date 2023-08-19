@@ -9,10 +9,10 @@ import Delete from "./AccessLevelDelete";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown"
-        onClick={(e) => {e.preventDefault(); onClick(e);}}>
-      {children}
+        onClick={(e) => {e.preventDefault(); onClick(e);}} >
+        {children}
     </NavLink>
-));
+))
 
 // Start:: Component
 // props parameters
@@ -123,6 +123,7 @@ const AccessLevelCard = forwardRef((props, ref) => {
                         {/* Start:: Column menu */}
                         <Col xs={2} sm={2} md={1} lg={1} xl={1} className="text-right p-0 m-0">
                             {/* Start:: operational menu */}
+
                             <Dropdown>
 
                                 <Dropdown.Toggle as={CustomToggle}>
@@ -144,6 +145,7 @@ const AccessLevelCard = forwardRef((props, ref) => {
                                 </Dropdown.Menu>
 
                             </Dropdown>
+
                             {/* End:: operational menu */}
                         </Col>
                         {/* End:: Column menu */}

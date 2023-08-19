@@ -142,7 +142,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     // End:: Close modal
 
     // Start:: on data operation successfully
-    const handleSuccess = (operation, guestId = "") => {
+    const handleSuccess = (operation, guestId="") => {
         try {
             switch (operation) {
                 case Operation.GuestAdd:
@@ -297,8 +297,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             pGstNo = {pData.gstNo}
                             pBalance = {pData.balance}
                             pOption = {pData.option}
-                            pIndate={pData.inDate}
-                            pInTime={pData.inTime}
+                            pInDate = {pData.inDate}
                             pRooms = {pData.rooms}
                             pCallingFrom = {"M"}
                             onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
@@ -326,11 +325,10 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             pGstNo = {pData.gstNo}
                             pBalance = {pData.balance}
                             pOption = {pData.option}
-                            pIndate = {pData.inDate}
-                            pInTime = {pData.inTime}
+                            pInDate = {pData.inDate}
                             onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
                             onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}}
-                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id, pData.id)}}
+                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id)}}
                             onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
                             onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
                             onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 

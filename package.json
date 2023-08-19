@@ -11,7 +11,7 @@
     "ag-grid-community": "^29.0.0",
     "ag-grid-react": "^29.0.0",
     "axios": "^1.1.2",
-    "bootstrap": "^5.2.3",
+    "bootstrap": "^5.3.1",
     "dotenv": "^16.0.3",
     "formik": "^2.2.9",
     "jwt-decode": "^3.1.2",

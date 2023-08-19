@@ -11,7 +11,7 @@ import ExtraPersonEditor from "../common/ExtraPersonEditor";
 import ExtraBedEditor from "../common/ExtraBedEditor";
 
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import {X} from "react-feather";
+import { X } from "react-feather";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
@@ -161,7 +161,7 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
             hide: operationWiseHideState(pState, "occupancyDate"),
             suppressKeyboardEvent: (params) => {return suppressNavigation(params)},
             editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},            
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatDDMMYYYY(params.value)}` : ""},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatDDMMYYYY(params.value)}` : ""}
         },
         {
             headerName: "Room No.", 
@@ -415,7 +415,7 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         //     });
         //   });
 
-        gridRef.current.api.sizeColumnsToFit();
+        // gridRef.current.api.sizeColumnsToFit();
 
         if (pData) handleAddRow();
     

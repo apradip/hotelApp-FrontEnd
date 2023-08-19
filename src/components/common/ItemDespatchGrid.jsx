@@ -1,6 +1,8 @@
 import React, { useState, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
 
+import { subStr, properCase } from "./Common";
+
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
@@ -31,7 +33,7 @@ const ItemDespatchGrid = ({pDefaultRowData, onChange}) => {
             headerName: "Item", 
             field: "name", 
             hide: false,
-            cellRenderer: (params) => {return params.value},
+            valueFormatter: (params) => {return `${properCase(subStr(params.value, 20))}`},
             valueGetter: (params) => {return params.data.name},
         },
         {

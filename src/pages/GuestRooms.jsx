@@ -222,6 +222,7 @@ const GuestRooms = forwardRef((props, ref) => {
         let colIdx = 0;
         let rowData = [];
 
+        console.log(pData)
         try {
             return pData.map((item) => {
                 rowData.push(item);
@@ -269,7 +270,7 @@ const GuestRooms = forwardRef((props, ref) => {
             return (
                 <Col xl={4} md={4} key={colKey}>
                     {
-                        (pData.option === "R") &&
+                        // (pData.option === "R") &&
                             <CardRoom className = "border"
                                 ref = {(el) => cardRefs.current[itemIdx] = el}
                                 pIndex = {itemIdx}
@@ -282,8 +283,8 @@ const GuestRooms = forwardRef((props, ref) => {
                                 pGstNo = {pData.gstNo}
                                 pBalance = {pData.balance}
                                 pOption = {pData.option}
-                                pIndate = {pData.inDate}
-                                pInTime = {pData.inTime}
+                                pInDate = {pData.inDate}
+                                pOutDate = {pData.outDate}
                                 pRooms = {pData.rooms}
                                 pCallingFrom = {"R"}
                                 onEdited = {() => {handleSuccess(Operation.GuestMod)}}

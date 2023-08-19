@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle
 import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
-import { subStr } from "../common/Common";
+import { subStr, properCase } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
@@ -15,6 +15,36 @@ const Form = ({pName, pMobile, pGuestCount,
                pShow, 
                onClosed}) => {
 
+    const [defaultRowData, setDefaultRowData] = useState([]);
+
+    useEffect(() => {
+        try {
+            pData &&
+                pData.forEach(element => {
+                    const rowData = {
+                        rowId: defaultRowData.length + 1, 
+                        id: element.id,
+                        name: element.name, 
+                        unitPrice: element.unitPrice,
+                        quantity: element.quantity, 
+                        serviceChargePercentage: element.serviceChargePercentage, 
+                        serviceCharge: element.serviceCharge, 
+                        gstPercentage: element.gstPercentage, 
+                        gstCharge: element.gstCharge, 
+                        totalPrice: element.unitPrice * element.quantity,
+                        despatchDate: element.despatchDate ? element.despatchDate : "",
+                    };
+            
+                    defaultRowData.push(rowData);
+                });
+                        
+            setDefaultRowData(defaultRowData);
+        } catch (err) {
+            console.log("Error occured when fetching data");
+        }
+    }, [pData]);        // eslint-disable-line react-hooks/exhaustive-deps
+           
+            
     // Start:: Html
     return (
         <Modal size="lg"
@@ -22,7 +52,7 @@ const Form = ({pName, pMobile, pGuestCount,
 
             {/* Start:: Modal header */}
             <Modal.Header>
-                <Modal.Title>Orders</Modal.Title>
+                <Modal.Title>All orders</Modal.Title>
                 
                 <NavLink 
                     className = "nav-icon" href = "#" 
@@ -42,12 +72,12 @@ const Form = ({pName, pMobile, pGuestCount,
                     {pCorporateName ? 
                         <Col sx = {12} md = {5} className = "mb-3">
                             <label className = "col-12 form-label"><b>Company</b></label>
-                            <label className = "col-12 text-muted">{subStr(pCorporateName, 30)}</label>
+                            <label className = "col-12 text-muted">{properCase(subStr(pCorporateName, 30))}</label>
                         </Col>
                     :
                         <Col sx = {12} md = {5} className = "mb-3">
                             <label className = "col-12 form-label"><b>Name</b></label>
-                            <label className = "col-12 text-muted">{subStr(pName, 30)}</label>
+                            <label className = "col-12 text-muted">{properCase(subStr(pName, 30))}</label>
                         </Col>
                     }
                     {/* End:: Column name / company */}
@@ -56,7 +86,7 @@ const Form = ({pName, pMobile, pGuestCount,
                     {pCorporateName ? 
                         <Col sx = {12} md = {5} className = "mb-3">
                             <label className = "col-12 form-label"><b>Address</b></label>
-                            <label className = "col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                            <label className = "col-12 text-muted">{properCase(subStr(pCorporateAddress, 30))}</label>
                         </Col>
                     :
                         <Col sx = {12} md = {5} className = "mb-3">
@@ -84,7 +114,7 @@ const Form = ({pName, pMobile, pGuestCount,
 
                         {/* Start:: Column room detail */}
                         <ViewGrid
-                            pDefaultRowData = {pData}/>
+                            pDefaultRowData = {defaultRowData}/>
                         {/* End:: Column room detail */}
                     </Col>
                 </Row>

@@ -1,7 +1,7 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
+import React, { useRef, forwardRef, useImperativeHandle } from "react";
 import { Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { ChevronsRight, Coffee, Umbrella, Wind, ShoppingBag, PenTool, FileText, Edit2, LogOut, Scissors, MoreVertical, Phone } from "react-feather";
+import { ChevronsRight, Coffee, ShoppingBag, PenTool, FileText, MoreVertical, Phone } from "react-feather";
 import { subStr, properCase, formatINR, formatDDMMYYYY, getRooms } from "../common/Common";
 
 import View from "../guestRoom/GuestRoomView";

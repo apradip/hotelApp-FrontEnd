@@ -2,11 +2,9 @@ label:not(.form-check-label):not(.custom-file-label) {
   font-weight: 400 !important;
 }
 
-.dropdown {
+/* .dropdown {
   text-decoration: none;
   color: #869099;
-  /* height: 16px;
-  width: 16px; */
 }
 
 .dropdown:hover {
@@ -35,7 +33,7 @@ label:not(.form-check-label):not(.custom-file-label) {
   background-color: #c3c8cd;
   text-decoration: none;
   color: #869099;
-}
+} */
 
 .offcanvas {
   width: 35% !important;

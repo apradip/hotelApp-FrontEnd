@@ -3,7 +3,7 @@ import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
-import { subStr, getTables } from "../common/Common";
+import { subStr, properCase, getTables } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
@@ -153,12 +153,12 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     {pCorporateName ?
                         <Col sx={12} md={5}>
                             <label className="col-12 form-label"><b>Company</b></label>
-                            <label className="col-12 text-mutedl">{subStr(pCorporateName, 30)}</label>
+                            <label className="col-12 text-mutedl">{properCase(subStr(pCorporateName, 30))}</label>
                         </Col>
                         :
                         <Col sx={12} md={5}>
                             <label className="col-12 form-label"><b>Name</b></label>
-                            <label className="col-12 text-muted">{subStr(pName, 30)}</label>
+                            <label className="col-12 text-muted">{properCase(subStr(pName, 30))}</label>
                         </Col>
                     }
                     {/* End:: Column name / company */}
@@ -167,7 +167,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                     {pCorporateName ?
                         <Col sx={12} md={5}>
                             <label className="col-12 form-label"><b>Address</b></label>
-                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                            <label className="col-12 text-muted">{properCase(subStr(pCorporateAddress, 30))}</label>
                         </Col>
                         :
                         <Col sx={12} md={5}>

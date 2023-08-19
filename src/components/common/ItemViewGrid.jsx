@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
 
-import { formatINR, formatDDMMYYYY, formatTime12Hour } from "./Common";
+import { subStr, properCase, formatINR, formatDDMMYYYY, formatTime12Hour } from "./Common";
 import ItemSelector from "./MiscellaneousEditor";
 import QuantityEditor from "./QuantityEditor";
 
@@ -34,15 +34,14 @@ const ItemViewGrid = ({pDefaultRowData}) => {
             field: "despatchDate",
             hide: false,
             width: 100,
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatDDMMYYYY(params.value)} - ${formatTime12Hour(params.value)}` : ""},
         },
         {
             headerName: "Item", 
             field: "name", 
             hide: false,
             cellEditor: ItemSelector, 
-            editable: () => {return false},
-            cellRenderer: (params) => {return params.value},
-            valueGetter: (params) => {return params.data.name}
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${properCase(subStr(params.value, 20))}` : ""},
         },
         {
             headerName: "Rate",
@@ -51,7 +50,6 @@ const ItemViewGrid = ({pDefaultRowData}) => {
             width: 50,
             hide: true,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
-            valueGetter: (params) => {return params.data.unitPrice}
         },
         {
             headerName: "Quantity",
@@ -60,9 +58,7 @@ const ItemViewGrid = ({pDefaultRowData}) => {
             width: 50,
             hide: false,
             cellEditor: QuantityEditor,
-            editable: () => {return false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
-            valueGetter: (params) => {return params.data.quantity}
         },
         {
             headerName: "Price",
@@ -71,7 +67,6 @@ const ItemViewGrid = ({pDefaultRowData}) => {
             width: 50,
             hide: false,
             valueFormatter: (params) => {return `${formatINR(params.value)}`},
-            valueGetter: (params) => {return params.data.totalPrice}
         },
         {
             field: "id"
@@ -89,9 +84,6 @@ const ItemViewGrid = ({pDefaultRowData}) => {
             field: "gstCharge"
         },
     ]);
-    // const pinnedRowData = [
-    //     {rowId: "Total", totalPrice: 0}
-    // ];
     const [style] = useState({
         height: "100%",
         width: "100%"
@@ -115,17 +107,14 @@ const ItemViewGrid = ({pDefaultRowData}) => {
                     gstPercentage: element.gstPercentage, 
                     gstCharge: element.gstCharge, 
                     totalPrice: element.unitPrice * element.quantity,
-                    despatchDate: element.despatchDate && element.despatchTime ? formatDDMMYYYY(element.despatchDate) + " - " + formatTime12Hour(element.despatchTime) : ""
+                    despatchDate: element.despatchDate
                 };
                 
                 sum += data.totalPrice;                       
                 row.push(data);
             });
 
-            // pinnedRowData[0].totalPrice = sum;
-
             gridRef.current.api.setRowData(row);
-            // gridRef.current.api.setPinnedBottomRowData(pinnedRowData);
             gridRef.current.api.refreshCells();
             gridRef.current.api.redrawRows();
             gridRef.current.api.sizeColumnsToFit();

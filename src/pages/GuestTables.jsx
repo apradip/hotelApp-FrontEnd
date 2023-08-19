@@ -288,8 +288,7 @@ const GuestTables = forwardRef((props, ref) => {
                         pGstNo = {pData.gstNo}
                         pBalance = {pData.balance}
                         pOption = {pData.option}
-                        pIndate = {pData.inDate}
-                        pInTime = {pData.inTime}
+                        pInDate = {pData.inDate}
                         pRooms = {pData.rooms}
                         pCallingFrom = {"T"}
                         onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
@@ -316,8 +315,7 @@ const GuestTables = forwardRef((props, ref) => {
                         pGstNo = {pData.gstNo}
                         pBalance = {pData.balance}
                         pOption = {pData.option}
-                        pIndate = {pData.inDate}
-                        pInTime = {pData.inTime}
+                        pInDate = {pData.inDate}
                         pTables = {pData.tables}
                         onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
                         onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 

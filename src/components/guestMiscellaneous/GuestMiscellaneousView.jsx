@@ -2,13 +2,12 @@ import React, { useContext, useEffect, useState, forwardRef, useImperativeHandle
 import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
-import { subStr } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
+import { subStr, properCase } from "../common/Common"
 import ViewGrid from "../common/ItemViewGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-
 
 // Start:: form
 const Form = ({pName, pMobile, pGuestCount, 
@@ -34,7 +33,6 @@ const Form = ({pName, pMobile, pGuestCount,
                         gstCharge: element.gstCharge, 
                         totalPrice: element.unitPrice * element.quantity,
                         despatchDate: element.despatchDate ? element.despatchDate : "",
-                        despatchTime: element.despatchTime ? element.despatchTime : ""
                     };
             
                     defaultRowData.push(rowData);
@@ -53,7 +51,7 @@ const Form = ({pName, pMobile, pGuestCount,
 
             {/* Start:: Modal header */}
             <Modal.Header>
-                <Modal.Title>Orders</Modal.Title>
+                <Modal.Title>All orders</Modal.Title>
                 <NavLink 
                     className="nav-icon" 
                     href="#" 
@@ -73,12 +71,12 @@ const Form = ({pName, pMobile, pGuestCount,
                     {pCorporateName ? 
                         <Col sx={12} md={5} className="mb-3">
                             <label className = "col-12 form-label"><b>Company</b></label>
-                            <label className = "col-12 text-muted">{subStr(pCorporateName, 30)}</label>
+                            <label className = "col-12 text-muted">{properCase(subStr(pCorporateName, 30))}</label>
                         </Col>
                     :
                         <Col sx={12} md={5} className="mb-3">
                             <label className = "col-12 form-label"><b>Name</b></label>
-                            <label className = "col-12 text-muted">{subStr(pName, 30)}</label>
+                            <label className = "col-12 text-muted">{properCase(subStr(pName, 30))}</label>
                         </Col>
                     }
                     {/* End:: Column name / company */}
@@ -87,7 +85,7 @@ const Form = ({pName, pMobile, pGuestCount,
                     {pCorporateName ? 
                         <Col sx={12} md={5} className="mb-3">
                             <label className="col-12 form-label"><b>Address</b></label>
-                            <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                            <label className="col-12 text-muted">{properCase(subStr(pCorporateAddress, 30))}</label>
                         </Col>
                     :
                         <Col sx={12} md={5} className = "mb-3">

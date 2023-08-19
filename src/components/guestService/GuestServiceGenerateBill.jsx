@@ -7,9 +7,9 @@ import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import BillGrid from "../common/ItemBillGrid";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import AddPayment from "../common/GuestPaymentAdd";
+import AddPayment from "./GuestServicePaymentAdd";
 
-import { subStr, formatDDMMYYYY, formatTime12Hour, formatBillNo } from "../common/Common";
+import { formatBillNo , subStr, properCase, formatDDMMYYYY, formatTime12Hour } from "../common/Common";
 
 // Start:: form
 const Form = ({pGuestId, pName, pMobile, pGuestCount, 
@@ -96,7 +96,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                                 {/* Start:: Column transaction time */}
                                 <Col sx={12} md={2} className="mb-3">
                                     <label className="col-12 form-label"><b>Time</b></label>
-                                    <label className="col-12 text-muted">{formatTime12Hour(data.expense.transactionTime)}</label>
+                                    <label className="col-12 text-muted">{formatTime12Hour(data.expense.transactionDate)}</label>
                                 </Col>
                                 {/* End:: Column transaction time */}
 
@@ -110,12 +110,12 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                                 {pCorporateName ? 
                                     <Col sx={12} md={5} className="mb-3">
                                         <label className="col-12 form-label"><b>Company</b></label>
-                                        <label className="col-12 text-muted">{subStr(pCorporateName, 30)}</label>
+                                        <label className="col-12 text-muted">{properCase(subStr(pCorporateName, 30))}</label>
                                     </Col>
                                 :
                                     <Col sx={12} md={5} className="mb-3">
                                         <label className="col-12 form-label"><b>Name</b></label>
-                                        <label className="col-12 text-muted">{subStr(pName, 30)}</label>
+                                        <label className="col-12 text-muted">{properCase(subStr(pName, 30))}</label>
                                     </Col>
                                 }
                                 {/* End:: Column name / company */}
@@ -124,7 +124,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                                 {pCorporateName ? 
                                     <Col sx={12} md={5} className="mb-3">
                                         <label className="col-12 form-label"><b>Address</b></label>
-                                        <label className="col-12 text-muted">{subStr(pCorporateAddress, 30)}</label>
+                                        <label className="col-12 text-muted">{properCase(subStr(pCorporateAddress, 30))}</label>
                                     </Col>
                                 :
                                     <Col sx={12} md={5} className="mb-3">

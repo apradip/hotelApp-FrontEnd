@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
 
-import { formatINR } from "../common/Common";
+import { properCase, formatINR } from "../common/Common";
 import ItemSelector from "../common/MiscellaneousEditor";
 import QuantityEditor from "../common/QuantityEditor";
 
@@ -38,7 +38,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             hide: false,
             cellEditor: ItemSelector, 
             editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},
-            cellRenderer: (params) => {return params.value},
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${properCase(params.value)}` : ""},
             valueGetter: (params) => {return params.data.name},
             valueSetter: (params) => {
                 params.data.name = "Select item";
@@ -65,7 +65,12 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             width: 50,
             hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
-            valueGetter: (params) => {return params.data.unitPrice}
+            valueGetter: (params) => {return params.data.unitPrice},
+            valueSetter: (params) => {
+                params.data.totalPrice = params.newValue;
+                
+                return true;
+            }
         },
         {
             headerName: "Quantity",

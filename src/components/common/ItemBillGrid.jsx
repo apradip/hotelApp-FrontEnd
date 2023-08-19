@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react"; 
 
-import { formatINR } from "./Common";
+import { formatINR, subStr, properCase } from "./Common";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
@@ -38,7 +38,7 @@ const ItemBillGrid = ({pData}) => {
             headerName: "Item", 
             field: "name", 
             hide: false,
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}` : null}
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${properCase(subStr(params.value, 20))}` : null}
         },
         {
             headerName: "Rate", 

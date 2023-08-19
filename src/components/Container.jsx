@@ -13,26 +13,24 @@ import Error404 from "../pages/Error404"
 
 const Container = () => {
   return ( 
-    <>
-      <div className="main">
-        <Header/>
+    <div className="main">
+      <Header/>
 
-        <main className="content">
-          <div className="container-fluid p-0">
-            <Routes>
-              <Route exact path="/" element={<Login />} />
-              <Route exact path="/support" element={<Support />} />
-              <Route exact path="/help" element={<Help />} />
-              <Route exact path="/privacy" element={<Privacy />} />
-              <Route exact path="/terms" element={<Terms />} />
-              <Route path="*" element={<Error404 />} />
-            </Routes>
-          </div>
-        </main>
+      <main className="content">
+        <div className="container-fluid p-0">
+          <Routes>
+            <Route exact path="/" element={<Login />} />
+            <Route exact path="/support" element={<Support />} />
+            <Route exact path="/help" element={<Help />} />
+            <Route exact path="/privacy" element={<Privacy />} />
+            <Route exact path="/terms" element={<Terms />} />
+            <Route path="*" element={<Error404 />} />
+          </Routes>
+        </div>
+      </main>
 
-        <Footer/>
-      </div>
-    </>
+      <Footer/>
+    </div>
   );
 }
 

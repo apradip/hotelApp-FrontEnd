@@ -1,35 +1,33 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 // Start:: Component
 // props parameters
 // pInDate
-// pInTime
-
-const TimeElapsed = ({pInDate, pInTime}) => {    
+const TimeElapsed = ({pInDate}) => {    
     const [timeElapsed, setTimeElapsed] = useState()
 
     const calculateTimeElapsed = () => {
-        let timeElapsed = {}
-        const difference = new Date() - new Date(pInDate + " " + pInTime)
-    
+        let timeElapsed = {};
+        const difference = new Date().getTime() - new Date(pInDate).getTime();
+
         if (difference > 0) {
             timeElapsed = {
                 days: Math.floor(difference / (1000 * 60 * 60 * 24)),
                 hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
                 minutes: Math.floor((difference / 1000 / 60) % 60),
                 seconds: Math.floor((difference / 1000) % 60)
-            }
+            };
         }
     
-        return timeElapsed
+        return timeElapsed;
     }
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setTimeElapsed(calculateTimeElapsed())
-        }, 1000)
+        }, 1000);
     
-        return () => clearTimeout(timer)
+        return () => clearTimeout(timer);
     })
 
     return (

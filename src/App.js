@@ -1,5 +1,5 @@
-import React, {createContext, useEffect, useState, useRef} from "react";
-import {BrowserRouter} from "react-router-dom";
+import React, { createContext, useEffect, useState, useRef } from "react";
+import { BrowserRouter } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 import './App.css';

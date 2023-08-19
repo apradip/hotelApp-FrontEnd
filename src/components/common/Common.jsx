@@ -405,6 +405,10 @@ export const getRooms = (roomObject) => {
         }
     }
 
+    rooms = rooms.split(',').filter((item, index) => {
+            return rooms.indexOf(item) === index;
+    });
+
     return rooms;
 };
 
@@ -432,36 +436,50 @@ export const formatYYYYMMDD = (longDateTime) => {
 };
 
 export const formatDDMMYYYY = (longDateTime) => {
-    if (longDateTime.length > 0) {
-        let dt = new Date(longDateTime),
-        mon = ("0" + (dt.getMonth() + 1)).slice(-2),
-        day = ("0" + dt.getDate()).slice(-2);
-    
-        return [day, mon, dt.getFullYear()].join("/");
-    } else {
-        return "";
-    }
+    // console.log(longDateTime)
+
+    let dt = new Date(longDateTime);
+    const formattedDate = `${dt.getDate()}/${dt.getMonth() + 1}/${dt.getFullYear()}`;
+    return formattedDate;
+
+    // if (longDateTime.length > 0) {
+        
+    //     return moment(longDateTime).format("DD/MM/YYYY");
+    // } else {
+    //     return "";
+    // }
 };
 
 export const formatHHMM = (longDateTime) => {
-    const tim = new Date(longDateTime);
-    // const moment = moment(tim).format("HH:mm");
-    // return moment.format("HH:mm");
-    return moment(tim).format("HH:mm");
-};
-
-export const formatTime12Hour = (time) => {
-    // Check correct time format and split into components
-    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
-        
-    if (time.length > 1) { // If time format correct
-        time = time.slice (1); // Remove full string match value
-        time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
-        time[0] = +time[0] % 12 || 12; // Adjust hours
+    if (longDateTime.length > 0) {
+        return moment(longDateTime).format("hh:mm");
+    } else {
+        return "";
     }
 
-    return time.join (''); // return adjusted time or original string
-    
+    // const tim = new Date(longDateTime);
+    // const moment = moment(tim).format("HH:mm");
+    // return moment.format("HH:mm");
+    // return moment(tim).format("HH:mm");
+};
+
+export const formatTime12Hour = (longDateTime) => {
+    if (longDateTime.length > 0) {
+        return moment(longDateTime).format("hh:mm a");
+    } else {
+        return "";
+    }
+
+    // Check correct time format and split into components
+    // time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+        
+    // if (time.length > 1) { // If time format correct
+    //     time = time.slice (1); // Remove full string match value
+    //     time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+    //     time[0] = +time[0] % 12 || 12; // Adjust hours
+    // }
+
+    // return time.join (''); // return adjusted time or original string
 };
 
 export const formatINR = (number) => {

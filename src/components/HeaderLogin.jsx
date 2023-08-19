@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Nav, Navbar, Dropdown, Offcanvas } from "react-bootstrap";
+import { Button, Nav, Navbar, Offcanvas } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Menu, Paperclip, Edit3, Scissors, User, MoreVertical, Coffee, Umbrella, Wind } from "react-feather";
@@ -12,6 +13,8 @@ import Search from "./Search";
 import Profile from "./auth/Profile";
 import ChangePassword from "./auth/ChangePassword";
 import Logout from "./auth/Logout";
+
+// import Dropdown, { DropdownItem } from "./common/Dropdown";
 
 import CardMiscellaneousOrder from "./guestMiscellaneous/GuestMiscellaneousOrderCard";
 import CardServiceOrder from "./guestService/GuestServiceOrderCard";
@@ -92,6 +95,12 @@ const HeaderLogin = forwardRef((props, ref) => {
     const [menuState, setMenuState] = useState(contextValues.showMenu);
     const searchRef = useRef(null);
     const navigate = useNavigate();
+
+
+    const dropUserRef = useRef(null);
+    const dropToggleUserRef = useRef(null);
+    
+
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${props.pEmployeeId}`
     });
@@ -489,8 +498,22 @@ const HeaderLogin = forwardRef((props, ref) => {
                 </li>
 
                 <li className="nav-item dropdown">
-                    <Dropdown className="d-flex align-items-center ms-3 ms-lg-3">
-                        <Dropdown.Toggle as={CustomToggle}>
+
+
+
+                    {/* <nav className="flex items-start justify-end px-4 py-2 border-b"> */}
+                        {/* <Dropdown trigger={<Button>user</Button>}>
+                            <DropdownItem>
+                                <Edit3 size={16}/> Edit
+                            </DropdownItem>
+                        </Dropdown> */}
+                    {/* </nav> */}
+
+
+
+                    <Dropdown className="d-flex align-items-center ms-3 ms-lg-3"
+                        ref={dropUserRef}>
+                        <Dropdown.Toggle ref={dropToggleUserRef} as={CustomToggle}>
                             <User size={20} className="d-none d-sm-inline-block"/>
                             <span className="mx-1 d-none d-sm-inline-block">                                 
                                 {data && getFirstName(data.name)}

@@ -1,12 +1,14 @@
-import React, {useState, forwardRef, useImperativeHandle} from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import DatePicker from "react-datepicker";
+import { formatDDMMYYYY } from "./Common"
+
 
 const DateEditor = forwardRef((props, ref) => {	
 	const dateInput = React.createRef();
-	const [selected, setSelected] = useState(new Date(props.value));
+	const [selectedDate, setSelectedDate] = useState(props.value ? new Date(props.value) : new Date());
 
 	const getValue = () => {
-		return selected;
+		return selectedDate;
     };
 
 	useImperativeHandle(ref, () => {
@@ -16,31 +18,17 @@ const DateEditor = forwardRef((props, ref) => {
 	return (
 		<DatePicker
 			ref={dateInput}
-			placeholder="Stay date"
+			placeholder="Select date"
 			className="form-control"
 			minDate={new Date()}
 			dateFormat="dd/MM/yyyy"
 			showDisabledMonthNavigation
-			selected={selected}
+			selected={selectedDate}
 			onChange={(value) => {
-									setSelected(value)
-									return true
+									setSelectedDate(value);
+									return true;
 								}}
 			/>
-
-		// <Form.Control size="lg" type="number" placeholder="ext. bed" 
-		// 	ref={textInput}
-		// 	value={selected}
-		// 	onChange={(event) => {  event.preventDefault()
-
-		// 							// if (parseInt(event.target.value)>=0){
-		// 								setSelected(event.target.value) 
-		// 								return true
-		// 							// } else {
-		// 								// return false
-		// 							// }
-		// 						}}
-        //     style={{border: "none", height: "99%", width: "100%"}} />
     );
 })
  

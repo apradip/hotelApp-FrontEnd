@@ -149,6 +149,7 @@ const GuestServices = forwardRef((props, ref) => {
 
                 case Operation.Despatch:
                     toast.success("Item successfully despatched");
+                    socket.emit("M_order", guestId);
                     props.onSuccess();
                     break;                
 
@@ -291,8 +292,7 @@ const GuestServices = forwardRef((props, ref) => {
                             pGstNo = {pData.gstNo}
                             pBalance = {pData.balance}
                             pOption = {pData.option}
-                            pIndate={pData.inDate}
-                            pInTime={pData.inTime}
+                            pInDate={pData.inDate}
                             pRooms = {pData.rooms}
                             pCallingFrom = {"S"}
                             onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
@@ -301,7 +301,7 @@ const GuestServices = forwardRef((props, ref) => {
                             onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
                             onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
                             onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 
-                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id, pData.id)}}
+                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id)}}
                             onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
                             onActivated = {() => {handleActivated(itemIdx)}}
                             onClosed = {close} />}
@@ -319,8 +319,7 @@ const GuestServices = forwardRef((props, ref) => {
                             pGstNo = {pData.gstNo}
                             pBalance = {pData.balance}
                             pOption = {pData.option}
-                            pIndate = {pData.inDate}
-                            pInTime = {pData.inTime}
+                            pInDate = {pData.inDate}
                             onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
                             onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 
                             onOrdered = {() => {handleSuccess(Operation.Order, pData.id)}}
