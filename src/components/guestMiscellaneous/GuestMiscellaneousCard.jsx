@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { Row, Col, Card, Dropdown } from "react-bootstrap";
+import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Users, MapPin, Phone, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
-import { subStr, properCase, formatINR } from "../common/Common";
+import { Operation, subStr, properCase, formatINR } from "../common/Common";
 import TimeElapsed from "../common/TimeElapsed";
 
 import View from "./GuestMiscellaneousView";
@@ -163,12 +163,6 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
         }
     };
     // End:: Show delete modal 
-    
-    // Start:: Close all modal 
-    const handleClose = () => {
-        props.onClosed();
-    };
-    // End:: Close all modal 
 
     // Start:: de-select card 
     const handleDeSelect = () => {
@@ -231,6 +225,8 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                     <b>{properCase(subStr(name, 20))}</b>
                                 </>
                             }
+
+                            <Badge pill bg = "warning">M</Badge>
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
@@ -319,8 +315,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 {/* Start :: view component */}
                 <View
                     ref = {viewRef}
-                    pGuestId = {props.pGuestId} 
-                    onClosed = {() => {handleClose();}}/>
+                    pGuestId = {props.pGuestId} />
                 {/* End :: view component */}
 
                 {/* Start :: edit component */}
@@ -328,8 +323,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
                     pOption = {"M"}
-                    onSaved = {async () => {await doFetch(); props.onEdited();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {async () => {await doFetch(); props.onEdited();}} />
                 {/* End :: edit component */}
 
                 {/* Start :: delete employee component */}
@@ -337,24 +331,21 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     ref = {deleteRef}
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
-                    onDeleted = {() => {props.onDeleted();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onDeleted = {() => {props.onDeleted();}} />
                 {/* End :: delete employee component */}
 
                 {/* Start :: miscellaneous order component */}
                 <Order 
                     ref = {orderRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onOrdered();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {() => {props.onOrdered(Operation.Miscellaneous_Order, props.pGuestId);}} />
                 {/* End :: miscellaneous order component */}
 
                 {/* Start :: miscellaneous despatch component */}
                 <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {async () => {await doFetch(); props.onDespatched();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {async () => {await doFetch(); props.onDespatched(Operation.Miscellaneous_Despatch, props.pGuestId);}} />
                 {/* End :: miscellaneous despatch component */}
 
                 {/* Start :: miscellaneous generate & display summery bill component */}
@@ -362,8 +353,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
                     onPaymentAdded = {async () => {await doFetch(); props.onPaymentAdded();}}
-                    onSaved = {async () => {await doFetch(); props.onBillGenerated();}}
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {async () => {await doFetch(); props.onBillGenerated();}}/>
                 {/* End :: miscellaneous generate & display summery bill component */}
 
                 {/* Start :: miscellaneous checkout component */}
@@ -372,8 +362,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
                     pCorporateName = {props.pCorporateName}
-                    onSaved = {() => {props.onCheckedout();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {() => {props.onCheckedout();}} />
                 {/* End :: miscellaneous checkout component */}
             </>            
         </>

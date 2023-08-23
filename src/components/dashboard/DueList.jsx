@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef } from "react";
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { toast } from "react-toastify";
 
 import { HotelId } from "../../App";
@@ -48,6 +48,10 @@ const DueList = forwardRef((props, ref) => {
         data && setTotalDue(total);    
     }, [data, error, loading]);
 
+    // Start:: refresh data
+    const handleRefresh = () => {setDataChanged(true);};
+    // End:: refresh data
+
     // Start:: show all data in card format
     const displayData = (pData = []) => {
         try {
@@ -70,7 +74,13 @@ const DueList = forwardRef((props, ref) => {
     };
     // End:: show all data in card format
 
+    // Start:: forward reff refresh 
+    useImperativeHandle(ref, () => {
+        return {handleRefresh};
+    });
+    // End:: forward reff refresh
     
+
     // Start:: Html
     return (
         <div className="card dashboard-card mb-5 mb-xl-8">

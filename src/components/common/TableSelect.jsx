@@ -1,22 +1,53 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Select from "react-select";
+import {axiosPrivate} from "./axiosPrivate";
 
-import {HotelId} from "../../App";
-import {useStateContext} from "../../contexts/ContextProvider";
-import useFetchWithAuth from "./useFetchWithAuth";
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
 
-const TableSelect = ({onChange, name, value, disabled = false}) => {
+const TableSelect = ({ onChange, name, value, disabled = false }) => {
 	const hotelId = useContext(HotelId);
 	const contextValues = useStateContext();
 	const [tableList, setTableList] = useState([]);
 	const [selectedList, setSelectedList] = useState(value);
-    const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.tableAPI}/${hotelId}`,
-		params: {
-            option: "E"
-        }
-    });
+	
 	let defaultList = [];
+	  
+	useEffect(() => {
+		(async () => {
+			Promise.all([
+				await axiosPrivate.request(
+					{url: `${contextValues.tableAPI}/${hotelId}`,
+					params: {option: "E"}}),
+				await axiosPrivate.request(
+					{url: `${contextValues.roomAPI}/${hotelId}`,
+					params: {option: "O"}}),
+			])
+			.then(([dataTable, dataRoom]) => {
+				let list = [];
+
+				dataTable.data.map((item) => {
+					return list.push({value: item._id, label: `T-${item.no}`})
+				});
+
+				dataRoom.data.map((item) => {
+					return list.push({value: item._id, label: `R-${item.no}`})
+				});
+
+				setTableList(list);
+			})
+			.catch((err) => {console.log(err)});
+
+			if (Array.isArray(value) && value.length > 0){
+				value &&
+					value.map((item) => {return defaultList.push({value: item.id, label: `T-${item.no}`});})
+			}
+          })();
+    }, [value]);		// eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+        onChange(selectedList);
+    }, [selectedList]);		// eslint-disable-line react-hooks/exhaustive-deps
 
 	const onSelect = (selectedList) => {
 		let list = [];
@@ -27,37 +58,7 @@ const TableSelect = ({onChange, name, value, disabled = false}) => {
 
 		setSelectedList(list);
 	}
-
-	useEffect(() => {
-        (async () => {
-            try {
-                await doFetch();
-            } catch (err) {
-              console.log("Error occured when fetching data");
-            }
-
-			if (Array.isArray(value) && value.length > 0){
-				value &&
-					value.map((item) => {return defaultList.push({value: item.id, label: item.no});})
-			}
-          })();
-    }, [value]);		// eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-		let list = [];
-
-		data &&
-			data.map((item) => {
-				return list.push({value: item._id, label: item.no})
-			});
-
-		setTableList(list);
-    }, [data, loading, error]);
-
-	useEffect(() => {
-        onChange(selectedList);
-    }, [selectedList]);		// eslint-disable-line react-hooks/exhaustive-deps
-
+	
 	return (
 		<Select 
 			className = "col-12"

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef } from "react";
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { toast } from "react-toastify";
 
 import { HotelId } from "../../App";
@@ -45,9 +45,12 @@ const TableStatusList = forwardRef((props, ref) => {
         });
         data && setTableCount(count);
     }, [data, error, loading]);
-
     // Start:: show all data in card format
 
+    // Start:: refresh data
+    const handleRefresh = () => {setDataChanged(true);};
+    // End:: refresh data
+    
     const displayData = (pData = []) => {
         let rowIdx = 0;
         let colIdx = 0;
@@ -101,7 +104,7 @@ const TableStatusList = forwardRef((props, ref) => {
                         key = {`guest_table_obj_${pData._id}`}
                         pIndex = {itemIdx}
                         pTableId = {pData._id} 
-                        pNo = {pData.no}
+                        pNo = {`T-${pData.no}`}
                         pGuestCount = {pData.guestCount}
                         pStatus = {pData.isOccupied}/>);
         } catch (err) {
@@ -110,6 +113,12 @@ const TableStatusList = forwardRef((props, ref) => {
     };
     // End:: show all data in card format
 
+    // Start:: forward reff refresh 
+    useImperativeHandle(ref, () => {
+        return {handleRefresh};
+    });
+    // End:: forward reff refresh
+
     
     // Start:: Html
     return (
@@ -117,13 +126,13 @@ const TableStatusList = forwardRef((props, ref) => {
             <div className="dashboard-card-header border-0">
                 <h3 className="card-title align-items-start flex-column">
                     <span className="text-dark fs-4 mb-1">Table status</span>
-                    <span className="text-muted mt-1 fs-8 d-block">Total <b>{tableCount}</b> no of tables(s) are unoccupied</span>
+                    <span className="text-muted mt-1 fs-8 d-block">Total <b className="text-danger">{tableCount}</b> no of tables(s) are unoccupied</span>
                 </h3>
             </div>
-            <div className="card-body py-1 px-4 scrollable">
+            <div className="card-body py-1 px-3 scrollable">
                 {!loading && 
-                        data && 
-                            displayData(data)}
+                    data && 
+                        displayData(data)}
             </div>
         </div>);
     // End:: Html

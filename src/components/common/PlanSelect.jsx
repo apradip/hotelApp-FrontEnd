@@ -36,7 +36,11 @@ const PlanSelect = ({onChange, name, value, disabled = false}) => {
 			
 			{data &&
 				data.map((item) => {
-					return (<option key={item._id} value={item._id}>{item.name }</option>)
+					return (<option 
+							key = {item._id} 
+							value = {item._id}>
+								{item.name}
+							</option>)
 				})}
 		</select>
     );

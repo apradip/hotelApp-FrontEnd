@@ -123,8 +123,9 @@ const GuestTableCheckout = forwardRef((props, ref) => {
 
     useEffect(() => {
         error && toast.error(error);
+        
         data && 
-            data.balance !== 0 && 
+            data.option === "T" && data.balance !== 0 && 
                     toast.error("Guest can't be checked out, because there is some due.");
     }, [data, error, loading]);
 

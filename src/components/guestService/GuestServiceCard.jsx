@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { Row, Col, Card, Dropdown } from "react-bootstrap";
+import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Users, MapPin, Phone, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
@@ -230,6 +230,8 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                     <b>{properCase(subStr(name, 20))}</b>
                                 </>
                             }                            
+
+                            <Badge pill bg = "success">S</Badge>
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>

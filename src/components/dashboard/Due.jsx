@@ -28,13 +28,13 @@ const Due = forwardRef((props, ref) => {
             <div className="flex-grow-1">
                 <span className="text-muted fw-bold fs-8 d-block">{properCase(subStr(props.pGuestName, 20))}
                 {props.pOption === "R" &&
-                            <Badge pill bg="primary">R</Badge>}
+                    <Badge pill bg="primary">R</Badge>}
                 {props.pOption === "T" &&
-                            <Badge pill bg="secondary">T</Badge>}
+                    <Badge pill bg="secondary">T</Badge>}
                 {props.pOption === "S" &&
-                            <Badge pill bg="success">S</Badge>}
+                    <Badge pill bg="success">S</Badge>}
                 {props.pOption === "M" &&
-                            <Badge pill bg="warning">M</Badge>}
+                    <Badge pill bg="warning">M</Badge>}
 
                 </span>
                 <span className="text-muted d-block">

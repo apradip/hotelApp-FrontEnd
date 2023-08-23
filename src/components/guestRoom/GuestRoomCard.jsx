@@ -1,8 +1,9 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
+import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { Users, MapPin, Home, Calendar, Phone, ChevronsRight, Coffee, Umbrella, Wind, ShoppingBag, PenTool, FileText, Edit2, LogOut, Scissors, MoreVertical } from "react-feather";
-import { getRooms, subStr, properCase, formatDDMMYYYY, formatINR } from "../common/Common";
+import { Operation, getRooms, subStr, properCase, formatDDMMYYYY, formatINR } from "../common/Common";
+import { toast } from "react-toastify";
 import TimeElapsed from "../common/TimeElapsed";
 
 import View from "./GuestRoomView";
@@ -16,18 +17,21 @@ import Delete from "./GuestRoomDelete";
 import OrderTable from "../guestTable/GuestTableOrder";
 import DespatchTable from "../guestTable/GuestTableDespatch";
 import GenerateBillTable from "../guestTable/GuestTableGenerateBill";
-import CheckoutTable from "../common/GuestCheckout";
+import CheckoutTable from "../guestTable/GuestTableCheckout";
 
 import OrderService from "../guestService/GuestServiceOrder";
 import DespatchService from "../guestService/GuestServiceDespatch";
 import GenerateBillService from "../guestService/GuestServiceGenerateBill";
-import CheckoutService from "../common/GuestCheckout";
+import CheckoutService from "../guestService/GuestServiceCheckout";
 
 import OrderMiscellaneous from "../guestMiscellaneous/GuestMiscellaneousOrder";
 import DespatchMiscellaneous from "../guestMiscellaneous/GuestMiscellaneousDespatch";
 import GenerateBillMiscellaneous from "../guestMiscellaneous/GuestMiscellaneousGenerateBill";
-import CheckoutMiscellaneous from "../common/GuestCheckout";
+import CheckoutMiscellaneous from "../guestMiscellaneous/GuestMiscellaneousCheckout";
 
+import { HotelId } from "../../App";
+import { useStateContext } from "../../contexts/ContextProvider";
+import useFetchWithAuth from "../common/useFetchWithAuth";
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to = "#" className = "dropdown"   
@@ -39,23 +43,20 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // Start:: Component
 // props parameters
 // pIndex
-// pId
-// pRoomNos
-// pName
-// pMobile
-// pAddress
-// pCheckInDate
-// pCheckOutDate
-// pTotalPaidAmount
-// pTotalDueAmount
+// pGuestId
 // onActivated()
-// onClosed()
 
 // useImperativeHandle
 // handleDeSelect
 // handelOpenEdit 
 // handelOpenDelete
+// handelRefresh
+// getGuestId
+
 const GuestRoomCard = forwardRef((props, ref) => {
+    const hotelId = useContext(HotelId);
+    const contextValues = useStateContext();
+
     const viewRef = useRef(null);
     const editRef = useRef(null);
     const deleteRef = useRef(null);
@@ -79,10 +80,73 @@ const GuestRoomCard = forwardRef((props, ref) => {
     const generateBillMiscellaneousRef = useRef(null);
     const checkoutMiscellaneousRef = useRef(null);
 
+    const [corporateName, setCorporateName] = useState();
+    const [corporateAddress, setCorporateAddress] = useState();
+    const [name, setName] = useState();
+    const [mobile, setMobile] = useState();
+    const [guestCount, setGuestCount] = useState();
+    const [balance, setBalance] = useState();
+    const [rooms, setRooms] = useState();
+    const [inDate, setInDate] = useState();
+    const [outDate, setOutDate] = useState();
+
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
 
+    const {data, loading, error, doFetch} = useFetchWithAuth({
+        url: `${contextValues.guestRoomAPI}/${hotelId}/${props.pGuestId}`,
+        params: {option: "N"}
+    });
 
+    // Start:: fetch data list from api
+    useEffect(() => {
+        (async () => {
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+            })();
+    }, []);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch data list from api
+    
+    // Start:: set data to state variables
+    useEffect(() => {
+        try {
+            error && toast.error(error);
+
+            data && setCorporateName(data.corporateName);
+            data && setCorporateAddress(data.corporateAddress); 
+            data && setName(data.name);
+            data && setMobile(data.mobile);
+            data && setGuestCount(data.guestCount);  
+            data && setBalance(data.balance);
+            data && setInDate(data.inDate);
+            data && setOutDate(data.outDate);
+            data && setRooms(data.rooms);
+
+            data && setFocus(true);
+            data && setActive(true);
+        } catch (err) {
+            console.log(err);
+        }        
+    }, [data, error, loading]);
+    // End:: set data to state variables
+
+    // Start :: get guest Id of this component
+    const getGuestId = () => {return props.pGuestId;}
+    // End :: get guest Id of this component
+
+    // Start:: get data from api
+    const handelRefresh = async () => {
+        try {
+            await doFetch()
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: get data from api
+    
     // Start:: Show view modal 
     const handelOpenView = () => {
         try {
@@ -126,12 +190,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
         }
     };
     // End:: Show delete modal 
-    
-    // Start:: Close all modal 
-    const handleClose = () => {
-        props.onClosed();
-    };
-    // End:: Close all modal 
 
     // Start:: Show order modal 
     const handelOpenOrder = (option = "R") => {
@@ -243,9 +301,11 @@ const GuestRoomCard = forwardRef((props, ref) => {
         return {
             handleDeSelect, 
             handelOpenEdit,  
+            handelOpenDelete,
             handelOpenBooking, 
-            handelOpenGenerateBill, 
-            handelOpenDelete
+            handelOpenGenerateBill,
+            handelRefresh,
+            getGuestId
         };
     });
     // Edit:: forward reff de-select, show edit/delete modal function
@@ -256,7 +316,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
             {/* Start :: card component */}
             <Card 
                 ref = {ref}
-                key = {props.pIndex}
+                key = {`RC_${props.pGuestId}`}
                 index = {props.pIndex}
                 className = {"border"}
                 border = {active ? "info" : focus ? "primary" : ""}  
@@ -275,63 +335,63 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <Card.Body className="text-sm p-1">
                     <Row className="m-1">
                         <Col xs={8} sm={8} md={8} lg={8} xl={8} className="p-0">
-                            {props.pCorporateName ?
+                            {corporateName ?
                                 <>
                                     <MapPin className="feather-16 mr-2"/>
-                                    <b>{properCase(subStr(props.pCorporateName, 20))}</b>
+                                    <b>{properCase(subStr(corporateName, 20))}</b>
                                 </>
                             :
                                 <>
                                     <Users className="feather-16 mr-2"/>
-                                    <b>{properCase(subStr(props.pName, 20))}</b>
+                                    <b>{properCase(subStr(name, 20))}</b>
                                 </>
                             }
 
                             <Badge pill bg = "primary">R</Badge>
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (props.pBalance >= 0 ? "text-success" : "text-danger")}>
-                            <b>{formatINR(props.pBalance)}</b>
+                            <b>{formatINR(balance)}</b>
                         </Col>
                     </Row>
 
                     <Row className="d-none d-md-block d-lg-block d-xl-block text-mutedl m-1">
-                        {props.pRooms ? 
+                        {rooms ? 
                             <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
                                 <Home className="feather-16 mr-2"/>
-                                {getRooms(props.pRooms)}
-                                {/* Room(s): {getRooms(props.pRooms)} */}
+                                {getRooms(rooms)}
                             </Col>
                         :
-                            props.pCorporateName ?
+                            corporateName ?
                                 <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                                    {properCase(subStr(props.pCorporateAddress, 30))}
+                                    {properCase(subStr(corporateAddress, 30))}
                                 </Col>
                                 :
                                 <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
                                     <Phone className="feather-16 mr-2"/>
-                                    {props.pMobile}
+                                    {mobile}
                                 </Col>
                         }
                     </Row>        
 
-                    <Row className="text-mutedl p-0 m-1">
-                        <Col xs={12} sm={12} md={6} lg={6} xl={6} className="p-0">
-                            <Calendar className="feather-16 mr-2"/>
-                            {formatDDMMYYYY(props.pInDate)}
-                        </Col>
-                        <Col xs={12} sm={12} md={6} lg={6} xl={6} className="text-right p-0">
-                            <Calendar className="feather-16 mr-2"/>
-                            {formatDDMMYYYY(props.pOutDate)}
-                        </Col>
-                    </Row>        
+                    {(props.pCallingFrom === "R") && 
+                        <Row className="text-mutedl p-0 m-1">
+                            <Col xs={12} sm={12} md={6} lg={6} xl={6} className="p-0">
+                                <Calendar className="feather-16 mr-2"/>
+                                {formatDDMMYYYY(inDate)}
+                            </Col>
+                            <Col xs={12} sm={12} md={6} lg={6} xl={6} className="text-right p-0">
+                                <Calendar className="feather-16 mr-2"/>
+                                {formatDDMMYYYY(outDate)}
+                            </Col>
+                        </Row>}        
 
                     <Row className="m-1">
                         <Col xs={10} sm={10} md={6} lg={6} xl={6} className="p-0">
-                            {props.pGuestCount} guest(s)
+                            {guestCount} guest(s)
                         </Col>
                         <Col xs={0} sm={0} md={5} lg={5} xl={5} className="d-none d-md-block d-lg-block d-xl-block text-right p-0">
                             <TimeElapsed
-                                pInDate={props.pInDate}/>
+                                pInDate={inDate}/>
                         </Col>
                         <Col xs={2} sm={2} md={1} lg={1} xl={1} className="text-right p-0">
 
@@ -410,11 +470,11 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                                         <FileText className="feather-16 mr-3"/>Bill
                                                     </Dropdown.Item>
 
-                                                    {/* <Dropdown.Item eventKey="13"
+                                                    <Dropdown.Item eventKey="13"
                                                         disabled={props.pTransactionId !== "undefined" ? false : true}
                                                         onClick={() => {handelOpenCheckout("T")}}>
                                                         <LogOut className="feather-16 mr-3"/>Check out
-                                                    </Dropdown.Item> */}
+                                                    </Dropdown.Item>
 
                                                 </Dropdown.Menu>
                                             </Dropdown>
@@ -589,16 +649,14 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 {/* Start :: view component */}
                 <View
                     ref = {viewRef}
-                    pGuestId = {props.pGuestId} 
-                    onClosed = {() => {handleClose()}}/>
+                    pGuestId = {props.pGuestId} />
                 {/* End :: view room details component */}
 
                 {/* Start :: edit component */}
                 <Edit 
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => props.onEdited()} 
-                    onClosed = {() => {handleClose()}}/>
+                    onSaved = {() => props.onEdited(Operation.GuestMod, props.pGuestId)} />
                 {/* End :: edit component */}
 
                 {/* Start :: delete component */}
@@ -606,16 +664,14 @@ const GuestRoomCard = forwardRef((props, ref) => {
                     ref = {deleteRef}
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
-                    onDeleted = {() => {props.onDeleted()}} 
-                    onClosed = {() => {handleClose()}}/>
+                    onDeleted = {() => {props.onDeleted(Operation.GuestDel, props.pGuestId)}} />
                 {/* End :: delete component */}
 
                 {/* Start :: booking component */}
                 <Booking
                     ref = {bookingRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onBooked()}} 
-                    onClosed = {() => {handleClose()}}/>
+                    onSaved = {() => {props.onBooked(Operation.Booked, props.pGuestId)}} />
                 {/* End :: booking component */}
 
                 {/* Start :: generate & display summery bill component */}
@@ -623,8 +679,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
                     onPaymentAdded = {props.onPaymentAdded}
-                    onSaved = {() => {props.onBillGenerated()}}
-                    onClosed = {() => {handleClose()}}/>
+                    onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId)}} />
                 {/* End :: generate & display summery bill component */}
 
                 {/* Start :: add payment component */}
@@ -635,8 +690,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                     pMobile = {props.pMobile}
                     pCorporateName = {props.pCorporateName}
                     pCorporateAddress = {props.pCorporateAddress}
-                    onSaved = {() => {props.onPaymentAdded()}} 
-                    onClosed = {() => {handleClose()}}/>
+                    onSaved = {() => {props.onPaymentAdded(Operation.Room_PaymentAdd, props.pGuestId)}} />
                 {/* End :: add payment component */}
 
                 {/* Start :: checkout component */}
@@ -645,8 +699,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
                     pCorporateName = {props.pCorporateName}
-                    onSaved = {() => {props.onCheckedout()}} 
-                    onClosed = {() => {handleClose()}}/>
+                    onSaved = {() => {props.onCheckedout(Operation.Room_Checkout, props.pGuestId)}} />
                 {/* End :: checkout component */}
             </>
             {/* End :: Room component */}
@@ -657,25 +710,22 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <OrderTable 
                     ref = {orderTableRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onOrdered()}} 
-                    onClosed = {() => {handleClose()}}/>
+                    onSaved = {() => {props.onOrdered(Operation.Table_Order, props.pGuestId)}} />
                 {/* End :: order component */}
 
                 {/* Start :: despatch component */}
                 <DespatchTable
                     ref = {despatchTableRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onDespatched()}} 
-                    onClosed = {() => {handleClose()}}/>
+                    onSaved = {() => {props.onDespatched(Operation.Table_Despatch, props.pGuestId)}} />
                 {/* End :: despatch component */}
 
                 {/* Start :: generate & display summery bill component */}
                 <GenerateBillTable 
                     ref = {generateBillTableRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {() => {props.onPaymentAdded()}}
-                    onSaved = {() => {props.onBillGenerated()}}
-                    onClosed = {() => {handleClose()}}/>
+                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.Table_PaymentAdd, props.pGuestId)}}
+                    onSaved = {() => {props.onBillGenerated(Operation.Table_Checkout, props.pGuestId)}} />
                 {/* End :: generate & display summery bill component */}
 
                 {/* Start :: tables checkout component */}
@@ -684,8 +734,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
                     pCorporateName = {props.pCorporateName}
-                    onSaved = {() => {props.onCheckedout()}} 
-                    onClosed = {() => {handleClose()}}/>
+                    onSaved = {() => {props.onCheckedout(Operation.Table_Checkout, props.pGuestId)}} />
                 {/* End :: tables checkout component */}
             </>
             {/* End :: Table components */}            
@@ -696,25 +745,22 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <OrderService 
                     ref = {orderServiceRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onOrdered()}} 
-                    onClosed = {() => {handleClose()}} />
+                    onSaved = {() => {props.onOrdered(Operation.Service_Despatch, props.pGuestId)}} />
                 {/* End :: order component */}
 
                 {/* Start :: despatch component */}
                 <DespatchService
                     ref = {despatchServiceRef}
                     pGuestId = {props.pGuestId}
-                    onSaved = {() => {props.onDespatched()}} 
-                    onClosed = {() => {handleClose()}} />
+                    onSaved = {() => {props.onDespatched(Operation.Service_Despatch, props.pGuestId)}} />
                 {/* End :: despatch component */}
 
                 {/* Start :: generate & display summery bill component */}
                 <GenerateBillService 
                     ref = {generateBillServiceRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {() => {props.onPaymentAdded()}}
-                    onSaved = {() => {props.onBillGenerated()}} 
-                    onClosed = {() => {handleClose()}} />
+                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.BillGenerate, props.pGuestId)}}
+                    onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId)}} />
                 {/* End :: generate & display bill component */}
 
                 {/* Start :: checkout component */}
@@ -723,8 +769,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
                     pCorporateName = {props.pCorporateName}
-                    onSaved = {() => {props.onCheckedout()}} 
-                    onClosed = {() => {handleClose()}}/>
+                    onSaved = {() => {props.onCheckedout(Operation.Service_Checkout, props.pGuestId)}} />
                 {/* End :: checkout component */}
             </>            
             {/* End :: Service components */}            
@@ -735,25 +780,22 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <OrderMiscellaneous 
                     ref = {orderMiscellaneousRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onOrdered()}} 
-                    onClosed = {() => {handleClose()}} />
+                    onSaved = {() => {props.onOrdered(Operation.Miscellaneous_Order, props.pGuestId)}} />
                 {/* End :: miscellaneous order component */}
 
                 {/* Start :: miscellaneous despatch component */}
                 <DespatchMiscellaneous
                     ref = {despatchMiscellaneousRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onDespatched()}} 
-                    onClosed = {() => {handleClose()}} />
+                    onSaved = {() => {props.onDespatched(Operation.Miscellaneous_Despatch, props.pGuestId)}} />
                 {/* End :: miscellaneous despatch component */}
 
                 {/* Start :: miscellaneous generate & display summery bill component */}
                 <GenerateBillMiscellaneous 
                     ref = {generateBillMiscellaneousRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {props.onPaymentAdded}
-                    onSaved = {() => {props.onBillGenerated()}}
-                    onClosed = {() => {handleClose()}} />
+                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.Miscellaneous_PaymentAdd, props.pGuestId)}}
+                    onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId)}} />
                 {/* End :: miscellaneous generate & display summery bill component */}
 
                 {/* Start :: miscellaneous checkout component */}
@@ -762,8 +804,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
                     pCorporateName = {props.pCorporateName}
-                    onSaved = {props.onCheckedout} 
-                    onClosed = {() => {handleClose()}} />
+                    onSaved = {() => {props.onCheckedout(Operation.Miscellaneous_Checkout, props.pGuestId)}} />
                 {/* End :: miscellaneous checkout component */}
             </>
             {/* End :: miscellaneous components */} 

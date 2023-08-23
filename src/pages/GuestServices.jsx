@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Form, Breadcrumb, Row, Col, Placeholder } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { Operation } from "../components/common/Common";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -14,17 +15,6 @@ import useFetchWithAuth from "../components/common/useFetchWithAuth";
 import io from "socket.io-client";
 
 const socket = io.connect("http://localhost:3001");
-
-const Operation = {
-    GuestAdd: "GUEST_ADD",
-    GuestMod: "GUEST_MOD",
-    GuestDel: "GUEST_DEL",
-    Order: "ORDER",
-    Despatch: "DESPATCH",
-    BillGenerate: "BILL_GENERATE",
-    PaymentAdd: "PAYMENT_ADD",
-    Checkout: "GUEST_CHECKOUT"
-};
 
 // Start:: Component
 // props parameters
@@ -284,25 +274,15 @@ const GuestServices = forwardRef((props, ref) => {
                             ref = {(el) => cardRefs.current[itemIdx] = el}
                             pIndex = {itemIdx}
                             pGuestId = {pData.id} 
-                            pName = {pData.name}
-                            pMobile = {pData.mobile}
-                            pGuestCount = {pData.guestCount}
-                            pCorporateName = {pData.corporateName}
-                            pCorporateAddress = {pData.corporateAddress}
-                            pGstNo = {pData.gstNo}
-                            pBalance = {pData.balance}
-                            pOption = {pData.option}
-                            pInDate={pData.inDate}
-                            pRooms = {pData.rooms}
                             pCallingFrom = {"S"}
-                            onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
-                            onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 
-                            onBooked = {() => {handleSuccess(Operation.Booked, pData.id)}}
-                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
-                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
-                            onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 
-                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id)}}
-                            onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
+                            onEdited = {(o, g) => {handleSuccess(o, g)}}
+                            onDeleted = {(o, g) => {handleSuccess(o, g)}} 
+                            onBooked = {(o, g) => {handleSuccess(o, g)}}
+                            onBillGenerated = {(o, g) => {handleSuccess(o, g)}}
+                            onPaymentAdded = {(o, g) => {handleSuccess(o, g)}} 
+                            onCheckedout = {(o, g) => {handleSuccess(o, g)}} 
+                            onOrdered = {(o, g) => {handleSuccess(o, g)}}
+                            onDespatched = {(o, g) => {handleSuccess(o, g)}}
                             onActivated = {() => {handleActivated(itemIdx)}}
                             onClosed = {close} />}
 
@@ -322,8 +302,8 @@ const GuestServices = forwardRef((props, ref) => {
                             pInDate = {pData.inDate}
                             onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
                             onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 
-                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id)}}
-                            onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
+                            onOrdered = {(o, g) => {handleSuccess(o, g)}}
+                            onDespatched = {(o, g) => {handleSuccess(o, g)}}
                             onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
                             onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
                             onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 

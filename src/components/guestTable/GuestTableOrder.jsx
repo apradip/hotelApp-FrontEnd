@@ -3,7 +3,7 @@ import { Modal, NavLink, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { X } from "react-feather";
-import { subStr, properCase, getTables } from "../common/Common";
+import { subStr, properCase } from "../common/Common";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
@@ -34,7 +34,8 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     // Strat:: save assigned table 
     const handleChangeTable = async (tables, guestCount) => {
         try {
-            await doUpdate({tables: tables, guestCount: guestCount});
+            if (tables.length > 0)
+                await doUpdate({tables: tables, guestCount: guestCount});
         } catch (err) {
             console.log(err);
         }
@@ -132,7 +133,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
             {/* Start:: Modal header */}
             <Modal.Header>
                 {/* Header text */}
-                <Modal.Title>Order - [{getTables(pTables)}]</Modal.Title>
+                <Modal.Title>Order</Modal.Title>
 
                 {/* Close button */}
                 <NavLink
@@ -337,7 +338,6 @@ const GuestTableOrder = forwardRef((props, ref) => {
     const handleCloseModal = () => {
         try {
             setShowModal(false);
-            props.onClosed();
         } catch (err) {
             console.log(err);
         }

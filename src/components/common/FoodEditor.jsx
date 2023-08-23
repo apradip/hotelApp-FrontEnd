@@ -5,6 +5,8 @@ import {HotelId} from "../../App";
 import {useStateContext} from "../../contexts/ContextProvider";
 import useFetchWithAuth from "./useFetchWithAuth";
 
+import { properCase } from "../common/Common";
+
 const FoodEditor = forwardRef((props, ref) => {	
 	const hotelId = useContext(HotelId);
 	const contextValues = useStateContext();
@@ -44,7 +46,7 @@ const FoodEditor = forwardRef((props, ref) => {
 
     useEffect(() => {
 		let list = [emptyElement];
-		data && data.map(item => (list.push({_id:item._id, name:item.name, price:item.price})));
+		data && data.map(item => (list.push({_id:item._id, name: properCase(item.name), price:item.price})));
 		data && setListItem(list);
     }, [data, loading, error]);		// eslint-disable-line react-hooks/exhaustive-deps
 

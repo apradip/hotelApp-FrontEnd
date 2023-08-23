@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useRef} from "react"
-import {Routes, Route} from "react-router-dom"
+import React, { useState, useEffect, useRef } from "react"
+import { Routes, Route } from "react-router-dom"
 import {ToastContainer} from "react-toastify"
 
-import {useStateContext} from "../contexts/ContextProvider"
-import {getPage} from "./common/Common"
+import { useStateContext } from "../contexts/ContextProvider"
+import { getPage } from "./common/Common"
 import Header from "./HeaderLogin"
 import Menu from "./MenuLogin"
 import Footer from "./FooterLogin"
@@ -35,8 +35,7 @@ import Error404 from "../pages/Error404"
 const CloseButton = ({closeToast}) => (
   <i className="material-icons"
       onClick={closeToast}>
-  </i>
-)
+  </i>)
 // End:: hide toast close button
 
 // Start:: Component
@@ -378,19 +377,19 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
   }
 
   const handleSuccess = () => {
-    navRef.current.success()
+    navRef.current.success();
   }
   // End:: handle header operational options
 
   // Start:: click footer page
   const handleClickParent = (parent) => {
-    setMenuParentSelected(parent)
+    setMenuParentSelected(parent);
   }
   // End:: click footer page
 
   // Start:: click footer page
   const handleClickPage = (page) => {
-    setMenuSelected(page)
+    setMenuSelected(page);
   }
   // End:: click footer page
   
@@ -408,7 +407,8 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
             onChangeSearch={(s) => handleSearch(s)} 
             onClickAdd={handleAdd} 
             onClickEdit={handleEdit}
-            onClickDel={handleDel}/>
+            onClickDel={handleDel}
+            onDespatched={(o) => {handleSuccess(o)}}/>
         {/* End:: header nav component */}
 
         {/* Start:: sidebar */}
@@ -480,9 +480,7 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
                                                       onClose={handleClose}/>}/>
 
               <Route exact path="/guestrooms" element={<GuestRooms
-                                                        ref={guestRoomRef} 
-                                                        onSuccess={handleSuccess}
-                                                        onClose={handleClose}/>}/>
+                                                        ref={guestRoomRef} />}/>
 
               <Route exact path="/guesttables" element={<GuestTables
                                                         ref={guestTableRef} 
@@ -518,10 +516,10 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
               theme="colored"
               pauseOnFocusLoss
               pauseOnHover
-              autoClose = { 2000 }
-              hideProgressBar = { true }
-              newestOnTop = { true }
-              rtl = { false }
+              autoClose = {2000}
+              hideProgressBar = {true}
+              newestOnTop = {true}
+              rtl = {false}
               closeButton = {CloseButton}/>
             {/* End :: display message */}
         </main>

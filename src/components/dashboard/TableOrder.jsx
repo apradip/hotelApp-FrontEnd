@@ -42,14 +42,14 @@ const TableOrder = forwardRef((props, ref) => {
         <>
             {(props.pIndex % 2) != 0 ? 
                 <div className="d-flex bg-light-warning-border rounded p-1 mb-3">
-                    <div className="col-xl-2 p-0 m-0">
+                    <div className="col-xl-3 p-0 m-0">
                         <div className="rounded-circle-warning">
                             <span className="fw-bolder text-warning">
                                 {props.pTableNo}
                             </span>
                         </div>
                     </div>
-                    <div className="col-xl-10 p-1">
+                    <div className="col-xl-9 p-1">
                         {data &&
                             data.items.length > 0 && 
                                 data.items.map((food) => {
@@ -64,14 +64,14 @@ const TableOrder = forwardRef((props, ref) => {
                 </div>
                 :
                 <div className="d-flex bg-light-info-border rounded p-1 mb-3">
-                    <div className="col-xl-2 p-0 m-0">
+                    <div className="col-xl-3 p-0 m-0">
                         <div className="rounded-circle-info">
                             <span className="fw-bolder text-info">
                                 {props.pTableNo}
                             </span>
                         </div>
                     </div>
-                    <div className="col-xl-10 p-1">
+                    <div className="col-xl-9 p-1">
                         {data &&
                             data.items.length > 0 && 
                                 data.items.map((food) => {

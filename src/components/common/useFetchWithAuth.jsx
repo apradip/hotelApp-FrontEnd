@@ -2,10 +2,9 @@ import {useState} from "react";
 import {axiosPrivate} from "./axiosPrivate";
 
 const useFetchWithAuth = (params) => {
-    const [loading, setLoading] = useState(false);
     const [data, setData] = useState(undefined);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
 
     const doFetch = async () => {        
         setLoading(true);
@@ -21,7 +20,6 @@ const useFetchWithAuth = (params) => {
             setLoading(false);
         }
     };     // eslint-disable-line react-hooks/exhaustive-deps
-
 
     const doLogout = async (payload) => {
         setLoading(true);
@@ -63,7 +61,7 @@ const useFetchWithAuth = (params) => {
             .finally(() => {
                 setLoading(false);
             });
-    }
+    };
 
     const doInsert = async (payload) => {
         setLoading(true);

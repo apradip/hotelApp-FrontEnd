@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { Button, Nav, Navbar, Offcanvas } from "react-bootstrap";
+import { Nav, Navbar, Offcanvas } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Menu, Paperclip, Edit3, Scissors, User, MoreVertical, Coffee, Umbrella, Wind } from "react-feather";
+import io from "socket.io-client";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -14,19 +15,15 @@ import Profile from "./auth/Profile";
 import ChangePassword from "./auth/ChangePassword";
 import Logout from "./auth/Logout";
 
-// import Dropdown, { DropdownItem } from "./common/Dropdown";
-
 import CardMiscellaneousOrder from "./guestMiscellaneous/GuestMiscellaneousOrderCard";
 import CardServiceOrder from "./guestService/GuestServiceOrderCard";
-import CardTableOrder from "./guestTable/GuestTableOrderCard";
+import CardTableDespatch from "./guestTable/GuestTableDespatchCard";
 
 import MiscellaneousOrderList from "./guestMiscellaneous/GuestMiscellaneousPendingOrderList";
 import ServiceOrderList from "./guestService/GuestServicePendingOrderList";
-import TableOrderList from "./guestTable/GuestTablePendingOrderList";
+import TablePendingOrderList from "./guestTable/GuestTablePendingOrderList";
 
-import io from "socket.io-client";
-
-const socket = io.connect("http://localhost:3001");
+import { Operation, MessageRoom } from "./common/Common";
 
 
 const alertOptions = [
@@ -76,14 +73,15 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 const HeaderLogin = forwardRef((props, ref) => {   
     const hotelId = useContext(HotelId);     
     const contextValues = useStateContext();
+    const socket = io.connect("http://localhost:3001");
 
     const [miscellaneousCardComponents, setMiscellaneousCardComponents] = useState([]);
     const [serviceCardComponents, setServiceCardComponents] = useState([]);
-    const [tableCardComponents, setTableCardComponents] = useState([]);
+    const [tableDespatchCardComponents, setTableDespatchCardComponents] = useState([]);
 
     const miscellaneousOrderListRef = useRef(null);
     const serviceOrderListRef = useRef(null);
-    const tableOrderListRef = useRef(null);
+    const tablePendingOrderListRef = useRef(null);
 
     const [miscellaneousOrderCount, setMiscellaneousOrderCount] = useState(0);
     const [serviceOrderCount, setServiceOrderCount] = useState(0);
@@ -96,11 +94,9 @@ const HeaderLogin = forwardRef((props, ref) => {
     const searchRef = useRef(null);
     const navigate = useNavigate();
 
-
     const dropUserRef = useRef(null);
     const dropToggleUserRef = useRef(null);
     
-
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${props.pEmployeeId}`
     });
@@ -110,19 +106,19 @@ const HeaderLogin = forwardRef((props, ref) => {
 
     useEffect(() => {
         try {
-            socket.on("M_order", (guestId) => {
+            socket.on(MessageRoom.Miscellaneous, (payload) => {
                 miscellaneousOrderListRef.current && 
                     miscellaneousOrderListRef.current.Refresh();
             });
 
-            socket.on("S_order", (guestId) => {
+            socket.on(MessageRoom.Service, (payload) => {
                 serviceOrderListRef.current && 
                     serviceOrderListRef.current.Refresh();
             });
 
-            socket.on("T_order", (guestId) => {
-                tableOrderListRef.current && 
-                    tableOrderListRef.current.Refresh();
+            socket.on(MessageRoom.Table, (payload) => {
+                tablePendingOrderListRef.current && 
+                    tablePendingOrderListRef.current.Refresh();
             });
         } catch (err) {
             console.log(err);
@@ -144,8 +140,8 @@ const HeaderLogin = forwardRef((props, ref) => {
                 if (item.name === offcanvasName) {
                     if (offcanvasName === alertOptions[0].name) {
                         if (!showKitchenAlert[idx]) {
-                            tableOrderListRef.current && 
-                                tableOrderListRef.current.Refresh();
+                            tablePendingOrderListRef.current && 
+                                tablePendingOrderListRef.current.Refresh();
                         }
                     }
 
@@ -269,8 +265,38 @@ const HeaderLogin = forwardRef((props, ref) => {
         }
     };
 
+    // Start:: on data operation successfully
+    const handleSuccess = (operation = "", guestId = "") => {
+        try {
+            const payload = {operation, guestId};
+
+            switch (operation) {
+                  case Operation.Miscellaneous_Despatch:
+                    toast.success("Order successfully despatched");
+                    socket.emit(MessageRoom.Miscellaneous, payload);
+                    break;                
+
+                case Operation.Service_Despatch:
+                    toast.success("Order successfully despatched");
+                    socket.emit(MessageRoom.Service, payload);
+                    break;                
+
+                case Operation.Table_Despatch:
+                    toast.success("Order successfully despatched");
+                    socket.emit(MessageRoom.Table, payload);
+                    break;                
+    
+                default:                
+                    break;                
+            }
+        } catch (err) {
+            console.log(err);
+        }        
+    };
+    // End:: on data operation successfully
+    
     // Start:: populate offcanvas with pending orders
-    const handleHefresh = (option, orders) => {
+    const handleRefresh = (option, orders) => {
         try {
             switch (option) {
                 case "M":
@@ -279,7 +305,7 @@ const HeaderLogin = forwardRef((props, ref) => {
                         return (<CardMiscellaneousOrder
                                     className = "border"
                                     key = {`M_${element.id}`}
-                                    pGuestId = {element.id}/>);
+                                    pGuestId = {element.id} />);
                     });
                       
                     setMiscellaneousCardComponents(tmpMCards);
@@ -304,13 +330,14 @@ const HeaderLogin = forwardRef((props, ref) => {
                 case "T":
                     const TGuests = orders.filter((order) => (order.items.length > 0));
                     const tmpTCards = TGuests.map((element) => {
-                        return (<CardTableOrder
+                        return (<CardTableDespatch
                                     className = "border"
-                                    key = {`T_${element.id}`}
-                                    pGuestId = {element.id}/>);
+                                    key = {`TDC_${element.id}`}
+                                    pGuestId = {element.id}
+                                    onDespatched = {(o, g) => {handleSuccess(o, g)}} />);
                     });
                       
-                    setTableCardComponents(tmpTCards);
+                    setTableDespatchCardComponents(tmpTCards);
                     setTableOrderCount(TGuests.length);
 
                     break;
@@ -337,17 +364,17 @@ const HeaderLogin = forwardRef((props, ref) => {
             <MiscellaneousOrderList 
                 key = "keyMiscellaneousOrderList"
                 ref = {miscellaneousOrderListRef}
-                onRefreshed = {handleHefresh}/>
+                onRefreshed = {handleRefresh}/>
 
             <ServiceOrderList 
                 key = "keyServiceOrderList"
                 ref = {serviceOrderListRef}
-                onRefreshed = {handleHefresh}/>
+                onRefreshed = {handleRefresh}/>
 
-            <TableOrderList 
-                key = "keyTableOrderList"
-                ref = {tableOrderListRef}
-                onRefreshed = {handleHefresh}/>
+            <TablePendingOrderList 
+                key = "keyTablePendingOrderList"
+                ref = {tablePendingOrderListRef}
+                onRefreshed = {handleRefresh}/>
 
             {/* Start:: Left navbar links */}
             <ul className="navbar-nav">
@@ -444,7 +471,7 @@ const HeaderLogin = forwardRef((props, ref) => {
                             <Offcanvas.Title><h3>Pending Table Orders</h3></Offcanvas.Title>
                         </Offcanvas.Header>
                         <Offcanvas.Body>
-                            {tableCardComponents}
+                            {tableDespatchCardComponents}
                         </Offcanvas.Body>
                     </Offcanvas>
                 </li>
@@ -499,8 +526,6 @@ const HeaderLogin = forwardRef((props, ref) => {
 
                 <li className="nav-item dropdown">
 
-
-
                     {/* <nav className="flex items-start justify-end px-4 py-2 border-b"> */}
                         {/* <Dropdown trigger={<Button>user</Button>}>
                             <DropdownItem>
@@ -508,8 +533,6 @@ const HeaderLogin = forwardRef((props, ref) => {
                             </DropdownItem>
                         </Dropdown> */}
                     {/* </nav> */}
-
-
 
                     <Dropdown className="d-flex align-items-center ms-3 ms-lg-3"
                         ref={dropUserRef}>

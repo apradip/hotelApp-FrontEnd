@@ -38,7 +38,7 @@ export const ContextProvider = ({children}) => {
   const guestExpensePaymentAPI = "/guestExpensesPayments";
   const itemPerRow = 3;
   const itemPerPage = itemPerRow * 3;
-  const dashboardRoomItemPerRow = 4;
+  const dashboardRoomItemPerRow = 3;
   const dashboardTableItemPerRow = 4;
 
   const [screenSize, setScreenSize] = useState(undefined);

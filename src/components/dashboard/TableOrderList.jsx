@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef } from "react";
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { toast } from "react-toastify";
 
 import { HotelId } from "../../App";
@@ -18,7 +18,7 @@ const TableOrderList = forwardRef((props, ref) => {
     let cardRefs = useRef([]);
     const {data, loading, error, doFetch} = useFetchWithAuth({
         url: `${contextValues.tableAPI}/${hotelId}`,
-        params: { option: "A", search: ""}
+        params: {option: "A", search: ""}
     });
 
     // Start:: fetch data list from api
@@ -44,24 +44,61 @@ const TableOrderList = forwardRef((props, ref) => {
             setTableCount(data.filter((item) => item.isOccupied === true).length);
     }, [data, error, loading]);
 
+    // Start:: refresh data
+    const handleRefresh = () => {setDataChanged(true);};
+    // End:: refresh data
+    
     // Start:: show all data in card format
     const displayData = (pData = []) => {
         try {
-            return pData.map((object, idx) => {
-                cardRefs.current.push();
-                
-                return (<Order
-                    ref = {(el) => cardRefs.current[idx] = el}
-                    key = {`_guest_table_row_${idx}`}
-                    pIndex = {idx + 1}
-                    pGuestId = {object.guestId}
-                    pTableNo = {object.no} />);
+            let index = 0;
+            let prviousGuestId = "";
+            let previousTableNo = "";
+
+            return pData.map((item, idx) => {
+                if (prviousGuestId !== "") {
+                    if (prviousGuestId !== item.guestId) {
+                        index ++;
+                        prviousGuestId = item.guestId; 
+                        previousTableNo = `T-${item.no}`;
+        
+                        cardRefs.current.push();
+                        
+                        return (<Order
+                            ref = {(el) => cardRefs.current[index] = el}
+                            key = {`_guest_table_order_row_${index}`}
+                            pIndex = {index}
+                            pGuestId = {prviousGuestId}
+                            pTableNo = {previousTableNo} />);
+                    } else {
+                        prviousGuestId = item.guestId; 
+                        previousTableNo = previousTableNo + "," + `T-${item.no}`;
+
+                        if (pData.length === idx + 1){
+                            return (<Order
+                                ref = {(el) => cardRefs.current[index] = el}
+                                key = {`_guest_table_order_row_${index}`}
+                                pIndex = {index}
+                                pGuestId = {prviousGuestId}
+                                pTableNo = {previousTableNo} />);
+                        }
+                    }
+                } else {
+                    prviousGuestId = item.guestId; 
+                    previousTableNo = `T-${item.no}`;
+                }
             });
         } catch (err) {
             console.log(err);
         }
     };
     // End:: show all data in card format
+
+    // Start:: forward reff refresh 
+    useImperativeHandle(ref, () => {
+        return {handleRefresh};
+    });
+    // End:: forward reff refresh
 
     
     // Start:: Html

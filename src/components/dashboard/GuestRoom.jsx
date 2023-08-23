@@ -268,8 +268,8 @@ const GuestRoom = forwardRef((props, ref) => {
                 </td>
                 <td className="align-items-center text-muted fs-8">
                     <div className="d-flex justify-content-start flex-column">
-                        <span className="d-block">{formatDDMMYYYY(props.pIndate)}</span>
-                        <span className="d-block">6th Jan 2023</span>
+                        <span className="d-block">{formatDDMMYYYY(props.pInDate)}</span>
+                        <span className="d-block">{formatDDMMYYYY(props.pOutDate)}</span>
                     </div>
                 </td>
                 <td className="text-end">

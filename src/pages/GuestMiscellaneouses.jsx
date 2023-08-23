@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Form, Breadcrumb, Row, Col, Placeholder } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { Operation } from "../components/common/Common";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -15,28 +16,16 @@ import io from "socket.io-client";
 
 const socket = io.connect("http://localhost:3001");
 
-const Operation = {
-    GuestAdd: "GUEST_ADD",
-    GuestMod: "GUEST_MOD",
-    GuestDel: "GUEST_DEL",
-    Order: "ORDER",
-    Despatch: "DESPATCH",
-    BillGenerate: "BILL_GENERATE",
-    PaymentAdd: "PAYMENT_ADD",
-    Checkout: "GUEST_CHECKOUT"
-};
 
 // Start:: Component
 // props parameters
 // onSuccess
-// onClose
 
 // useImperativeHandle
 // changeSearch
 // openAdd
 // openEdit 
 // openDelete
-// close
 const GuestMiscellaneouses = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
@@ -131,16 +120,6 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     };
     // End:: Open delete modal
 
-    // Start:: Close modal
-    const close = () => {
-        try {
-            props.onClose();
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // End:: Close modal
-
     // Start:: on data operation successfully
     const handleSuccess = (operation, guestId="") => {
         try {
@@ -228,7 +207,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
-        return {changeSearch, openAdd, openEdit, openDelete, close};
+        return {changeSearch, openAdd, openEdit, openDelete};
     });
     // End:: forward reff change search and open add/edit/delete modal
 
@@ -289,27 +268,16 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             ref = {(el) => cardRefs.current[itemIdx] = el}
                             pIndex = {itemIdx}
                             pGuestId = {pData.id} 
-                            pName = {pData.name}
-                            pMobile = {pData.mobile}
-                            pGuestCount = {pData.guestCount}
-                            pCorporateName = {pData.corporateName}
-                            pCorporateAddress = {pData.corporateAddress}
-                            pGstNo = {pData.gstNo}
-                            pBalance = {pData.balance}
-                            pOption = {pData.option}
-                            pInDate = {pData.inDate}
-                            pRooms = {pData.rooms}
                             pCallingFrom = {"M"}
-                            onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
-                            onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 
-                            onBooked = {() => {handleSuccess(Operation.Booked, pData.id)}}
-                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
-                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
-                            onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 
-                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id)}}
-                            onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
-                            onActivated = {() => {handleActivated(itemIdx)}} 
-                            onClosed = {close} />}
+                            onEdited = {(o, g) => {handleSuccess(o, g)}}
+                            onDeleted = {(o, g) => {handleSuccess(o, g)}} 
+                            onBooked = {(o, g) => {handleSuccess(o, g)}}
+                            onBillGenerated = {(o, g) => {handleSuccess(o, g)}}
+                            onPaymentAdded = {(o, g) => {handleSuccess(o, g)}} 
+                            onCheckedout = {(o, g) => {handleSuccess(o, g)}} 
+                            onOrdered = {(o, g) => {handleSuccess(o, g)}}
+                            onDespatched = {(o, g) => {handleSuccess(o, g)}}
+                            onActivated = {() => {handleActivated(itemIdx)}} />}
 
                     {(pData.option === "M") && 
                         <CardMiscellaneous 
@@ -328,13 +296,12 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             pInDate = {pData.inDate}
                             onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
                             onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}}
-                            onOrdered = {() => {handleSuccess(Operation.Order, pData.id)}}
-                            onDespatched = {() => {handleSuccess(Operation.Despatch, pData.id)}}
+                            onOrdered = {(o, g) => {handleSuccess(o, g)}}
+                            onDespatched = {(o, g) => {handleSuccess(o, g)}}
                             onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
                             onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
                             onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 
-                            onActivated = {() => {handleActivated(itemIdx)}} 
-                            onClosed = {close}/>}
+                            onActivated = {() => {handleActivated(itemIdx)}} />}
                 </Col>);
         } catch (err) {
             console.log(err);
@@ -396,8 +363,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                 <Col xl={4} md={4} key={colKey}>
                 <CardPlaceholder 
                     ref = {(el) => cardRefs.current[itemIdx] = el}
-                    pIndex = {itemIdx}
-                    onClosed = {close}/>
+                    pIndex = {itemIdx}/>
                 </Col>);
         } catch (err) {
             console.log(err);
@@ -507,8 +473,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             <Add 
                 ref = {addRef}   
                 pOption = {"M"}
-                onAdded = {() => {handleSuccess(Operation.GuestAdd)}}
-                onClosed = {close}/>
+                onAdded = {() => {handleSuccess(Operation.GuestAdd)}}/>
             {/* End :: add component */}
 
         </div>

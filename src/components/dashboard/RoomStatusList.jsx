@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef, forwardRef } from "react";
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { toast } from "react-toastify";
 
 import { HotelId } from "../../App";
@@ -57,6 +57,10 @@ const RoomStatusList = forwardRef((props, ref) => {
         data && setRoomCount(count);
     }, [data, error, loading]);
 
+    // Start:: refresh data
+    const handleRefresh = () => {setDataChanged(true);};
+    // End:: refresh data
+    
     // Start:: show all data in card format
     const displayData = (pData = []) => {
         let rowIdx = 0;
@@ -111,7 +115,7 @@ const RoomStatusList = forwardRef((props, ref) => {
                         key = {`guest_room_obj_${pData._id}`}
                         pIndex = {itemIdx}
                         pRoomId = {pData._id} 
-                        pNo = {pData.no}
+                        pNo = {`R-${pData.no}`}
                         pGuestCount = {pData.guestCount}
                         pStatus = {pData.isOccupied}/>);
         } catch (err) {
@@ -120,6 +124,12 @@ const RoomStatusList = forwardRef((props, ref) => {
     };
     // End:: show all data in card format
 
+    // Start:: forward reff refresh 
+    useImperativeHandle(ref, () => {
+        return {handleRefresh};
+    });
+    // End:: forward reff refresh
+    
     
     // Start:: Html
     return (
@@ -127,13 +137,13 @@ const RoomStatusList = forwardRef((props, ref) => {
             <div className="dashboard-card-header border-0">
                 <h3 className="card-title align-items-start flex-column">
                     <span className="text-dark fs-4 mb-1">Room status</span>
-                    <span className="text-muted mt-1 fs-8 d-block">Total <b>{roomCount}</b> no of room(s) are unoccupied</span>
+                    <span className="text-muted mt-1 fs-8 d-block">Total <b className="text-danger">{roomCount}</b> no of room(s) are unoccupied</span>
                 </h3>
             </div>
-            <div className="card-body py-1 px-4 scrollable">
+            <div className="card-body py-1 px-3 scrollable">
                 {!loading && 
-                        data && 
-                            displayData(data)}
+                    data && 
+                        displayData(data)}
             </div>
         </div>);
     // End:: Html

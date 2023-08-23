@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { Row, Col, Card, Dropdown } from "react-bootstrap";
+import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import { Users, Phone, MapPin, Layers, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
 import { toast } from "react-toastify";
-import { Users, MapPin, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
 import { subStr, properCase, formatINR, getTables } from "../common/Common";
 import TimeElapsed from "../common/TimeElapsed";
 
@@ -49,6 +49,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handelOpenPayment
 // handelOpenCheckout
 // handelOpenDelete
+// handelRefresh
 const GuestTableCard = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
@@ -61,6 +62,7 @@ const GuestTableCard = forwardRef((props, ref) => {
     const generateBillRef = useRef(null);
     const checkoutRef = useRef(null);
 
+    const [guestId, setGuestId] = useState(props.pGustId);
     const [corporateName, setCorporateName] = useState(props.pCorporateName);
     const [corporateAddress, setCorporateAddress] = useState(props.pCorporateAddress);
     const [name, setName] = useState(props.pName);
@@ -73,12 +75,14 @@ const GuestTableCard = forwardRef((props, ref) => {
     const [active, setActive] = useState(false);
 
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
+        url: `${contextValues.guestAPI}/${hotelId}/${guestId}`
     });
     
     useEffect(() => {
         error && toast.error(error);
 
+        data && console.log(data)
+        data && setGuestId(data.id);
         data && setCorporateName(data.corporateName);
         data && setCorporateAddress(data.corporateAddress); 
         data && setName(data.name);
@@ -86,8 +90,21 @@ const GuestTableCard = forwardRef((props, ref) => {
         data && setGuestCount(data.guestCount);  
         data && setBalance(data.balance);
         data && setInDate(data.inDate);
+        
+        data && setFocus(true);
+        data && setActive(true);
     }, [data, error, loading]);
 
+    // Start:: get data from api
+    const handelRefresh = async () => {
+        try {
+            await doFetch()
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: get data from api
+    
     // Start:: Show view modal 
     const handelOpenView = () => {
         try {
@@ -190,7 +207,8 @@ const GuestTableCard = forwardRef((props, ref) => {
             handelOpenOrder, 
             handelOpenDespatch, 
             handelOpenGenerateBill, 
-            handelOpenDelete
+            handelOpenDelete,
+            handelRefresh
         }
     });
     // End:: forward reff de-select, show edit/delete modal function
@@ -233,6 +251,8 @@ const GuestTableCard = forwardRef((props, ref) => {
                                     <b>{properCase(subStr(name, 20))}</b>
                                 </>
                             }
+
+                            <Badge pill bg = "secondary">T</Badge>
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
@@ -242,7 +262,8 @@ const GuestTableCard = forwardRef((props, ref) => {
                     <Row className="d-none d-md-block d-lg-block d-xl-block m-1">
                         {props.pTables ? 
                             <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                               Table(s): {getTables(props.pTables)}
+                               <Layers className="feather-16 mr-2"/>
+                               {getTables(props.pTables)}
                             </Col>
                         :
                             corporateName ?
@@ -251,13 +272,14 @@ const GuestTableCard = forwardRef((props, ref) => {
                                 </Col>
                                 :
                                 <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                                    Mobile no. {mobile}
+                                    <Phone className="feather-16 mr-2"/>
+                                    {mobile}
                                 </Col>}
                     </Row>
 
                     <Row className="m-1">
                         <Col xs={10} sm={10} md={6} lg={6} xl={6} className="p-0">
-                            {guestCount} no of guest(s)
+                            {guestCount} guest(s)
                         </Col>
 
                         <Col xs={0} sm={0} md={5} lg={5} xl={5} className="d-none d-md-block d-lg-block d-xl-block text-right p-0">

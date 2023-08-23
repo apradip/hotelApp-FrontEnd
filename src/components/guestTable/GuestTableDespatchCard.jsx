@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect, forwardRef, useImperativeHandle } from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import { useFormik } from "formik";
-import { getTables } from "../common/Common";
-import { toast } from "react-toastify";
+import { Operation, getTables } from "../common/Common";
+// import { toast } from "react-toastify";
 // import { subStr, getTables } from "../common/Common";
 // import TimeElapsed from "../common/TimeElapsed";
 
@@ -18,7 +18,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 // pGuestId
 // onRefresh()
 
-const GuestTableOrderCard = forwardRef((props, ref) => {
+const GuestTableDespatchCard = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [transactionId, setTransactionId] = useState(null);
@@ -68,12 +68,12 @@ const GuestTableOrderCard = forwardRef((props, ref) => {
             try {
                 despatchData && await doUpdate({deliveries: despatchData});
 
-                if (error === null) {
+                if (!error) {
                     resetForm();
                     await doFetch();
-                    toast.success("Order despatched successfully");
+                    props.onDespatched(Operation.Table_Despatch, props.pGuestId);
                 } else {
-                    toast.danger(error);
+                    console.log(error);
                 }
             } catch (err) {
                 console.log(err);
@@ -107,14 +107,14 @@ const GuestTableOrderCard = forwardRef((props, ref) => {
                     <Card 
                         className = "border"
                         ref = {ref}
-                        key = {`TO_${data.id}`}> 
+                        key = {`TPOC_${data.id}`}> 
 
                         {/* Start:: card body */}
                         <Card.Body className="text-sm p-1"> 
 
                             <Row className="d-none d-md-block d-lg-block d-xl-block m-1">
                                 <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                                    Table(s): {data && getTables(data.tables)}
+                                    {data && getTables(data.tables)}
                                 </Col>
                             </Row>
 
@@ -166,4 +166,4 @@ const GuestTableOrderCard = forwardRef((props, ref) => {
 
 });
 
-export default GuestTableOrderCard;
+export default GuestTableDespatchCard;

@@ -1,5 +1,35 @@
 import moment from "moment";
 
+export const MessageRoom = {
+    Room: "SOCKET_ROOM",
+    Table: "SOCKET_TABLE",
+    Service: "SOCKET_SERVICE",
+    Miscellaneous: "SOCKET_MISCELLANEOUS"
+};
+
+export const Operation = {
+    GuestAdd: "GUEST_ADD",
+    GuestMod: "GUEST_MOD",
+    GuestDel: "GUEST_DEL",
+    Booked: "BOOKED",
+    Table_Order: "TABLE_ORDER",
+    Service_Order: "SERVICE_ORDER",
+    Miscellaneous_Order: "MISCELLANEOUS_ORDER",
+    Table_Despatch: "TABLE_DESPATCH",
+    Service_Despatch: "SERVICE_DESPATCH",
+    Miscellaneous_Despatch: "MISCELLANEOUS_DESPATCH",
+    BillGenerate: "BILL_GENERATE",
+    Room_PaymentAdd: "ROOM_PAYMENT_ADD",
+    Table_PaymentAdd: "TABLE_PAYMENT_ADD",   
+    Service_PaymentAdd: "SERVICE_PAYMENT_ADD",
+    Miscellaneous_PaymentAdd: "MISCELLANEOUS_PAYMENT_ADD",
+    Room_Checkout: "ROOM_CHECKOUT",
+    Table_Checkout: "TABLE_CHECKOUT",
+    Service_Checkout: "SERVICE_CHECKOUT",
+    Miscellaneous_Checkout: "MISCELLANEOUS_CHECKOUT",
+};
+
+
 export const subStr = (text, len) => {
     let t = ''
     t = text && text.length > len ? text.substr(0, len) + ' ...' : text
@@ -7,12 +37,12 @@ export const subStr = (text, len) => {
 };
 
 export const properCase = (text) => { 
-    const properCaseStr = text.replace(
-        /\w\S*/g,
-        (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-      );
-
-      return properCaseStr;
+    if (text) {
+        const properCaseStr = text.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+        return properCaseStr;
+    } else {
+        return text;
+    }
 }
 
 export const  getPage = (baseURL, url) => {
@@ -400,7 +430,7 @@ export const getRooms = (roomObject) => {
     if (roomObject) {
         if (roomObject.length) {
             roomObject.map((room) => (
-                rooms.length > 0 ? rooms = rooms + ", " + room.no : rooms = room.no
+                rooms.length > 0 ? rooms = rooms + ", " + `R-${room.no}` : rooms = `R-${room.no}`
             ));
         }
     }
@@ -419,7 +449,7 @@ export const getTables = (tableObject) => {
         if (tableObject.length) {
             if (Array.isArray(tableObject) && tableObject.length > 0){
                 tableObject.map((table) => (
-                    tables.length > 0 ? tables = tables + ", " + table.no : tables = table.no));
+                    tables.length > 0 ? tables = tables + ", " + `T-${table.no}` : tables = `T-${table.no}`));
             }
         }
     }

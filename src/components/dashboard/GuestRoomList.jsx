@@ -5,16 +5,7 @@ import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import Guest from "./GuestRoom";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-
-const Operation = {
-    GuestAdd: "GUEST_ADD",
-    GuestMod: "GUEST_MOD",
-    GuestDel: "GUEST_DEL",
-    Booked: "BOOKED",
-    BillGenerate: "BILL_GENERATE",
-    PaymentAdd: "PAYMENT_ADD",
-    Checkout: "GUEST_CHECKOUT"
-};
+import { Operation } from "../common/Common";
 
 
 // Start:: Component
@@ -30,7 +21,7 @@ const Operation = {
 // onClosed()
 
 // useImperativeHandle
-// handleShowModal
+// handleRefresh
 const GuestRoomList = forwardRef((props, ref) => {    
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
@@ -65,15 +56,9 @@ const GuestRoomList = forwardRef((props, ref) => {
         data && setGuestCount(count);
     }, [data, error, loading]);
 
-    // // Start:: Close modal
-    // const close = () => {
-    //     try {
-    //         props.onClose();
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // // End:: Close modal
+    // Start:: refresh data
+    const handleRefresh = () => {setDataChanged(true);};
+    // End:: refresh data
 
     // Start:: on data operation successfully
     const handleSuccess = (operation) => {
@@ -132,33 +117,33 @@ const GuestRoomList = forwardRef((props, ref) => {
     // Start:: show all data in card format
     const displayData = (pData = []) => {
         try {
-            return pData.map((object, idx) => {
+            return pData.map((item, idx) => {
                 cardRefs.current.push();
                 
                 return (<Guest
                     ref = {(el) => cardRefs.current[idx] = el}
-                    key = {`_guest_room_row_${idx}`}
+                    key = {`_GRR_${item.id}`}
                     pIndex = {idx}
-                    pGuestId = {object.id} 
-                    pName = {object.name}
-                    pMobile = {object.mobile}
-                    pGuestCount = {object.guestCount}
-                    pCorporateName = {object.corporateName}
-                    pCorporateAddress = {object.corporateAddress}
-                    pBalance = {object.balance}
-                    // pOption = {object.option}
-                    pIndate = {object.inDate}
-                    pRooms = {object.rooms}
-                    onEdited = {() => {handleSuccess(Operation.GuestMod)}}
-                    onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
-                    onBooked = {() => {handleSuccess(Operation.Booked)}}
-                    onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
-                    onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
-                    onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
-                    onOrdered = {() => {handleSuccess(Operation.Order)}}
-                    onDespatched = {() => {handleSuccess(Operation.Despatch)}}
+                    pGuestId = {item.id} 
+                    pName = {item.name}
+                    pMobile = {item.mobile}
+                    pGuestCount = {item.guestCount}
+                    pCorporateName = {item.corporateName}
+                    pCorporateAddress = {item.corporateAddress}
+                    pBalance = {item.balance}
+                    // pOption = {item.option}
+                    pInDate = {item.inDate}
+                    pOutDate = {item.outDate}
+                    pRooms = {item.rooms}
+                    // onEdited = {() => {handleSuccess(Operation.GuestMod)}}
+                    // onDeleted = {() => {handleSuccess(Operation.GuestDel)}} 
+                    // onBooked = {() => {handleSuccess(Operation.Booked)}}
+                    // onBillGenerated = {() => {handleSuccess(Operation.BillGenerate)}}
+                    // onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd)}} 
+                    // onCheckedout = {() => {handleSuccess(Operation.Checkout)}} 
+                    // onOrdered = {() => {handleSuccess(Operation.Order)}}
+                    // onDespatched = {() => {handleSuccess(Operation.Despatch)}}
                     // onActivated={() => {handleActivated(idx)}}
-                    // onClosed = {close}
                     />);
             });
         } catch (err) {
@@ -167,7 +152,13 @@ const GuestRoomList = forwardRef((props, ref) => {
     };
     // End:: show all data in card format
 
-    
+    // Start:: forward reff refresh 
+    useImperativeHandle(ref, () => {
+        return {handleRefresh};
+    });
+    // End:: forward reff refresh
+
+
     // Start:: Html
     return (
         <div className="card card-xl-stretch mb-5 mb-xl-8 dashboard-card">
