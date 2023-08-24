@@ -15,13 +15,13 @@ import Profile from "./auth/Profile";
 import ChangePassword from "./auth/ChangePassword";
 import Logout from "./auth/Logout";
 
-import CardMiscellaneousOrder from "./guestMiscellaneous/GuestMiscellaneousOrderCard";
-import CardServiceOrder from "./guestService/GuestServiceOrderCard";
 import CardTableDespatch from "./guestTable/GuestTableDespatchCard";
+import CardServiceDespatch from "./guestService/GuestServiceDespatchCard";
+import CardMiscellaneousDespatch from "./guestMiscellaneous/GuestMiscellaneousDespatchCard";
 
-import MiscellaneousOrderList from "./guestMiscellaneous/GuestMiscellaneousPendingOrderList";
-import ServiceOrderList from "./guestService/GuestServicePendingOrderList";
 import TablePendingOrderList from "./guestTable/GuestTablePendingOrderList";
+import ServiceOrderList from "./guestService/GuestServicePendingOrderList";
+import MiscellaneousOrderList from "./guestMiscellaneous/GuestMiscellaneousPendingOrderList";
 
 import { Operation, MessageRoom } from "./common/Common";
 
@@ -75,17 +75,17 @@ const HeaderLogin = forwardRef((props, ref) => {
     const contextValues = useStateContext();
     const socket = io.connect("http://localhost:3001");
 
-    const [miscellaneousCardComponents, setMiscellaneousCardComponents] = useState([]);
-    const [serviceCardComponents, setServiceCardComponents] = useState([]);
     const [tableDespatchCardComponents, setTableDespatchCardComponents] = useState([]);
-
-    const miscellaneousOrderListRef = useRef(null);
-    const serviceOrderListRef = useRef(null);
+    const [serviceCardComponents, setServiceCardComponents] = useState([]);
+    const [miscellaneousCardComponents, setMiscellaneousCardComponents] = useState([]);
+    
     const tablePendingOrderListRef = useRef(null);
+    const serviceOrderListRef = useRef(null);
+    const miscellaneousOrderListRef = useRef(null);
 
-    const [miscellaneousOrderCount, setMiscellaneousOrderCount] = useState(0);
-    const [serviceOrderCount, setServiceOrderCount] = useState(0);
     const [tableOrderCount, setTableOrderCount] = useState(0);
+    const [serviceOrderCount, setServiceOrderCount] = useState(0);
+    const [miscellaneousOrderCount, setMiscellaneousOrderCount] = useState(0);
 
     const [showKitchenAlert, setShowKitchenAlert] = useState([false, false, false]);
 
@@ -299,34 +299,6 @@ const HeaderLogin = forwardRef((props, ref) => {
     const handleRefresh = (option, orders) => {
         try {
             switch (option) {
-                case "M":
-                    const MGuests = orders.filter((order) => (order.items.length > 0));
-                    const tmpMCards = MGuests.map((element) => {
-                        return (<CardMiscellaneousOrder
-                                    className = "border"
-                                    key = {`M_${element.id}`}
-                                    pGuestId = {element.id} />);
-                    });
-                      
-                    setMiscellaneousCardComponents(tmpMCards);
-                    setMiscellaneousOrderCount(MGuests.length);
-
-                    break;
-
-                case "S":
-                    const SGuests = orders.filter((order) => (order.items.length > 0));
-                    const tmpSCards = SGuests.map((element) => {
-                        return (<CardServiceOrder
-                                    className = "border"
-                                    key = {`S_${element.id}`}
-                                    pGuestId = {element.id}/>);
-                    });
-                      
-                    setServiceCardComponents(tmpSCards);
-                    setServiceOrderCount(SGuests.length);
-
-                    break;
-
                 case "T":
                     const TGuests = orders.filter((order) => (order.items.length > 0));
                     const tmpTCards = TGuests.map((element) => {
@@ -339,6 +311,36 @@ const HeaderLogin = forwardRef((props, ref) => {
                       
                     setTableDespatchCardComponents(tmpTCards);
                     setTableOrderCount(TGuests.length);
+
+                    break;
+
+                case "S":
+                    const SGuests = orders.filter((order) => (order.items.length > 0));
+                    const tmpSCards = SGuests.map((element) => {
+                        return (<CardServiceDespatch
+                                    className = "border"
+                                    key = {`SDC_${element.id}`}
+                                    pGuestId = {element.id}
+                                    onDespatched = {(o, g) => {handleSuccess(o, g)}} />);
+                    });
+                      
+                    setServiceCardComponents(tmpSCards);
+                    setServiceOrderCount(SGuests.length);
+
+                    break;
+
+                case "M":
+                    const MGuests = orders.filter((order) => (order.items.length > 0));
+                    const tmpMCards = MGuests.map((element) => {
+                        return (<CardMiscellaneousDespatch
+                                    className = "border"
+                                    key = {`MDC_${element.id}`}
+                                    pGuestId = {element.id} 
+                                    onDespatched = {(o, g) => {handleSuccess(o, g)}} />);
+                    });
+                        
+                    setMiscellaneousCardComponents(tmpMCards);
+                    setMiscellaneousOrderCount(MGuests.length);
 
                     break;
                         
@@ -355,7 +357,6 @@ const HeaderLogin = forwardRef((props, ref) => {
         return {changePage, success}
     });
     // End:: forward reff change page
-
 
     // Start:: Html
     return (

@@ -1,31 +1,31 @@
 import React, { useState, useContext, useEffect, forwardRef, useImperativeHandle } from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import { useFormik } from "formik";
-import { toast } from "react-toastify";
+import { Operation } from "../common/Common";
+
+import DespatchGrid from "../common/ItemDespatchGrid";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
-import DespatchGrid from "../common/ItemDespatchGrid";
 
 // Start:: Component
 // props parameters
 // pGuestId
 // onRefresh()
-
-const GuestMiscellaneousOrderCard = forwardRef((props, ref) => {
+const GuestServiceDespatchCard = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [transactionId, setTransactionId] = useState(null);
     const [despatchData, setDespatchData] = useState(null);
 
     const {data, error, loading, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
+        url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
     });         // get pending orders
     const {doUpdate} = useFetchWithAuth({
-        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}/${transactionId}`
+        url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}/${transactionId}`
     });         // update delivery status
 
     useEffect(() => {
@@ -40,8 +40,10 @@ const GuestMiscellaneousOrderCard = forwardRef((props, ref) => {
 
     useEffect(() => {
         error && console.log(error);
+        
         data && setTransactionId(data.transactionId);
     }, [data, error, loading]);
+    
 
     const handelChangeData = (gridData) => {
         let listData = [];
@@ -67,9 +69,9 @@ const GuestMiscellaneousOrderCard = forwardRef((props, ref) => {
                 if (error === null) {
                     resetForm();
                     await doFetch();
-                    toast.success("Order despatched successfully");
+                    props.onDespatched(Operation.Service_Despatch, props.pGuestId);
                 } else {
-                    toast.danger(error);
+                    console.log(error);
                 }
             } catch (err) {
                 console.log(err);
@@ -103,14 +105,14 @@ const GuestMiscellaneousOrderCard = forwardRef((props, ref) => {
                     <Card 
                         className = "border"
                         ref = {ref}
-                        key = {`MO_${data.id}`}> 
+                        key = {`SO_${data.id}`}> 
 
                         {/* Start:: card body */}
                         <Card.Body className="text-sm p-1"> 
 
                             <Row className="d-none d-md-block d-lg-block d-xl-block m-1">
                                 <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                                    Guest: {data && data.name}
+                                    {data && data.name}
                                 </Col>
                             </Row>
 
@@ -161,4 +163,4 @@ const GuestMiscellaneousOrderCard = forwardRef((props, ref) => {
 
 });
 
-export default GuestMiscellaneousOrderCard;
+export default GuestServiceDespatchCard;

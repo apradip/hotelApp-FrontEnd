@@ -2,9 +2,6 @@ import React, { useState, useContext, useEffect, forwardRef, useImperativeHandle
 import { Row, Col, Card } from "react-bootstrap";
 import { useFormik } from "formik";
 import { Operation, getTables } from "../common/Common";
-// import { toast } from "react-toastify";
-// import { subStr, getTables } from "../common/Common";
-// import TimeElapsed from "../common/TimeElapsed";
 
 import DespatchGrid from "../common/ItemDespatchGrid";
 
@@ -17,7 +14,6 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 // props parameters
 // pGuestId
 // onRefresh()
-
 const GuestTableDespatchCard = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();

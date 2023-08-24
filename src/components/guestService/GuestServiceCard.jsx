@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { toast } from "react-toastify";
 import { Users, MapPin, Phone, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
-import { subStr, properCase, formatINR } from "../common/Common";
+import { Operation, subStr, properCase, formatINR } from "../common/Common";
+import { toast } from "react-toastify";
 import TimeElapsed from "../common/TimeElapsed";
 
 import View from "./GuestServiceView";
@@ -29,16 +29,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // props parameters
 // pIndex
 // pGuestId
-// pRoomNos
-// pName
-// pMobile
-// pAddress
-// pCheckInDate
-// pCheckOutDate
-// pTotalPaidAmount
-// pTotalDueAmount
 // onActivated()
-// onClosed()
 
 // useImperativeHandle
 // handleDeSelect
@@ -47,6 +38,8 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handelOpenGenerateBill
 // handelOpenCheckout
 // handelOpenDelete
+// handelRefresh
+// getGuestId
 const GuestServiceCard = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
@@ -59,32 +52,70 @@ const GuestServiceCard = forwardRef((props, ref) => {
     const generateBillRef = useRef(null);
     const checkoutRef = useRef(null);
     
-    const [corporateName, setCorporateName] = useState(props.pCorporateName);
-    const [corporateAddress, setCorporateAddress] = useState(props.pCorporateAddress);
-    const [name, setName] = useState(props.pName);
-    const [mobile, setMobile] = useState(props.pMobile);
-    const [guestCount, setGuestCount] = useState(props.pGuestCount);
-    const [balance, setBalance] = useState(props.pBalance);
-    const [inDate, setInDate] = useState(props.pInDate);
+    const [corporateName, setCorporateName] = useState();
+    const [corporateAddress, setCorporateAddress] = useState();
+    const [name, setName] = useState();
+    const [mobile, setMobile] = useState();
+    const [guestCount, setGuestCount] = useState();
+    const [balance, setBalance] = useState();
+    const [inDate, setInDate] = useState();
+    const [transactionId, setTransactionId] = useState();
 
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
 
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
+        url: `${contextValues.guestServiceAPI}/${hotelId}/${props.pGuestId}`,
+        params: {option: "N"}
     });
-
+    
+    // Start:: fetch data list from api
     useEffect(() => {
-        error && toast.error(error);
+        (async () => {
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+            })();
+    }, []);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch data list from api
 
-        data && setCorporateName(data.corporateName);
-        data && setCorporateAddress(data.corporateAddress); 
-        data && setName(data.name);
-        data && setMobile(data.mobile);
-        data && setGuestCount(data.guestCount);  
-        data && setBalance(data.balance);
-        data && setInDate(data.inDate);
+    // Start:: set data to state variables
+    useEffect(() => {
+        try {
+            error && toast.error(error);
+
+            data && setCorporateName(data.corporateName);
+            data && setCorporateAddress(data.corporateAddress); 
+            data && setName(data.name);
+            data && setMobile(data.mobile);
+            data && setGuestCount(data.guestCount);  
+            data && setBalance(data.balance);
+            data && setInDate(data.inDate);
+            data && setTransactionId(data.transactionId);
+
+            data && setFocus(true);
+            data && setActive(true);
+        } catch (err) {
+            console.log(err);
+        }        
     }, [data, error, loading]);
+    // End:: set data to state variables
+
+    // Start :: get guest Id of this component
+    const getGuestId = () => {return props.pGuestId;}
+    // End :: get guest Id of this component
+    
+    // Start:: get data from api
+    const handelRefresh = async () => {
+        try {
+            await doFetch()
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: get data from api
 
     // Start:: Show view modal 
     const handelOpenView = () => {
@@ -162,12 +193,6 @@ const GuestServiceCard = forwardRef((props, ref) => {
         }
     };
     // End:: Show delete modal 
-    
-    // Start:: Close all modal 
-    const handleClose = () => {
-        props.onClosed();
-    };
-    // End:: Close all modal 
 
     // Start:: de-select card 
     const handleDeSelect = () => {
@@ -188,7 +213,9 @@ const GuestServiceCard = forwardRef((props, ref) => {
             handelOpenOrder, 
             handelOpenDespatch, 
             handelOpenGenerateBill, 
-            handelOpenDelete
+            handelOpenDelete,
+            handelRefresh,
+            getGuestId
         };
     });
     // End:: forward reff de-select, show edit/delete modal function
@@ -199,7 +226,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
             {/* Start :: card component */}
             <Card 
                 ref = {ref}
-                key = {props.pIndex}
+                key = {`SC_${props.pGuestId}`}
                 index = {props.pIndex}
                 className = "border"
                 border = {active ? "info" : focus ? "primary" : ""}  
@@ -241,14 +268,14 @@ const GuestServiceCard = forwardRef((props, ref) => {
                     <Row className="d-none d-md-block d-lg-block d-xl-block m-1">
                         <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
                         {corporateName ?
-                                <>
-                                    {properCase(subStr(corporateAddress, 30))}
-                                </>
-                            :
-                                <>
-                                    <Phone className="feather-16 mr-2"/>
-                                    {mobile}
-                                </>
+                            <>
+                                {properCase(subStr(corporateAddress, 30))}
+                            </>
+                        :
+                            <>
+                                <Phone className="feather-16 mr-2"/>
+                                {mobile}
+                            </>
                         }
                         </Col>
                     </Row>
@@ -259,7 +286,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                         </Col>
                         <Col xs={0} sm={0} md={5} lg={5} xl={5} className="d-none d-md-block d-lg-block d-xl-block text-right p-0">
                             <TimeElapsed
-                                pInDate={inDate}/>
+                                pInDate = {inDate} />
                         </Col>
                         <Col xs={2} sm={2} md={1} lg={1} xl={1} className="text-right p-0">
                             {/* Start:: operational menu */}
@@ -282,13 +309,13 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey="3" 
-                                        disabled={props.pTransactionId !== "undefined" ? false : true}
+                                        disabled={transactionId !== "undefined" ? false : true}
                                         onClick={() => {handelOpenGenerateBill()}}>
                                         <FileText className="feather-16 mr-3"/>Bill
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey="4"
-                                        disabled={props.pTransactionId !== "undefined" ? false : true}
+                                        disabled={transactionId !== "undefined" ? false : true}
                                         onClick={() => {handelOpenCheckout()}}>
                                         <LogOut className="feather-16 mr-3"/>Check out
                                     </Dropdown.Item>
@@ -320,8 +347,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 {/* Start :: view component */}
                 <View
                     ref = {viewRef}
-                    pGuestId = {props.pGuestId} 
-                    onClosed = {() => {handleClose();}} />
+                    pGuestId = {props.pGuestId} />
                 {/* End :: view component */}
 
                 {/* Start :: edit component */}
@@ -329,52 +355,46 @@ const GuestServiceCard = forwardRef((props, ref) => {
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
                     pOption = {"S"}
-                    onSaved = {async () => {await doFetch(); props.onEdited();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {() => {props.onEdited(Operation.GuestMod, props.pGuestId)}} />
                 {/* End :: edit component */}
 
                 {/* Start :: delete employee component */}
                 <Delete 
                     ref = {deleteRef}
                     pId = {props.pGuestId} 
-                    pName = {props.pName}
-                    onDeleted = {() => {props.onDeleted()}} 
-                    onClosed = {() => {handleClose();}} />
+                    pName = {name}
+                    onDeleted = {() => {props.onDeleted(Operation.GuestDel, props.pGuestId)}} />
                 {/* End :: delete employee component */}
 
                 {/* Start :: order component */}
                 <Order 
                     ref = {orderRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onOrdered();}} 
-                    onClosed = {() => {handleClose();}} />
+                    onSaved = {() => {props.onOrdered(Operation.Service_Order, props.pGuestId)}} />
                 {/* End :: order component */}
 
                 {/* Start :: despatch component */}
                 <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId}
-                    onSaved = {async () => {await doFetch(); props.onDespatched();}} 
-                    onClosed = {() => {handleClose()}} />
+                    onSaved = {() => {props.onDespatched(Operation.Service_Despatch, props.pGuestId)}} />
                 {/* End :: despatch component */}
 
                 {/* Start :: generate & display summery bill component */}
                 <GenerateBill 
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {async () => {await doFetch(); props.onPaymentAdded();}}
-                    onSaved = {async () => {await doFetch(); props.onBillGenerated();}}
-                    onClosed = {() => {handleClose();}} />
+                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.BillGenerate, props.pGuestId)}}
+                    onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId)}} />
                 {/* End :: generate & display bill component */}
 
                 {/* Start :: checkout component */}
                 <Checkout
                     ref = {checkoutRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
-                    pCorporateName = {props.pCorporateName}
-                    onSaved = {() => {props.onCheckedout();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    pName = {name}
+                    pCorporateName = {corporateName}
+                    onSaved = {() => {props.onCheckedout(Operation.Service_Checkout, props.pGuestId)}} />
                 {/* End :: checkout component */}
             </>            
         </>

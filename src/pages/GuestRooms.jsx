@@ -338,95 +338,114 @@ const GuestRooms = forwardRef((props, ref) => {
                 case Operation.GuestAdd:
                     toast.success("Guest successfully added");
                     socket.emit(MessageRoom.Room, payload);
+                    
                     break;
         
                 case Operation.GuestMod:
                     toast.success("Guest successfully changed");
                     socket.emit(MessageRoom.Room, payload);
+                    
                     break;
 
                 case Operation.GuestDel:
                     toast.success("Guest successfully deleted");
                     socket.emit(MessageRoom.Room, payload);
+                    
                     break;               
                         
                 case Operation.Booked:
                     toast.success("Room successfully booked");
                     socket.emit(MessageRoom.Room, payload);
+
                     break;               
         
                 case Operation.BillGenerate:
                     socket.emit(MessageRoom.Room, payload);    
+                    
                     break;                                
-                        
-                case Operation.Miscellaneous_Order:
+    
+                case Operation.Table_Order:
                     toast.success("Order successfully placed");
-                    socket.emit(MessageRoom.Miscellaneous, payload);
+                    socket.emit(MessageRoom.Table, payload);
+                    
                     break;               
 
                 case Operation.Service_Order:
                     toast.success("Order successfully placed");
                     socket.emit(MessageRoom.Service, payload);
+                    
                     break;               
-
-                case Operation.Table_Order:
-                    toast.success("Order successfully placed");
-                    socket.emit(MessageRoom.Table, payload);
-                    break;               
-                        
-                case Operation.Miscellaneous_Despatch:
-                    toast.success("Order successfully despatched");
-                    socket.emit(MessageRoom.Miscellaneous, payload);
-                    break;                
     
-                case Operation.Service_Despatch:
-                    toast.success("Order successfully despatched");
-                    socket.emit(MessageRoom.Service, payload);
-                    break;                
+                case Operation.Miscellaneous_Order:
+                    toast.success("Order successfully placed");
+                    socket.emit(MessageRoom.Miscellaneous, payload);
+                    
+                    break;               
     
                 case Operation.Table_Despatch:
                     toast.success("Order successfully despatched");
                     socket.emit(MessageRoom.Table, payload);
+                    
+                    break;                
+                        
+                case Operation.Service_Despatch:
+                    toast.success("Order successfully despatched");
+                    socket.emit(MessageRoom.Service, payload);
+                    
                     break;                
 
-                case Operation.Miscellaneous_PaymentAdd:
-                    toast.success("Payment successfully done");
+                case Operation.Miscellaneous_Despatch:
+                    toast.success("Order successfully despatched");
                     socket.emit(MessageRoom.Miscellaneous, payload);
-                    break;
-
-                case Operation.Service_PaymentAdd:
+                    
+                    break;                
+    
+                case Operation.Room_PaymentAdd:
                     toast.success("Payment successfully done");
-                    socket.emit(MessageRoom.Service, payload);
+                    socket.emit(MessageRoom.Room, payload);
+                    
                     break;
 
                 case Operation.Table_PaymentAdd:
                     toast.success("Payment successfully done");
                     socket.emit(MessageRoom.Table, payload);
-                    break;
-
-                case Operation.Room_PaymentAdd:
-                    toast.success("Payment successfully done");
-                    socket.emit(MessageRoom.Room, payload);
+                    
                     break;
                         
-                case Operation.Miscellaneous_Checkout:
+                case Operation.Service_PaymentAdd:
+                    toast.success("Payment successfully done");
+                    socket.emit(MessageRoom.Service, payload);
+                    
+                    break;
+
+                case Operation.Miscellaneous_PaymentAdd:
+                    toast.success("Payment successfully done");
+                    socket.emit(MessageRoom.Service, payload);
+                    
+                    break;
+                    
+                case Operation.Room_Checkout:
                     toast.success("Guest successfully checked out");
-                    socket.emit(MessageRoom.Miscellaneous, payload);
+                    socket.emit(MessageRoom.Room, payload);
+                    
+                    break;
+
+                case Operation.Table_Checkout:
+                    toast.success("Guest successfully checked out");
+                    socket.emit(MessageRoom.Table, payload);
+                    
                     break;
     
                 case Operation.Service_Checkout:
                     toast.success("Guest successfully checked out");
                     socket.emit(MessageRoom.Service, payload);
+                    
                     break;
     
-                case Operation.Table_Checkout:
+                case Operation.Miscellaneous_Checkout:
                     toast.success("Guest successfully checked out");
-                    socket.emit(MessageRoom.Table, payload);
-                    break;
-    
-                case Operation.Room_Checkout:
-                    toast.success("Guest successfully checked out");
-                    socket.emit(MessageRoom.Room, payload);
+                    socket.emit(MessageRoom.Miscellaneous, payload);
+                    
                     break;
                         
                 default:                
@@ -466,7 +485,7 @@ const GuestRooms = forwardRef((props, ref) => {
 
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
-        return {changeSearch, openAdd, openEdit, openDelete};
+        return { changeSearch, openAdd, openEdit, openDelete };
     });
     // End:: forward reff change search and open add/edit/delete modal
 

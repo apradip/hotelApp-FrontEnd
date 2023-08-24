@@ -2,8 +2,8 @@ import React, { useState, useContext, useEffect, useRef, forwardRef, useImperati
 import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { Users, Phone, MapPin, Layers, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
+import { Operation, getTables, subStr, properCase, formatINR } from "../common/Common";
 import { toast } from "react-toastify";
-import { subStr, properCase, formatINR, getTables } from "../common/Common";
 import TimeElapsed from "../common/TimeElapsed";
 
 import View from "./GuestTableView";
@@ -30,14 +30,6 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // props parameters
 // pIndex
 // pGuestId
-// pRoomNos
-// pName
-// pMobile
-// pAddress
-// pCheckInDate
-// pCheckOutDate
-// pTotalPaidAmount
-// pTotalDueAmount
 // onActivated()
 // onClosed()
 
@@ -50,6 +42,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handelOpenCheckout
 // handelOpenDelete
 // handelRefresh
+// getGuestId
 const GuestTableCard = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
@@ -62,43 +55,64 @@ const GuestTableCard = forwardRef((props, ref) => {
     const generateBillRef = useRef(null);
     const checkoutRef = useRef(null);
 
-    const [guestId, setGuestId] = useState(props.pGustId);
-    const [corporateName, setCorporateName] = useState(props.pCorporateName);
-    const [corporateAddress, setCorporateAddress] = useState(props.pCorporateAddress);
-    const [name, setName] = useState(props.pName);
-    const [mobile, setMobile] = useState(props.pMobile);
-    const [guestCount, setGuestCount] = useState(props.pGuestCount);
-    const [balance, setBalance] = useState(props.pBalance);
-    const [inDate, setInDate] = useState(props.pInDate);
+    const [corporateName, setCorporateName] = useState();
+    const [corporateAddress, setCorporateAddress] = useState();
+    const [name, setName] = useState();
+    const [mobile, setMobile] = useState();
+    const [guestCount, setGuestCount] = useState();
+    const [balance, setBalance] = useState();
+    const [tables, setTables] = useState();
+    const [inDate, setInDate] = useState();
 
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
-
+    
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}/${guestId}`
+        url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
+        params: {option: "N"}
     });
+
+
+    // Start:: fetch data list from api
+    useEffect(() => {
+        (async () => {
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+            })();
+    }, []);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch data list from api
     
     useEffect(() => {
-        error && toast.error(error);
+        try {
+            error && toast.error(error);
 
-        data && console.log(data)
-        data && setGuestId(data.id);
-        data && setCorporateName(data.corporateName);
-        data && setCorporateAddress(data.corporateAddress); 
-        data && setName(data.name);
-        data && setMobile(data.mobile);
-        data && setGuestCount(data.guestCount);  
-        data && setBalance(data.balance);
-        data && setInDate(data.inDate);
-        
-        data && setFocus(true);
-        data && setActive(true);
+            data && setCorporateName(data.corporateName);
+            data && setCorporateAddress(data.corporateAddress); 
+            data && setName(data.name);
+            data && setMobile(data.mobile);
+            data && setGuestCount(data.guestCount);  
+            data && setBalance(data.balance);
+            data && setTables(data.tables);
+            data && setInDate(data.inDate);
+            
+            data && setFocus(true);
+            data && setActive(true);
+        } catch (err) {
+            console.log(err);
+        }        
     }, [data, error, loading]);
 
+    // Start :: get guest Id of this component
+    const getGuestId = () => {return props.pGuestId;}
+    // End :: get guest Id of this component
+    
     // Start:: get data from api
     const handelRefresh = async () => {
         try {
-            await doFetch()
+            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -181,12 +195,6 @@ const GuestTableCard = forwardRef((props, ref) => {
         }
     };
     // End:: Show delete modal 
-    
-    // Start:: Close all modal 
-    const handleClose = () => {
-        props.onClosed();
-    };
-    // End:: Close all modal 
 
     // Start:: de-select card 
     const handleDeSelect = () => {
@@ -208,7 +216,8 @@ const GuestTableCard = forwardRef((props, ref) => {
             handelOpenDespatch, 
             handelOpenGenerateBill, 
             handelOpenDelete,
-            handelRefresh
+            handelRefresh,
+            getGuestId
         }
     });
     // End:: forward reff de-select, show edit/delete modal function
@@ -219,7 +228,7 @@ const GuestTableCard = forwardRef((props, ref) => {
             {/* Start :: card component */}
             <Card 
                 ref = {ref}
-                key = {props.pIndex}
+                key = {`TC_${props.pGuestId}`}
                 index = {props.pIndex}
                 className = {"border"}
                 border = {active ? "info" : focus ? "primary" : ""}  
@@ -237,7 +246,6 @@ const GuestTableCard = forwardRef((props, ref) => {
 
                 {/* Start:: card body */}
                 <Card.Body className="text-sm p-1"> 
-
                     <Row className="m-1">
                         <Col xs={8} sm={8} md={8} lg={8} xl={8} className="p-0">
                             {corporateName ?
@@ -260,10 +268,10 @@ const GuestTableCard = forwardRef((props, ref) => {
                     </Row>
 
                     <Row className="d-none d-md-block d-lg-block d-xl-block m-1">
-                        {props.pTables ? 
+                        {tables ? 
                             <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
                                <Layers className="feather-16 mr-2"/>
-                               {getTables(props.pTables)}
+                               {getTables(tables)}
                             </Col>
                         :
                             corporateName ?
@@ -348,8 +356,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 {/* Start :: view component */}
                 <View
                     ref = {viewRef}
-                    pGuestId = {props.pGuestId} 
-                    onClosed = {() => {handleClose();}}/>
+                    pGuestId = {props.pGuestId} />
                 {/* End :: view component */}
 
                 {/* Start :: edit component */}
@@ -357,8 +364,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
                     pOption = {"T"}
-                    onSaved = {async () => {await doFetch(); props.onEdited();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {() => {props.onEdited(Operation.GuestMod, props.pGuestId);}} />
                 {/* End :: edit component */}
 
                 {/* Start :: delete employee component */}
@@ -366,33 +372,29 @@ const GuestTableCard = forwardRef((props, ref) => {
                     ref = {deleteRef}
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
-                    onDeleted = {() => {props.onDeleted();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onDeleted = {() => {props.onDeleted(Operation.GuestDel, props.pGuestId);}} />
                 {/* End :: delete employee component */}
 
                 {/* Start :: order component */}
                 <Order 
                     ref = {orderRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onOrdered();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {() => {props.onOrdered(Operation.Table_Order, props.pGuestId);}} />
                 {/* End :: order component */}
 
                 {/* Start :: despatch component */}
                 <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {async () => {await doFetch(); props.onDespatched();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {() => {props.onDespatched(Operation.Table_Despatch, props.pGuestId);}} />
                 {/* End :: despatch component */}
 
                 {/* Start :: generate & display summery bill component */}
                 <GenerateBill 
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {async () => {await doFetch(); props.onPaymentAdded();}}
-                    onSaved = {async () => {await doFetch(); props.onBillGenerated();}}
-                    onClosed = {() => {handleClose();}}/>
+                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.Table_PaymentAdd, props.pGuestId);}}
+                    onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId);}} />
                 {/* End :: generate & display summery bill component */}
 
                 {/* Start :: tables checkout component */}
@@ -401,8 +403,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
                     pCorporateName = {props.pCorporateName}
-                    onSaved = {() => {props.onCheckedout();}} 
-                    onClosed = {() => {handleClose();}}/>
+                    onSaved = {() => {props.onCheckedout(Operation.Table_Checkout, props.pGuestId);}} />
                 {/* End :: tables checkout component */}
             </>                                    
         </>

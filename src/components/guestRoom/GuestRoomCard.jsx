@@ -121,10 +121,10 @@ const GuestRoomCard = forwardRef((props, ref) => {
             data && setMobile(data.mobile);
             data && setGuestCount(data.guestCount);  
             data && setBalance(data.balance);
+            data && setRooms(data.rooms);
             data && setInDate(data.inDate);
             data && setOutDate(data.outDate);
-            data && setRooms(data.rooms);
-
+            
             data && setFocus(true);
             data && setActive(true);
         } catch (err) {
@@ -295,7 +295,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
     };
     // End:: de-select card
     
-
     // Start:: forward reff de-select, show edit/delete modal function
     useImperativeHandle(ref, () => {
         return {
@@ -349,28 +348,30 @@ const GuestRoomCard = forwardRef((props, ref) => {
 
                             <Badge pill bg = "primary">R</Badge>
                         </Col>
-                        <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (props.pBalance >= 0 ? "text-success" : "text-danger")}>
+                        <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
                         </Col>
                     </Row>
 
                     <Row className="d-none d-md-block d-lg-block d-xl-block text-mutedl m-1">
+                        <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
                         {rooms ? 
-                            <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
+                            <>
                                 <Home className="feather-16 mr-2"/>
                                 {getRooms(rooms)}
-                            </Col>
+                            </>
                         :
                             corporateName ?
-                                <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
+                                <>
                                     {properCase(subStr(corporateAddress, 30))}
-                                </Col>
-                                :
-                                <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
+                                </>
+                            :
+                                <>
                                     <Phone className="feather-16 mr-2"/>
                                     {mobile}
-                                </Col>
+                                </>
                         }
+                        </Col>
                     </Row>        
 
                     {(props.pCallingFrom === "R") && 

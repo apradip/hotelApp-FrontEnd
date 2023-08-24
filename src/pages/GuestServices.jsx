@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Form, Breadcrumb, Row, Col, Placeholder } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { Operation } from "../components/common/Common";
+import io from "socket.io-client";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -11,25 +11,21 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-
-import io from "socket.io-client";
-
-const socket = io.connect("http://localhost:3001");
+import { Operation, MessageRoom } from "../components/common/Common";
 
 // Start:: Component
 // props parameters
 // onSuccess
-// onClose
 
 // useImperativeHandle
 // changeSearch
 // openAdd
 // openEdit 
 // openDelete
-// close
 const GuestServices = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
+    const socket = io.connect("http://localhost:3001");
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
@@ -48,6 +44,142 @@ const GuestServices = forwardRef((props, ref) => {
             search: search, 
             roomonly: roomOnly}
     });
+
+    // Start:: leasten and act on command on socket
+    useEffect(() => {
+        try {        
+            
+            socket.on(MessageRoom.Room, (payload) => {
+                try {
+                    const {operation, guestId} = payload;
+                    
+                    switch (operation) {
+                        case Operation.GuestAdd:
+                            setDataChanged(true);
+                            break;                
+
+                        case Operation.GuestMod:
+                            cardRefs.current.forEach((object, idx) => {
+                                if (guestId === object.getGuestId())
+                                    object && 
+                                        object.handelRefresh();
+                            });
+
+                            break;                
+
+                        case Operation.GuestDel:
+                            setDataChanged(true);
+                            break;                
+
+                        case Operation.Booked:
+                            cardRefs.current.forEach((object, idx) => {
+                                if (guestId === object.getGuestId())
+                                    object && 
+                                        object.handelRefresh();
+                            });
+
+                            break;                
+
+                        case Operation.BillGenerate:
+                            cardRefs.current.forEach((object, idx) => {
+                                if (guestId === object.getGuestId())
+                                    object && 
+                                        object.handelRefresh();
+                            });
+
+                            break;                
+
+                        case Operation.Room_PaymentAdd:
+                            cardRefs.current.forEach((object, idx) => {
+                                if (guestId === object.getGuestId())
+                                    object && 
+                                        object.handelRefresh();
+                            });
+
+                            break;                
+
+                        case Operation.Room_Checkout:
+                            setDataChanged(true);
+                            break;                
+                                
+                        default:                
+                            break;  
+                    }       
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+
+            socket.on(MessageRoom.Service, (payload) => {
+                try {
+                    const {operation, guestId} = payload;
+
+                    switch (operation) {
+                        case Operation.Service_Order:
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId())
+                                    object && 
+                                        object.handelRefresh();
+                            });
+
+                            break;
+
+                        case Operation.Service_Despatch:
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId())
+                                    object && 
+                                        object.handelRefresh();
+                            });
+
+                            break;                
+
+                        case Operation.Service_PaymentAdd:
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId())
+                                    object && 
+                                        object.handelRefresh();
+                            });
+
+                            break;                
+
+                        case Operation.Service_Checkout:
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId())
+                                    object && 
+                                        object.handelRefresh();
+                            });
+
+                            break;                
+                                
+                        default:                
+                            break;  
+                    }    
+                } catch (err) {
+                    console.log(err);
+                }          
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    },[]);
+    // End:: leasten and act on command on socket
+
+    // Start:: fetch data list from api
+    useEffect(() => {
+        (async () => {
+            try {
+              await doFetch();
+              setDataChanged(false);
+            } catch (err) {
+              console.log(err);
+            }
+          })();
+    }, [dataChanged, search, roomOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch data list from api
+
+    useEffect(() => {
+        error && toast.error(error);
+    }, [data, error, loading]);
 
     // Start:: Change search text
     const changeSearch = (search) => {
@@ -100,62 +232,57 @@ const GuestServices = forwardRef((props, ref) => {
     };
     // End:: Open delete modal
 
-    // Start:: Close modal
-    const close = () => {
-        try {
-            props.onClose();
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // End:: Close modal
-
     // Start:: on data operation successfully
-    const handleSuccess = (operation, guestId = "") => {
+    const handleSuccess = (operation = "", guestId = "") => {
+        const payload = {operation, guestId};
+
         try {
             switch (operation) {
                 case Operation.GuestAdd:
                     toast.success("Guest successfully added");
-                    setDataChanged(true);
-                    props.onSuccess();
+                    socket.emit(MessageRoom.Service, payload);
+
                     break;
 
                 case Operation.GuestMod:
                     toast.success("Guest successfully changed");
-                    props.onSuccess();
+                    socket.emit(MessageRoom.Service, payload);
+
                     break;
         
                 case Operation.GuestDel:
                     toast.success("Guest successfully deleted");
-                    setDataChanged(true);
-                    props.onSuccess();
+                    socket.emit(MessageRoom.Service, payload);
+
                     break;               
-                        
-                case Operation.Order:
+                    
+                case Operation.Service_Order:
                     toast.success("Item successfully ordered");
-                    socket.emit("S_order", guestId);
-                    props.onSuccess();
+                    socket.emit(MessageRoom.Service, payload);
+
                     break;               
 
-                case Operation.Despatch:
+                case Operation.Service_Despatch:
                     toast.success("Item successfully despatched");
-                    socket.emit("M_order", guestId);
-                    props.onSuccess();
+                    socket.emit(MessageRoom.Service, payload);
+
                     break;                
 
                 case Operation.BillGenerate:
-                    props.onSuccess();
+                    socket.emit(MessageRoom.Service, payload);
+
                     break;                
                         
-                case Operation.PaymentAdd:
+                case Operation.Service_PaymentAdd:
                     toast.success("Payment successfully added");
-                    props.onSuccess();
+                    socket.emit(MessageRoom.Service, payload);
+
                     break;
 
-                case Operation.Checkout:
+                case Operation.Service_Checkout:
                     toast.success("Guest successfully checked out");
-                    setDataChanged(true);
-                    props.onSuccess();
+                    socket.emit(MessageRoom.Service, payload);
+
                     break;
                         
                 default:                
@@ -195,26 +322,9 @@ const GuestServices = forwardRef((props, ref) => {
 
     // Start:: forward reff change search and open add/edit/delete modal
     useImperativeHandle(ref, () => {
-        return {changeSearch, openAdd, openEdit, openDelete, close};
+        return { changeSearch, openAdd, openEdit, openDelete };
     });
     // End:: forward reff change search and open add/edit/delete modal
-
-    // Start:: fetch data list from api
-    useEffect(() => {
-        (async () => {
-            try {
-              await doFetch();
-              setDataChanged(false);
-            } catch (err) {
-              console.log("Error occured when fetching data");
-            }
-          })();
-    }, [dataChanged, search, roomOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: fetch data list from api
-
-    useEffect(() => {
-        error && toast.error(error);
-    }, [data, error, loading]);
 
     // Start:: show all data in card format
     const displayData = (pData = []) => {
@@ -283,32 +393,21 @@ const GuestServices = forwardRef((props, ref) => {
                             onCheckedout = {(o, g) => {handleSuccess(o, g)}} 
                             onOrdered = {(o, g) => {handleSuccess(o, g)}}
                             onDespatched = {(o, g) => {handleSuccess(o, g)}}
-                            onActivated = {() => {handleActivated(itemIdx)}}
-                            onClosed = {close} />}
+                            onActivated = {() => {handleActivated(itemIdx)}} />}
 
                     {(pData.option === "S") &&
                         <CardService className="border"
                             ref = {(el) => cardRefs.current[itemIdx] = el}
                             pIndex = {itemIdx}
                             pGuestId = {pData.id} 
-                            pName = {pData.name}
-                            pMobile = {pData.mobile}
-                            pGuestCount = {pData.guestCount}
-                            pCorporateName = {pData.corporateName}
-                            pCorporateAddress = {pData.corporateAddress}
-                            pGstNo = {pData.gstNo}
-                            pBalance = {pData.balance}
-                            pOption = {pData.option}
-                            pInDate = {pData.inDate}
-                            onEdited = {() => {handleSuccess(Operation.GuestMod, pData.id)}}
-                            onDeleted = {() => {handleSuccess(Operation.GuestDel, pData.id)}} 
+                            onEdited = {(o, g) => {handleSuccess(o, g)}}
+                            onDeleted = {(o, g) => {handleSuccess(o, g)}} 
                             onOrdered = {(o, g) => {handleSuccess(o, g)}}
                             onDespatched = {(o, g) => {handleSuccess(o, g)}}
-                            onBillGenerated = {() => {handleSuccess(Operation.BillGenerate, pData.id)}}
-                            onPaymentAdded = {() => {handleSuccess(Operation.PaymentAdd, pData.id)}} 
-                            onCheckedout = {() => {handleSuccess(Operation.Checkout, pData.id)}} 
-                            onActivated = {() => {handleActivated(itemIdx)}} 
-                            onClosed = {close}/>}           
+                            onBillGenerated = {(o, g) => {handleSuccess(o, g)}}
+                            onPaymentAdded = {(o, g) => {handleSuccess(o, g)}} 
+                            onCheckedout = {(o, g) => {handleSuccess(o, g)}} 
+                            onActivated = {() => {handleActivated(itemIdx)}} />}           
                 </div>);
         } catch (err) {
             console.log(err);
@@ -370,8 +469,7 @@ const GuestServices = forwardRef((props, ref) => {
                 <Col xl={4} md={4} key={colKey}>
                 <CardPlaceholder 
                     ref = {(el) => cardRefs.current[itemIdx] = el}
-                    pIndex = {itemIdx}
-                    onClosed = {close} />
+                    pIndex = {itemIdx} />
                 </Col>);
         } catch (err) {
             console.log(err);
@@ -483,8 +581,7 @@ const GuestServices = forwardRef((props, ref) => {
             <Add 
                 ref = {addRef}   
                 pOption = {"S"}
-                onAdded = {() => {handleSuccess(Operation.GuestAdd)}}
-                onClosed = {close}/>
+                onAdded = {() => { handleSuccess(Operation.GuestAdd) }} />
             {/* End :: add component */}
 
         </div>

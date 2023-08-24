@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { toast } from "react-toastify";
 import { Users, MapPin, Phone, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
 import { Operation, subStr, properCase, formatINR } from "../common/Common";
+import { toast } from "react-toastify";
 import TimeElapsed from "../common/TimeElapsed";
 
 import View from "./GuestMiscellaneousView";
@@ -30,16 +30,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // props parameters
 // pIndex
 // pGuestId
-// pRoomNos
-// pName
-// pMobile
-// pAddress
-// pCheckInDate
-// pCheckOutDate
-// pTotalPaidAmount
-// pTotalDueAmount
 // onActivated()
-// onClosed()
 
 // useImperativeHandle
 // handleDeSelect
@@ -48,6 +39,8 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // handelOpenGenerateBill
 // handelOpenCheckout
 // handelOpenDelete
+// handelRefresh
+// getGuestId
 const GuestMiscellaneousCard = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
@@ -60,32 +53,70 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
     const generateBillRef = useRef(null);
     const checkoutRef = useRef(null);
     
-    const [corporateName, setCorporateName] = useState(props.pCorporateName);
-    const [corporateAddress, setCorporateAddress] = useState(props.pCorporateAddress);
-    const [name, setName] = useState(props.pName);
-    const [mobile, setMobile] = useState(props.pMobile);
-    const [guestCount, setGuestCount] = useState(props.pGuestCount);
-    const [balance, setBalance] = useState(props.pBalance);
-    const [inDate, setInDate] = useState(props.pInDate);
+    const [corporateName, setCorporateName] = useState();
+    const [corporateAddress, setCorporateAddress] = useState();
+    const [name, setName] = useState();
+    const [mobile, setMobile] = useState();
+    const [guestCount, setGuestCount] = useState();
+    const [balance, setBalance] = useState();
+    const [inDate, setInDate] = useState();
+    const [transactionId, setTransactionId] = useState();
 
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
 
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
+        params: {option: "N"}
     });
 
+    // Start:: fetch data list from api
     useEffect(() => {
-        error && toast.error(error);
+        (async () => {
+            try {
+                await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+            })();
+    }, []);      // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch data list from api
 
-        data && setCorporateName(data.corporateName);
-        data && setCorporateAddress(data.corporateAddress); 
-        data && setName(data.name);
-        data && setMobile(data.mobile);
-        data && setGuestCount(data.guestCount);  
-        data && setBalance(data.balance);
-        data && setInDate(data.inDate);
+    // Start:: set data to state variables
+    useEffect(() => {
+        try {
+            error && toast.error(error);
+
+            data && setCorporateName(data.corporateName);
+            data && setCorporateAddress(data.corporateAddress); 
+            data && setName(data.name);
+            data && setMobile(data.mobile);
+            data && setGuestCount(data.guestCount);  
+            data && setBalance(data.balance);
+            data && setInDate(data.inDate);
+            data && setTransactionId(data.transactionId);
+
+            data && setFocus(true);
+            data && setActive(true);
+        } catch (err) {
+            console.log(err);
+        }
     }, [data, error, loading]);
+    // End:: set data to state variables
+
+    // Start :: get guest Id of this component
+    const getGuestId = () => {return props.pGuestId;}
+    // End :: get guest Id of this component
+
+    // Start:: get data from api
+    const handelRefresh = async () => {
+        try {
+            await doFetch()
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: get data from api
 
     // Start:: Show view modal 
     const handelOpenView = () => {
@@ -183,7 +214,9 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
             handelOpenOrder, 
             handelOpenDespatch, 
             handelOpenGenerateBill, 
-            handelOpenDelete
+            handelOpenDelete,
+            handelRefresh,
+            getGuestId
         };
     });
     // End:: forward reff de-select, show edit/delete modal function
@@ -277,13 +310,13 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey = "3" 
-                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                        disabled = {transactionId !== "undefined" ? false : true}
                                         onClick = {() => {handelOpenGenerateBill()}}>
                                         <FileText className="feather-16 mr-3"/>Bill
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey = "4"
-                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
+                                        disabled = {transactionId !== "undefined" ? false : true}
                                         onClick = {() => {handelOpenCheckout()}}>
                                         <LogOut className = "feather-16 mr-3"/>Check out
                                     </Dropdown.Item>
@@ -323,46 +356,46 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
                     pOption = {"M"}
-                    onSaved = {async () => {await doFetch(); props.onEdited();}} />
+                    onSaved = {() => {props.onEdited(Operation.GuestMod, props.pGuestId)}} />
                 {/* End :: edit component */}
 
                 {/* Start :: delete employee component */}
                 <Delete 
                     ref = {deleteRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
-                    onDeleted = {() => {props.onDeleted();}} />
+                    pName = {name}
+                    onDeleted = {() => {props.onDeleted(Operation.GuestDel, props.pGuestId)}} />
                 {/* End :: delete employee component */}
 
                 {/* Start :: miscellaneous order component */}
                 <Order 
                     ref = {orderRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onOrdered(Operation.Miscellaneous_Order, props.pGuestId);}} />
+                    onSaved = {() => {props.onOrdered(Operation.Miscellaneous_Order, props.pGuestId)}} />
                 {/* End :: miscellaneous order component */}
 
                 {/* Start :: miscellaneous despatch component */}
                 <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {async () => {await doFetch(); props.onDespatched(Operation.Miscellaneous_Despatch, props.pGuestId);}} />
+                    onSaved = {() => {props.onDespatched(Operation.Miscellaneous_Despatch, props.pGuestId)}} />
                 {/* End :: miscellaneous despatch component */}
 
                 {/* Start :: miscellaneous generate & display summery bill component */}
                 <GenerateBill 
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {async () => {await doFetch(); props.onPaymentAdded();}}
-                    onSaved = {async () => {await doFetch(); props.onBillGenerated();}}/>
+                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.Miscellaneous_PaymentAdd, props.pGuestId)}}
+                    onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId)}} />
                 {/* End :: miscellaneous generate & display summery bill component */}
 
                 {/* Start :: miscellaneous checkout component */}
                 <Checkout
                     ref = {checkoutRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
-                    pCorporateName = {props.pCorporateName}
-                    onSaved = {() => {props.onCheckedout();}} />
+                    pName = {name}
+                    pCorporateName = {corporateName}
+                    onSaved = {() => {props.onCheckedout(Operation.Miscellaneous_Checkout, props.pGuestId)}} />
                 {/* End :: miscellaneous checkout component */}
             </>            
         </>

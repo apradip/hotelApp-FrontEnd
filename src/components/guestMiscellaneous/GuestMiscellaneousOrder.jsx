@@ -17,7 +17,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 pCorporateName, pCorporateAddress, pGstNo, 
                 pTransactionId, pData, 
                 pShow, 
-                onSubmited, onClosed}) => {
+                onSubmited}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [orderData, setOrderData] = useState(null);
@@ -102,7 +102,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         try {
             setValidateOnChange(false);
             resetForm();
-            onClosed();
         } catch (err) {
             console.log(err);
         }
@@ -248,7 +247,6 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
 // pCorporateAddress
 // pGstNo
 // onSaved()
-// onClosed()
 
 // useImperativeHandle
 // handleShowModal
@@ -294,7 +292,6 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
     const handleCloseModal = () => {
         try {
             setShowModal(false);
-            props.onClosed();
         } catch (err) {
             console.log(err);
         }
@@ -334,8 +331,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
                     pTransactionId = {data.transactionId}
                     pData = {data.items}
                     pShow = {showModal}
-                    onSubmited = {handleSave} 
-                    onClosed = {handleCloseModal}/>}
+                    onSubmited = {handleSave} />}
             {/* End:: Edit modal */}
         </>
     );
