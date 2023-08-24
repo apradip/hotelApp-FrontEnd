@@ -95,8 +95,8 @@ const GuestServiceCard = forwardRef((props, ref) => {
             data && setInDate(data.inDate);
             data && setTransactionId(data.transactionId);
 
-            data && setFocus(true);
-            data && setActive(true);
+            // data && setFocus(true);
+            // data && setActive(true);
         } catch (err) {
             console.log(err);
         }        

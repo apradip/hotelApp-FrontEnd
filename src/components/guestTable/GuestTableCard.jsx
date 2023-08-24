@@ -98,8 +98,8 @@ const GuestTableCard = forwardRef((props, ref) => {
             data && setTables(data.tables);
             data && setInDate(data.inDate);
             
-            data && setFocus(true);
-            data && setActive(true);
+            // data && setFocus(true);
+            // data && setActive(true);
         } catch (err) {
             console.log(err);
         }        
