@@ -113,7 +113,7 @@ const GuestMiscellaneousDespatchCard = forwardRef((props, ref) => {
 
                             <Row className="d-none d-md-block d-lg-block d-xl-block m-1">
                                 <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                                    Guest: {data && data.name}
+                                    {data && data.name}
                                 </Col>
                             </Row>
 
