@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Users, MapPin, Phone, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
 import { Operation, subStr, properCase, formatINR } from "../common/Common";
-import { toast } from "react-toastify";
 import TimeElapsed from "../common/TimeElapsed";
 
 import View from "./GuestMiscellaneousView";
@@ -227,7 +227,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
             {/* Start :: card component */}
             <Card 
                 ref = {ref}
-                key = {props.pIndex}
+                key = {`MC_${props.pGuestId}`}
                 index = {props.pIndex}
                 className = {"border"} 
                 border = {active ? "info" : focus ? "primary" : ""}  
