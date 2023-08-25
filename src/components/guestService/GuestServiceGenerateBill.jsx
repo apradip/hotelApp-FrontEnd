@@ -68,7 +68,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             <NavLink 
                                 className = "nav-icon" 
                                 href = "#" 
-                                onClick = {() => {onClosed();}}>
+                                onClick = {() => {onClosed()}}>
                                 <i className = "align-middle"><X/></i>
                             </NavLink>
                         </Modal.Header>
@@ -174,7 +174,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             <button
                                 type="button"
                                 className="btn btn-danger"
-                                onClick={() => {onClosed();}}>
+                                onClick={() => {onClosed()}}>
                                 Close
                             </button>
                             {/* End:: Close button */}

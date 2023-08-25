@@ -267,7 +267,6 @@ const GuestServiceDespatch = forwardRef((props, ref) => {
     const handleCloseModal = () => {
         try {
             setShowMain(false);
-            props.onClosed();
         } catch (err) {
             console.log(err);
         }

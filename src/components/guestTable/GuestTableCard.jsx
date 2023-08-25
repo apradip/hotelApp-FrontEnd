@@ -30,7 +30,6 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 // pIndex
 // pGuestId
 // onActivated()
-// onClosed()
 
 // useImperativeHandle
 // handleDeSelect

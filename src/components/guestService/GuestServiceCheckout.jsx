@@ -143,7 +143,6 @@ const GuestServiceCheckout = forwardRef((props, ref) => {
     const handleCloseModal = () => {
         try {
             setShowModal(false);
-            props.onClosed();
         } catch (err) {
             console.log(err);
         }
