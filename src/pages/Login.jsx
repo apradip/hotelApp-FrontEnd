@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
+// import { localStorage } from 'window';
 
 import LoginPassword from "../components/auth/LoginPassword";
 import ForgetPassword from "../components/auth/ForgetPassword";

@@ -3,7 +3,7 @@ import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Users, MapPin, Phone, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
-import { Operation, subStr, properCase, formatINR } from "../common/Common";
+import { ActivityArea, Operation, subStr, properCase, formatINR } from "../common/Common";
 import TimeElapsed from "../common/TimeElapsed";
 
 import View from "./GuestMiscellaneousView";
@@ -229,8 +229,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 ref = {ref}
                 key = {`MC_${props.pGuestId}`}
                 index = {props.pIndex}
-                className = {"border"} 
-                border = {active ? "info" : focus ? "primary" : ""}  
+                className = {active ? "active" : focus ? "focus" : "miscellanious"}  
                 onMouseEnter = {() => setFocus(true)}
                 onMouseLeave = {() => setFocus(false)} 
                 onClick = {(e) => { 
@@ -244,7 +243,6 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
 
                 {/* Start:: card body */}
                 <Card.Body className="text-sm p-1"> 
-
                     <Row className="m-1">
                         <Col xs={8} sm={8} md={8} lg={8} xl={8} className="p-0">
                             {corporateName ?
@@ -259,7 +257,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                 </>
                             }
 
-                            <Badge pill bg = "warning">M</Badge>
+                            {/* <Badge pill bg = "warning">M</Badge> */}
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
@@ -355,7 +353,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                 <Edit 
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
-                    pOption = {"M"}
+                    pOption = {ActivityArea.Miscellaneous}
                     onSaved = {() => {props.onEdited(Operation.GuestMod, props.pGuestId)}} />
                 {/* End :: edit component */}
 

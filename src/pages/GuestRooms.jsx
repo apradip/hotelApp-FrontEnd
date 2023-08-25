@@ -10,7 +10,7 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-import { Operation, MessageRoom } from "../components/common/Common";
+import { ActivityArea, Operation, MessageRoom } from "../components/common/Common";
 
 
 // Start:: Component
@@ -523,12 +523,10 @@ const GuestRooms = forwardRef((props, ref) => {
 
             return (
                 <Row key={rowKey}>
-                    {
-                        pData.map((item, idx) => {
+                    {pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createCol(item, itemIdx);
-                        })
-                    }
+                        })}
                 </Row>);
         } catch (err) {
             console.log(err);
@@ -541,11 +539,11 @@ const GuestRooms = forwardRef((props, ref) => {
 
             return (
                 <Col xl={4} md={4} key={colKey}>
-                    {<CardRoom className = "border"
+                    {<CardRoom 
                         ref = {(el) => cardRefs.current[itemIdx] = el}
                         pIndex = {itemIdx}
                         pGuestId = {pData.id} 
-                        pCallingFrom = {"R"}
+                        pCallingFrom = {ActivityArea.Room}
                         onEdited = {(o, g) => {handleSuccess(o, g)}}
                         onDeleted = {(o, g) => {handleSuccess(o, g)}} 
                         onBooked = {(o, g) => {handleSuccess(o, g)}}
@@ -596,12 +594,10 @@ const GuestRooms = forwardRef((props, ref) => {
 
             return (
                 <Row key={rowKey}>
-                    {
-                        pData.map((item, idx) => {
+                    {pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createPlaceholderCol(item, itemIdx);
-                        })
-                    }
+                        })}
                 </Row>);
         } catch (err) {
             console.log(err);
@@ -674,14 +670,12 @@ const GuestRooms = forwardRef((props, ref) => {
 
                         {/* Start :: Display data */}
                         <div className="card-body">
-                            <Row>
-                                {loading &&
-                                    displayPlsceholder()}
+                            {loading &&
+                                displayPlsceholder()}
 
-                                {!loading && 
-                                    data && 
-                                        displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
-                            </Row>
+                            {!loading && 
+                                data && 
+                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
                         </div>
                         {/* End :: Display data */}
                         

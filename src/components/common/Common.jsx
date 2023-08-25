@@ -7,6 +7,13 @@ export const MessageRoom = {
     Miscellaneous: "SOCKET_MISCELLANEOUS"
 };
 
+export const ActivityArea = {
+    Room: "R",
+    Table: "T",
+    Service: "S",
+    Miscellaneous: "M"
+};
+
 export const Operation = {
     GuestAdd: "GUEST_ADD",
     GuestMod: "GUEST_MOD",
@@ -458,26 +465,25 @@ export const getTables = (tableObject) => {
 };
 
 export const formatYYYYMMDD = (longDateTime) => {
-    let dt = new Date(longDateTime),
-      mon = ("0" + (dt.getMonth() + 1)).slice(-2),
-      day = ("0" + dt.getDate()).slice(-2);
+    if ((longDateTime) && (longDateTime.length > 0)) {
+        let dt = new Date(longDateTime),
+        mon = ("0" + (dt.getMonth() + 1)).slice(-2),
+        day = ("0" + dt.getDate()).slice(-2);
     
-    return [dt.getFullYear(), mon, day].join("-");
+        return [dt.getFullYear(), mon, day].join("-");
+    } else {
+        return "";
+    }
 };
 
 export const formatDDMMYYYY = (longDateTime) => {
-    // console.log(longDateTime)
-
-    let dt = new Date(longDateTime);
-    const formattedDate = `${dt.getDate()}/${dt.getMonth() + 1}/${dt.getFullYear()}`;
-    return formattedDate;
-
-    // if (longDateTime.length > 0) {
-        
-    //     return moment(longDateTime).format("DD/MM/YYYY");
-    // } else {
-    //     return "";
-    // }
+    if ((longDateTime) && (longDateTime.length > 0)) {
+        let dt = new Date(longDateTime);
+        const formattedDate = `${dt.getDate()}/${dt.getMonth() + 1}/${dt.getFullYear()}`;
+        return formattedDate;
+    } else {
+        return "";
+    }
 };
 
 export const formatHHMM = (longDateTime) => {

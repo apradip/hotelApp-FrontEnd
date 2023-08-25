@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef, forwardRef, useImperati
 import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { Users, Phone, MapPin, Layers, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
-import { Operation, getTables, subStr, properCase, formatINR } from "../common/Common";
+import { ActivityArea, Operation, getTables, subStr, properCase, formatINR } from "../common/Common";
 import { toast } from "react-toastify";
 import TimeElapsed from "../common/TimeElapsed";
 
@@ -17,7 +17,6 @@ import Checkout from "./GuestTableCheckout";
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
-
 
 const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     <NavLink to="#" className="dropdown"
@@ -230,8 +229,9 @@ const GuestTableCard = forwardRef((props, ref) => {
                 ref = {ref}
                 key = {`TC_${props.pGuestId}`}
                 index = {props.pIndex}
-                className = {"border"}
-                border = {active ? "info" : focus ? "primary" : ""}  
+                className = {active ? "active" : focus ? "focus" : "restaurent"}  
+                // className = {"card restaurent"}
+                // border = {active ? "active" : focus ? "focus" : ""}  
                 onMouseEnter = {() => setFocus(true)}
                 onMouseLeave = {() => setFocus(false)} 
                 onClick = {(e) => { 
@@ -260,7 +260,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                                 </>
                             }
 
-                            <Badge pill bg = "secondary">T</Badge>
+                            {/* <Badge pill bg = "secondary">T</Badge> */}
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
@@ -346,7 +346,6 @@ const GuestTableCard = forwardRef((props, ref) => {
                                    
                         </Col>
                     </Row>
-                    
                 </Card.Body>
                 {/* End:: card body */}
             </Card>
@@ -363,7 +362,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 <Edit 
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
-                    pOption = {"T"}
+                    pOption = {ActivityArea.Table}
                     onSaved = {() => {props.onEdited(Operation.GuestMod, props.pGuestId);}} />
                 {/* End :: edit component */}
 

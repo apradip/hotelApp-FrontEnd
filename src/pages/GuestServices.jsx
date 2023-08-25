@@ -3,6 +3,7 @@ import { Form, Breadcrumb, Row, Col, Placeholder } from "react-bootstrap";
 import { toast } from "react-toastify";
 import io from "socket.io-client";
 
+
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
 import Add from "../components/common/GuestAddSmall";
@@ -11,7 +12,7 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-import { Operation, MessageRoom } from "../components/common/Common";
+import { ActivityArea, Operation, MessageRoom } from "../components/common/Common";
 
 // Start:: Component
 // props parameters
@@ -29,7 +30,7 @@ const GuestServices = forwardRef((props, ref) => {
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
-    const [roomOnly, setRoomOnly] = useState(false);
+    const [serviceOnly, setServiceOnly] = useState(localStorage.getItem("serviceOnly"));
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -42,13 +43,12 @@ const GuestServices = forwardRef((props, ref) => {
         url: `${contextValues.guestServiceAPI}/${hotelId}`,
         params: {
             search: search, 
-            roomonly: roomOnly}
+            serviceonly: serviceOnly}
     });
 
     // Start:: leasten and act on command on socket
     useEffect(() => {
         try {        
-            
             socket.on(MessageRoom.Room, (payload) => {
                 try {
                     const {operation, guestId} = payload;
@@ -174,7 +174,7 @@ const GuestServices = forwardRef((props, ref) => {
               console.log(err);
             }
           })();
-    }, [dataChanged, search, roomOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dataChanged, search, serviceOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
 
     useEffect(() => {
@@ -358,15 +358,12 @@ const GuestServices = forwardRef((props, ref) => {
         try {
             const rowKey=`row_${rowIdx}`;
 
-            return (
-                <div className="row" key={rowKey}>
-                    {
+            return (<Row key={rowKey}>{
                         pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createCol(item, itemIdx);
-                        })
-                    }
-                </div>);
+                        })}
+                </Row>);
         } catch (err) {
             console.log(err);
         }
@@ -376,15 +373,13 @@ const GuestServices = forwardRef((props, ref) => {
         try {
             const colKey = `col_${pData.id}`;
 
-            return (
-                <div className="col-sm-6 col-xl-4 col-md-4" key={colKey}>
-                    {(pData.option === "R") && 
+            return (<Col xl={4} md={4} key={colKey}>
+                    {(pData.option === ActivityArea.Room) && 
                         <CardRoom 
-                            className = "border"
                             ref = {(el) => cardRefs.current[itemIdx] = el}
                             pIndex = {itemIdx}
                             pGuestId = {pData.id} 
-                            pCallingFrom = {"S"}
+                            pCallingFrom = {ActivityArea.Service}
                             onEdited = {(o, g) => {handleSuccess(o, g)}}
                             onDeleted = {(o, g) => {handleSuccess(o, g)}} 
                             onBooked = {(o, g) => {handleSuccess(o, g)}}
@@ -395,8 +390,8 @@ const GuestServices = forwardRef((props, ref) => {
                             onDespatched = {(o, g) => {handleSuccess(o, g)}}
                             onActivated = {() => {handleActivated(itemIdx)}} />}
 
-                    {(pData.option === "S") &&
-                        <CardService className="border"
+                    {(pData.option === ActivityArea.Service) &&
+                        <CardService 
                             ref = {(el) => cardRefs.current[itemIdx] = el}
                             pIndex = {itemIdx}
                             pGuestId = {pData.id} 
@@ -408,7 +403,7 @@ const GuestServices = forwardRef((props, ref) => {
                             onPaymentAdded = {(o, g) => {handleSuccess(o, g)}} 
                             onCheckedout = {(o, g) => {handleSuccess(o, g)}} 
                             onActivated = {() => {handleActivated(itemIdx)}} />}           
-                </div>);
+                </Col>);
         } catch (err) {
             console.log(err);
         }
@@ -447,9 +442,7 @@ const GuestServices = forwardRef((props, ref) => {
         try {
             const rowKey=`row_${rowIdx}`;
 
-            return (
-                <Row key={rowKey}>
-                    {
+            return (<Row key={rowKey}>{
                         pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createPlaceholderCol(item, itemIdx);
@@ -465,8 +458,7 @@ const GuestServices = forwardRef((props, ref) => {
         try {
             const colKey = `col_${itemIdx}`;
 
-            return (
-                <Col xl={4} md={4} key={colKey}>
+            return (<Col xl={4} md={4} key={colKey}>
                 <CardPlaceholder 
                     ref = {(el) => cardRefs.current[itemIdx] = el}
                     pIndex = {itemIdx} />
@@ -526,10 +518,13 @@ const GuestServices = forwardRef((props, ref) => {
                                 <Col sx={6} md={6} className="d-flex justify-content-end">
                                     <Form.Check 
                                         type="switch"
-                                        id="chkRoom"
-                                        label={roomOnly ? "In-house guests" : "All guests"} 
-                                        value={roomOnly} 
-                                        onChange={(e) => {setRoomOnly(e.currentTarget.checked)}}/>
+                                        id="chkService"
+                                        defaultChecked = {serviceOnly}
+                                        label={serviceOnly ? "Service only" : "All guests"} 
+                                        onChange={(e) => {
+                                                localStorage.setItem("serviceOnly", e.currentTarget.checked);
+                                                setServiceOnly(e.currentTarget.checked);
+                                            }}/>
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>
@@ -538,14 +533,12 @@ const GuestServices = forwardRef((props, ref) => {
 
                         {/* Start :: Display data */}
                         <div className="card-body">
-                            <Row>
-                                {loading &&
-                                        displayPlsceholder()}
+                            {loading &&
+                                    displayPlsceholder()}
 
-                                {!loading && 
-                                    data && 
-                                        displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
-                            </Row>   
+                            {!loading && 
+                                data && 
+                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
                         </div>
                         {/* End :: Display data */}
                         
@@ -580,7 +573,7 @@ const GuestServices = forwardRef((props, ref) => {
             {/* Start :: add component */}
             <Add 
                 ref = {addRef}   
-                pOption = {"S"}
+                pOption = {ActivityArea.Service}
                 onAdded = {() => { handleSuccess(Operation.GuestAdd) }} />
             {/* End :: add component */}
 

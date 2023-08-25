@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef, forwardRef, useImperati
 import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { Users, MapPin, Phone, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
-import { Operation, subStr, properCase, formatINR } from "../common/Common";
+import { ActivityArea, Operation, subStr, properCase, formatINR } from "../common/Common";
 import { toast } from "react-toastify";
 import TimeElapsed from "../common/TimeElapsed";
 
@@ -228,8 +228,9 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 ref = {ref}
                 key = {`SC_${props.pGuestId}`}
                 index = {props.pIndex}
-                className = "border"
-                border = {active ? "info" : focus ? "primary" : ""}  
+                className = {active ? "active" : focus ? "focus" : "service"}  
+                // className = {"border"}
+                // border = {active ? "info" : focus ? "primary" : ""}  
                 onMouseEnter={() => setFocus(true)}
                 onMouseLeave={() => setFocus(false)} 
                 onClick = {(e) => { 
@@ -258,7 +259,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                 </>
                             }                            
 
-                            <Badge pill bg = "success">S</Badge>
+                            {/* <Badge pill bg = "success">S</Badge> */}
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
@@ -354,7 +355,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 <Edit 
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
-                    pOption = {"S"}
+                    pOption = {ActivityArea.Service}
                     onSaved = {() => {props.onEdited(Operation.GuestMod, props.pGuestId)}} />
                 {/* End :: edit component */}
 

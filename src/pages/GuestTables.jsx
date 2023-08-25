@@ -11,7 +11,7 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-import { Operation, MessageRoom } from "../components/common/Common";
+import { MessageRoom, ActivityArea, Operation } from "../components/common/Common";
 
 // Start:: Component
 // props parameters
@@ -28,7 +28,7 @@ const GuestTables = forwardRef((props, ref) => {
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
-    const [roomOnly, setRoomOnly] = useState(false);
+    const [restaurentOnly, setRestaurentOnly] = useState(false);
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -41,7 +41,7 @@ const GuestTables = forwardRef((props, ref) => {
         url: `${contextValues.guestTableAPI}/${hotelId}`,
         params: {
             search: search, 
-            roomonly: roomOnly
+            restaurentonly: restaurentOnly
         }
     });
 
@@ -129,7 +129,7 @@ const GuestTables = forwardRef((props, ref) => {
               console.log("Error occured when fetching data");
             }
           })();
-    }, [dataChanged, search, roomOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dataChanged, search, restaurentOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
 
     useEffect(() => {
@@ -308,55 +308,60 @@ const GuestTables = forwardRef((props, ref) => {
     };
     
     const createRow = (pData, rowIdx) => {
-        const rowKey=`row_${rowIdx}`;
+        try {
+            const rowKey=`row_${rowIdx}`;
 
-        return (
-            <Row key={rowKey}>
-                {
-                    pData.map((item, idx) => {
-                        const itemIdx = (rowIdx * itemPerRow) + idx;
-                        return createCol(item, itemIdx);
-                    })
-                }
-            </Row>)
+            return (
+                <Row key={rowKey}>{
+                        pData.map((item, idx) => {
+                            const itemIdx = (rowIdx * itemPerRow) + idx;
+                            return createCol(item, itemIdx);
+                        })}
+                </Row>);
+        } catch (err) {
+            console.log(err);
+        }            
     };
     
     const createCol = (pData = undefined, itemIdx) => {
-        const colKey = `col_${pData.id}`;
+        try {
+            const colKey = `col_${pData.id}`;
 
-        return (
-            <Col xl={4} md={4} key={colKey}>
-                {(pData.option === "R") && 
-                    <CardRoom 
-                        className = "border"
-                        ref = {(el) => cardRefs.current[itemIdx] = el}
-                        pIndex = {itemIdx}
-                        pGuestId = {pData.id} 
-                        pCallingFrom = {"T"}
-                        onEdited = {(o, g) => {handleSuccess(o, g)}}
-                        onDeleted = {(o, g) => {handleSuccess(o, g)}} 
-                        onBooked = {(o, g) => {handleSuccess(o, g)}}
-                        onBillGenerated = {(o, g) => {handleSuccess(o, g)}}
-                        onPaymentAdded = {(o, g) => {handleSuccess(o, g)}} 
-                        onCheckedout = {(o, g) => {handleSuccess(o,g)}} 
-                        onOrdered = {(o, g) => {handleSuccess(o, g)}}
-                        onDespatched = {(o, g) => {handleSuccess(o, g)}}
-                        onActivated={() => {handleActivated(itemIdx)}} />}
-                
-                {(pData.option === "T") &&
-                    <CardTable 
-                        ref = {(el) => cardRefs.current[itemIdx] = el}
-                        pIndex = {itemIdx}
-                        pGuestId = {pData.id} 
-                        onEdited = {(o, g) => {handleSuccess(o, g)}}
-                        onDeleted = {(o, g) => {handleSuccess(o, g)}} 
-                        onOrdered = {(o, g) => {handleSuccess(o, g)}}
-                        onDespatched = {(o, g) => {handleSuccess(o, g)}}
-                        onBillGenerated = {(o, g) => {handleSuccess(o, g)}}
-                        onPaymentAdded = {(o, g) => {handleSuccess(o, g)}} 
-                        onCheckedout = {(o, g) => {handleSuccess(o, g)}} 
-                        onActivated = {() => {handleActivated(itemIdx)}} />}              
-            </Col>);
+            return (
+                <Col xl={4} md={4} key={colKey}>
+                    {(pData.option === ActivityArea.Room) && 
+                        <CardRoom 
+                            ref = {(el) => cardRefs.current[itemIdx] = el}
+                            pIndex = {itemIdx}
+                            pGuestId = {pData.id} 
+                            pCallingFrom = {ActivityArea.Table}
+                            onEdited = {(o, g) => {handleSuccess(o, g)}}
+                            onDeleted = {(o, g) => {handleSuccess(o, g)}} 
+                            onBooked = {(o, g) => {handleSuccess(o, g)}}
+                            onBillGenerated = {(o, g) => {handleSuccess(o, g)}}
+                            onPaymentAdded = {(o, g) => {handleSuccess(o, g)}} 
+                            onCheckedout = {(o, g) => {handleSuccess(o,g)}} 
+                            onOrdered = {(o, g) => {handleSuccess(o, g)}}
+                            onDespatched = {(o, g) => {handleSuccess(o, g)}}
+                            onActivated={() => {handleActivated(itemIdx)}} />}
+                    
+                    {(pData.option === ActivityArea.Table) &&
+                        <CardTable 
+                            ref = {(el) => cardRefs.current[itemIdx] = el}
+                            pIndex = {itemIdx}
+                            pGuestId = {pData.id} 
+                            onEdited = {(o, g) => {handleSuccess(o, g)}}
+                            onDeleted = {(o, g) => {handleSuccess(o, g)}} 
+                            onOrdered = {(o, g) => {handleSuccess(o, g)}}
+                            onDespatched = {(o, g) => {handleSuccess(o, g)}}
+                            onBillGenerated = {(o, g) => {handleSuccess(o, g)}}
+                            onPaymentAdded = {(o, g) => {handleSuccess(o, g)}} 
+                            onCheckedout = {(o, g) => {handleSuccess(o, g)}} 
+                            onActivated = {() => {handleActivated(itemIdx)}} />}              
+                </Col>);
+        } catch (err) {
+            console.log(err);
+        }            
     };
     // End:: show all data in card format
     
@@ -473,9 +478,9 @@ const GuestTables = forwardRef((props, ref) => {
                                     <Form.Check 
                                         type="switch"
                                         id="chkRoom"
-                                        label={roomOnly ? "In-house guests" : "All guests"} 
-                                        value={roomOnly} 
-                                        onChange={(e) => {setRoomOnly(e.currentTarget.checked)}}/>
+                                        label={restaurentOnly ? "Restaurent only" : "All guests"} 
+                                        value={restaurentOnly} 
+                                        onChange={(e) => {setRestaurentOnly(e.currentTarget.checked)}}/>
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>
@@ -484,14 +489,12 @@ const GuestTables = forwardRef((props, ref) => {
 
                         {/* Start :: Display data */}
                         <div className="card-body">
-                            <Row>
-                                {loading &&
-                                    displayPlsceholder()}
+                            {loading &&
+                                displayPlsceholder()}
 
-                                {!loading && 
-                                    data && 
-                                        displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
-                            </Row>
+                            {!loading && 
+                                data && 
+                                    displayData(data.slice(indexOfFirstItem, indexOfLastItem))}
                         </div>
                         {/* End :: Display data */}
                         
@@ -526,7 +529,7 @@ const GuestTables = forwardRef((props, ref) => {
             {/* Start :: add component */}
             <Add 
                 ref = {addRef}   
-                pOption = {"T"}
+                pOption = {ActivityArea.Table}
                 onAdded = {() => {handleSuccess(Operation.GuestAdd)}} />
             {/* End :: add component */}
 

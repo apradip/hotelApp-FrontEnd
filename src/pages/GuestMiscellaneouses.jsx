@@ -11,7 +11,7 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-import { Operation, MessageRoom } from "../components/common/Common";
+import { ActivityArea, Operation, MessageRoom } from "../components/common/Common";
 
 
 // Start:: Component
@@ -30,7 +30,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
-    const [roomOnly, setRoomOnly] = useState(false);
+    const [miscellaneousOnly, setMiscellaneousOnly] = useState(false);
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -43,7 +43,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}`,
         params: {
             search: search,
-            roomonly: roomOnly
+            miscellaneousonly: miscellaneousOnly
         }
     });
 
@@ -177,7 +177,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
               console.log("Error occured when fetching data");
             }
           })();
-    }, [dataChanged, search, roomOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dataChanged, search, miscellaneousOnly]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
 
     // Start:: check error on fetch data
@@ -368,13 +368,12 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         try {
             const rowKey=`row_${rowIdx}`;
 
-            return (<Row key={rowKey}>
-                    {
+            return (
+                <Row key={rowKey}>{
                         pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createCol(item, itemIdx);
-                        })
-                    }
+                        })}
                 </Row>);
         } catch (err) {
             console.log(err);
@@ -387,13 +386,12 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
             return (
                 <Col xl={4} md={4} key={colKey}>
-                    {(pData.option === "R") && 
+                    {(pData.option === ActivityArea.Room) && 
                         <CardRoom 
-                            className = "border"
                             ref = {(el) => cardRefs.current[itemIdx] = el}
                             pIndex = {itemIdx}
                             pGuestId = {pData.id} 
-                            pCallingFrom = {"M"}
+                            pCallingFrom = {ActivityArea.Miscellaneous}
                             onEdited = {(o, g) => {handleSuccess(o, g)}}
                             onDeleted = {(o, g) => {handleSuccess(o, g)}} 
                             onBooked = {(o, g) => {handleSuccess(o, g)}}
@@ -404,9 +402,8 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                             onDespatched = {(o, g) => {handleSuccess(o, g)}}
                             onActivated = {() => {handleActivated(itemIdx)}} />}
 
-                    {(pData.option === "M") && 
+                    {(pData.option === ActivityArea.Miscellaneous) && 
                         <CardMiscellaneous 
-                            className = "border"
                             ref = {(el) => cardRefs.current[itemIdx] = el}
                             pIndex = {itemIdx}
                             pGuestId = {pData.id} 
@@ -459,12 +456,10 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
             return (
                 <Row key={rowKey}>
-                    {
-                        pData.map((item, idx) => {
+                    {pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createPlaceholderCol(item, itemIdx);
-                        })
-                    }
+                        })}
                 </Row>);
         } catch (err) {
             console.log(err);
@@ -477,9 +472,9 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
             return (
                 <Col xl={4} md={4} key={colKey}>
-                <CardPlaceholder 
-                    ref = {(el) => cardRefs.current[itemIdx] = el}
-                    pIndex = {itemIdx}/>
+                    <CardPlaceholder 
+                        ref = {(el) => cardRefs.current[itemIdx] = el}
+                        pIndex = {itemIdx}/>
                 </Col>);
         } catch (err) {
             console.log(err);
@@ -537,9 +532,9 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                                     <Form.Check 
                                         type="switch"
                                         id="chkRoom"
-                                        label={roomOnly ? "In-house guests" : "All guests"} 
-                                        value={roomOnly} 
-                                        onChange={(e) => {setRoomOnly(e.currentTarget.checked);}}/>
+                                        label={miscellaneousOnly ? {"Miscellaneous only" : "All guests"} : {"All guests" : "Miscellaneous only"}} 
+                                        // value={miscellaneousOnly} 
+                                        onChange={(e) => {setMiscellaneousOnly(e.currentTarget.checked);}}/>
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>
@@ -588,7 +583,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             {/* Start :: add component */}
             <Add 
                 ref = {addRef}   
-                pOption = {"M"}
+                pOption = {ActivityArea.Miscellaneous}
                 onAdded = {() => {handleSuccess(Operation.GuestAdd)}}/>
             {/* End :: add component */}
 
