@@ -11,6 +11,7 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 const Form = ({pGuestId, pName, pCorporateName, 
                 pShow,
                 onSubmited, onClosed}) => {
+
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const inputRef = useRef(null);
@@ -52,7 +53,7 @@ const Form = ({pGuestId, pName, pCorporateName,
 
             {/* Start:: Modal body */}
             <Modal.Body>
-                <label className = "form-label">Are you really want to check out guest <mark><code>{ pName ? pName : pCorporateName }</code></mark> ?</label>
+                <label className = "form-label">Are you really want to check out guest <mark><code>{pName ? pName : pCorporateName}</code></mark> ?</label>
             </Modal.Body>
             {/* End:: Modal body */}
 
@@ -100,7 +101,7 @@ const Form = ({pGuestId, pName, pCorporateName,
 
 // Start:: Component
 // props parameters
-// pId
+// pGuestId
 // onDeleted()
 // onClosed()
 

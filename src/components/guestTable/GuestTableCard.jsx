@@ -399,8 +399,8 @@ const GuestTableCard = forwardRef((props, ref) => {
                 <Checkout
                     ref = {checkoutRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
-                    pCorporateName = {props.pCorporateName}
+                    pName = {name}
+                    pCorporateName = {corporateName}
                     onSaved = {() => {props.onCheckedout(Operation.Table_Checkout, props.pGuestId);}} />
                 {/* End :: tables checkout component */}
             </>                                    

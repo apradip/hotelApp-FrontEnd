@@ -545,10 +545,10 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                                         <FileText className="feather-16 mr-3"/>Bill
                                                     </Dropdown.Item>
 
-                                                    {/* <Dropdown.Item eventKey="33"
+                                                    <Dropdown.Item eventKey="33"
                                                         onClick={() => {handelOpenCheckout(ActivityArea.Miscellaneous)}}>
                                                         <LogOut className="feather-16 mr-3"/>Check out
-                                                    </Dropdown.Item> */}
+                                                    </Dropdown.Item>
 
                                                 </Dropdown.Menu>
                                             </Dropdown>
@@ -694,8 +694,8 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <Checkout
                     ref = {checkoutRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
-                    pCorporateName = {props.pCorporateName}
+                    pName = {name}
+                    pCorporateName = {corporateName}
                     onSaved = {() => {props.onCheckedout(Operation.Room_Checkout, props.pGuestId)}} />
                 {/* End :: checkout component */}
             </>
@@ -729,8 +729,8 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <CheckoutTable
                     ref = {checkoutTableRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
-                    pCorporateName = {props.pCorporateName}
+                    pName = {name}
+                    pCorporateName = {corporateName}
                     onSaved = {() => {props.onCheckedout(Operation.Table_Checkout, props.pGuestId)}} />
                 {/* End :: tables checkout component */}
             </>
@@ -764,8 +764,8 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <CheckoutService
                     ref = {checkoutServiceRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
-                    pCorporateName = {props.pCorporateName}
+                    pName = {name}
+                    pCorporateName = {corporateName}
                     onSaved = {() => {props.onCheckedout(Operation.Service_Checkout, props.pGuestId)}} />
                 {/* End :: checkout component */}
             </>            
@@ -799,8 +799,8 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <CheckoutMiscellaneous
                     ref = {checkoutMiscellaneousRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
-                    pCorporateName = {props.pCorporateName}
+                    pName = {name}
+                    pCorporateName = {corporateName}
                     onSaved = {() => {props.onCheckedout(Operation.Miscellaneous_Checkout, props.pGuestId)}} />
                 {/* End :: miscellaneous checkout component */}
             </>

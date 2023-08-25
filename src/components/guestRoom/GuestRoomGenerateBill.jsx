@@ -317,7 +317,7 @@ const GuestRoomGenerateBill = forwardRef((props, ref) => {
             {/* Start:: Edit modal */}
             {data &&  data.transactionId !== "undefined" && data.rooms.length > 0 &&
                 <Form
-                    pGuestId = {data.id}
+                    pGuestId = {props.pGuestId}
                     pName = {data.name}
                     pMobile = {data.mobile}
                     pGuestCount = {data.guestCount}
