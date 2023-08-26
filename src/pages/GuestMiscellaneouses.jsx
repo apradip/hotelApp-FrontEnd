@@ -30,7 +30,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
-    const [miscellaneousOnly, setMiscellaneousOnly] = useState(false);
+    const [miscellaneousOnly, setMiscellaneousOnly] = useState(localStorage.getItem("miscellaneousOnly"));
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -530,11 +530,13 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                                 {/* Start :: display switch option */}
                                 <Col sx={6} md={6} className="d-flex justify-content-end">
                                     <Form.Check 
-                                        type="switch"
-                                        id="chkRoom"
-                                        label={miscellaneousOnly ? {"Miscellaneous only" : "All guests"} : {"All guests" : "Miscellaneous only"}} 
-                                        // value={miscellaneousOnly} 
-                                        onChange={(e) => {setMiscellaneousOnly(e.currentTarget.checked);}}/>
+                                        type = {"switch"}
+                                        id = {"chkMiscellaneous"} 
+                                        defaultChecked = {miscellaneousOnly}
+                                        label = {miscellaneousOnly ? "Miscellaneous only" : "All guests"} 
+                                        onChange={(e) => {
+                                            localStorage.setItem("miscellaneousOnly", e.currentTarget.checked);
+                                            setMiscellaneousOnly(e.currentTarget.checked);}}/>
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>

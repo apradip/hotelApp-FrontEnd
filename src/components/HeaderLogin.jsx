@@ -23,26 +23,26 @@ import TablePendingOrderList from "./guestTable/GuestTablePendingOrderList";
 import ServiceOrderList from "./guestService/GuestServicePendingOrderList";
 import MiscellaneousOrderList from "./guestMiscellaneous/GuestMiscellaneousPendingOrderList";
 
-import { Operation, MessageRoom } from "./common/Common";
+import { ActivityArea, Operation, MessageRoom } from "./common/Common";
 
 
 const alertOptions = [
     {
-        key: "T",  
+        key: ActivityArea.Table,  
         name: "TableAlert",
         placement: "end",
         scroll: false,
         backdrop: true
     },
     {
-        key: "S",  
+        key: ActivityArea.Service,  
         name: "ServiceAlert",
         placement: "end",
         scroll: false,
         backdrop: true
     },
     {
-        key: "M",  
+        key: ActivityArea.Miscellaneous,  
         name: "MiscellaneousAlert",
         placement: "end",
         scroll: false,
@@ -134,7 +134,7 @@ const HeaderLogin = forwardRef((props, ref) => {
         }
     }, [menuState]);    // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleToggleKitchenAlert = (offcanvasName) => {
+    const handleToggleOffcanvas = (offcanvasName) => {
         try {
             const newItems = alertOptions.map((item, idx) => {
                 if (item.name === offcanvasName) {
@@ -299,11 +299,11 @@ const HeaderLogin = forwardRef((props, ref) => {
     const handleRefresh = (option, orders) => {
         try {
             switch (option) {
-                case "T":
+                case ActivityArea.Table:
                     const TGuests = orders.filter((order) => (order.items.length > 0));
                     const tmpTCards = TGuests.map((element) => {
                         return (<CardTableDespatch
-                                    className = "border"
+                                    className = "restaurent"
                                     key = {`TDC_${element.id}`}
                                     pGuestId = {element.id}
                                     onDespatched = {(o, g) => {handleSuccess(o, g)}} />);
@@ -314,11 +314,11 @@ const HeaderLogin = forwardRef((props, ref) => {
 
                     break;
 
-                case "S":
+                case ActivityArea.Service:
                     const SGuests = orders.filter((order) => (order.items.length > 0));
                     const tmpSCards = SGuests.map((element) => {
                         return (<CardServiceDespatch
-                                    className = "border"
+                                    className = "service"
                                     key = {`SDC_${element.id}`}
                                     pGuestId = {element.id}
                                     onDespatched = {(o, g) => {handleSuccess(o, g)}} />);
@@ -329,11 +329,11 @@ const HeaderLogin = forwardRef((props, ref) => {
 
                     break;
 
-                case "M":
+                case ActivityArea.Miscellaneous:
                     const MGuests = orders.filter((order) => (order.items.length > 0));
                     const tmpMCards = MGuests.map((element) => {
                         return (<CardMiscellaneousDespatch
-                                    className = "border"
+                                    className = "miscellaneous"
                                     key = {`MDC_${element.id}`}
                                     pGuestId = {element.id} 
                                     onDespatched = {(o, g) => {handleSuccess(o, g)}} />);
@@ -362,9 +362,9 @@ const HeaderLogin = forwardRef((props, ref) => {
     return (
         <nav className="main-header navbar navbar-expand navbar-white navbar-light">
 
-            <MiscellaneousOrderList 
-                key = "keyMiscellaneousOrderList"
-                ref = {miscellaneousOrderListRef}
+            <TablePendingOrderList 
+                key = "keyTablePendingOrderList"
+                ref = {tablePendingOrderListRef}
                 onRefreshed = {handleRefresh}/>
 
             <ServiceOrderList 
@@ -372,10 +372,11 @@ const HeaderLogin = forwardRef((props, ref) => {
                 ref = {serviceOrderListRef}
                 onRefreshed = {handleRefresh}/>
 
-            <TablePendingOrderList 
-                key = "keyTablePendingOrderList"
-                ref = {tablePendingOrderListRef}
+            <MiscellaneousOrderList 
+                key = "keyMiscellaneousOrderList"
+                ref = {miscellaneousOrderListRef}
                 onRefreshed = {handleRefresh}/>
+
 
             {/* Start:: Left navbar links */}
             <ul className="navbar-nav">
@@ -458,7 +459,7 @@ const HeaderLogin = forwardRef((props, ref) => {
                     <Dropdown className="d-flex align-items-center ms-3 ms-lg-3" >
                         <Dropdown.Toggle 
                             as={CustomToggle} 
-                            onClick={() => {handleToggleKitchenAlert(alertOptions[0].name)}}>
+                            onClick={() => {handleToggleOffcanvas(alertOptions[0].name)}}>
                             <Coffee size={20} className="d-none d-sm-inline-block"/>
                             {(tableOrderCount > 0) ? <span className="bullet bullet-dot bg-success position-absolute translate-middle blink"></span> : ""}
                         </Dropdown.Toggle>
@@ -466,10 +467,11 @@ const HeaderLogin = forwardRef((props, ref) => {
 
                     <Offcanvas 
                         {...alertOptions[0]}
-                        show={showKitchenAlert[0]} 
-                        onHide={() => {handleToggleKitchenAlert(alertOptions[0].name)}}>
+                        className = {"restaurent"}
+                        show = {showKitchenAlert[0]} 
+                        onHide = {() => {handleToggleOffcanvas(alertOptions[0].name)}}>
                         <Offcanvas.Header closeButton>
-                            <Offcanvas.Title><h3>Pending Table Orders</h3></Offcanvas.Title>
+                            <Offcanvas.Title><h3>Pending food orders</h3></Offcanvas.Title>
                         </Offcanvas.Header>
                         <Offcanvas.Body>
                             {tableDespatchCardComponents}
@@ -477,12 +479,12 @@ const HeaderLogin = forwardRef((props, ref) => {
                     </Offcanvas>
                 </li>
 
-                {/* service orders             */}
+                {/* service orders */}
                 <li className="nav-item dropdown">
                     <Dropdown className="d-flex align-items-center ms-3 ms-lg-3">
                         <Dropdown.Toggle 
                             as={CustomToggle} 
-                            onClick={() => {handleToggleKitchenAlert(alertOptions[1].name)}}>
+                            onClick={() => {handleToggleOffcanvas(alertOptions[1].name)}}>
                             <Umbrella size={20} className="d-none d-sm-inline-block"/>
                             {(serviceOrderCount > 0) ? <span className="bullet bullet-dot bg-success position-absolute translate-middle blink"></span> : ""}
                         </Dropdown.Toggle>
@@ -490,10 +492,11 @@ const HeaderLogin = forwardRef((props, ref) => {
 
                     <Offcanvas 
                         {...alertOptions[1]}
-                        show={showKitchenAlert[1]} 
-                        onHide={() => {handleToggleKitchenAlert(alertOptions[1].name)}}>
+                        className = {"service"}
+                        show = {showKitchenAlert[1]} 
+                        onHide  ={() => {handleToggleOffcanvas(alertOptions[1].name)}}>
                         <Offcanvas.Header closeButton>
-                            <Offcanvas.Title><h3>Pending Service Orders</h3></Offcanvas.Title>
+                            <Offcanvas.Title><h3>Pending service orders</h3></Offcanvas.Title>
                         </Offcanvas.Header>
                         <Offcanvas.Body>
                             {serviceCardComponents}
@@ -501,23 +504,24 @@ const HeaderLogin = forwardRef((props, ref) => {
                     </Offcanvas>
                 </li>
 
-                {/* Miscellaneous orders                                 */}
+                {/* Miscellaneous orders */}
                 <li className="nav-item dropdown">
                     <Dropdown className="d-flex align-items-center ms-3 ms-lg-3">
                         <Dropdown.Toggle 
                             as={CustomToggle} 
-                            onClick={() => {handleToggleKitchenAlert(alertOptions[2].name)}}>
+                            onClick={() => {handleToggleOffcanvas(alertOptions[2].name)}}>
                             <Wind size={20} className="d-none d-sm-inline-block"/>
                             {(miscellaneousOrderCount > 0) ? <span className="bullet bullet-dot bg-success position-absolute translate-middle blink"></span> : ""}
                         </Dropdown.Toggle>
                     </Dropdown>
 
-                    <Offcanvas 
+                    <Offcanvas
                         {...alertOptions[2]}
-                        show={showKitchenAlert[2]} 
-                        onHide={() => {handleToggleKitchenAlert(alertOptions[2].name)}}>
+                        className = {"miscellaneous"}
+                        show = {showKitchenAlert[2]} 
+                        onHide = {() => {handleToggleOffcanvas(alertOptions[2].name)}}>
                         <Offcanvas.Header closeButton>
-                            <Offcanvas.Title><h3>Pending Miscellaneous Orders</h3></Offcanvas.Title>
+                            <Offcanvas.Title><h3>Pending miscellaneous orders</h3></Offcanvas.Title>
                         </Offcanvas.Header>
                         <Offcanvas.Body>
                             {miscellaneousCardComponents}
@@ -526,15 +530,6 @@ const HeaderLogin = forwardRef((props, ref) => {
                 </li>
 
                 <li className="nav-item dropdown">
-
-                    {/* <nav className="flex items-start justify-end px-4 py-2 border-b"> */}
-                        {/* <Dropdown trigger={<Button>user</Button>}>
-                            <DropdownItem>
-                                <Edit3 size={16}/> Edit
-                            </DropdownItem>
-                        </Dropdown> */}
-                    {/* </nav> */}
-
                     <Dropdown className="d-flex align-items-center ms-3 ms-lg-3"
                         ref={dropUserRef}>
                         <Dropdown.Toggle ref={dropToggleUserRef} as={CustomToggle}>

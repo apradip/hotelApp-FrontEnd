@@ -4,6 +4,7 @@ import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetchWithAuth from "../common/useFetchWithAuth";
 
+import { ActivityArea } from "../common/Common";
 
 // Start:: Component
 // props parameters
@@ -23,7 +24,7 @@ const GuestTablePendingOrderList = forwardRef((props, ref) => {
 
     useEffect(() => {
         error && console.log(error);
-        data && props.onRefreshed("T", data);
+        data && props.onRefreshed(ActivityArea.Table, data);
     }, [data, error, loading]);
 
     // Start:: get data from db

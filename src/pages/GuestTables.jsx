@@ -28,7 +28,7 @@ const GuestTables = forwardRef((props, ref) => {
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
-    const [restaurentOnly, setRestaurentOnly] = useState(false);
+    const [restaurentOnly, setRestaurentOnly] = useState(localStorage.getItem("restaurentOnly"));
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -476,11 +476,13 @@ const GuestTables = forwardRef((props, ref) => {
                                 {/* Start :: display switch option */}
                                 <Col sx={6} md={6} className="d-flex justify-content-end">
                                     <Form.Check 
-                                        type="switch"
-                                        id="chkRoom"
-                                        label={restaurentOnly ? "Restaurent only" : "All guests"} 
-                                        value={restaurentOnly} 
-                                        onChange={(e) => {setRestaurentOnly(e.currentTarget.checked)}}/>
+                                        type = {"switch"}
+                                        id = {"chkTable"}
+                                        defaultChecked = {restaurentOnly}
+                                        label = {restaurentOnly ? "Restaurent only" : "All guests"} 
+                                        onChange = {(e) => {
+                                            localStorage.setItem("restaurentOnly", e.currentTarget.checked);
+                                            setRestaurentOnly(e.currentTarget.checked)}}/>
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>

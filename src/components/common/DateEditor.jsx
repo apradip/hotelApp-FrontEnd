@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import DatePicker from "react-datepicker";
-import { formatDDMMYYYY } from "./Common"
+// import { formatDDMMYYYY } from "./Common"
 
 
 const DateEditor = forwardRef((props, ref) => {	
@@ -27,9 +27,7 @@ const DateEditor = forwardRef((props, ref) => {
 			onChange={(value) => {
 									setSelectedDate(value);
 									return true;
-								}}
-			/>
-    );
+								}} />);
 })
  
 export default DateEditor;

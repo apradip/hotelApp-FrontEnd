@@ -311,19 +311,6 @@ label:not(.form-check-label):not(.custom-file-label) {
   font-size: small !important;
 }
 
-/* .border {
-  background: #e9ecef !important;
-  border-color: #d6dbe0 !important;
-  border-style: solid;
-  border-top-width: 6px !important;
-  border-right-width: 2px !important; 
-  border-bottom-width: 2px !important;
-  border-left-width: 2px !important; 
-  box-shadow: 0 0 2rem 0 rgba(53,64,82,.1);
-  cursor: pointer !important;
-} */
-
-
 .card {
   border-style: solid;
   border-top-width: 6px !important;
@@ -332,7 +319,6 @@ label:not(.form-check-label):not(.custom-file-label) {
   border-left-width: 2px !important; 
   box-shadow: 0 0 2rem 0 rgba(53,64,82,.1);
   
-
   .room {
     background: #d9e3f3 !important;
     border-color: #a6c1ed !important;
@@ -368,27 +354,72 @@ label:not(.form-check-label):not(.custom-file-label) {
   }
 }
 
+.offcanvas {
+  background: #fafbfc !important;
+
+  .restaurent{
+    background: #d9d0e8 !important;
+    border-color: #c2aee4 !important;
+  }
+
+  .service {
+    background: #cdebd4 !important;
+    border-color: #abe1b8 !important;
+  }
+
+  .miscellanious{
+    background: #f9efdf !important;
+    border-color: #fae4a3 !important;
+  }
+
+  .card {
+    border-style: solid;
+    border-top-width: 6px !important;
+    border-right-width: 2px !important; 
+    border-bottom-width: 2px !important;
+    border-left-width: 2px !important; 
+    box-shadow: 0 0 2rem 0 rgba(53,64,82,.1);
+    
+    .room {
+      background: #d9e3f3 !important;
+      border-color: #a6c1ed !important;
+      cursor: pointer !important;
+    }
+  
+    .restaurent {
+      background: #d9d0e8 !important;
+      border-color: #c2aee4 !important;
+      cursor: pointer !important;
+    }
+  
+    .service {
+      background: #cdebd4 !important;
+      border-color: #abe1b8 !important;
+      cursor: pointer !important;
+    }
+  
+    .miscellanious {
+      background: #f9efdf !important;
+      border-color: #fae4a3 !important;
+      cursor: pointer !important;
+    }
+  
+    .focus {
+      border-color: #bcdffb !important;  
+      cursor: pointer !important;
+    }
+  
+    .active {
+      border-color: #2396f0 !important;
+      cursor: pointer !important;
+    }
+  }
+  
 
 
-/* .border-room {
-  background: #e9ecef !important;
-  border-color: #fcb0a3 !important;
-  border-style: solid;
-  border-top-width: 6px !important;
-  border-right-width: 2px !important; 
-  border-bottom-width: 2px !important;
-  border-left-width: 2px !important; 
-  box-shadow: 0 0 2rem 0 rgba(53,64,82,.1);
-  cursor: pointer !important;
+
 }
 
-.border-primary {
-  border-color: #bcdffb !important;
-}
-
-.border-info {
-  border-color: #2396f0 !important;
-} */
 
 .header-text {
   color:#354052;

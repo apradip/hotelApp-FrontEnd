@@ -1,9 +1,11 @@
 import React, { useState, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
+import {Scissors} from "react-feather";
 
 import { properCase, formatINR } from "../common/Common";
 import FoodItemSelector from "../common/FoodEditor";
 import QuantityEditor from "../common/QuantityEditor";
+// import DeleteButtonEditor from "../common/DeleteButtonEditor";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
@@ -98,6 +100,23 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 params.data.totalPrice = params.newValue;
                 return true;
             }
+        },
+        {
+            headerName: "",
+            field: "rowIdx",
+            width: 6,
+            hide: false,
+            cellRenderer: (params) => {
+                if ((params.data.name !== "Select item") && (!params.node.rowPinned)) {
+                return (
+                    <Scissors 
+                        className="feather-16" 
+                        onClick={() => {deleteRow(params.data.rowId)}} />
+                );
+                } else {
+                    return null;
+                }
+            },
         },
         {
             field: "id"
@@ -251,7 +270,46 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         }
     }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
 
+
+    const deleteRow = useCallback ((rowIndex) => {
+        try {
+            // console.log("delete : " + idx);
+            
+            if (pState !== "VIEW") {
+                let row = [];
+
+                gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+                    if (rowNode.data.rowId !== rowIndex) {
+                        // console.log(rowNode.data.id + " : " + rowNode.data.name + " : " + rowNode.data.unitPrice);
+
+                        const object = {
+                            rowId: row.length + 1, 
+                            id: rowNode.data.id, 
+                            name: rowNode.data.name, 
+                            unitPrice: rowNode.data.unitPrice,
+                            quantity: rowNode.data.quantity,
+                            serviceChargePercentage: rowNode.data.serviceChargePercentage,
+                            serviceCharge: rowNode.data.serviceCharge,
+                            gstPercentage: rowNode.data.gstPercentage,
+                            gstCharge: rowNode.data.gstCharge,
+                            totalPrice: rowNode.data.totalPrice,
+                            despatchDate: rowNode.data.despatchDate};
+
+                        row.push(object);
+                    }
+                });
     
+                gridRef.current.api.setRowData(row);
+
+                rowData = row;
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+
+
+
 	return (
         <div className="col-12 ag-theme-alpine grid-height-400">
             <div style = {style}>

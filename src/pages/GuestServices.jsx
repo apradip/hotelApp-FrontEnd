@@ -517,14 +517,13 @@ const GuestServices = forwardRef((props, ref) => {
                                 {/* Start :: display switch option */}
                                 <Col sx={6} md={6} className="d-flex justify-content-end">
                                     <Form.Check 
-                                        type="switch"
-                                        id="chkService"
+                                        type = {"switch"}
+                                        id = {"chkService"}
                                         defaultChecked = {serviceOnly}
-                                        label={serviceOnly ? "Service only" : "All guests"} 
-                                        onChange={(e) => {
+                                        label = {serviceOnly ? "Service only" : "All guests"} 
+                                        onChange = {(e) => {
                                                 localStorage.setItem("serviceOnly", e.currentTarget.checked);
-                                                setServiceOnly(e.currentTarget.checked);
-                                            }}/>
+                                                setServiceOnly(e.currentTarget.checked);}}/>
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>

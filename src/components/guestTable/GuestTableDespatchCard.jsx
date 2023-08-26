@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, forwardRef, useImperativeHandle
 import { Row, Col, Card } from "react-bootstrap";
 import { useFormik } from "formik";
 import { Operation, getTables } from "../common/Common";
+import { Layers } from "react-feather";
 
 import DespatchGrid from "../common/ItemDespatchGrid";
 
@@ -101,16 +102,17 @@ const GuestTableDespatchCard = forwardRef((props, ref) => {
             {data && 
                 data.items.length > 0 &&
                     <Card 
-                        className = "border"
                         ref = {ref}
-                        key = {`TPOC_${data.id}`}> 
+                        key = {`TOA_${data.id}`}
+                        className = {"restaurent"}> 
 
                         {/* Start:: card body */}
                         <Card.Body className="text-sm p-1"> 
 
                             <Row className="d-none d-md-block d-lg-block d-xl-block m-1">
                                 <Col xs={12} sm={12} md={12} lg={12} xl={12} className="p-0">
-                                    {data && getTables(data.tables)}
+                                    <Layers className="feather-16 mr-2"/>
+                                    <b>{getTables(data.tables)}</b>
                                 </Col>
                             </Row>
 
@@ -119,10 +121,9 @@ const GuestTableDespatchCard = forwardRef((props, ref) => {
                                     
                                     <div className = "ag-theme-alpine grid-height-150">
                                         {/* Start:: Column service detail */}
-                                        {data &&
-                                            <DespatchGrid
-                                                pDefaultRowData = {data.items}
-                                                onChange = {handelChangeData}/>}
+                                        <DespatchGrid
+                                            pDefaultRowData = {data.items}
+                                            onChange = {handelChangeData}/>
                                         {/* End:: Column service detail */}
                                     </div>
 
@@ -135,15 +136,12 @@ const GuestTableDespatchCard = forwardRef((props, ref) => {
                                     {/* Start:: Save button */}
                                     <button 
                                         type = "button"
-                                        className = "btn btn-success"
+                                        className = "btn btn-success mt-1"
                                         disabled = {loading} 
                                         onClick = {handleSubmit}>
 
-                                        {!loading && "Done"}
-                                        {loading && 
-                                                    <>
-                                                        <span className = "spinner-border spinner-border-sm" role = "status" aria-hidden = "true"></span>
-                                                    </>}
+                                        {!loading && <b>OK</b>}
+                                        {loading && <span className = "spinner-border spinner-border-sm" role = "status" aria-hidden = "true"></span>}
                                     </button>
                                     {/* End:: Save button */}
 

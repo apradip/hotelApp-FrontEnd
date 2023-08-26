@@ -229,8 +229,6 @@ const GuestTableCard = forwardRef((props, ref) => {
                 key = {`TC_${props.pGuestId}`}
                 index = {props.pIndex}
                 className = {active ? "active" : focus ? "focus" : "restaurent"}  
-                // className = {"card restaurent"}
-                // border = {active ? "active" : focus ? "focus" : ""}  
                 onMouseEnter = {() => setFocus(true)}
                 onMouseLeave = {() => setFocus(false)} 
                 onClick = {(e) => { 
