@@ -66,7 +66,7 @@ const TableOrderList = forwardRef((props, ref) => {
                         
                         return (<Order
                             ref = {(el) => cardRefs.current[index] = el}
-                            key = {`_guest_table_order_row_${index}`}
+                            key = {`RO_${item._id}`}
                             pIndex = {index}
                             pGuestId = {prviousGuestId}
                             pTableNo = {previousTableNo} />);
@@ -77,7 +77,7 @@ const TableOrderList = forwardRef((props, ref) => {
                         if (pData.length === idx + 1){
                             return (<Order
                                 ref = {(el) => cardRefs.current[index] = el}
-                                key = {`_guest_table_order_row_${index}`}
+                                key = {`RO_${item._id}`}
                                 pIndex = {index}
                                 pGuestId = {prviousGuestId}
                                 pTableNo = {previousTableNo} />);
@@ -111,11 +111,9 @@ const TableOrderList = forwardRef((props, ref) => {
             </h3>
         </div>
         <div className="card-body py-1 px-4 scrollable">
-
             {!loading && 
                 filterData && 
                     displayData(filterData)}
-
         </div>
     </div>);
 

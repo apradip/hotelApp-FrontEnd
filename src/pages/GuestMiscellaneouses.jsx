@@ -11,7 +11,7 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-import { ActivityArea, Operation, MessageRoom } from "../components/common/Common";
+import { SearchOption, ActivityArea, Operation, MessageRoom } from "../components/common/Common";
 
 
 // Start:: Component
@@ -30,7 +30,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
-    const [miscellaneousOnly, setMiscellaneousOnly] = useState(localStorage.getItem("miscellaneousOnly"));
+    const [miscellaneousOnly, setMiscellaneousOnly] = useState(JSON.parse(localStorage.getItem(SearchOption.MiscellaneousOnly)));
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -173,6 +173,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             try {
               await doFetch();
               setDataChanged(false);
+              localStorage.setItem(SearchOption.MiscellaneousOnly, miscellaneousOnly);
             } catch (err) {
               console.log("Error occured when fetching data");
             }
@@ -529,14 +530,20 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
                                 {/* Start :: display switch option */}
                                 <Col sx={6} md={6} className="d-flex justify-content-end">
-                                    <Form.Check 
-                                        type = {"switch"}
-                                        id = {"chkMiscellaneous"} 
-                                        defaultChecked = {miscellaneousOnly}
-                                        label = {miscellaneousOnly ? "Miscellaneous only" : "All guests"} 
-                                        onChange={(e) => {
-                                            localStorage.setItem("miscellaneousOnly", e.currentTarget.checked);
-                                            setMiscellaneousOnly(e.currentTarget.checked);}}/>
+                                    {JSON.parse(miscellaneousOnly) ?
+                                        <Form.Check 
+                                            defaultChecked
+                                            type = {"switch"}
+                                            label = {"Miscellaneous only"} 
+                                            onChange={(e) => {
+                                                setMiscellaneousOnly(e.currentTarget.checked)}}/>
+                                    :
+                                        <Form.Check 
+                                            type = {"switch"}
+                                            label = {"All guests"} 
+                                            onChange={(e) => {
+                                                setMiscellaneousOnly(e.currentTarget.checked)}}/>
+                                    }                                                
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>

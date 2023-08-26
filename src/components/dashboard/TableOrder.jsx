@@ -53,7 +53,7 @@ const TableOrder = forwardRef((props, ref) => {
                         {data &&
                             data.items.length > 0 && 
                                 data.items.map((food) => {
-                                    return (<Row className="text-muted fs-8 mx-1" key={`_order_${props.pGuestId}_${food.id}`}>
+                                    return (<Row className="text-muted fs-8 mx-1" key={`O_${props.pGuestId}_${food.id}`}>
                                         <Col className="col-xl-1 p-0">
                                             <span className="bullet bullet-vertical h-6px bg-warning p-0 m-0"></span>
                                         </Col>

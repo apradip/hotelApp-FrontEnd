@@ -14,6 +14,12 @@ export const ActivityArea = {
     Miscellaneous: "M"
 };
 
+export const SearchOption = {
+    RestaurentOnly: "RESTAURENT_ONLY",
+    ServiceOnly: "SERVICE_ONLY",
+    MiscellaneousOnly: "MISCELLANEOUS_ONLY"
+};
+
 export const Operation = {
     GuestAdd: "GUEST_ADD",
     GuestMod: "GUEST_MOD",
@@ -35,6 +41,7 @@ export const Operation = {
     Service_Checkout: "SERVICE_CHECKOUT",
     Miscellaneous_Checkout: "MISCELLANEOUS_CHECKOUT",
 };
+
 
 
 export const subStr = (text, len) => {

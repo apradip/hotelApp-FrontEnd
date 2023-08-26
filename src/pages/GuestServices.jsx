@@ -12,7 +12,7 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-import { ActivityArea, Operation, MessageRoom } from "../components/common/Common";
+import { SearchOption, ActivityArea, Operation, MessageRoom } from "../components/common/Common";
 
 // Start:: Component
 // props parameters
@@ -30,7 +30,7 @@ const GuestServices = forwardRef((props, ref) => {
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
-    const [serviceOnly, setServiceOnly] = useState(localStorage.getItem("serviceOnly"));
+    const [serviceOnly, setServiceOnly] = useState(JSON.parse(localStorage.getItem(SearchOption.ServiceOnly)));
     const addRef = useRef(null);
     let cardRefs = useRef([]);
     cardRefs.current = [itemPerRow];
@@ -170,6 +170,7 @@ const GuestServices = forwardRef((props, ref) => {
             try {
               await doFetch();
               setDataChanged(false);
+              localStorage.setItem(SearchOption.ServiceOnly, serviceOnly);
             } catch (err) {
               console.log(err);
             }
@@ -516,14 +517,20 @@ const GuestServices = forwardRef((props, ref) => {
 
                                 {/* Start :: display switch option */}
                                 <Col sx={6} md={6} className="d-flex justify-content-end">
-                                    <Form.Check 
-                                        type = {"switch"}
-                                        id = {"chkService"}
-                                        defaultChecked = {serviceOnly}
-                                        label = {serviceOnly ? "Service only" : "All guests"} 
-                                        onChange = {(e) => {
-                                                localStorage.setItem("serviceOnly", e.currentTarget.checked);
-                                                setServiceOnly(e.currentTarget.checked);}}/>
+                                    {JSON.parse(serviceOnly) ?
+                                        <Form.Check 
+                                            defaultChecked
+                                            type = {"switch"}
+                                            label = {"Service only"}
+                                            onChange = {(e) => {
+                                                    setServiceOnly(e.currentTarget.checked)}}/>
+                                    :
+                                        <Form.Check 
+                                            type = {"switch"}
+                                            label = {"All guests"} 
+                                            onChange = {(e) => {
+                                                    setServiceOnly(e.currentTarget.checked)}}/>
+                                    }
                                 </Col>
                                 {/* End :: display switch option */}
                             </Row>
