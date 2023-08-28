@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
+import { Row, Col, Card, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { Users, MapPin, Phone, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
 import { ActivityArea, Operation, subStr, properCase, formatINR } from "../common/Common";
@@ -59,7 +59,6 @@ const GuestServiceCard = forwardRef((props, ref) => {
     const [guestCount, setGuestCount] = useState();
     const [balance, setBalance] = useState();
     const [inDate, setInDate] = useState();
-    const [transactionId, setTransactionId] = useState();
 
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
@@ -93,10 +92,6 @@ const GuestServiceCard = forwardRef((props, ref) => {
             data && setGuestCount(data.guestCount);  
             data && setBalance(data.balance);
             data && setInDate(data.inDate);
-            data && setTransactionId(data.transactionId);
-
-            // data && setFocus(true);
-            // data && setActive(true);
         } catch (err) {
             console.log(err);
         }        
@@ -104,7 +99,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
     // End:: set data to state variables
 
     // Start :: get guest Id of this component
-    const getGuestId = () => {return props.pGuestId;}
+    const getGuestId = () => {return props.pGuestId}
     // End :: get guest Id of this component
     
     // Start:: get data from api
@@ -308,13 +303,11 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey = "3" 
-                                        // disabled = {data && data.transactionId !== undefined ? false : true}
                                         onClick = {handelOpenGenerateBill}>
                                         <FileText className = "feather-16 mr-3"/>Bill
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey="4"
-                                        // disabled = {data && data.transactionId !== undefined ? false : true}
                                         onClick = {handelOpenCheckout}>
                                         <LogOut className="feather-16 mr-3"/>Check out
                                     </Dropdown.Item>
@@ -360,7 +353,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 {/* Start :: delete employee component */}
                 <Delete 
                     ref = {deleteRef}
-                    pId = {props.pGuestId} 
+                    pGuestId = {props.pGuestId} 
                     pName = {name}
                     onDeleted = {() => {props.onDeleted(Operation.GuestDel, props.pGuestId)}} />
                 {/* End :: delete employee component */}

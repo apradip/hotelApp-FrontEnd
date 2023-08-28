@@ -271,11 +271,22 @@ const GuestServiceOrder = forwardRef((props, ref) => {
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        (async () => {
+            try {
+                showModal && await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch id wise detail from api
+
     // Start:: Show modal
     const handleShowModal = async () => {
         try {
             setShowModal(true);
-            await doFetch();
         } catch (err) {
             console.log(err);
         }

@@ -304,13 +304,11 @@ const GuestTableCard = forwardRef((props, ref) => {
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey = "2" 
-                                        // disabled = {data && data.transactionId !== undefined ? false : true}
                                         onClick = {handelOpenGenerateBill}>
                                         <FileText className="feather-16 mr-3"/>Bill
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey = "3"
-                                        // disabled = {data && data.transactionId !== undefined ? false : true}
                                         onClick = {handelOpenCheckout}>
                                         <LogOut className="feather-16 mr-3"/>Check out
                                     </Dropdown.Item>
@@ -357,7 +355,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                 <Delete 
                     ref = {deleteRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
+                    pName = {name}
                     onDeleted = {() => {props.onDeleted(Operation.GuestDel, props.pGuestId)}} />
                 {/* End :: delete employee component */}
 

@@ -476,7 +476,6 @@ const GuestServices = forwardRef((props, ref) => {
 
             return (<Col xl={4} md={4} key={colKey}>
                 <CardPlaceholder 
-                    ref = {(el) => cardRefs.current[itemIdx] = el}
                     pIndex = {itemIdx} />
                 </Col>);
         } catch (err) {
