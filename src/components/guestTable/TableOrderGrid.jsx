@@ -1,11 +1,11 @@
 import React, { useState, useRef, useMemo, useCallback } from "react";
+import { NavLink } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
-import {Scissors} from "react-feather";
+import { Scissors } from "react-feather";
 
-import { properCase, formatINR } from "../common/Common";
+import { properCase, formatINR, OperationState } from "../common/Common";
 import FoodItemSelector from "../common/FoodEditor";
 import QuantityEditor from "../common/QuantityEditor";
-// import DeleteButtonEditor from "../common/DeleteButtonEditor";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
@@ -39,7 +39,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "name", 
             hide: false,
             cellEditor: FoodItemSelector, 
-            editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},
+            editable: (params) => {return params.node.rowPinned ? false : pState === OperationState.Add ? true : pState === OperationState.Mod ? true : pState === OperationState.View ? false : true},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${properCase(params.value)}` : ""},
             valueGetter: (params) => {return params.data.name},
             valueSetter: (params) => {
@@ -65,7 +65,6 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "unitPrice",
             type: "rightAligned",
             width: 50,
-            hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
             valueGetter: (params) => {return params.data.unitPrice}
         },
@@ -76,7 +75,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             width: 50,
             hide: false,
             cellEditor: QuantityEditor,
-            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true : false},
+            editable: (params) => {return params.data.id !== "" ? params.node.rowPinned ? false : pState === OperationState.Add ? true : pState === OperationState.Mod ? true : pState === OperationState.View ? false : true : false},
             valueFormatter: (params) => {return !params.node.rowPinned ? `${Number(params.value)}` : ""},
             valueGetter: (params) => {return params.data.quantity},
             valueSetter: (params) => {
@@ -106,12 +105,15 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "rowIdx",
             width: 6,
             hide: false,
+            type: "rightAligned",
             cellRenderer: (params) => {
                 if ((params.data.name !== "Select item") && (!params.node.rowPinned)) {
                 return (
-                    <Scissors 
-                        className="feather-16" 
-                        onClick={() => {deleteRow(params.data.rowId)}} />
+                    <NavLink to="#"
+                        onClick={(e) => {e.preventDefault(); deleteRow(params.data.rowId);}}>
+                        <Scissors 
+                            className="feather-16 text-danger" />
+                    </NavLink>
                 );
                 } else {
                     return null;
@@ -186,12 +188,12 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     // set grid data to a parent component
     const handleCellValueChanged = () => {
-        let dataRows = [];    
+        let row = [];    
 
         try {
             gridRef.current.api.forEachNode((gridRow) => {
                 if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
-                    dataRows.push({
+                    row.push({
                         id: gridRow.data.id, 
                         name: gridRow.data.name,
                         unitPrice: gridRow.data.unitPrice,
@@ -206,7 +208,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 }
             });
               
-            onChange(dataRows);
+            onChange(row);
             calculateSum();
         } catch (err) {
             console.log(err);
@@ -244,7 +246,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         let emptyRow = rowData;
 
         try {
-            if (pState !== "VIEW") {
+            if (pState !== OperationState.View) {
                 emptyRow.push({
                     rowId: emptyRow.length + 1, 
                     id: "", 
@@ -270,18 +272,13 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
         }
     }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
 
-
     const deleteRow = useCallback ((rowIndex) => {
         try {
-            // console.log("delete : " + idx);
-            
-            if (pState !== "VIEW") {
+            if (pState !== OperationState.View) {
                 let row = [];
 
                 gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
                     if (rowNode.data.rowId !== rowIndex) {
-                        // console.log(rowNode.data.id + " : " + rowNode.data.name + " : " + rowNode.data.unitPrice);
-
                         const object = {
                             rowId: row.length + 1, 
                             id: rowNode.data.id, 
@@ -302,6 +299,7 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 gridRef.current.api.setRowData(row);
 
                 rowData = row;
+                onChange(row);
             }
         } catch (err) {
             console.log(err);
@@ -319,8 +317,8 @@ const TableOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                     defaultColDef = {defaultColDef}
                     rowData = {null}
                     rowSelection = {"single"}
-                    onGridReady = {() => {handleGridReady()}}
-                    onCellValueChanged = {() => {handleCellValueChanged()}}/>
+                    onGridReady = {handleGridReady}
+                    onCellValueChanged = {handleCellValueChanged}/>
             </div>
         </div>
     );

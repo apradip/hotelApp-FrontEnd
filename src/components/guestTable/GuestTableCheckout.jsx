@@ -33,9 +33,9 @@ const Form = ({pGuestId, pName, pCorporateName,
     return (
         <Modal 
             size = "sm"
-            show = {pShow} >
+            show = {pShow}>
 
-            {/* Start:: Modal header */}
+                {/* Start:: Modal header */}
             <Modal.Header>
                 {/* Header text */}
                 <Modal.Title>Checkout</Modal.Title>
@@ -111,7 +111,8 @@ const GuestTableCheckout = forwardRef((props, ref) => {
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
+        url: `${contextValues.guestTableAPI}/${hotelId}/${props.pGuestId}`,
+        params: {option: "N"}
     });
 
     // Strat:: close modal on key press esc    
@@ -121,18 +122,32 @@ const GuestTableCheckout = forwardRef((props, ref) => {
     }, []);     // eslint-disable-line react-hooks/exhaustive-deps
     // End:: close modal on key press esc    
 
+    // Start:: fetch data and assigned to state variables    
     useEffect(() => {
-        error && toast.error(error);
+        try {
+            error && toast.error(error);
         
-        data && 
-            data.option === "T" && data.balance !== 0 && 
-                    toast.error("Guest can't be checked out, because there is some due.");
+            data && 
+                data.items.length > 0 &&
+                        toast.error("Guest can't be checked out, because there is some due.");
+        
+                        data &&                     
+            data.balance !== 0 && 
+                toast.error("Guest can't be checked out, because there is some due.");
+
+            data &&
+                data.items.length === 0 &&                                    
+                    data.balance === 0 && 
+                        setShowModal(true);    
+        } catch (err) {
+            console.log(err);
+        }                    
     }, [data, error, loading]);
+    // End:: fetch data and assigned to state variables
 
     // Start :: Show modal 
     const handleShowModal = async () => {
         try {
-            setShowModal(true);
             await doFetch();
         } catch (err) {
             console.log(err);
@@ -171,15 +186,13 @@ const GuestTableCheckout = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Delete modal */}
-            {data && 
-                data.balance === 0 && 
-                    <Form 
-                        pGuestId = {props.pGuestId} 
-                        pName = {props.pName}
-                        pCorporateName = {props.pCorporateName}
-                        pShow = {showModal}
-                        onSubmited = {handleSave} 
-                        onClosed = {handleCloseModal}/>}
+            <Form 
+                pGuestId = {props.pGuestId} 
+                pName = {props.pName}
+                pCorporateName = {props.pCorporateName}
+                pShow = {showModal}
+                onSubmited = {handleSave} 
+                onClosed = {handleCloseModal}/>
             {/* End:: Delete modal */}
         </>
     );

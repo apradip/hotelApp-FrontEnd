@@ -229,10 +229,8 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 key = {`SC_${props.pGuestId}`}
                 index = {props.pIndex}
                 className = {active ? "active" : focus ? "focus" : "service"}  
-                // className = {"border"}
-                // border = {active ? "info" : focus ? "primary" : ""}  
-                onMouseEnter={() => setFocus(true)}
-                onMouseLeave={() => setFocus(false)} 
+                onMouseEnter = {() => setFocus(true)}
+                onMouseLeave = {() => setFocus(false)} 
                 onClick = {(e) => { 
                                     if (e.detail === 1) {
                                         setActive(!active);
@@ -299,37 +297,37 @@ const GuestServiceCard = forwardRef((props, ref) => {
                                 
                                 <Dropdown.Menu>
 
-                                    <Dropdown.Item eventKey="1" 
-                                        onClick={() => {handelOpenOrder()}}>
-                                        <PenTool className="feather-16 mr-3" />Order
+                                    <Dropdown.Item eventKey = "1" 
+                                        onClick = {handelOpenOrder}>
+                                        <PenTool className = "feather-16 mr-3" />Order
                                     </Dropdown.Item>
                                     
-                                    <Dropdown.Item eventKey="2"
-                                        onClick={() => {handelOpenDespatch()}}>
-                                        <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                    <Dropdown.Item eventKey = "2"
+                                        onClick = {handelOpenDespatch}>
+                                        <ShoppingBag className = "feather-16 mr-3"/>Despatch
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey="3" 
-                                        disabled={transactionId !== "undefined" ? false : true}
-                                        onClick={() => {handelOpenGenerateBill()}}>
-                                        <FileText className="feather-16 mr-3"/>Bill
+                                    <Dropdown.Item eventKey = "3" 
+                                        // disabled = {data && data.transactionId !== undefined ? false : true}
+                                        onClick = {handelOpenGenerateBill}>
+                                        <FileText className = "feather-16 mr-3"/>Bill
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey="4"
-                                        disabled={transactionId !== "undefined" ? false : true}
-                                        onClick={() => {handelOpenCheckout()}}>
+                                        // disabled = {data && data.transactionId !== undefined ? false : true}
+                                        onClick = {handelOpenCheckout}>
                                         <LogOut className="feather-16 mr-3"/>Check out
                                     </Dropdown.Item>
 
                                     <Dropdown.Divider />
 
                                     <Dropdown.Item eventKey="5" 
-                                        onClick={() => {handelOpenEdit()}}>
+                                        onClick = {handelOpenEdit}>
                                         <Edit2 className="feather-16 mr-3"/>Edit
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey="6" 
-                                        onClick={() => {handelOpenDelete()}}>
+                                        onClick = {handelOpenDelete}>
                                         <Scissors className="feather-16 mr-3"/>Delete
                                     </Dropdown.Item>
 
@@ -385,7 +383,7 @@ const GuestServiceCard = forwardRef((props, ref) => {
                 <GenerateBill 
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.BillGenerate, props.pGuestId)}}
+                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.Service_PaymentAdd, props.pGuestId)}}
                     onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId)}} />
                 {/* End :: generate & display bill component */}
 

@@ -52,50 +52,52 @@ const GuestRooms = forwardRef((props, ref) => {
                     switch (operation) {
                         case Operation.GuestAdd:
                             setDataChanged(true);
+                            
                             break;                
 
                         case Operation.GuestMod:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;                
 
                         case Operation.GuestDel:
                             setDataChanged(true);
+                            
                             break;                
 
                         case Operation.Booked:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;                
 
                         case Operation.BillGenerate:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;                
 
                         case Operation.Room_PaymentAdd:
-                            cardRefs.current.forEach((object, idx) => {
+                            cardRefs.current.forEach((object) => {
                                 if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                                    object.handelRefresh();
                             });
 
                             break;                
 
                         case Operation.Room_Checkout:
                             setDataChanged(true);
+                            
                             break;                
                                 
                         default:                
@@ -112,38 +114,34 @@ const GuestRooms = forwardRef((props, ref) => {
                     
                     switch (operation) {
                         case Operation.Table_Order:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()){
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;
 
                         case Operation.Table_Despatch:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;                
 
                         case Operation.Table_PaymentAdd:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;                
 
                         case Operation.Table_Checkout:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
-                            });
+                            setDataChanged(true);
 
                             break;                
                                 
@@ -161,38 +159,34 @@ const GuestRooms = forwardRef((props, ref) => {
 
                     switch (operation) {
                         case Operation.Service_Order:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;
 
                         case Operation.Service_Despatch:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;                
 
                         case Operation.Service_PaymentAdd:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;                
 
                         case Operation.Service_Checkout:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
-                            });
+                            setDataChanged(true);
 
                             break;                
                                 
@@ -210,38 +204,34 @@ const GuestRooms = forwardRef((props, ref) => {
 
                     switch (operation) {
                         case Operation.Miscellaneous_Order:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;
 
                         case Operation.Miscellaneous_Despatch:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;                
 
                         case Operation.Miscellaneous_PaymentAdd:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
                             });
 
                             break;                
                                 
                         case Operation.Miscellaneous_Checkout:
-                            cardRefs.current.forEach((object, idx) => {
-                                if (guestId === object.getGuestId())
-                                    object && 
-                                        object.handelRefresh();
-                            });
+                            setDataChanged(true);
 
                             break;                
         

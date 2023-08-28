@@ -228,7 +228,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         pCorporateName = {pCorporateName}
                         pCorporateAddress = {pCorporateAddress}
                         pBalance = {data.expense.expenseAmount * -1}    
-                        onSaved = {async () => {await doFetch(); onPaymentAdded();}}/>
+                        onSaved = {onPaymentAdded} />
                     {/* End :: add payment component */}
                 </>
             }
@@ -293,6 +293,17 @@ const GuestTableGenerateBill = forwardRef((props, ref) => {
     };
     // End:: Show modal
 
+    // Start:: payment added
+    const handlePaymentAdded = () => {
+        try {
+            props.onPaymentAdded();
+            setShowModal(false);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: payment added
+    
     // Start:: Close modal
     const handleCloseModal = () => {
         try {
@@ -314,18 +325,20 @@ const GuestTableGenerateBill = forwardRef((props, ref) => {
     return (
         <>
             {/* Start:: Edit modal */}
-            {data &&  data.transactionId !== "undefined" && data.items.length === 0 &&
-                <Form
-                    pGuestId = {data.id}
-                    pName = {data.name}
-                    pMobile = {data.mobile}
-                    pGuestCount = {data.guestCount}
-                    pCorporateName = {data.corporateName}
-                    pCorporateAddress = {data.corporateAddress}
-                    pTransactionId = {data.transactionId}
-                    pShow = {showModal}
-                    onPaymentAdded = {props.onPaymentAdded}
-                    onClosed = {handleCloseModal}/>}
+            {data &&  
+                data.transactionId !== undefined && 
+                    data.items.length === 0 &&
+                        <Form
+                            pGuestId = {data.id}
+                            pName = {data.name}
+                            pMobile = {data.mobile}
+                            pGuestCount = {data.guestCount}
+                            pCorporateName = {data.corporateName}
+                            pCorporateAddress = {data.corporateAddress}
+                            pTransactionId = {data.transactionId}
+                            pShow = {showModal}
+                            onPaymentAdded = {handlePaymentAdded}
+                            onClosed = {handleCloseModal} />}
             {/* End:: Edit modal */}
         </>
     );

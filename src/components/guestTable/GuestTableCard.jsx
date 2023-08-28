@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
+import { Row, Col, Card, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { Users, Phone, MapPin, Layers, Edit2, PenTool, ShoppingBag, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
+import { Users, Phone, MapPin, Layers, Edit2, PenTool, FileText, LogOut, Scissors, MoreVertical } from "react-feather";
 import { ActivityArea, Operation, getTables, subStr, properCase, formatINR } from "../common/Common";
 import { toast } from "react-toastify";
 import TimeElapsed from "../common/TimeElapsed";
@@ -10,7 +10,6 @@ import View from "./GuestTableView";
 import Edit from "../common/GuestEditSmall";
 import Delete from "../common/GuestDeleteSmall";
 import Order from "./GuestTableOrder";
-import Despatch from "./GuestTableDespatch";
 import GenerateBill from "./GuestTableGenerateBill";
 import Checkout from "./GuestTableCheckout";
 
@@ -83,6 +82,7 @@ const GuestTableCard = forwardRef((props, ref) => {
     }, []);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch data list from api
     
+    // Start:: fetch data and assigned to state variables
     useEffect(() => {
         try {
             error && toast.error(error);
@@ -95,16 +95,14 @@ const GuestTableCard = forwardRef((props, ref) => {
             data && setBalance(data.balance);
             data && setTables(data.tables);
             data && setInDate(data.inDate);
-            
-            // data && setFocus(true);
-            // data && setActive(true);
         } catch (err) {
             console.log(err);
         }        
     }, [data, error, loading]);
+    // End:: fetch data and assigned to state variables
 
     // Start :: get guest Id of this component
-    const getGuestId = () => {return props.pGuestId;}
+    const getGuestId = () => {return props.pGuestId}
     // End :: get guest Id of this component
     
     // Start:: get data from api
@@ -256,8 +254,6 @@ const GuestTableCard = forwardRef((props, ref) => {
                                     <b>{properCase(subStr(name, 20))}</b>
                                 </>
                             }
-
-                            {/* <Badge pill bg = "secondary">T</Badge> */}
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
@@ -303,37 +299,31 @@ const GuestTableCard = forwardRef((props, ref) => {
                                 <Dropdown.Menu>
 
                                     <Dropdown.Item eventKey = "1" 
-                                        onClick = {() => {handelOpenOrder()}}>
+                                        onClick = {handelOpenOrder}>
                                         <PenTool className = "feather-16 mr-3" />Order
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "2"
-                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
-                                        onClick = {() => {handelOpenDespatch()}}>
-                                        <ShoppingBag className="feather-16 mr-3"/>Despatch
-                                    </Dropdown.Item>
-
-                                    <Dropdown.Item eventKey = "3" 
-                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
-                                        onClick = {() => {handelOpenGenerateBill()}}>
+                                    <Dropdown.Item eventKey = "2" 
+                                        // disabled = {data && data.transactionId !== undefined ? false : true}
+                                        onClick = {handelOpenGenerateBill}>
                                         <FileText className="feather-16 mr-3"/>Bill
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "4"
-                                        disabled = {props.pTransactionId !== "undefined" ? false : true}
-                                        onClick = {() => {handelOpenCheckout()}}>
+                                    <Dropdown.Item eventKey = "3"
+                                        // disabled = {data && data.transactionId !== undefined ? false : true}
+                                        onClick = {handelOpenCheckout}>
                                         <LogOut className="feather-16 mr-3"/>Check out
                                     </Dropdown.Item>
 
                                     <Dropdown.Divider />
 
-                                    <Dropdown.Item eventKey = "5" 
-                                        onClick = {() => {handelOpenEdit()}}>
+                                    <Dropdown.Item eventKey = "4" 
+                                        onClick = {handelOpenEdit}>
                                         <Edit2 className = "feather-16 mr-3"/>Edit
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item eventKey = "6"
-                                        onClick = {() => {handelOpenDelete()}}>
+                                    <Dropdown.Item eventKey = "5"
+                                        onClick = {handelOpenDelete}>
                                         <Scissors className = "feather-16 mr-3"/>Delete
                                     </Dropdown.Item>
 
@@ -360,7 +350,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                     ref = {editRef}
                     pGuestId = {props.pGuestId} 
                     pOption = {ActivityArea.Table}
-                    onSaved = {() => {props.onEdited(Operation.GuestMod, props.pGuestId);}} />
+                    onSaved = {() => {props.onEdited(Operation.GuestMod, props.pGuestId)}} />
                 {/* End :: edit component */}
 
                 {/* Start :: delete employee component */}
@@ -368,29 +358,29 @@ const GuestTableCard = forwardRef((props, ref) => {
                     ref = {deleteRef}
                     pGuestId = {props.pGuestId} 
                     pName = {props.pName}
-                    onDeleted = {() => {props.onDeleted(Operation.GuestDel, props.pGuestId);}} />
+                    onDeleted = {() => {props.onDeleted(Operation.GuestDel, props.pGuestId)}} />
                 {/* End :: delete employee component */}
 
                 {/* Start :: order component */}
                 <Order 
                     ref = {orderRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onOrdered(Operation.Table_Order, props.pGuestId);}} />
+                    onSaved = {() => {props.onOrdered(Operation.Table_Order, props.pGuestId)}} />
                 {/* End :: order component */}
 
                 {/* Start :: despatch component */}
-                <Despatch
+                {/* <Despatch
                     ref = {despatchRef}
                     pGuestId = {props.pGuestId} 
-                    onSaved = {() => {props.onDespatched(Operation.Table_Despatch, props.pGuestId);}} />
+                    onSaved = {() => {props.onDespatched(Operation.Table_Despatch, props.pGuestId)}} /> */}
                 {/* End :: despatch component */}
 
                 {/* Start :: generate & display summery bill component */}
                 <GenerateBill 
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.Table_PaymentAdd, props.pGuestId);}}
-                    onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId);}} />
+                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.Table_PaymentAdd, props.pGuestId)}}
+                    onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId)}} />
                 {/* End :: generate & display summery bill component */}
 
                 {/* Start :: tables checkout component */}
@@ -399,7 +389,7 @@ const GuestTableCard = forwardRef((props, ref) => {
                     pGuestId = {props.pGuestId} 
                     pName = {name}
                     pCorporateName = {corporateName}
-                    onSaved = {() => {props.onCheckedout(Operation.Table_Checkout, props.pGuestId);}} />
+                    onSaved = {() => {props.onCheckedout(Operation.Table_Checkout, props.pGuestId)}} />
                 {/* End :: tables checkout component */}
             </>                                    
         </>

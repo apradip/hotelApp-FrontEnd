@@ -20,6 +20,13 @@ export const SearchOption = {
     MiscellaneousOnly: "MISCELLANEOUS_ONLY"
 };
 
+export const OperationState = {
+    View: "VIEW",
+    Add: "ADD",
+    Mod: "MOD",
+    Delete: "DELETE",
+}
+
 export const Operation = {
     GuestAdd: "GUEST_ADD",
     GuestMod: "GUEST_MOD",

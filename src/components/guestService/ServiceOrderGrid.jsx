@@ -1,7 +1,9 @@
 import React, { useState, useRef, useMemo, useCallback } from "react";
+import { NavLink } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
+import { Scissors } from "react-feather";
 
-import { properCase, formatINR } from "../common/Common";
+import { properCase, formatINR, OperationState } from "../common/Common";
 import ItemSelector from "../common/ServiceEditor";
 import QuantityEditor from "../common/QuantityEditor";
 
@@ -63,7 +65,6 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "unitPrice",
             type: "rightAligned",
             width: 50,
-            hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
             valueGetter: (params) => {return params.data.unitPrice}
         },
@@ -100,6 +101,26 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 return true;
             }
         },
+        {
+            headerName: "",
+            field: "rowIdx",
+            width: 6,
+            hide: false,
+            type: "rightAligned",
+            cellRenderer: (params) => {
+                if ((params.data.name !== "Select item") && (!params.node.rowPinned)) {
+                return (
+                    <NavLink to="#"
+                        onClick={(e) => {e.preventDefault(); deleteRow(params.data.rowId);}}>
+                        <Scissors 
+                            className="feather-16 text-danger" />
+                    </NavLink>
+                );
+                } else {
+                    return null;
+                }
+            },
+        },        
         {
             field: "id"
         },
@@ -251,6 +272,40 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             console.log(err);
         }
     }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
+
+    const deleteRow = useCallback ((rowIndex) => {
+        try {
+            if (pState !== OperationState.View) {
+                let row = [];
+
+                gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+                    if (rowNode.data.rowId !== rowIndex) {
+                        const object = {
+                            rowId: row.length + 1, 
+                            id: rowNode.data.id, 
+                            name: rowNode.data.name, 
+                            unitPrice: rowNode.data.unitPrice,
+                            quantity: rowNode.data.quantity,
+                            serviceChargePercentage: rowNode.data.serviceChargePercentage,
+                            serviceCharge: rowNode.data.serviceCharge,
+                            gstPercentage: rowNode.data.gstPercentage,
+                            gstCharge: rowNode.data.gstCharge,
+                            totalPrice: rowNode.data.totalPrice,
+                            despatchDate: rowNode.data.despatchDate};
+
+                        row.push(object);
+                    }
+                });
+    
+                gridRef.current.api.setRowData(row);
+
+                rowData = row;
+                onChange(row);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
 
 
 	return (

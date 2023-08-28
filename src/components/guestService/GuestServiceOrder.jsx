@@ -322,7 +322,7 @@ const GuestServiceOrder = forwardRef((props, ref) => {
                     pCorporateName = {data.corporateName}
                     pCorporateAddress = {data.corporateAddress}
                     pGstNo = {data.gstNo}
-                    pTransactionId = {data.transactionId}
+                    pTransactionId = {data.transactionId ? data.transactionId : "NAN"}
                     pData = {data.items}
                     pShow = {showModal}
                     onSubmited = {handleSave} 

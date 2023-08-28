@@ -34,8 +34,9 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
     // Strat:: save assigned table 
     const handleChangeTable = async (tables, guestCount) => {
         try {
-            if (tables.length > 0)
+            if (tables.length > 0) {
                 await doUpdate({tables: tables, guestCount: guestCount});
+            }
         } catch (err) {
             console.log(err);
         }
@@ -227,9 +228,8 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                             pState = "MOD"
                             pDefaultRowData = {pData}
                             onChange = {(value) => {
-                                if (!value) return;
-                                handelChangeFood(value);
-                            }} />
+                                value &&
+                                    handelChangeFood(value)}} />
                         {/* End:: Column service detail */}
 
                     </Col>
@@ -374,7 +374,7 @@ const GuestTableOrder = forwardRef((props, ref) => {
                     pCorporateName = {data.corporateName}
                     pCorporateAddress = {data.corporateAddress}
                     pGstNo = {data.gstNo}
-                    pTransactionId = {data.transactionId}
+                    pTransactionId = {data.transactionId ? data.transactionId : "NAN"}
                     pTables = {data.tables}
                     pData = {data.items}
                     pShow = {showModal}
