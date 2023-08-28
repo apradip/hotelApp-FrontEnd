@@ -56,6 +56,7 @@ const GuestServices = forwardRef((props, ref) => {
                     switch (operation) {
                         case Operation.GuestAdd:
                             setDataChanged(true);
+
                             break;                
 
                         case Operation.GuestMod:
@@ -69,12 +70,13 @@ const GuestServices = forwardRef((props, ref) => {
 
                         case Operation.GuestDel:
                             setDataChanged(true);
+
                             break;                
 
                         case Operation.Booked:
                             cardRefs.current.forEach((object) => {
                                 if (guestId === object.getGuestId()) {
-                                    object && object.handelRefresh();
+                                    object.handelRefresh();
                                 }
                             });
 
@@ -83,7 +85,7 @@ const GuestServices = forwardRef((props, ref) => {
                         case Operation.BillGenerate:
                             cardRefs.current.forEach((object) => {
                                 if (guestId === object.getGuestId()) {
-                                    object && object.handelRefresh();
+                                    object.handelRefresh();
                                 }
                             });
 
@@ -92,7 +94,7 @@ const GuestServices = forwardRef((props, ref) => {
                         case Operation.Room_PaymentAdd:
                             cardRefs.current.forEach((object) => {
                                 if (guestId === object.getGuestId()) {
-                                    object && object.handelRefresh();
+                                    object.handelRefresh();
                                 }
                             });
 
@@ -100,6 +102,7 @@ const GuestServices = forwardRef((props, ref) => {
 
                         case Operation.Room_Checkout:
                             setDataChanged(true);
+
                             break;                
                                 
                         default:                
@@ -211,7 +214,8 @@ const GuestServices = forwardRef((props, ref) => {
     // Start:: Open add modal
     const openAdd = () => {
         try {
-            addRef.current.handleShowModal();
+            addRef.current && 
+                addRef.current.handleShowModal();
         } catch (err) {
             console.log(err);
         }

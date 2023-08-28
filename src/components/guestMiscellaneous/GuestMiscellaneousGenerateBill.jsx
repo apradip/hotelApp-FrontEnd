@@ -264,14 +264,13 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
     // Start:: fetch id wise detail from api
     useEffect(() => {
         try {
-            error && toast.error(error);
             data && 
                 data.items.length > 0 &&
                     toast.error("All ordered items not delivered! Please despatch all ordered items them generate bill.");
         } catch (err) {
             console.log(err);
         }
-    }, [data, error, loading]);      // eslint-disable-line react-hooks/exhaustive-deps
+    }, [data]);      // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Show modal
@@ -284,6 +283,17 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
         }
     };
     // End:: Show modal
+
+    // Start:: payment added
+    const handlePaymentAdded = () => {
+        try {
+            props.onPaymentAdded();
+            setShowModal(false);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    // End:: payment added
 
     // Start:: Close modal
     const handleCloseModal = () => {
@@ -307,7 +317,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
         <>
             {/* Start:: Bill modal */}
             {data &&  
-                data.transactionId !== "undefined" && 
+                data.transactionId !== undefined && 
                     data.items.length === 0 &&
                         <Form
                             pGuestId = {data.id}
@@ -318,7 +328,7 @@ const GuestMiscellaneousGenerateBill = forwardRef((props, ref) => {
                             pCorporateAddress = {data.corporateAddress}
                             pTransactionId = {data.transactionId}
                             pShow = {showModal}
-                            onPaymentAdded = {props.onPaymentAdded}
+                            onPaymentAdded = {handlePaymentAdded}
                             onClosed = {handleCloseModal}/>}
             {/* End:: Bill modal */}
         </>

@@ -17,7 +17,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 pCorporateName, pCorporateAddress, pGstNo, 
                 pTransactionId, pData, 
                 pShow, 
-                onSubmited}) => {
+                onSubmited, onClosed}) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [orderData, setOrderData] = useState(null);
@@ -102,6 +102,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
         try {
             setValidateOnChange(false);
             resetForm();
+            onClosed();
         } catch (err) {
             console.log(err);
         }
@@ -254,7 +255,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
-    const {data, loading, error, doFetch} = useFetchWithAuth({
+    const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
         params: {option: "N"}
     });         // get all non delivered items
@@ -269,12 +270,14 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
 
     // Start:: fetch id wise detail from api
     useEffect(() => {
-        try {
-            error && toast.error(error);
-        } catch (err) {
-            console.log(err);
-        }
-    }, [data, error, loading]);      // eslint-disable-line react-hooks/exhaustive-deps
+        (async () => {
+            try {
+                showModal && await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
     // End:: fetch id wise detail from api
 
     // Start:: Show modal
@@ -328,10 +331,11 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
                     pCorporateName = {data.corporateName}
                     pCorporateAddress = {data.corporateAddress}
                     pGstNo = {data.gstNo}
-                    pTransactionId = {data.transactionId}
+                    pTransactionId = {data.transactionId ? data.transactionId : "NAN"}
                     pData = {data.items}
                     pShow = {showModal}
-                    onSubmited = {handleSave} />}
+                    onSubmited = {handleSave} 
+                    onClosed = {handleCloseModal} />}
             {/* End:: Edit modal */}
         </>
     );

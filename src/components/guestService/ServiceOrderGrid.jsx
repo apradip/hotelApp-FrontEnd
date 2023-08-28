@@ -189,12 +189,12 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     // set grid data to a parent component
     const handleCellValueChanged = () => {
-        let dataRows = [];    
+        let row = [];    
 
         try {
             gridRef.current.api.forEachNode((gridRow) => {
                 if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
-                    dataRows.push({
+                    row.push({
                         id: gridRow.data.id, 
                         name: gridRow.data.name,
                         unitPrice: gridRow.data.unitPrice,
@@ -209,7 +209,7 @@ const ServiceOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 }
             });
               
-            onChange(dataRows);
+            onChange(row);
             calculateSum();
         } catch (err) {
             console.log(err);

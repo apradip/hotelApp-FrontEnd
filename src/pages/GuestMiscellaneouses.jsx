@@ -118,6 +118,25 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
                     const {operation, guestId} = payload;
 
                     switch (operation) {
+                        case Operation.GuestAdd:
+                            setDataChanged(true);
+
+                            break;                
+
+                        case Operation.GuestMod:
+                            cardRefs.current.forEach((object) => {
+                                if (guestId === object.getGuestId()) {
+                                    object.handelRefresh();
+                                }
+                            });
+
+                            break;                
+
+                        case Operation.GuestDel:
+                            setDataChanged(true);
+
+                            break;                
+
                         case Operation.Miscellaneous_Order:
                             cardRefs.current.forEach((object) => {
                                 if (guestId === object.getGuestId()) {
@@ -212,8 +231,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
                     if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && 
-                            cardRefs.current[idx].handelOpenEdit();
+                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
                 });
             }
         } catch (err) {
@@ -228,8 +246,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
                     if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && 
-                            cardRefs.current[idx].handelOpenDelete();
+                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
                 });
             }
         } catch (err) {
@@ -287,7 +304,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
 
                 case Operation.Miscellaneous_Checkout:
                     toast.success("Guest successfully checked out");
-                    socket.emit(MessageRoom.Miscellaneous_Checkout, payload);
+                    socket.emit(MessageRoom.Miscellaneous, payload);
 
                     break;
                         
@@ -305,11 +322,9 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         try {
             setSelectedCardIndex(index);
 
-            cardRefs.current && 
-                cardRefs.current.forEach((item, idx) => {
+            cardRefs.current && cardRefs.current.forEach((item, idx) => {
                 if (index !== idx) 
-                    cardRefs.current[idx] && 
-                        cardRefs.current[idx].handleDeSelect();
+                    cardRefs.current[idx] && cardRefs.current[idx].handleDeSelect();
             });
         } catch (err) {
             console.log(err);
@@ -366,8 +381,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         try {
             const rowKey=`row_${rowIdx}`;
 
-            return (
-                <Row key={rowKey}>{
+            return (<Row key={rowKey}>{
                         pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createCol(item, itemIdx);
@@ -452,8 +466,7 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
         try {
             const rowKey=`row_${rowIdx}`;
 
-            return (
-                <Row key={rowKey}>
+            return (<Row key={rowKey}>
                     {pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createPlaceholderCol(item, itemIdx);
@@ -471,7 +484,6 @@ const GuestMiscellaneouses = forwardRef((props, ref) => {
             return (
                 <Col xl={4} md={4} key={colKey}>
                     <CardPlaceholder 
-                        ref = {(el) => cardRefs.current[itemIdx] = el}
                         pIndex = {itemIdx}/>
                 </Col>);
         } catch (err) {

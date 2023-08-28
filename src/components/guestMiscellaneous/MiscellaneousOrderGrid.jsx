@@ -1,7 +1,9 @@
 import React, { useState, useRef, useMemo, useCallback } from "react";
+import { NavLink } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
+import { Scissors } from "react-feather";
 
-import { properCase, formatINR } from "../common/Common";
+import { properCase, formatINR, OperationState } from "../common/Common";
 import ItemSelector from "../common/MiscellaneousEditor";
 import QuantityEditor from "../common/QuantityEditor";
 
@@ -63,7 +65,6 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
             field: "unitPrice",
             type: "rightAligned",
             width: 50,
-            hide: false,
             valueFormatter: (params) => {return !params.node.rowPinned ? `${formatINR(params.value)}` : ""},
             valueGetter: (params) => {return params.data.unitPrice},
             valueSetter: (params) => {
@@ -105,6 +106,26 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 return true;
             }
         },
+        {
+            headerName: "",
+            field: "rowIdx",
+            width: 6,
+            hide: false,
+            type: "rightAligned",
+            cellRenderer: (params) => {
+                if ((params.data.name !== "Select item") && (!params.node.rowPinned)) {
+                return (
+                    <NavLink to="#"
+                        onClick={(e) => {e.preventDefault(); deleteRow(params.data.rowId);}}>
+                        <Scissors 
+                            className="feather-16 text-danger" />
+                    </NavLink>
+                );
+                } else {
+                    return null;
+                }
+            },
+        },        
         {
             field: "id"
         },
@@ -173,12 +194,12 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
 
     // set grid data to a parent component
     const handleCellValueChanged = () => {
-        let dataRows = [];    
+        let row = [];    
 
         try {
             gridRef.current.api.forEachNode((gridRow) => {
                 if ((gridRow.data.name !== "Select item") && ((gridRow.data.quantity !== 0))) {
-                    dataRows.push({
+                    row.push({
                         id: gridRow.data.id, 
                         name: gridRow.data.name,
                         unitPrice: gridRow.data.unitPrice,
@@ -193,7 +214,7 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                 }
             });
               
-            onChange(dataRows);
+            onChange(row);
             calculateSum();
         } catch (err) {
             console.log(err);
@@ -259,6 +280,41 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
     }, [emptyRowCount]);        // eslint-disable-line react-hooks/exhaustive-deps
 
     
+    const deleteRow = useCallback ((rowIndex) => {
+        try {
+            if (pState !== OperationState.View) {
+                let row = [];
+
+                gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+                    if (rowNode.data.rowId !== rowIndex) {
+                        const object = {
+                            rowId: row.length + 1, 
+                            id: rowNode.data.id, 
+                            name: rowNode.data.name, 
+                            unitPrice: rowNode.data.unitPrice,
+                            quantity: rowNode.data.quantity,
+                            serviceChargePercentage: rowNode.data.serviceChargePercentage,
+                            serviceCharge: rowNode.data.serviceCharge,
+                            gstPercentage: rowNode.data.gstPercentage,
+                            gstCharge: rowNode.data.gstCharge,
+                            totalPrice: rowNode.data.totalPrice,
+                            despatchDate: rowNode.data.despatchDate};
+
+                        row.push(object);
+                    }
+                });
+    
+                gridRef.current.api.setRowData(row);
+
+                rowData = row;
+                onChange(row);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+
+
 	return (
         <div className = "col-12 ag-theme-alpine grid-height-400">
             <div style = {style}>
@@ -268,8 +324,8 @@ const MiscellaneousOrderGrid = ({pState, pDefaultRowData, onChange}) => {
                     defaultColDef = {defaultColDef}
                     rowData = {null}
                     rowSelection = {"single"}
-                    onGridReady = {() => {handleGridReady()}}
-                    onCellValueChanged = {() => {handleCellValueChanged()}}/>
+                    onGridReady = {handleGridReady}
+                    onCellValueChanged = {handleCellValueChanged}/>
             </div>
         </div>
     );

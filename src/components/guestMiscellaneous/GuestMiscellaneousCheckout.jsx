@@ -111,8 +111,10 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
     const contextValues = useStateContext();
     const [showModal, setShowModal] = useState(false);
     const {data, loading, error, doFetch} = useFetchWithAuth({
-        url: `${contextValues.guestAPI}/${hotelId}/${props.pGuestId}`
+        url: `${contextValues.guestMiscellaneousAPI}/${hotelId}/${props.pGuestId}`,
+        params: {option: "N"}
     });
+
 
     // Strat:: close modal on key press esc    
     useEffect(() => {
@@ -122,16 +124,29 @@ const GuestMiscellaneousCheckout = forwardRef((props, ref) => {
     // End:: close modal on key press esc    
 
     useEffect(() => {
-        error && toast.error(error);
-        data && 
+        try {
+            error && toast.error(error);
+        
+            data && 
+                data.items.length > 0 &&
+                        toast.error("Guest can't be checked out, because there is some due.");
+        
+                        data &&                     
             data.balance !== 0 && 
-                    toast.error("Guest can't be checked out, because there is some due.");
+                toast.error("Guest can't be checked out, because there is some due.");
+
+            data &&
+                data.items.length === 0 &&                                    
+                    data.balance === 0 && 
+                        setShowModal(true);    
+        } catch (err) {
+            console.log(err);
+        }                    
     }, [data, error, loading]);
 
     // Start :: Show modal 
     const handleShowModal = async () => {
         try {
-            setShowModal(true);
             await doFetch();
         } catch (err) {
             console.log(err);

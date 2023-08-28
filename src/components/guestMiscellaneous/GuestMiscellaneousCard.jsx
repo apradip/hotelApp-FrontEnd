@@ -60,7 +60,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
     const [guestCount, setGuestCount] = useState();
     const [balance, setBalance] = useState();
     const [inDate, setInDate] = useState();
-    const [transactionId, setTransactionId] = useState();
+    // const [transactionId, setTransactionId] = useState();
 
     const [focus, setFocus] = useState(false);
     const [active, setActive] = useState(false);
@@ -94,11 +94,7 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
             data && setGuestCount(data.guestCount);  
             data && setBalance(data.balance);
             data && setInDate(data.inDate);
-            data && setTransactionId(data.transactionId);
-
-            // data && setFocus(true);
-            // data && setActive(true);
-        } catch (err) {
+     } catch (err) {
             console.log(err);
         }
     }, [data, error, loading]);
@@ -256,8 +252,6 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                     <b>{properCase(subStr(name, 20))}</b>
                                 </>
                             }
-
-                            {/* <Badge pill bg = "warning">M</Badge> */}
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
@@ -298,36 +292,34 @@ const GuestMiscellaneousCard = forwardRef((props, ref) => {
                                 <Dropdown.Menu>
 
                                     <Dropdown.Item eventKey = "1" 
-                                        onClick = {() => {handelOpenOrder()}}>
+                                        onClick = {handelOpenOrder}>
                                         <PenTool className = "feather-16 mr-3" />Order
                                     </Dropdown.Item>
                                     
                                     <Dropdown.Item eventKey = "2"
-                                        onClick = {() => {handelOpenDespatch()}}>
+                                        onClick = {handelOpenDespatch}>
                                         <ShoppingBag className = "feather-16 mr-3"/>Despatch
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey = "3" 
-                                        disabled = {transactionId !== "undefined" ? false : true}
-                                        onClick = {() => {handelOpenGenerateBill()}}>
+                                        onClick = {handelOpenGenerateBill}>
                                         <FileText className="feather-16 mr-3"/>Bill
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey = "4"
-                                        disabled = {transactionId !== "undefined" ? false : true}
-                                        onClick = {() => {handelOpenCheckout()}}>
+                                        onClick = {handelOpenCheckout}>
                                         <LogOut className = "feather-16 mr-3"/>Check out
                                     </Dropdown.Item>
 
                                     <Dropdown.Divider />
 
                                     <Dropdown.Item eventKey = "5" 
-                                        onClick = {() => {handelOpenEdit()}}>
+                                        onClick = {handelOpenEdit}>
                                         <Edit2 className = "feather-16 mr-3"/>Edit
                                     </Dropdown.Item>
 
                                     <Dropdown.Item eventKey = "6" 
-                                        onClick = {() => {handelOpenDelete()}}>
+                                        onClick = {handelOpenDelete}>
                                         <Scissors className = "feather-16 mr-3"/>Delete
                                     </Dropdown.Item>
 
