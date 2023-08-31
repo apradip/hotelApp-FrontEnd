@@ -246,7 +246,7 @@ const GuestRooms = forwardRef((props, ref) => {
         } catch (err) {
             console.log(err);
         }
-    },[]);
+    },[socket]);
     // End:: leasten and act on command on socket
     
     // Start:: fetch data list from api
@@ -256,7 +256,7 @@ const GuestRooms = forwardRef((props, ref) => {
                 await doFetch();
                 setDataChanged(false);
             } catch (err) {
-                console.log("Error occured when fetching data");
+                console.log(err);
             }
           })();
     }, [dataChanged, search]);      // eslint-disable-line react-hooks/exhaustive-deps
@@ -282,7 +282,8 @@ const GuestRooms = forwardRef((props, ref) => {
     // Start:: Open add modal
     const openAdd = () => {
         try {
-            addRef.current.handleShowModal();
+            addRef.current && 
+                addRef.current.handleShowModal();
         } catch (err) {
             console.log(err);
         }
@@ -294,8 +295,10 @@ const GuestRooms = forwardRef((props, ref) => {
         try {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
-                    if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
+                    if (selectedCardIndex === idx) {
+                        cardRefs.current[idx] && 
+                            cardRefs.current[idx].handelOpenEdit();
+                    }
                 });
             }
         } catch (err) {
@@ -309,8 +312,10 @@ const GuestRooms = forwardRef((props, ref) => {
         try {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
-                    if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
+                    if (selectedCardIndex === idx) {
+                        cardRefs.current[idx] && 
+                            cardRefs.current[idx].handelOpenDelete();
+                    }
                 });
             }
         } catch (err) {
@@ -453,8 +458,10 @@ const GuestRooms = forwardRef((props, ref) => {
             setSelectedCardIndex(index);
 
             cardRefs.current && cardRefs.current.forEach((item, idx) => {
-                if (index !== idx) 
-                    cardRefs.current[idx] && cardRefs.current[idx].handleDeSelect();
+                if (index !== idx) {
+                    cardRefs.current[idx] && 
+                        cardRefs.current[idx].handleDeSelect();
+                }
             });
         } catch (err) {
             console.log(err);
@@ -511,9 +518,8 @@ const GuestRooms = forwardRef((props, ref) => {
         try {
             const rowKey=`row_${rowIdx}`;
 
-            return (
-                <Row key={rowKey}>
-                    {pData.map((item, idx) => {
+            return (<Row key={rowKey}>{
+                        pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createCol(item, itemIdx);
                         })}
@@ -527,8 +533,7 @@ const GuestRooms = forwardRef((props, ref) => {
         try {
             const colKey = `col_${pData.id}`;
 
-            return (
-                <Col xl={4} md={4} key={colKey}>
+            return (<Col xl={4} md={4} key={colKey}>
                     {<CardRoom 
                         ref = {(el) => cardRefs.current[itemIdx] = el}
                         pIndex = {itemIdx}
@@ -582,8 +587,7 @@ const GuestRooms = forwardRef((props, ref) => {
         try {
             const rowKey=`row_${rowIdx}`;
 
-            return (
-                <Row key={rowKey}>
+            return (<Row key={rowKey}>
                     {pData.map((item, idx) => {
                             const itemIdx = (rowIdx * itemPerRow) + idx;
                             return createPlaceholderCol(item, itemIdx);
@@ -598,10 +602,8 @@ const GuestRooms = forwardRef((props, ref) => {
         try {
             const colKey = `col_${itemIdx}`;
 
-            return (
-                <Col xl={4} md={4} key={colKey}>
+            return (<Col xl={4} md={4} key={colKey}>
                     <CardPlaceholder 
-                        ref = {(el) => cardRefs.current[itemIdx] = el}
                         pIndex = {itemIdx} />
                 </Col>);
         } catch (err) {
@@ -700,7 +702,7 @@ const GuestRooms = forwardRef((props, ref) => {
             {/* Start :: add employee component */}
             <Add 
                 ref = {addRef}    
-                onAdded = {() => {handleSuccess(Operation.GuestAdd)}} />
+                onAdded = {() => { handleSuccess(Operation.GuestAdd) }} />
             {/* End :: add employee component */}
 
         </div>

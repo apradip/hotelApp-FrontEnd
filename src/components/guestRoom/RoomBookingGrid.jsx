@@ -1,116 +1,118 @@
-import React, { useEffect, useState, useRef, useMemo, useCallback, forwardRef, useImperativeHandle } from "react";
+import React, { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react"; 
 
-import { Modal, NavLink } from "react-bootstrap";
+import { NavLink } from "react-bootstrap";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { formatDDMMYYYY } from "../common/Common";
+import { formatDDMMYYYY, OperationState } from "../common/Common";
 import NumericEditor from "../common/NumericEditor";
 import DateEditor from "../common/DateEditor";
+// import DateComponent from "../common/DateComponent.jsx";
+
 import RoomEditor from "../common/RoomEditor";
 import ExtraPersonEditor from "../common/ExtraPersonEditor";
 import ExtraBedEditor from "../common/ExtraBedEditor";
 
 import useFetchWithAuth from "../common/useFetchWithAuth";
-import { X } from "react-feather";
+import { Scissors } from "react-feather";
 
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
-// Start:: form
-const DeleteConfirmationForm = forwardRef((props, ref) => {
-    const [showModal, setShowModal] = useState(false);
+// // Start:: form
+// const DeleteConfirmationForm = forwardRef((props, ref) => {
+//     const [showModal, setShowModal] = useState(false);
 
-    // Start :: Show modal 
-    const handleShowModal = () => {
-        setShowModal(true);
-    };
-    // End :: Show modal 
+//     // Start :: Show modal 
+//     const handleShowModal = () => {
+//         setShowModal(true);
+//     };
+//     // End :: Show modal 
 
-    // Start :: Close modal 
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
-    // End :: Close modal 
+//     // Start :: Close modal 
+//     const handleCloseModal = () => {
+//         setShowModal(false);
+//     };
+//     // End :: Close modal 
 
-    // Start :: Save 
-    const handleSave = () => {
-        setShowModal(false);
-        props.onSubmited(); 
-    };
-    // End :: Save 
+//     // Start :: Save 
+//     const handleSave = () => {
+//         setShowModal(false);
+//         props.onSubmited(); 
+//     };
+//     // End :: Save 
 
 
-    // // Start:: Call delete api
-    // const handleSave = async () => {
-    //     //await doDelete();
-    //     //error === null ? onSubmited() : toast.error(error);
-    //     onSubmited();
-    // };
-    // // End:: Call delete api
+//     // // Start:: Call delete api
+//     // const handleSave = async () => {
+//     //     //await doDelete();
+//     //     //error === null ? onSubmited() : toast.error(error);
+//     //     onSubmited();
+//     // };
+//     // // End:: Call delete api
 
-    // Start:: forward reff show modal function
-    useImperativeHandle(ref, () => {
-        return {handleShowModal}
-    });
-    // End:: forward reff show modal function
+//     // Start:: forward reff show modal function
+//     useImperativeHandle(ref, () => {
+//         return {handleShowModal}
+//     });
+//     // End:: forward reff show modal function
     
-    // Start:: Html
-    return (
-        <Modal 
-            size="sm"
-            show={showModal}>
+//     // Start:: Html
+//     return (
+//         <Modal 
+//             size="sm"
+//             show={showModal}>
 
-            {/* Start:: Modal header */}
-            <Modal.Header>
-                {/* Header text */}
-                <Modal.Title>Delete guest room</Modal.Title>
+//             {/* Start:: Modal header */}
+//             <Modal.Header>
+//                 {/* Header text */}
+//                 <Modal.Title>Delete guest room</Modal.Title>
 
-                {/* Close button */}
-                <NavLink 
-                    className="nav-icon" href="#" 
-                    onClick={handleCloseModal}>
-                    <i className="align-middle"><X/></i>
-                </NavLink>
-            </Modal.Header>
-            {/* End:: Modal header */}
+//                 {/* Close button */}
+//                 <NavLink 
+//                     className="nav-icon" href="#" 
+//                     onClick={handleCloseModal}>
+//                     <i className="align-middle"><X/></i>
+//                 </NavLink>
+//             </Modal.Header>
+//             {/* End:: Modal header */}
 
-            {/* Start:: Modal body */}
-            <Modal.Body>
-                <label className="form-label">Are you really want to delete room no. <mark><code>{props.pRoom} on {props.pOccupancyDate}</code></mark> ?</label>
-            </Modal.Body>
-            {/* End:: Modal body */}
+//             {/* Start:: Modal body */}
+//             <Modal.Body>
+//                 <label className="form-label">Are you really want to delete room no. <mark><code>{props.pRoom} on {props.pOccupancyDate}</code></mark> ?</label>
+//             </Modal.Body>
+//             {/* End:: Modal body */}
 
-            {/* Start:: Modal footer */}
-            <Modal.Footer>
+//             {/* Start:: Modal footer */}
+//             <Modal.Footer>
 
-                {/* Start:: Close button */}
-                <button 
-                    type="button"   
-                    className="btn btn-danger"
-                    autoFocus
-                    onClick={handleCloseModal}>
-                    Close
-                </button>
-                {/* End:: Close button */}
+//                 {/* Start:: Close button */}
+//                 <button 
+//                     type="button"   
+//                     className="btn btn-danger"
+//                     autoFocus
+//                     onClick={handleCloseModal}>
+//                     Close
+//                 </button>
+//                 {/* End:: Close button */}
 
-                {/* Start:: Save button */}
-                <button 
-                    type="button"
-                    className="btn btn-success"
-                    onClick={handleSave}>
-                    Confirm
-                </button>
-                {/* End:: Save button */}
+//                 {/* Start:: Save button */}
+//                 <button 
+//                     type="button"
+//                     className="btn btn-success"
+//                     onClick={handleSave}>
+//                     Confirm
+//                 </button>
+//                 {/* End:: Save button */}
 
-            </Modal.Footer>
-            {/* End:: Modal footer */}
+//             </Modal.Footer>
+//             {/* End:: Modal footer */}
 
-        </Modal>
-    );
-    // End:: Html
+//         </Modal>
+//     );
+//     // End:: Html
 
-});
-// End:: form
+// });
+// // End:: form
 
 const RoomBookingGrid = ({pState, pData, onChange}) => {    
 	const contextValues = useStateContext();
@@ -133,6 +135,28 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
 
         return suppress;
     };
+
+    // const filterParams = {
+    //     comparator: (filterLocalDateAtMidnight, cellValue) => {
+    //       const dateAsString = cellValue;
+    //       const dateParts = dateAsString.split('/');
+    //       const cellDate = new Date(
+    //         Number(dateParts[2]),
+    //         Number(dateParts[1]) - 1,
+    //         Number(dateParts[0])
+    //       );
+    //       if (filterLocalDateAtMidnight.getTime() === cellDate.getTime()) {
+    //         return 0;
+    //       }
+    //       if (cellDate < filterLocalDateAtMidnight) {
+    //         return -1;
+    //       }
+    //       if (cellDate > filterLocalDateAtMidnight) {
+    //         return 1;
+    //       }
+    //     },
+    //   };
+
     const defaultColDef = useMemo(() => {
         return {
           flex: 1,
@@ -158,10 +182,12 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
             field: "occupancyDate", 
             width: 190,
             cellEditor: DateEditor, 
+            // cellEditor: DateComponent,
             hide: operationWiseHideState(pState, "occupancyDate"),
-            suppressKeyboardEvent: (params) => {return suppressNavigation(params)},
+            // suppressKeyboardEvent: (params) => {return suppressNavigation(params)},
             editable: (params) => {return params.node.rowPinned ? false : pState === "ADD" ? true : pState === "MOD" ? true : pState === "VIEW" ? false : true},            
-            valueFormatter: (params) => {return !params.node.rowPinned ? `${formatDDMMYYYY(params.value)}` : ""}
+            // valueFormatter: (params) => {return !params.node.rowPinned ? `${formatDDMMYYYY(params.value)}` : ""}
+            valueFormatter: (params) => {return !params.node.rowPinned ? `${params.value}` : ""}
         },
         {
             headerName: "Room No.", 
@@ -305,7 +331,7 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
             headerName: "GST", 
             field: "gstCharge", 
             type: "rightAligned",
-            hide: operationWiseHideState(pState, "gstCharge"),
+            // hide: operationWiseHideState(pState, "gstCharge"),
             valueFormatter: (params) => {return !params.node.rowPinned ? `₹ ${Number(params.value).toFixed(2)}` : ""},
             valueGetter: (params) => {return params.data.gstCharge},
             valueSetter: (params) => {
@@ -325,6 +351,26 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
                 return true;
             }
         },
+        {
+            headerName: "",
+            field: "rowIdx",
+            width: 6,
+            hide: false,
+            type: "rightAligned",
+            cellRenderer: (params) => {
+                if ((params.data.name !== "Select item") && (!params.node.rowPinned)) {
+                return (
+                    <NavLink to="#"
+                        onClick={(e) => {e.preventDefault(); deleteRow(params.data.rowId);}}>
+                        <Scissors 
+                            className="feather-16 text-danger" />
+                    </NavLink>
+                );
+                } else {
+                    return null;
+                }
+            },
+        },        
         {
             field: "id"
         },
@@ -366,6 +412,13 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
             }
         }
     ]);
+
+    // const components = useMemo(() => {
+    //     return {
+    //       agDateInput: DateComponent
+    //     };
+    //   }, []);
+
     const pinnedRowData = [
         {rowId: "Total", finalTariff: 0}
     ];
@@ -432,12 +485,12 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     },[]);
     // End:: load empty data to grid
     
-    // Start:: on row selection change set selected 
-    const handleSelectionChanged = useCallback((event) => {
-		setSelectedRowNode(event.api.getSelectedNodes()[0]);		
-        // setFinalTariff(0);
-    }, []);
-    // End:: on row selection change set selected 
+    // // Start:: on row selection change set selected 
+    // const handleSelectionChanged = useCallback((event) => {
+	// 	setSelectedRowNode(event.api.getSelectedNodes()[0]);		
+    //     // setFinalTariff(0);
+    // }, []);
+    // // End:: on row selection change set selected 
 
     // Start:: on grid data change calculate final tariff
     const handleCellValueChanged = useCallback(() => {
@@ -473,10 +526,10 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
     }, []);
     // End:: on grid data change calculate final tariff
 
-    const handleCellKeyDown = useCallback((e) => {
-        if ((pState !== "ADD") && (pState !== "MOD")) return;
-        if (e.event.key === "Delete") deleteRef && deleteRef.current.handleShowModal();
-    }, []);
+    // const handleCellKeyDown = useCallback((e) => {
+    //     if ((pState !== "ADD") && (pState !== "MOD")) return;
+    //     if (e.event.key === "Delete") deleteRef && deleteRef.current.handleShowModal();
+    // }, []);
     
     // Start:: find gst% from api
     useEffect(() => {
@@ -554,42 +607,80 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         gridRef.current.api.setRowData(rows);
     }, []);        // eslint-disable-line react-hooks/exhaustive-deps
 
-    // Start :: Delete row 
-    const handleDeleteRow = useCallback(() => {
-        let rows = [];
 
-        if ((pState !== "ADD") && (pState !== "MOD")) return;
+    const deleteRow = useCallback ((rowIndex) => {
+        try {
+            if (pState !== OperationState.View) {
+                let rows = [];
 
-        gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
-            if (rowNode.data.rowId !== selectedRowNode.data.rowId) {
-                rows.push({
-                    rowId: rows.length + 1, 
-                    room: rowNode.data.room, 
-                    occupancyDate: rowNode.data.occupancyDate, 
-                    extraBed: rowNode.data.extraBed, 
-                    extraPerson: rowNode.data.extraPerson, 
-                    discount: rowNode.data.discount, 
-                    gstCharge: rowNode.data.gstCharge,
-                    finalTariff: rowNode.data.finalTariff, 
-                    id: rowNode.data.id, 
-                    itemTransactionId: rowNode.data.itemTransactionId,
-                    tariff: rowNode.data.tariff,
-                    extraBedTariff: rowNode.data.extraBedTariff, 
-                    extraPersonTariff: rowNode.data.extraPersonTariff, 
-                    maxDiscount: rowNode.data.maxDiscount, 
-                    gstPercentage: rowNode.data.gstPercentage
+                gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+                    if (rowNode.data.rowId !== rowIndex) {
+                        const object = {
+                            rowId: rows.length + 1, 
+                            room: rowNode.data.room, 
+                            occupancyDate: rowNode.data.occupancyDate, 
+                            extraBed: rowNode.data.extraBed, 
+                            extraPerson: rowNode.data.extraPerson, 
+                            discount: rowNode.data.discount, 
+                            gstCharge: rowNode.data.gstCharge,
+                            finalTariff: rowNode.data.finalTariff, 
+                            id: rowNode.data.id, 
+                            itemTransactionId: rowNode.data.itemTransactionId,
+                            tariff: rowNode.data.tariff,
+                            extraBedTariff: rowNode.data.extraBedTariff, 
+                            extraPersonTariff: rowNode.data.extraPersonTariff, 
+                            maxDiscount: rowNode.data.maxDiscount, 
+                            gstPercentage: rowNode.data.gstPercentage}
+
+                        rows.push(object);
+                    }
                 });
+    
+                gridRef.current.api.setRowData(rows);
+                onChange(rows);
             }
-        });
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);        // eslint-disable-line react-hooks/exhaustive-deps
+
+
+    // Start :: Delete row 
+    // const handleDeleteRow = useCallback(() => {
+    //     let rows = [];
+
+    //     if ((pState !== "ADD") && (pState !== "MOD")) return;
+
+    //     gridRef.current.api && gridRef.current.api.forEachNode((rowNode) => {
+    //         if (rowNode.data.rowId !== selectedRowNode.data.rowId) {
+    //             rows.push({
+    //                 rowId: rows.length + 1, 
+    //                 room: rowNode.data.room, 
+    //                 occupancyDate: rowNode.data.occupancyDate, 
+    //                 extraBed: rowNode.data.extraBed, 
+    //                 extraPerson: rowNode.data.extraPerson, 
+    //                 discount: rowNode.data.discount, 
+    //                 gstCharge: rowNode.data.gstCharge,
+    //                 finalTariff: rowNode.data.finalTariff, 
+    //                 id: rowNode.data.id, 
+    //                 itemTransactionId: rowNode.data.itemTransactionId,
+    //                 tariff: rowNode.data.tariff,
+    //                 extraBedTariff: rowNode.data.extraBedTariff, 
+    //                 extraPersonTariff: rowNode.data.extraPersonTariff, 
+    //                 maxDiscount: rowNode.data.maxDiscount, 
+    //                 gstPercentage: rowNode.data.gstPercentage
+    //             });
+    //         }
+    //     });
         
-        gridRef.current.api.setRowData(rows);
+    //     gridRef.current.api.setRowData(rows);
 
-        // calculate sum
-        calculateSum();
+    //     // calculate sum
+    //     calculateSum();
 
-        // raise on change event for parent component 
-        onChange(rows);
-    }, [selectedRowNode]);
+    //     // raise on change event for parent component 
+    //     onChange(rows);
+    // }, [selectedRowNode]);
     // End :: Delete row 
 
     // Start:: calculate sum on change tariff
@@ -674,24 +765,26 @@ const RoomBookingGrid = ({pState, pData, onChange}) => {
         <div className="col-12 ag-theme-alpine grid-height-400">
 
             <AgGridReact	
-                ref={gridRef}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowData={null}
-                rowSelection={"single"}
-                onGridReady={handleGridReady}
+                ref = {gridRef}
+                columnDefs = {columnDefs}
+                // components = {components}
+                defaultColDef = {defaultColDef}
+                rowData = {null}
+                rowSelection = {"single"}
+                onGridReady = {handleGridReady}
                 onFirstDataRendered={handleFirstDataRendered}
-                onSelectionChanged={handleSelectionChanged}
+                // onSelectionChanged={handleSelectionChanged}
                 onCellValueChanged={handleCellValueChanged}
-                onCellKeyDown={handleCellKeyDown}/>
+                // onCellKeyDown={handleCellKeyDown}
+                />
 
             {/* Start:: Form component */}
-            {selectedRowNode &&
+            {/* {selectedRowNode &&
                 <DeleteConfirmationForm 
                     ref={deleteRef}
                     pRoom={selectedRowNode.data.room}
                     pOccupancyDate={selectedRowNode.data.occupancyDate}
-                    onSubmited={handleDeleteRow}/>}
+                    onSubmited={handleDeleteRow}/>} */}
                 {/* End:: Form component */}
 
         </div>

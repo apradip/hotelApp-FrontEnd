@@ -326,7 +326,7 @@ const GuestServiceOrder = forwardRef((props, ref) => {
             {/* Start:: Edit modal */}
             {data &&
                 <Form 
-                    pGuestId = {data.id}
+                    pGuestId = {props.pGuestId}
                     pName = {data.name}
                     pMobile = {data.mobile}
                     pGuestCount = {data.guestCount}

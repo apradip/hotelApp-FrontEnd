@@ -179,7 +179,7 @@ const GuestServices = forwardRef((props, ref) => {
         } catch (err) {
             console.log(err);
         }
-    },[]);
+    },[socket]);
     // End:: leasten and act on command on socket
 
     // Start:: fetch data list from api
@@ -227,8 +227,10 @@ const GuestServices = forwardRef((props, ref) => {
         try {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
-                    if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenEdit();
+                    if (selectedCardIndex === idx) {
+                        cardRefs.current[idx] && 
+                            cardRefs.current[idx].handelOpenEdit();
+                    }
                 });
             }
         } catch (err) {
@@ -242,8 +244,10 @@ const GuestServices = forwardRef((props, ref) => {
         try {
             if (selectedCardIndex >= 0) { 
                 cardRefs.current.forEach((item, idx) => {
-                    if (selectedCardIndex === idx)
-                        cardRefs.current[idx] && cardRefs.current[idx].handelOpenDelete();
+                    if (selectedCardIndex === idx) {
+                        cardRefs.current[idx] && 
+                            cardRefs.current[idx].handelOpenDelete();
+                    }
                 });
             }
         } catch (err) {
@@ -320,8 +324,10 @@ const GuestServices = forwardRef((props, ref) => {
             setSelectedCardIndex(index);
 
             cardRefs.current && cardRefs.current.forEach((item, idx) => {
-                if (index !== idx) 
-                    cardRefs.current[idx] && cardRefs.current[idx].handleDeSelect();
+                if (index !== idx) {
+                    cardRefs.current[idx] && 
+                        cardRefs.current[idx].handleDeSelect();
+                }
             });
         } catch (err) {
             console.log(err);

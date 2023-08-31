@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { Row, Col, Card, Badge, Dropdown } from "react-bootstrap";
+import { Row, Col, Card, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { Users, MapPin, Home, Calendar, Phone, ChevronsRight, Coffee, Umbrella, Wind, ShoppingBag, PenTool, FileText, Edit2, LogOut, Scissors, MoreVertical } from "react-feather";
 import { ActivityArea, Operation, getRooms, subStr, properCase, formatDDMMYYYY, formatINR } from "../common/Common";
@@ -124,9 +124,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
             data && setRooms(data.rooms);
             data && setInDate(data.inDate);
             data && setOutDate(data.outDate);
-            
-            // data && setFocus(true);
-            // data && setActive(true);
         } catch (err) {
             console.log(err);
         }        
@@ -134,7 +131,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
     // End:: set data to state variables
 
     // Start :: get guest Id of this component
-    const getGuestId = () => {return props.pGuestId;}
+    const getGuestId = () => {return props.pGuestId}
     // End :: get guest Id of this component
 
     // Start:: get data from api
@@ -193,94 +190,145 @@ const GuestRoomCard = forwardRef((props, ref) => {
 
     // Start:: Show order modal 
     const handelOpenOrder = (option = ActivityArea.Room) => {
-        switch (option) {
-            case ActivityArea.Table :
-                orderTableRef && orderTableRef.current.handleShowModal();
-                return;
-                
-            case ActivityArea.Service :
-                orderServiceRef && orderServiceRef.current.handleShowModal();
-                return;                
+        try {
+            switch (option) {
+                case ActivityArea.Table :
+                    orderTableRef && 
+                        orderTableRef.current.handleShowModal();
+                    
+                    return;
+                    
+                case ActivityArea.Service :
+                    orderServiceRef && 
+                        orderServiceRef.current.handleShowModal();
+                    
+                    return;                
 
-            case ActivityArea.Miscellaneous :
-                orderMiscellaneousRef && orderMiscellaneousRef.current.handleShowModal();
-                return;
+                case ActivityArea.Miscellaneous :
+                    orderMiscellaneousRef && 
+                        orderMiscellaneousRef.current.handleShowModal();
+                    
+                    return;
 
-            default:
-                generateBillRef && generateBillRef.current.handleShowModal();
-                return;
+                default:
+                    generateBillRef && 
+                        generateBillRef.current.handleShowModal();
+                    
+                    return;
+            }
+        } catch (err) {
+            console.log(err);
         }
     };
     // End:: Show order modal 
 
     // Start:: Show despatch modal 
     const handelOpenDespatch = (option) => {
-        switch (option) {
-            case ActivityArea.Table :
-                despatchTableRef && despatchTableRef.current.handleShowModal();
-                return;
-                
-            case ActivityArea.Service :
-                despatchServiceRef && despatchServiceRef.current.handleShowModal();
-                return;                
+        try {
+            switch (option) {
+                case ActivityArea.Table :
+                    despatchTableRef && 
+                        despatchTableRef.current.handleShowModal();
 
-            case ActivityArea.Miscellaneous :
-                despatchMiscellaneousRef && despatchMiscellaneousRef.current.handleShowModal();
-                return;
+                    return;
+                    
+                case ActivityArea.Service :
+                    despatchServiceRef && 
+                        despatchServiceRef.current.handleShowModal();
 
-            default:
-                return;                
-        }
+                    return;                
+
+                case ActivityArea.Miscellaneous :
+                    despatchMiscellaneousRef && 
+                        despatchMiscellaneousRef.current.handleShowModal();
+
+                    return;
+
+                default:
+                    return;                
+            }
+        } catch (err) {
+            console.log(err);
+        }        
     };
     // End:: Show despatch modal 
     
     // Start:: Show generate bill modal 
     const handelOpenGenerateBill = (option = ActivityArea.Room) => {
-        switch (option) {
-            case ActivityArea.Table :
-                generateBillTableRef && generateBillTableRef.current.handleShowModal();
-                return;
-                
-            case ActivityArea.Service :
-                generateBillServiceRef && generateBillServiceRef.current.handleShowModal();
-                return;                
+        try {
+            switch (option) {
+                case ActivityArea.Table :
+                    generateBillTableRef && 
+                        generateBillTableRef.current.handleShowModal();
 
-            case ActivityArea.Miscellaneous :
-                generateBillMiscellaneousRef && generateBillMiscellaneousRef.current.handleShowModal();
-                return;
-    
-            default:
-                generateBillRef && generateBillRef.current.handleShowModal();
-                return;                
+                    return;
+                    
+                case ActivityArea.Service :
+                    generateBillServiceRef && 
+                        generateBillServiceRef.current.handleShowModal();
+
+                    return;                
+
+                case ActivityArea.Miscellaneous :
+                    generateBillMiscellaneousRef && 
+                        generateBillMiscellaneousRef.current.handleShowModal();
+
+                    return;
+        
+                default:
+                    generateBillRef && 
+                        generateBillRef.current.handleShowModal();
+
+                    return;                
+            }
+        } catch (err) {
+            console.log(err);
         }
     };
     // End:: Show generate bill modal 
 
     // Start:: Show generate bill modal 
     const handelOpenPayment = () => {
-        advancePaymentRef && advancePaymentRef.current.handleShowModal();
+        try {
+            advancePaymentRef && 
+                advancePaymentRef.current.handleShowModal();
+        } catch (err) {
+            console.log(err);
+        }
     };
     // End:: Show generate bill modal 
 
     // Start:: Show checkout modal 
     const handelOpenCheckout = (option = ActivityArea.Room) => {
-        switch (option) {
-            case ActivityArea.Table :
-                checkoutTableRef && checkoutTableRef.current.handleShowModal();
-                return;
-                
-            case ActivityArea.Service :
-                checkoutServiceRef && checkoutServiceRef.current.handleShowModal();
-                return;                
+        try {
+            switch (option) {
+                case ActivityArea.Table :
+                    checkoutTableRef && 
+                        checkoutTableRef.current.handleShowModal();
 
-            case ActivityArea.Miscellaneous :
-                checkoutMiscellaneousRef && checkoutMiscellaneousRef.current.handleShowModal();
-                return;
-    
-            default:
-                checkoutRef && checkoutRef.current.handleShowModal();
-                return;                
-        }
+                    return;
+                    
+                case ActivityArea.Service :
+                    checkoutServiceRef && 
+                        checkoutServiceRef.current.handleShowModal();
+                    
+                    return;                
+
+                case ActivityArea.Miscellaneous :
+                    checkoutMiscellaneousRef && 
+                        checkoutMiscellaneousRef.current.handleShowModal();
+
+                    return;
+        
+                default:
+                    checkoutRef && 
+                        checkoutRef.current.handleShowModal();
+
+                    return;                
+            }
+        } catch (err) {
+            console.log(err);
+        }        
     };
     // End:: Show checkout modal 
 
@@ -318,8 +366,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 key = {`RC_${props.pGuestId}`}
                 index = {props.pIndex}
                 className = {active ? "active" : focus ? "focus" : "room"}  
-                // className = {"border"}
-                // border = {active ? "info" : focus ? "primary" : ""}  
                 onMouseEnter = {() => setFocus(true)}
                 onMouseLeave = {() => setFocus(false)} 
                 onClick = {(e) => { 
@@ -346,8 +392,6 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                     <b>{properCase(subStr(name, 20))}</b>
                                 </>
                             }
-
-                            {/* <Badge pill bg = "primary">R</Badge> */}
                         </Col>
                         <Col xs={4} sm={4} md={4} lg={4} xl={4} className={"text-right p-0 " + (balance >= 0 ? "text-success" : "text-danger")}>
                             <b>{formatINR(balance)}</b>
@@ -438,7 +482,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                             </Dropdown.Item>
 
                                             <Dropdown.Item eventKey = "6" 
-                                                onClick = {handelOpenDelete}>
+                                                onClick = {() => {handelOpenDelete()}}>
                                                 <Scissors className = "feather-16 mr-3"/>Delete
                                             </Dropdown.Item>
                                             {/* End :: Room menu */}        
@@ -467,13 +511,11 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                                     </Dropdown.Item>
 
                                                     <Dropdown.Item eventKey="12" 
-                                                        disabled={props.pTransactionId !== "undefined" ? false : true}
                                                         onClick={() => {handelOpenGenerateBill(ActivityArea.Table)}}>
                                                         <FileText className="feather-16 mr-3"/>Bill
                                                     </Dropdown.Item>
 
                                                     <Dropdown.Item eventKey="13"
-                                                        disabled={props.pTransactionId !== "undefined" ? false : true}
                                                         onClick={() => {handelOpenCheckout(ActivityArea.Table)}}>
                                                         <LogOut className="feather-16 mr-3"/>Check out
                                                     </Dropdown.Item>
@@ -504,13 +546,11 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                                     </Dropdown.Item>
 
                                                     <Dropdown.Item eventKey="22" 
-                                                        disabled={props.pTransactionId !== "undefined" ? false : true}
                                                         onClick={() => {handelOpenGenerateBill(ActivityArea.Service)}}>
                                                         <FileText className="feather-16 mr-3"/>Bill
                                                     </Dropdown.Item>
 
                                                     <Dropdown.Item eventKey="23"
-                                                        disabled={props.pTransactionId !== "undefined" ? false : true}
                                                         onClick={() => {handelOpenCheckout(ActivityArea.Service)}}>
                                                         <LogOut className="feather-16 mr-3"/>Check out
                                                     </Dropdown.Item>
@@ -556,80 +596,76 @@ const GuestRoomCard = forwardRef((props, ref) => {
                
                                         </>}
 
-                                        {(props.pCallingFrom === ActivityArea.Table) && 
-                                            <>
-                                                {/* Start :: Table menu */}
-                                                <Dropdown.Item eventKey="10" 
-                                                    onClick={() => {handelOpenOrder(ActivityArea.Table)}}>
-                                                    <PenTool className="feather-16 mr-3" />Order
-                                                </Dropdown.Item>
-                                                
-                                                <Dropdown.Item eventKey="11"
-                                                    onClick={() => {handelOpenDespatch(ActivityArea.Table)}}>
-                                                    <ShoppingBag className="feather-16 mr-3"/>Despatch
-                                                </Dropdown.Item>
+                                    {(props.pCallingFrom === ActivityArea.Table) && 
+                                        <>
+                                            {/* Start :: Table menu */}
+                                            <Dropdown.Item eventKey="10" 
+                                                onClick={() => {handelOpenOrder(ActivityArea.Table)}}>
+                                                <PenTool className="feather-16 mr-3" />Order
+                                            </Dropdown.Item>
+                                            
+                                            <Dropdown.Item eventKey="11"
+                                                onClick={() => {handelOpenDespatch(ActivityArea.Table)}}>
+                                                <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                            </Dropdown.Item>
 
-                                                <Dropdown.Item eventKey="12" 
-                                                    disabled={props.pTransactionId !== "undefined" ? false : true}
-                                                    onClick={() => {handelOpenGenerateBill(ActivityArea.Table)}}>
-                                                    <FileText className="feather-16 mr-3"/>Bill
-                                                </Dropdown.Item>
+                                            <Dropdown.Item eventKey="12" 
+                                                onClick={() => {handelOpenGenerateBill(ActivityArea.Table)}}>
+                                                <FileText className="feather-16 mr-3"/>Bill
+                                            </Dropdown.Item>
 
-                                                {/* <Dropdown.Item eventKey="13"
-                                                    disabled={props.pTransactionId !== "undefined" ? false : true}
-                                                    onClick={() => {handelOpenCheckout("T")}}>
-                                                    <LogOut className="feather-16 mr-3"/>Check out
-                                                </Dropdown.Item> */}
-                                                {/* End :: Room menu */}                       
-                                            </>}                                        
+                                            {/* <Dropdown.Item eventKey="13"
+                                                onClick={handelOpenCheckout("T")}>
+                                                <LogOut className="feather-16 mr-3"/>Check out
+                                            </Dropdown.Item> */}
+                                            {/* End :: Room menu */}                       
+                                        </>}                                        
 
-                                        {(props.pCallingFrom === ActivityArea.Service) && 
-                                            <>
-                                                {/* Start :: Service menu */}        
-                                                <Dropdown.Item eventKey="20" 
-                                                    onClick={() => {handelOpenOrder(ActivityArea.Service)}}>
-                                                    <PenTool className="feather-16 mr-3" />Order
-                                                </Dropdown.Item>
-                                                
-                                                <Dropdown.Item eventKey="21"
-                                                    onClick={() => {handelOpenDespatch(ActivityArea.Service)}}>
-                                                    <ShoppingBag className="feather-16 mr-3"/>Despatch
-                                                </Dropdown.Item>
+                                    {(props.pCallingFrom === ActivityArea.Service) && 
+                                        <>
+                                            {/* Start :: Service menu */}        
+                                            <Dropdown.Item eventKey="20" 
+                                                onClick={() => {handelOpenOrder(ActivityArea.Service)}}>
+                                                <PenTool className="feather-16 mr-3" />Order
+                                            </Dropdown.Item>
+                                            
+                                            <Dropdown.Item eventKey="21"
+                                                onClick={() => {handelOpenDespatch(ActivityArea.Service)}}>
+                                                <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                            </Dropdown.Item>
 
-                                                <Dropdown.Item eventKey="22" 
-                                                    disabled={props.pTransactionId !== "undefined" ? false : true}
-                                                    onClick={() => {handelOpenGenerateBill(ActivityArea.Service)}}>
-                                                    <FileText className="feather-16 mr-3"/>Bill
-                                                </Dropdown.Item>
+                                            <Dropdown.Item eventKey="22" 
+                                                onClick={() => {handelOpenGenerateBill(ActivityArea.Service)}}>
+                                                <FileText className="feather-16 mr-3"/>Bill
+                                            </Dropdown.Item>
 
-                                                {/* <Dropdown.Item eventKey="23"
-                                                    disabled={props.pTransactionId !== "undefined" ? false : true}
-                                                    onClick={() => {handelOpenCheckout("S")}}>
-                                                    <LogOut className="feather-16 mr-3"/>Check out
-                                                </Dropdown.Item> */}
-                                                {/* End :: Service menu */}        
-                                            </>}
+                                            {/* <Dropdown.Item eventKey="23"
+                                                onClick={handelOpenCheckout("S")}>
+                                                <LogOut className="feather-16 mr-3"/>Check out
+                                            </Dropdown.Item> */}
+                                            {/* End :: Service menu */}        
+                                        </>}
 
-                                        {(props.pCallingFrom === ActivityArea.Miscellaneous) && 
-                                            <>
-                                                {/* Start :: Miscellaneous menu */}               
-                                                <Dropdown.Item eventKey="30" 
-                                                    onClick={() => {handelOpenOrder(ActivityArea.Miscellaneous)}}>
-                                                    <PenTool className="feather-16 mr-3" />Order
-                                                </Dropdown.Item>
-                                                
-                                                <Dropdown.Item eventKey="31"
-                                                    onClick={() => {handelOpenDespatch(ActivityArea.Miscellaneous)}}>
-                                                    <ShoppingBag className="feather-16 mr-3"/>Despatch
-                                                </Dropdown.Item>
+                                    {(props.pCallingFrom === ActivityArea.Miscellaneous) && 
+                                        <>
+                                            {/* Start :: Miscellaneous menu */}               
+                                            <Dropdown.Item eventKey="30" 
+                                                onClick={() => {handelOpenOrder(ActivityArea.Miscellaneous)}}>
+                                                <PenTool className="feather-16 mr-3" />Order
+                                            </Dropdown.Item>
+                                            
+                                            <Dropdown.Item eventKey="31"
+                                                onClick={() => {handelOpenDespatch(ActivityArea.Miscellaneous)}}>
+                                                <ShoppingBag className="feather-16 mr-3"/>Despatch
+                                            </Dropdown.Item>
 
-                                                <Dropdown.Item eventKey="32" 
-                                                    onClick={() => {handelOpenGenerateBill(ActivityArea.Miscellaneous)}}>
-                                                    <FileText className="feather-16 mr-3"/>Bill
-                                                </Dropdown.Item>
-                                                {/* End :: Miscellaneous menu */}               
-                                                {/* End :: Room menu */}                       
-                                            </>}
+                                            <Dropdown.Item eventKey="32" 
+                                                onClick={() => {handelOpenGenerateBill(ActivityArea.Miscellaneous)}}>
+                                                <FileText className="feather-16 mr-3"/>Bill
+                                            </Dropdown.Item>
+                                            {/* End :: Miscellaneous menu */}               
+                                            {/* End :: Room menu */}                       
+                                        </>}
 
                                 </Dropdown.Menu> 
                             </Dropdown>
@@ -660,7 +696,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <Delete 
                     ref = {deleteRef}
                     pGuestId = {props.pGuestId} 
-                    pName = {props.pName}
+                    pName = {name}
                     onDeleted = {() => {props.onDeleted(Operation.GuestDel, props.pGuestId)}} />
                 {/* End :: delete component */}
 
@@ -675,7 +711,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <GenerateBill 
                     ref = {generateBillRef}
                     pGuestId = {props.pGuestId} 
-                    onPaymentAdded = {props.onPaymentAdded}
+                    onPaymentAdded = {() => {props.onPaymentAdded(Operation.Room_PaymentAdd, props.pGuestId)}}
                     onSaved = {() => {props.onBillGenerated(Operation.BillGenerate, props.pGuestId)}} />
                 {/* End :: generate & display summery bill component */}
 
@@ -683,10 +719,10 @@ const GuestRoomCard = forwardRef((props, ref) => {
                 <AdvancePayment 
                     ref = {advancePaymentRef}
                     pGuestId = {props.pGuestId}    
-                    pName = {props.pName}
-                    pMobile = {props.pMobile}
-                    pCorporateName = {props.pCorporateName}
-                    pCorporateAddress = {props.pCorporateAddress}
+                    pName = {name}
+                    pMobile = {mobile}
+                    pCorporateName = {corporateName}
+                    pCorporateAddress = {corporateAddress}
                     onSaved = {() => {props.onPaymentAdded(Operation.Room_PaymentAdd, props.pGuestId)}} />
                 {/* End :: add payment component */}
 

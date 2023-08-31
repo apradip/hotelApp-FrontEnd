@@ -140,7 +140,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                 {/* Close button */}
                 <NavLink 
                     className="nav-icon" href="#" 
-                    onClick={onClosed}>
+                    onClick={handleClose}>
                     <i className = "align-middle"><X/></i>
                 </NavLink>
             </Modal.Header>
@@ -304,11 +304,29 @@ const GuestRoomBooking = forwardRef((props, ref) => {
         params: {option: "N"}
     });
 
+    // Strat:: close modal on key press esc    
+    useEffect(() => {
+        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
+        return () => {document.removeEventListener("keydown", handleCloseModal);};
+    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: close modal on key press esc    
+    
+    // Start:: fetch id wise detail from api
+    useEffect(() => {
+        (async () => {
+            try {
+                showModal && await doFetch();
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, [showModal]);        // eslint-disable-line react-hooks/exhaustive-deps
+    // End:: fetch id wise detail from api
+
     // Start:: Show modal
     const handleShowModal = async () => {
         try {
             setShowModal(true);
-            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -338,16 +356,10 @@ const GuestRoomBooking = forwardRef((props, ref) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal};
+        return { handleShowModal };
     });
     // End:: forward reff show modal function
 
-    // Strat:: close modal on key press esc    
-    useEffect(() => {
-        document.addEventListener("keydown", (event) => {if (event.key === "Escape") handleCloseModal();});
-        return () => {document.removeEventListener("keydown", handleCloseModal);};
-    }, []);     // eslint-disable-line react-hooks/exhaustive-deps
-    // End:: close modal on key press esc    
 
     // Start:: Html
     return (

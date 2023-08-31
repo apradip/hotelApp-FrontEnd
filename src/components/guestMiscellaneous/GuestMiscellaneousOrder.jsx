@@ -284,7 +284,6 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
     const handleShowModal = async () => {
         try {
             setShowModal(true);
-            await doFetch();
         } catch (err) {
             console.log(err);
         }
@@ -314,7 +313,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return {handleShowModal};
+        return { handleShowModal };
     });
     // End:: forward reff show modal function
 
@@ -324,7 +323,7 @@ const GuestMiscellaneousOrder = forwardRef((props, ref) => {
             {/* Start:: Edit modal */}
             {data &&
                 <Form 
-                    pGuestId = {data.id}
+                    pGuestId = {props.pGuestId}
                     pName = {data.name}
                     pMobile = {data.mobile}
                     pGuestCount = {data.guestCount}
