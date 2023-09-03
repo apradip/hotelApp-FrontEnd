@@ -67,15 +67,18 @@ const Login = () => {
                                     onBack={handleBack}/>
                             }
 
-                            <iframe 
-                                height="430" 
-                                width="350" 
-                                src="https://bot.dialogflow.com/fc67500b-e537-4c67-b2d6-77f5b651013e"></iframe>
+                            <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+                            <df-messenger
+                                intent="WELCOME"
+                                chat-title="HotelLive"
+                                agent-id="fc67500b-e537-4c67-b2d6-77f5b651013e"
+                                language-code="en"></df-messenger> 
+
                         </div>
                     </div>
                 </div>}
-
-
+ 
+                
         </>
     );
 }
