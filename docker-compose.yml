@@ -7,7 +7,7 @@ services:
     build:
       context: .
     ports:
-      - 3000:3000
+      - 80:80
     environment:
-      - REACT_APP_API_URI=http://20.219.3.91:8000/api
-      - REACT_APP_BASE_URI=http://20.219.3.91:3000/
+      - REACT_APP_API_URI=http://https://hotelapi.wikitoria.in/api
+      - REACT_APP_BASE_URI=http://hotel.wikitoria.in
