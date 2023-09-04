@@ -10,4 +10,4 @@ services:
       - 3000:80
     environment:
       - REACT_APP_API_URI=http://https://hotelapi.wikitoria.in/api
-      - REACT_APP_BASE_URI=http://42.239.110.22:3000/
+      # - REACT_APP_BASE_URI=http://42.239.110.22:3000/
