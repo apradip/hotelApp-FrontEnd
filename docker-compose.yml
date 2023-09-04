@@ -3,9 +3,9 @@ version: "3.8"
 services:
   app:
     container_name: frontend_container
-    image: docker-react-i
-    build:
-      context: .
+    # image: docker-react-i
+    build: .
+      # context: .
     ports:
       - 3000:80
     environment:
