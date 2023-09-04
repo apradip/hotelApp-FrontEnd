@@ -9,5 +9,5 @@ services:
     ports:
       - 3000:80
     environment:
-      - REACT_APP_API_URI=http://https://hotelapi.wikitoria.in/api
+      - REACT_APP_API_URI=https://hotelapi.wikitoria.in/api
       - REACT_APP_BASE_URI=http://localhost:3000/

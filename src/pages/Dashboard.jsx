@@ -11,7 +11,7 @@ import DueList from "../components/dashboard/DueList";
 import { Operation, MessageRoom } from "../components/common/Common";
 
 const Dashboard = () => {
-    const socket = io.connect("http://localhost:3001");
+    const socket = io.connect(process.env.REACT_APP_API_URI + ":" + process.env.SOCKET_PORT);
 
     const guestListRef = useRef(null);
     const roomListRef = useRef(null);
