@@ -25,7 +25,7 @@ const GuestTables = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     // const socket = io.connect("http://localhost:3001");
-    const socket = io.connect(process.env.REACT_APP_API_URI + ":" + process.env.SOCKET_PORT);
+    const socket = io.connect(process.env.REACT_APP_API_IP + ":" + process.env.SOCKET_PORT);
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
