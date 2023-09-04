@@ -73,7 +73,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 const HeaderLogin = forwardRef((props, ref) => {   
     const hotelId = useContext(HotelId);     
     const contextValues = useStateContext();
-    const socket = io.connect("http://localhost:3001");
+    const socket = io.connect(process.env.REACT_APP_API_URI + ":" + process.env.SOCKET_PORT);
 
     const [tableDespatchCardComponents, setTableDespatchCardComponents] = useState([]);
     const [serviceCardComponents, setServiceCardComponents] = useState([]);
