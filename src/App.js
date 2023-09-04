@@ -27,17 +27,15 @@ function App() {
 
   
 
-// Start:: click footer page
-const handleClickPage = (page) => {
-};
-// End:: click footer page
+// // Start:: click footer page
+// const handleClickPage = (page) => {
+// };
+// // End:: click footer page
 
 return (
     <HotelId.Provider value={hotelId}>
       <ContextProvider>
         <BrowserRouter>
-          {/* <div> */}
-
             {/* Start :: call container after login */}
             {pEmployeeId && <ContainerLogin 
                 pEmployeeId={pEmployeeId}
@@ -47,8 +45,6 @@ return (
             {/* Start :: call container before login */}
             {!pEmployeeId && <Container />}
             {/* End :: call container before login */}
-
-          {/* </div> */}
         </BrowserRouter>
       </ContextProvider>
     </HotelId.Provider>

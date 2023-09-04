@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Routes, Route } from "react-router-dom"
-import {ToastContainer} from "react-toastify"
+import { ToastContainer } from "react-toastify"
 
 import { useStateContext } from "../contexts/ContextProvider"
 import { getPage } from "./common/Common"

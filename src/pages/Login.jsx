@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import LoginPassword from "../components/auth/LoginPassword";
 import ForgetPassword from "../components/auth/ForgetPassword";
 import LoginOtp from "../components/auth/LoginOtp";
+import ChatBot from "../components/auth/ChatBot";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -67,12 +68,7 @@ const Login = () => {
                                     onBack={handleBack}/>
                             }
 
-                            <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-                            <df-messenger
-                                intent="WELCOME"
-                                chat-title="HotelLive"
-                                agent-id="fc67500b-e537-4c67-b2d6-77f5b651013e"
-                                language-code="en"></df-messenger> 
+                            <ChatBot/>
 
                         </div>
                     </div>
