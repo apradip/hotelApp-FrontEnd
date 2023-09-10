@@ -9,7 +9,7 @@ services:
       - 80:3000
     environment:
       - REACT_APP_API_URI=https://hotelapi.wikitoria.in/api
-      - REACT_APP_BASE_URI=http://hotel.wikitoria.in
+      - REACT_APP_BASE_URI=https://hotel.wikitoria.in
       - REACT_APP_API_IP=43.239.110.22
       - SOCKET_PORT=3001
       - SSL_CRT_FILE=.//sslcert//certificate.crt
