@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import LoginPassword from "../components/auth/LoginPassword";
 import ForgetPassword from "../components/auth/ForgetPassword";
 import LoginOtp from "../components/auth/LoginOtp";
-import ChatBot from "../components/auth/ChatBot";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -67,8 +66,6 @@ const Login = () => {
                                     onSuccess={handleSuccess}
                                     onBack={handleBack}/>
                             }
-
-                            <ChatBot/>
 
                         </div>
                     </div>

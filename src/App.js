@@ -25,8 +25,6 @@ function App() {
     }
   }, []);
 
-  
-
 // // Start:: click footer page
 // const handleClickPage = (page) => {
 // };
