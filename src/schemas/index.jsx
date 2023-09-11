@@ -28,6 +28,16 @@ export const changePasswordSchema = Yup.object({
         })
 });
 
+export const advanceRoomBookingSchema = Yup.object({
+    // keyInputHotelLocation: Yup.string().required("Hotel location can't be empty!").min(4, "Invalid hotel location!"),
+    keyInputRoomCategory: Yup.string().required("Room category can't be empty!").min(5, "Invalid room category!"),
+    keyInputGuestCount: Yup.number().required("Guest count can't be empty!").min(1, "Invalid guest count!"),
+    keyInputArrivalDate: Yup.date().required("Arrival date can't be empty!").min(10, "Invalid arrival date!"),
+    keyInputDepartureDate: Yup.date().required("Departure date can't be empty!").min(10, "Invalid departure date!"),
+    keyInputName: Yup.string().required("Name can't be empty!").min(5, "Invalid name!"),
+    keyInputPhone: Yup.number().required("Phone no. can't be empty!").min(10, "Invalid phone no!")
+});
+
 export const accessLevelSchema = Yup.object({
     keyInputName: Yup.string().required("Name can't be empty!").min(3, "Invalid name!"),
     keyInputDescription: Yup.string()

@@ -1,11 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import { useFormik } from "formik";
-import { NavLink } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 
 import { HotelId } from "../../App";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { loginPasswordSchema } from "../../schemas";
+import { advanceRoomBookingSchema } from "../../schemas";
 import useFetch from "../common/useFetch";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -14,29 +13,35 @@ import "react-toastify/dist/ReactToastify.css";
 const RoomBooking = ({ onSuccess, onBack }) => {
 	const hotelId = useContext(HotelId);
 	const contextValues = useStateContext();
-	const { data, loading, error, doLoginPassword } = useFetch({
+	const { data, loading, error, doInsert } = useFetch({
         method: 'POST',
         url: `${contextValues.loginAPI}/${hotelId}`
     });
 
     const { values, errors, handleBlur, handleChange, touched, handleSubmit } = useFormik({
         initialValues: {
-            keyInputUser: "9830152752",
-            keyInputPassword: "pixel"
+            keyInputRoomCategory: "DELUX",
+            keyInputGuestCount: "2",
+			keyInputArrivalDate: "01/01/2023",
+			keyInputDepartureDate: "03/01/2023",
+			keyInputName: "",
+			keyInputPhone: ""
         },
-        validationSchema: loginPasswordSchema,
+        validationSchema: advanceRoomBookingSchema,
         onSubmit: async (values) => {
-            const payload = {   
-                            "userName": values.keyInputUser, 
-                            "password": values.keyInputPassword
-                        };
+            const payload = {categoryId: values.keyInputRoomCategory, 
+                             guestCount: values.keyInputGuestCount,
+							 arrivalDate: values.keyInputArrivalDate,
+							 departureDate: values.keyInputDepartureDate,
+							 name: values.keyInputName,
+							 phone: values.keyInputPhone};
 						
-            await doLoginPassword(payload);
+            await doInsert(payload);
         }
     });
    
-	const handleBack = () => {
-		onBack("FORGET_PASSWORD");
+	const handleClose = () => {
+		// onBack("FORGET_PASSWORD");
     };
 
 	useEffect(() => {
@@ -47,10 +52,10 @@ const RoomBooking = ({ onSuccess, onBack }) => {
 	return ( 
 		<>
 			<h1 className='mt-4'>Advance booking</h1>
-			<div className="panel-body col-12 p-3">
+			<div className="panel-body col-md-12 px-0 m-0" style={{"border": "solid 1px blue"}}>
 				<form onSubmit={handleSubmit}>
-					<div className="form-group py-2">
-						<div className="input-field">
+					<div className="row col-md-12 px-2 py-2 m-0 form-group">
+						<div className="col-md-6 input-field">
 							<span className="pb-2">Name</span>
 							
 							<input 
@@ -73,13 +78,13 @@ const RoomBooking = ({ onSuccess, onBack }) => {
 											null }
 						</div>
 
-						<div className="input-field">
-							<span className="pb-2">Phone</span>
+						<div className="col-md-6 input-field">
+							<span className="pb-2">Phone No.</span>
 							
 							<input 
 								type="text" 
 								name={ "keyInputPhone" }
-								placeholder="phone"
+								placeholder="phone no."
 								className="form-control"
 								autoComplete="off"
 								autoFocus
@@ -97,56 +102,127 @@ const RoomBooking = ({ onSuccess, onBack }) => {
 						</div>
 					</div>
 
-					<div className="form-group py-1 pb-2">
-						<div className="input-field">
-							<span className="pb-2">Password</span>
+					<div className="row col-md-12 px-0 py-2 m-0 form-group">
+						<div className="col-md-6 input-field">
+							<span className="pb-2">Room category</span>
 
 							<input 
-								type="password" 
-								name={ "keyInputPassword" }
-								placeholder="password"
+								type="text" 
+								name={ "keyInputRoomCategory" }
+								placeholder="room category"
 								className="form-control"
 								autoComplete="off"
 								maxLength={ 50 }
 								disabled={ loading } 
-								value={ values.keyInputPassword } 
+								value={ values.keyInputRoomCategory } 
 								onChange={ handleChange }
 								onBlur={ handleBlur } 
 								required/>
 
-								{/* <button className="btn bg-white text-muted">
-									<span className="far fa-eye-slash"></span>
-								</button> */}
+								{ errors.keyInputRoomCategory && 
+									touched.keyInputRoomCategory ? 
+										(<small className="text-danger">{ errors.keyInputRoomCategory }</small>) : 
+											null }
 
-								{ errors.keyInputPassword && 
-									touched.keyInputPassword ? 
-										(<small className="text-danger">{ errors.keyInputPassword }</small>) : 
+						</div>
+
+						<div className="col-md-6 input-field">
+							<span className="pb-2">Guest count</span>
+
+							<input 
+								type="text" 
+								name={ "keyInputGuestCount" }
+								placeholder="Guest count"
+								className="form-control"
+								autoComplete="off"
+								maxLength={ 2 }
+								disabled={ loading } 
+								value={ values.keyInputGuestCount } 
+								onChange={ handleChange }
+								onBlur={ handleBlur } 
+								required/>
+
+								{ errors.keyInputGuestCount && 
+									touched.keyInputGuestCount ? 
+										(<small className="text-danger">{ errors.keyInputGuestCount }</small>) : 
 											null }
 
 						</div>
 					</div>
 
-					<div className="form-inline clearfix">
-						<input type="checkbox" name="remember" id="remember"/>
-						<label htmlFor="remember" className="text-muted px-2 float-start">Remember me</label>
-						<NavLink className="font-weight-bold float-end" href="#" onClick={() => {handleBack()}}>
-							Forgot password?
-						</NavLink>
+					<div className="row col-md-12 px-0 py-2 m-0 form-group">
+						<div className="col-md-6 input-field">
+							<span className="pb-2">Arrival date</span>
+							
+							<input 
+								type="text" 
+								name={ "keyInputArrivalDate" }
+								placeholder="name"
+								className="form-control"
+								autoComplete="off"
+								autoFocus
+								maxLength={ 10 }
+								disabled={ loading } 
+								value={ values.keyInputArrivalDate } 
+								onChange={ handleChange }
+								onBlur={ handleBlur } 
+								required />
+
+								{ errors.keyInputArrivalDate && 
+									touched.keyInputArrivalDate ? 
+										(<small className="text-danger">{ errors.keyInputArrivalDate }</small>) : 
+											null }
+						</div>
+
+						<div className="col-md-6 input-field">
+							<span className="pb-2">Departure date</span>
+							
+							<input 
+								type="text" 
+								name={ "keyInputDepartureDate" }
+								placeholder="departure date"
+								className="form-control"
+								autoComplete="off"
+								autoFocus
+								maxLength={ 10 }
+								disabled={ loading } 
+								value={ values.keyInputDepartureDate } 
+								onChange={ handleChange }
+								onBlur={ handleBlur } 
+								required />
+
+								{ errors.keyInputDepartureDate && 
+									touched.keyInputDepartureDate ? 
+										(<small className="text-danger">{ errors.keyInputDepartureDate }</small>) : 
+											null }
+						</div>
 					</div>
 
+					{/* Start:: Close button */}
+					<button 
+						type="button"
+						className="btn btn-danger"
+						disabled={loading}
+						onClick={handleClose} >
+						Close
+					</button>
+					{/* End:: Close button */}
+
+					{/* Start:: Submit button */}
 					<button 
 						name={"keyButtonConfirm"}
 						type="submit"
-						className="btn btn-primary btn-block mt-3"
+						className="btn btn-primary ml-3"
 						disabled={loading} >
 
-						{!loading && "Login"}
+						{!loading && "Submit"}
 						{loading && 
 							<>
 								<span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
 								Working
 							</> }
 					</button>
+					{/* End:: Submit button */}
 				</form>
 
 				<ToastContainer

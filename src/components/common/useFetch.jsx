@@ -72,7 +72,28 @@ const useFetch = (params) => {
             })
     }
 
-    return { data, loading, error, doLoginPassword, doLoginOtp, doForgetPassword };
+    const doInsert = async (payload) => {
+        setLoading(true);
+        setData(undefined);
+        setError(null);
+
+        await axiosPublic.post(`${params.url}`, payload)
+            .then((response) => {
+                if (response.status === 200) {
+                    setData(response.data)
+                } else {
+                    throw Error("Could not inserted");
+                }
+            })
+            .catch((error) => {
+                setError(error.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+    };
+
+    return { data, loading, error, doLoginPassword, doLoginOtp, doForgetPassword, doInsert };
 }
 
 export default useFetch;
