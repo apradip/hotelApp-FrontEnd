@@ -702,7 +702,7 @@ const GuestRooms = forwardRef((props, ref) => {
             {/* Start :: add employee component */}
             <Add 
                 ref = {addRef}    
-                onAdded = {() => { handleSuccess(Operation.GuestAdd) }} />
+                onAdded = {() => {handleSuccess(Operation.GuestAdd)}}/>
             {/* End :: add employee component */}
 
         </div>

@@ -6,7 +6,7 @@ services:
     build: .
       # context: .
     ports:
-      - 443:3000
+      - 8443:3000
     environment:
       - REACT_APP_API_URI=https://hotelapi.wikitoria.in/api
       # - REACT_APP_BASE_URI=http://hotel.wikitoria.in

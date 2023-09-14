@@ -21,6 +21,7 @@ const Container = () => {
         <div className="container-fluid p-0">
           <Routes>
             <Route exact path="/" element={<Login />} />
+            {/* <Route exact path="/advanceroombooking/:hotelId/:location/:categoryId/:category/:roomCount/:arrivalDate/:dayCount" element={<AdvanceRoomBooking />} /> */}
             <Route exact path="/advanceroombooking" element={<AdvanceRoomBooking />} />
             <Route exact path="/support" element={<Support />} />
             <Route exact path="/help" element={<Help />} />

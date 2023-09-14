@@ -537,7 +537,7 @@ const GuestTables = forwardRef((props, ref) => {
             <Add 
                 ref = {addRef}   
                 pOption = {ActivityArea.Table}
-                onAdded = {() => {handleSuccess(Operation.GuestAdd)}} />
+                onAdded = {() => {handleSuccess(Operation.GuestAdd)}}/>
             {/* End :: add component */}
 
         </div>
