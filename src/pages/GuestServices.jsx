@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Form, Breadcrumb, Row, Col, Placeholder } from "react-bootstrap";
 import { toast } from "react-toastify";
-import io from "socket.io-client";
 
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
+import { SocketContext } from "../contexts/ContextSocket";
 import Add from "../components/common/GuestAddSmall";
 import CardService from "../components/guestService/GuestServiceCard";
 import CardRoom from "../components/guestRoom/GuestRoomCard";
@@ -26,7 +26,7 @@ import { SearchOption, ActivityArea, Operation, MessageRoom } from "../component
 const GuestServices = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const socket = io.connect(process.env.REACT_APP_API_IP + ":" + process.env.SOCKET_PORT);
+    const socket = useContext(SocketContext);
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");

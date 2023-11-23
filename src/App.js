@@ -4,7 +4,8 @@ import jwt_decode from "jwt-decode";
 
 import './App.css';
 
-import {ContextProvider} from "./contexts/ContextProvider";
+import { ContextProvider } from "./contexts/ContextProvider";
+import { SocketContext, socket } from "./contexts/ContextSocket";
 import Container from "./components/Container";
 import ContainerLogin from "./components/ContainerLogin";
 
@@ -25,26 +26,26 @@ function App() {
     }
   }, []);
 
-// // Start:: click footer page
-// const handleClickPage = (page) => {
-// };
-// // End:: click footer page
 
-return (
+  return (
     <HotelId.Provider value={hotelId}>
-      <ContextProvider>
-        <BrowserRouter>
-            {/* Start :: call container after login */}
-            {pEmployeeId && <ContainerLogin 
-                pEmployeeId={pEmployeeId}
-                pEmployeeName={pEmployeeName} />}
-            {/* End :: call container after login */}
+      
+        <ContextProvider>
+        <SocketContext.Provider value={socket}>
+          <BrowserRouter>
+              {/* Start :: call container after login */}
+              {pEmployeeId && <ContainerLogin 
+                  pEmployeeId={pEmployeeId}
+                  pEmployeeName={pEmployeeName} />}
+              {/* End :: call container after login */}
 
-            {/* Start :: call container before login */}
-            {!pEmployeeId && <Container />}
-            {/* End :: call container before login */}
-        </BrowserRouter>
-      </ContextProvider>
+              {/* Start :: call container before login */}
+              {!pEmployeeId && <Container />}
+              {/* End :: call container before login */}
+          </BrowserRouter>
+          </SocketContext.Provider>
+        </ContextProvider>
+      
     </HotelId.Provider>
   );
 }

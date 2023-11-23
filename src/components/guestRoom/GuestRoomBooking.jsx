@@ -230,7 +230,7 @@ const Form = ({pGuestId, pName, pMobile, pGuestCount,
                         <BookingGrid
                             pState = "MOD"
                             pData = {pData}
-                            onChange = {handelChangeData} />
+                            onChange = {handelChangeData}/>
                         {/* End:: Column service detail */}
 
                     </Col>                
@@ -356,7 +356,7 @@ const GuestRoomBooking = forwardRef((props, ref) => {
 
     // Start:: forward reff show modal function
     useImperativeHandle(ref, () => {
-        return { handleShowModal };
+        return {handleShowModal};
     });
     // End:: forward reff show modal function
 
@@ -380,7 +380,7 @@ const GuestRoomBooking = forwardRef((props, ref) => {
                     pData = {data.rooms}
                     pShow = {showModal}
                     onSubmited = {handleSave} 
-                    onClosed = {handleCloseModal} />}
+                    onClosed = {handleCloseModal}/>}
             {/* End:: Edit modal */}
         </>
     );

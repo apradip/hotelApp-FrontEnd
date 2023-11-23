@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState} from "react";
+import React, { createContext, useContext, useState } from "react";
 
 const StateContext = createContext();
 
@@ -64,7 +64,7 @@ export const ContextProvider = ({children}) => {
     setShowMenu(status);
     localStorage.setItem("menuStatus", status);
   };
-
+ 
   const handleClick = (clicked) => setIsClicked({...initialState, [clicked]: true});
 
   return (
@@ -76,7 +76,8 @@ export const ContextProvider = ({children}) => {
       activeMenu, setActiveMenu, showMenu, setShowMenu,
       isClicked, setIsClicked, itemPerRow, 
       itemPerPage, dashboardRoomItemPerRow, dashboardTableItemPerRow, setColor, setMode, 
-      setMenuStatus, handleClick}}>
+      setMenuStatus, 
+      handleClick}}>
       {children}
     </StateContext.Provider>
   );

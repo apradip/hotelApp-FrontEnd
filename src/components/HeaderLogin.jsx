@@ -3,11 +3,12 @@ import { Nav, Navbar, Offcanvas } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Menu, Paperclip, Edit3, Scissors, User, MoreVertical, Coffee, Umbrella, Wind } from "react-feather";
-import io from "socket.io-client";
+import { Menu, Paperclip, Edit3, Scissors, MoreVertical, Coffee, Umbrella, Wind } from "react-feather";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
+import { SocketContext } from "../contexts/ContextSocket";
+
 import { getFirstName, getPageAttribute } from "./common/Common";
 import useFetchWithAuth from "./common/useFetchWithAuth";
 import Search from "./Search";
@@ -57,6 +58,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
     </NavLink>
 ))
 
+
 // Start:: Component
 // props parameters
 // pEmployeeId
@@ -73,7 +75,7 @@ const CustomToggle = React.forwardRef(({children, onClick}, ref) => (
 const HeaderLogin = forwardRef((props, ref) => {   
     const hotelId = useContext(HotelId);     
     const contextValues = useStateContext();
-    const socket = io.connect(process.env.REACT_APP_API_IP + ":" + process.env.SOCKET_PORT);
+    const socket = useContext(SocketContext);
 
     const [tableDespatchCardComponents, setTableDespatchCardComponents] = useState([]);
     const [serviceCardComponents, setServiceCardComponents] = useState([]);
@@ -96,7 +98,7 @@ const HeaderLogin = forwardRef((props, ref) => {
 
     const dropUserRef = useRef(null);
     const dropToggleUserRef = useRef(null);
-    
+
     const {data, doFetch} = useFetchWithAuth({
         url: `${contextValues.employeeAPI}/${hotelId}/${props.pEmployeeId}`
     });
@@ -106,24 +108,28 @@ const HeaderLogin = forwardRef((props, ref) => {
 
     useEffect(() => {
         try {
-            socket.on(MessageRoom.Miscellaneous, (payload) => {
+            // socket.on("connect", () => {
+            //     console.log("Socket connected...");
+            // });
+
+            socket.on(MessageRoom.Miscellaneous, () => {
                 miscellaneousOrderListRef.current && 
                     miscellaneousOrderListRef.current.Refresh();
             });
 
-            socket.on(MessageRoom.Service, (payload) => {
+            socket.on(MessageRoom.Service, () => {
                 serviceOrderListRef.current && 
                     serviceOrderListRef.current.Refresh();
             });
 
-            socket.on(MessageRoom.Table, (payload) => {
+            socket.on(MessageRoom.Table, () => {
                 tablePendingOrderListRef.current && 
                     tablePendingOrderListRef.current.Refresh();
             });
         } catch (err) {
-            console.log(err);
+            console.log("Error : " + err);
         }
-    },[]);
+    },[socket]);
 
     useEffect(() => {
         try {
@@ -274,16 +280,19 @@ const HeaderLogin = forwardRef((props, ref) => {
                   case Operation.Miscellaneous_Despatch:
                     toast.success("Order successfully despatched");
                     socket.emit(MessageRoom.Miscellaneous, payload);
+                    
                     break;                
 
                 case Operation.Service_Despatch:
                     toast.success("Order successfully despatched");
                     socket.emit(MessageRoom.Service, payload);
+                    
                     break;                
 
                 case Operation.Table_Despatch:
                     toast.success("Order successfully despatched");
                     socket.emit(MessageRoom.Table, payload);
+        
                     break;                
     
                 default:                
@@ -533,7 +542,7 @@ const HeaderLogin = forwardRef((props, ref) => {
                     <Dropdown className="d-flex align-items-center ms-3 ms-lg-3"
                         ref={dropUserRef}>
                         <Dropdown.Toggle ref={dropToggleUserRef} as={CustomToggle}>
-                            <User size={20} className="d-none d-sm-inline-block"/>
+                            {/* <User size={20} className="d-none d-sm-inline-block"/> */}
                             <span className="mx-1 d-none d-sm-inline-block">                                 
                                 {data && getFirstName(data.name)}
                                 {!data && getFirstName(props.pEmployeeName)}

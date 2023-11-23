@@ -605,8 +605,8 @@ const Form = ({pShow,
                                 autoComplete = "off"
                                 maxLength = {2}
                                 disabled = {loading} 
-                                value = {values.keyInputDayCount} />
-                                {/* onChange={e => {handleChange(e); setNoOfDay(e.target.value)}} /> */}
+                                value = {values.keyInputDayCount} 
+                                onChange = {handleChange} />
 
                             {/* Validation message */}
                             {errors.keyInputDayCount && 
@@ -772,7 +772,7 @@ const Form = ({pShow,
                     type = "button"
                     className = "btn btn-danger"
                     disabled = {loading}
-                    onClick = {handleClose} >
+                    onClick = {handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -782,7 +782,7 @@ const Form = ({pShow,
                     type = "button"
                     className = "btn btn-success"
                     disabled = {loading} 
-                    onClick = {handleSubmit} >
+                    onClick = {handleSubmit}>
 
                     {!loading && "Confirm"}
                     {loading && 

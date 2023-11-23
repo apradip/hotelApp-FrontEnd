@@ -564,7 +564,7 @@ const GuestRoomCard = forwardRef((props, ref) => {
                                                 <Dropdown.Toggle as={CustomToggle} drop="end" variant="secondary">
                                                     <span className="dropdown-item">
                                                         <Wind className="feather-16 mr-3" />
-                                                        Miscellaneous
+                                                        Misce.
                                                         <ChevronsRight className="feather-16 float-end"/>
                                                     </span>
                                                 </Dropdown.Toggle>

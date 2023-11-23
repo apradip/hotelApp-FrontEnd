@@ -34,7 +34,7 @@ const Form = ({pGuestId, pName, pCorporateName,
     return (
         <Modal 
             size = "sm"
-            show = {pShow} >
+            show = {pShow}>
 
             {/* Start:: Modal header */}
             <Modal.Header>

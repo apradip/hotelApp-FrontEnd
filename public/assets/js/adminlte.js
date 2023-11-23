@@ -1,8 +1,3 @@
-/*!
- * AdminLTE v3.1.0-rc (https://adminlte.io)
- * Copyright 2014-2020 Colorlib <https://colorlib.com>
- * Licensed under MIT (https://github.com/ColorlibHQ/AdminLTE/blob/master/LICENSE)
- */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery')) :
   typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory) :
@@ -14,12 +9,6 @@
   var $__default = /*#__PURE__*/_interopDefaultLegacy($);
 
   /**
-   * --------------------------------------------
-   * AdminLTE CardRefresh.js
-   * License MIT
-   * --------------------------------------------
-   */
-  /**
    * Constants
    * ====================================================
    */
@@ -27,7 +16,6 @@
   var NAME = 'CardRefresh';
   var DATA_KEY = 'lte.cardrefresh';
   var EVENT_KEY = "." + DATA_KEY;
-  // var JQUERY_NO_CONFLICT = $__default['default'].fn[NAME];
   var EVENT_LOADED = "loaded" + EVENT_KEY;
   var EVENT_OVERLAY_ADDED = "overlay.added" + EVENT_KEY;
   var EVENT_OVERLAY_REMOVED = "overlay.removed" + EVENT_KEY;

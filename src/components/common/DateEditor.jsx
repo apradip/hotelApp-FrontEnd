@@ -7,8 +7,6 @@ const DateEditor = forwardRef((props, ref) => {
 	const dateInput = React.createRef();
 	const [selectedDate, setSelectedDate] = useState(props.value ? new Date(props.value) : new Date());
 
-	console.log(selectedDate);
-
 	const getValue = () => {
 		return selectedDate;
     };
@@ -19,7 +17,7 @@ const DateEditor = forwardRef((props, ref) => {
     }
   
 	useImperativeHandle(ref, () => {
-        return { getValue, setDate }
+        return {getValue, setDate}
     });
 
 	return (

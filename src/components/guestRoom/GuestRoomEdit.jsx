@@ -14,9 +14,12 @@ import useFetchWithAuth from "../common/useFetchWithAuth";
 
 
 // Start:: form
-const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddress, pCity,
-                pPoliceStation, pState, pPin, pPhone, pMobile, pEmail, pGuestCount, 
-                pGuestMaleCount, pGuestFemaleCount, pDayCount, pBookingAgentId, pPlanId, 
+const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, 
+                pAge, pFatherName, pAddress, 
+                pCity, pPoliceStation, pState, 
+                pPin, pMobile, pEmail, 
+                pGuestCount, pGuestMaleCount, pGuestFemaleCount, 
+                pDayCount, pBookingAgentId, pPlanId, 
                 pCorporateName, pCorporateAddress, pGST,
                 pShow, 
                 onSubmited, onClosed }) => {
@@ -24,7 +27,7 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
     const [validateOnChange, setValidateOnChange] = useState(false);
-    const {loading, error, doInsert} = useFetchWithAuth({
+    const {loading, error, doUpdate} = useFetchWithAuth({
         url: `${contextValues.guestAPI}/${hotelId}/${pGuestId}`
     });
 
@@ -41,7 +44,6 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
             keyInputPS: pPoliceStation,
             keyInputState: pState,
             keyInputPIN: pPin,
-            keyInputPhone: pPhone,
             keyInputMobile: pMobile,
             keyInputEmail: pEmail,
             keyInputGuestCount: pGuestCount,
@@ -70,7 +72,6 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     policeStation: values.keyInputPS.toUpperCase(), 
                     state: values.keyInputState.toUpperCase(),
                     pin: values.keyInputPIN,
-                    phone: values.keyInputPhone,
                     mobile: parseInt(values.keyInputMobile),
                     email: values.keyInputEmail.toLowerCase(),
                     guestCount: parseInt(values.keyInputGuestCount),
@@ -84,7 +85,7 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     gstNo: values.keyInputGST
                 };
 
-                await doInsert(payload);
+                await doUpdate(payload);
         
                 if (error === null) {
                     resetForm();
@@ -253,7 +254,7 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
 
                         {/* Label element */}
                         <label className="form-label" 
-                            htmlFor={"keyInputFatherName"}>Father's name</label>
+                            htmlFor={"keyInputFatherName"}>Guardian's name</label>
 
                         {/* Input element text*/}
                         <input 
@@ -428,34 +429,6 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     </Col>
                     {/* End:: Column pin */}
 
-                    {/* Start:: Column phone */}
-                    <Col sx={12} md={4} className="mb-3">
-
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor={"keyInputPhone"}>Phone</label>
-
-                        {/* Input element text*/}
-                        <input 
-                            type="text" 
-                            name="keyInputPhone"
-                            placeholder="Phone"
-                            className="form-control"
-                            autoComplete="off"
-                            maxLength={10}
-                            disabled={loading} 
-                            value={values.keyInputPhone} 
-                            onChange={handleChange}/>
-
-                        {/* Validation message */}
-                        {errors.keyInputPhone && 
-                            touched.keyInputPhone ? 
-                                (<small className="text-danger">{errors.keyInputPhone}</small>) : 
-                                    null}
-                    
-                    </Col>
-                    {/* End:: Column phone */}
-
                     {/* Start:: Column mobile */}
                     <Col sx={12} md={4} className="mb-3">
 
@@ -484,39 +457,40 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     </Col>
                     {/* End:: Column mobile */}
 
+                    {/* Start:: Column email */}
+                    <Col sx = {12} md = {4} className = "mb-3">
+
+                        {/* Label element */}
+                        <label className = "col-12 form-label" 
+                            htmlFor = {"keyInputEmail"}>Email</label>
+
+                        <div className = "col-12">
+                            {/* Input element text*/}
+                            <input 
+                                type = "text" 
+                                name = "keyInputEmail"
+                                placeholder = "Email"
+                                className = "form-control"
+                                autoComplete = "off"
+                                maxLength = {100}
+                                disabled = {loading} 
+                                value = {values.keyInputEmail} 
+                                onChange = {handleChange} />
+
+                            {/* Validation message */}
+                            {errors.keyInputEmail && 
+                                touched.keyInputEmail ? 
+                                    (<small className = "text-danger">{errors.keyInputEmail}</small>) : 
+                                        null}
+                        </div>
+                    </Col>
+                    {/* End:: Column email */}
+
                 </Row>
                 {/* End:: Row */}
 
                 {/* Start:: Row */}
                 <Row>
-
-                    {/* Start:: Column email */}
-                    <Col sx={12} md={4} className="mb-3">
-
-                        {/* Label element */}
-                        <label className="form-label" 
-                            htmlFor={"keyInputEmail"}>Email</label>
-
-                        {/* Input element text*/}
-                        <input 
-                            type="text" 
-                            name="keyInputEmail"
-                            placeholder="Email"
-                            className="form-control"
-                            autoComplete="off"
-                            maxLength={100}
-                            disabled={loading} 
-                            value={values.keyInputEmail} 
-                            onChange={handleChange}/>
-
-                        {/* Validation message */}
-                        {errors.keyInputEmail && 
-                            touched.keyInputEmail ? 
-                                (<small className="text-danger">{errors.keyInputEmail}</small>) : 
-                                    null}
-                    
-                    </Col>
-                    {/* End:: Column email */}
 
                     {/* Start:: Column no of guest */}
                     <Col sx={12} md={4} className="mb-3">
@@ -574,12 +548,6 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     </Col>
                     {/* End:: Column no of male guest */}
 
-                </Row>
-                {/* End:: Row */}
-
-                {/* Start:: Row */}
-                <Row>
-
                     {/* Start:: Column no of female guest */}
                     <Col sx={12} md={4} className="mb-3">
 
@@ -607,6 +575,12 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     
                     </Col>
                     {/* End:: Column no of female guest */}
+
+                </Row>
+                {/* End:: Row */}
+
+                {/* Start:: Row */}
+                <Row>
 
                     {/* Start:: Column no of day */}
                     <Col sx={12} md={4} className="mb-3">
@@ -658,12 +632,6 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     </Col>
                     {/* End:: Column no of male guest */}
 
-                </Row>
-                {/* End:: Row */}
-
-                {/* Start:: Row */}
-                <Row>
-
                     {/* Start:: Column plan */}
                     <Col sx={12} md={4} className="mb-3">
 
@@ -686,6 +654,12 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     
                     </Col>
                     {/* End:: Column plan */}
+
+                </Row>
+                {/* End:: Row */}
+
+                {/* Start:: Row */}
+                <Row>
 
                     {/* Start:: Column corporate name */}
                     <Col sx={12} md={4} className="mb-3">
@@ -743,12 +717,6 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     </Col>
                     {/* End:: Column coroprate address */}
 
-                </Row>
-                {/* End:: Row */}
-
-                {/* Start:: Row */}
-                <Row>
-
                     {/* Start:: Column gst no */}
                     <Col sx={12} md={4} className="mb-3">
 
@@ -790,8 +758,8 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                 <button
                     type="button"
                     className="btn btn-danger"
-                    disabled = { loading }
-                    onClick = { handleClose } >
+                    disabled = {loading}
+                    onClick = {handleClose}>
                     Close
                 </button>
                 {/* End:: Close button */}
@@ -801,7 +769,7 @@ const Form = ({pGuestId, pIDDocumentId, pIDNo, pName, pAge, pFatherName, pAddres
                     type="button"
                     className="btn btn-success"
                     disabled={loading} 
-                    onClick={handleSubmit} >
+                    onClick={handleSubmit}>
 
                     {!loading && "Confirm"}
                     {loading && 
@@ -905,7 +873,6 @@ const GuestRoomEdit = forwardRef(( props, ref ) => {
                     pPoliceStation = {data.policeStation}
                     pState = {data.state}
                     pPin = {data.pin}
-                    pPhone = {data.phone}
                     pMobile = {data.mobile}
                     pEmail = {data.email}
                     pGuestCount = {data.guestCount}

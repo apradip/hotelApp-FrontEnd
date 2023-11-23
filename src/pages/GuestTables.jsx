@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Form, Breadcrumb, Row, Col, Placeholder } from "react-bootstrap";
 import { toast } from "react-toastify";
-import io from "socket.io-client";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
+import { SocketContext } from "../contexts/ContextSocket";
 import Add from "../components/common/GuestAddSmall";
 import CardTable from "../components/guestTable/GuestTableCard";
 import CardRoom from "../components/guestRoom/GuestRoomCard";
@@ -24,8 +24,7 @@ import { SearchOption, ActivityArea, Operation, MessageRoom } from "../component
 const GuestTables = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    // const socket = io.connect("http://localhost:3001");
-    const socket = io.connect(process.env.REACT_APP_API_IP + ":" + process.env.SOCKET_PORT);
+    const socket = useContext(SocketContext);
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
@@ -48,7 +47,7 @@ const GuestTables = forwardRef((props, ref) => {
 
     // Start:: leasten and act on command on socket
     useEffect(() => {
-        try {        
+        try {   
             socket.on(MessageRoom.Table, (payload) => {
                 try {
                     const {operation, guestId} = payload;
@@ -115,7 +114,7 @@ const GuestTables = forwardRef((props, ref) => {
         } catch (err) {
             console.log(err);
         }
-    },[]);
+    },[socket]);
     // End:: leasten and act on command on socket
     
     // Start:: fetch data list from api

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { Breadcrumb, Row, Col } from "react-bootstrap";
-import io from "socket.io-client";
+import { SocketContext } from "../contexts/ContextSocket";
 
 import GuestList from "../components/dashboard/GuestRoomList"
 import RoomList from "../components/dashboard/RoomStatusList"
@@ -11,8 +11,7 @@ import DueList from "../components/dashboard/DueList";
 import { Operation, MessageRoom } from "../components/common/Common";
 
 const Dashboard = () => {
-    const socket = io.connect(process.env.REACT_APP_API_IP + ":" + process.env.SOCKET_PORT);
-
+    const socket = useContext(SocketContext);
     const guestListRef = useRef(null);
     const roomListRef = useRef(null);
     const tableListRef = useRef(null);
@@ -189,9 +188,8 @@ const Dashboard = () => {
         } catch (err) {
             console.log(err);
         }
-    },[]);
+    },[socket]);
     // End:: leasten and act on command on socket
-
 
 
     return ( 

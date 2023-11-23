@@ -65,7 +65,7 @@ const ContainerLogin = ({pEmployeeId, pEmployeeName}) => {
   const guestPaymentRef = useRef(null)
 
   useEffect(() => {
-    const page = getPage(process.env.REACT_APP_BASE_URI, window.location.href)
+    const page = getPage(process.env.REACT_APP_FRONTEND_SERVER_DOMAIN, window.location.href)
     navRef.current.changePage(page)
     setMenuSelected(page)
   }, [])   // eslint-disable-line react-hooks/exhaustive-deps

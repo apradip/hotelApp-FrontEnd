@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Breadcrumb, Row, Col, Placeholder } from "react-bootstrap";
 import { toast } from "react-toastify";
-import io from "socket.io-client";
 
 import { HotelId } from "../App";
 import { useStateContext } from "../contexts/ContextProvider";
+import { SocketContext } from "../contexts/ContextSocket";
 import Add from "../components/guestRoom/GuestRoomAdd";
 import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
@@ -24,7 +24,7 @@ import { ActivityArea, Operation, MessageRoom } from "../components/common/Commo
 const GuestRooms = forwardRef((props, ref) => {
     const hotelId = useContext(HotelId);
     const contextValues = useStateContext();
-    const socket = io.connect(process.env.REACT_APP_API_IP + ":" + process.env.SOCKET_PORT);
+    const socket = useContext(SocketContext);
     const itemPerRow = contextValues.itemPerRow;
     const itemPerPage = contextValues.itemPerPage;
     const [search, setSearch] = useState("");
@@ -44,7 +44,6 @@ const GuestRooms = forwardRef((props, ref) => {
     // Start:: leasten and act on command on socket
     useEffect(() => {
         try {        
-            
             socket.on(MessageRoom.Room, (payload) => {
                 try {
                     const {operation, guestId} = payload;
