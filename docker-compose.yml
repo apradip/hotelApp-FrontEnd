@@ -11,5 +11,6 @@ services:
       - REACT_APP_FRONTEND_SERVER_DOMAIN=http://hotel.wikitoria.in
       
       - REACT_APP_API_SERVER_DOMAIN=https://hotelapi.wikitoria.in
-      - REACT_APP_API_SERVER_URI=https://hotelapi.wikitoria.in/api     
+      - REACT_APP_API_SERVER_URI=https://hotelapi.wikitoria.in/api    
+      - REACT_APP_API_SERVER_SOCKET_PORT=443 
       
