@@ -6,7 +6,8 @@ services:
     build: .
       # context: .
     ports:
-      - 8443:3000
+      # - 8443:3000
+      - 80:3000
     environment:
       - REACT_APP_FRONTEND_SERVER_DOMAIN=http://hotel.wikitoria.in
       
