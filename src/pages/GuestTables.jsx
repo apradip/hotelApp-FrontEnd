@@ -11,7 +11,7 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-import { SearchOption, ActivityArea, Operation, MessageRoom } from "../components/common/Common";
+import { SearchOption, ActivityArea, Operation, SocketRoom } from "../components/common/Common";
 
 // Start:: Component
 // props parameters
@@ -48,7 +48,7 @@ const GuestTables = forwardRef((props, ref) => {
     // Start:: leasten and act on command on socket
     useEffect(() => {
         try {   
-            socket.on(MessageRoom.Table, (payload) => {
+            socket.on(SocketRoom.Table, (payload) => {
                 try {
                     const {operation, guestId} = payload;
 
@@ -188,53 +188,87 @@ const GuestTables = forwardRef((props, ref) => {
 
     // Start:: on data operation successfully
     const handleSuccess = (operation = "", guestId = "") => {
-        const payload = {operation, guestId};
-
         try {
+            const payload = {operation, guestId};
+
             switch (operation) {
                 case Operation.GuestAdd:
-                    toast.success("Guest successfully added");
-                    socket.emit(MessageRoom.Table, payload);
+                    try {
+                        toast.success("Guest successfully added");
+                        socket.emit(SocketRoom.Table, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
 
                     break;
 
                 case Operation.GuestMod:
-                    toast.success("Guest successfully changed");
-                    socket.emit(MessageRoom.Table, payload);
+                    try {
+                        toast.success("Guest successfully changed");
+                        socket.emit(SocketRoom.Table, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
 
                     break;
 
                 case Operation.GuestDel:
-                    toast.success("Guest successfully deleted");
-                    socket.emit(MessageRoom.Table, payload);
+                    try {
+                        toast.success("Guest successfully deleted");
+                        socket.emit(SocketRoom.Table, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
 
                     break;               
                         
                 case Operation.Table_Order:
-                    toast.success("Item successfully ordered");
-                    socket.emit(MessageRoom.Table, payload);
+                    try {
+                        toast.success("Item successfully ordered");
+                        socket.emit(SocketRoom.Table, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
 
                     break;               
 
                 case Operation.Table_Despatch:
-                    toast.success("Item successfully despatched");
-                    socket.emit(MessageRoom.Table, payload);
+                    try {
+                        toast.success("Item successfully despatched");
+                        socket.emit(SocketRoom.Table, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
 
                     break;                
 
                 case Operation.BillGenerate:
-                    socket.emit(MessageRoom.Table, payload);
+                    try {
+                        socket.emit(SocketRoom.Table, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
+
                     break;                
                         
                 case Operation.Table_PaymentAdd:
-                    toast.success("Payment successfully added");
-                    socket.emit(MessageRoom.Table, payload);
+                    try {
+                        toast.success("Payment successfully added");
+                        socket.emit(SocketRoom.Table, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
+
                     break;
 
                 case Operation.Table_Checkout:
-                    toast.success("Guest successfully checked out");
-                    socket.emit(MessageRoom.Table, payload);
-
+                    try {
+                        toast.success("Guest successfully checked out");
+                        socket.emit(SocketRoom.Table, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
+        
                     break;
                         
                 default:                

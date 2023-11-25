@@ -8,7 +8,7 @@ import TableList from "../components/dashboard/TableStatusList"
 import TableOrderList from "../components/dashboard/TableOrderList"
 import DueList from "../components/dashboard/DueList";
 
-import { Operation, MessageRoom } from "../components/common/Common";
+import { Operation, SocketRoom } from "../components/common/Common";
 
 const Dashboard = () => {
     const socket = useContext(SocketContext);
@@ -21,7 +21,7 @@ const Dashboard = () => {
     // Start:: leasten and act on command on socket
     useEffect(() => {
         try {        
-            socket.on(MessageRoom.Room, (payload) => {
+            socket.on(SocketRoom.Room, (payload) => {
                 try {
                     const {operation, guestId} = payload;
                     
@@ -73,7 +73,7 @@ const Dashboard = () => {
                 }
             });
 
-            socket.on(MessageRoom.Table, (payload) => {
+            socket.on(SocketRoom.Table, (payload) => {
                 try {
                     const {operation, guestId} = payload;
                     
@@ -123,7 +123,7 @@ const Dashboard = () => {
                 }
             });
 
-            socket.on(MessageRoom.Service, (payload) => {
+            socket.on(SocketRoom.Service, (payload) => {
                 try {
                     const {operation, guestId} = payload;
 
@@ -154,7 +154,7 @@ const Dashboard = () => {
                 }          
             });
 
-            socket.on(MessageRoom.Miscellaneous, (payload) => {
+            socket.on(SocketRoom.Miscellaneous, (payload) => {
                 try {
                     const {operation, guestId} = payload;
 

@@ -24,7 +24,7 @@ import TablePendingOrderList from "./guestTable/GuestTablePendingOrderList";
 import ServiceOrderList from "./guestService/GuestServicePendingOrderList";
 import MiscellaneousOrderList from "./guestMiscellaneous/GuestMiscellaneousPendingOrderList";
 
-import { ActivityArea, Operation, MessageRoom } from "./common/Common";
+import { ActivityArea, Operation, SocketRoom } from "./common/Common";
 
 
 const alertOptions = [
@@ -107,28 +107,36 @@ const HeaderLogin = forwardRef((props, ref) => {
     });
 
     useEffect(() => {
-        try {
-            // socket.on("connect", () => {
-            //     console.log("Socket connected...");
-            // });
+    //     console.log("socket connected ...");
 
-            socket.on(MessageRoom.Miscellaneous, () => {
+    
+        socket.on(SocketRoom.Miscellaneous, () => {
+            try {
                 miscellaneousOrderListRef.current && 
                     miscellaneousOrderListRef.current.Refresh();
-            });
+            } catch (err) {
+                console.log(err);
+            }
+        });
 
-            socket.on(MessageRoom.Service, () => {
+        socket.on(SocketRoom.Service, () => {
+            try {
                 serviceOrderListRef.current && 
                     serviceOrderListRef.current.Refresh();
-            });
+            } catch (err) {
+                console.log(err);
+            }
+        });
 
-            socket.on(MessageRoom.Table, () => {
+        socket.on(SocketRoom.Table, () => {
+            try {
+                console.log(SocketRoom.Table);
                 tablePendingOrderListRef.current && 
                     tablePendingOrderListRef.current.Refresh();
-            });
-        } catch (err) {
-            console.log("Error : " + err);
-        }
+            } catch (err) {
+                console.log(err);
+            }
+        });
     },[socket]);
 
     useEffect(() => {
@@ -278,21 +286,33 @@ const HeaderLogin = forwardRef((props, ref) => {
 
             switch (operation) {
                   case Operation.Miscellaneous_Despatch:
-                    toast.success("Order successfully despatched");
-                    socket.emit(MessageRoom.Miscellaneous, payload);
-                    
+                    try {
+                        toast.success("Order successfully despatched");
+                        socket.emit(SocketRoom.Miscellaneous, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
+                            
                     break;                
 
                 case Operation.Service_Despatch:
-                    toast.success("Order successfully despatched");
-                    socket.emit(MessageRoom.Service, payload);
-                    
+                    try {
+                        toast.success("Order successfully despatched");
+                        socket.emit(SocketRoom.Service, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
+                                
                     break;                
 
                 case Operation.Table_Despatch:
-                    toast.success("Order successfully despatched");
-                    socket.emit(MessageRoom.Table, payload);
-        
+                    try {
+                        toast.success("Order successfully despatched");
+                        socket.emit(SocketRoom.Table, payload);
+                    } catch (err) {
+                        console.log(err);
+                    }        
+                
                     break;                
     
                 default:                

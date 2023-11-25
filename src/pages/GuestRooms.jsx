@@ -10,7 +10,7 @@ import CardRoom from "../components/guestRoom/GuestRoomCard";
 import CardPlaceholder from "../components/common/GuestPlaceholderCard";
 import Paging from "../components/Paging";
 import useFetchWithAuth from "../components/common/useFetchWithAuth";
-import { ActivityArea, Operation, MessageRoom } from "../components/common/Common";
+import { ActivityArea, Operation, SocketRoom } from "../components/common/Common";
 
 
 // Start:: Component
@@ -44,7 +44,7 @@ const GuestRooms = forwardRef((props, ref) => {
     // Start:: leasten and act on command on socket
     useEffect(() => {
         try {        
-            socket.on(MessageRoom.Room, (payload) => {
+            socket.on(SocketRoom.Room, (payload) => {
                 try {
                     const {operation, guestId} = payload;
                     
@@ -107,7 +107,7 @@ const GuestRooms = forwardRef((props, ref) => {
                 }
             });
 
-            socket.on(MessageRoom.Table, (payload) => {
+            socket.on(SocketRoom.Table, (payload) => {
                 try {
                     const {operation, guestId} = payload;
                     
@@ -152,7 +152,7 @@ const GuestRooms = forwardRef((props, ref) => {
                 }
             });
 
-            socket.on(MessageRoom.Service, (payload) => {
+            socket.on(SocketRoom.Service, (payload) => {
                 try {
                     const {operation, guestId} = payload;
 
@@ -197,7 +197,7 @@ const GuestRooms = forwardRef((props, ref) => {
                 }          
             });
 
-            socket.on(MessageRoom.Miscellaneous, (payload) => {
+            socket.on(SocketRoom.Miscellaneous, (payload) => {
                 try {
                     const {operation, guestId} = payload;
 
@@ -331,114 +331,114 @@ const GuestRooms = forwardRef((props, ref) => {
             switch (operation) {
                 case Operation.GuestAdd:
                     toast.success("Guest successfully added");
-                    socket.emit(MessageRoom.Room, payload);
+                    socket.emit(SocketRoom.Room, payload);
                     
                     break;
         
                 case Operation.GuestMod:
                     toast.success("Guest successfully changed");
-                    socket.emit(MessageRoom.Room, payload);
+                    socket.emit(SocketRoom.Room, payload);
                     
                     break;
 
                 case Operation.GuestDel:
                     toast.success("Guest successfully deleted");
-                    socket.emit(MessageRoom.Room, payload);
+                    socket.emit(SocketRoom.Room, payload);
                     
                     break;               
                         
                 case Operation.Booked:
                     toast.success("Room successfully booked");
-                    socket.emit(MessageRoom.Room, payload);
+                    socket.emit(SocketRoom.Room, payload);
 
                     break;               
         
                 case Operation.BillGenerate:
-                    socket.emit(MessageRoom.Room, payload);    
+                    socket.emit(SocketRoom.Room, payload);    
                     
                     break;                                
     
                 case Operation.Table_Order:
                     toast.success("Order successfully placed");
-                    socket.emit(MessageRoom.Table, payload);
+                    socket.emit(SocketRoom.Table, payload);
                     
                     break;               
 
                 case Operation.Service_Order:
                     toast.success("Order successfully placed");
-                    socket.emit(MessageRoom.Service, payload);
+                    socket.emit(SocketRoom.Service, payload);
                     
                     break;               
     
                 case Operation.Miscellaneous_Order:
                     toast.success("Order successfully placed");
-                    socket.emit(MessageRoom.Miscellaneous, payload);
+                    socket.emit(SocketRoom.Miscellaneous, payload);
                     
                     break;               
     
                 case Operation.Table_Despatch:
                     toast.success("Order successfully despatched");
-                    socket.emit(MessageRoom.Table, payload);
+                    socket.emit(SocketRoom.Table, payload);
                     
                     break;                
                         
                 case Operation.Service_Despatch:
                     toast.success("Order successfully despatched");
-                    socket.emit(MessageRoom.Service, payload);
+                    socket.emit(SocketRoom.Service, payload);
                     
                     break;                
 
                 case Operation.Miscellaneous_Despatch:
                     toast.success("Order successfully despatched");
-                    socket.emit(MessageRoom.Miscellaneous, payload);
+                    socket.emit(SocketRoom.Miscellaneous, payload);
                     
                     break;                
     
                 case Operation.Room_PaymentAdd:
                     toast.success("Payment successfully done");
-                    socket.emit(MessageRoom.Room, payload);
+                    socket.emit(SocketRoom.Room, payload);
                     
                     break;
 
                 case Operation.Table_PaymentAdd:
                     toast.success("Payment successfully done");
-                    socket.emit(MessageRoom.Table, payload);
+                    socket.emit(SocketRoom.Table, payload);
                     
                     break;
                         
                 case Operation.Service_PaymentAdd:
                     toast.success("Payment successfully done");
-                    socket.emit(MessageRoom.Service, payload);
+                    socket.emit(SocketRoom.Service, payload);
                     
                     break;
 
                 case Operation.Miscellaneous_PaymentAdd:
                     toast.success("Payment successfully done");
-                    socket.emit(MessageRoom.Service, payload);
+                    socket.emit(SocketRoom.Service, payload);
                     
                     break;
                     
                 case Operation.Room_Checkout:
                     toast.success("Guest successfully checked out");
-                    socket.emit(MessageRoom.Room, payload);
+                    socket.emit(SocketRoom.Room, payload);
                     
                     break;
 
                 case Operation.Table_Checkout:
                     toast.success("Guest successfully checked out");
-                    socket.emit(MessageRoom.Table, payload);
+                    socket.emit(SocketRoom.Table, payload);
                     
                     break;
     
                 case Operation.Service_Checkout:
                     toast.success("Guest successfully checked out");
-                    socket.emit(MessageRoom.Service, payload);
+                    socket.emit(SocketRoom.Service, payload);
                     
                     break;
     
                 case Operation.Miscellaneous_Checkout:
                     toast.success("Guest successfully checked out");
-                    socket.emit(MessageRoom.Miscellaneous, payload);
+                    socket.emit(SocketRoom.Miscellaneous, payload);
                     
                     break;
                         

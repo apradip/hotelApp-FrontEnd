@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export const MessageRoom = {
+export const SocketRoom = {
     Room: "SOCKET_ROOM",
     Table: "SOCKET_TABLE",
     Service: "SOCKET_SERVICE",
