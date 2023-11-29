@@ -141,7 +141,7 @@ const Employees = forwardRef((props, ref) => {
 
                 case Operation.Mod:
                     toast.success("Data successfully changed");
-                    // setDataChanged(true);
+                    setDataChanged(true);
                     props.onSuccess();
                     break;                
 

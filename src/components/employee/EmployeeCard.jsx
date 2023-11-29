@@ -1,5 +1,5 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
-import { NavLink, Card, Dropdown, Row, Col } from "react-bootstrap";
+import React, {useState, useRef, forwardRef, useImperativeHandle} from "react";
+import {NavLink, Card, Dropdown, Row, Col} from "react-bootstrap";
 
 import {MoreVertical, Edit3, Scissors} from "react-feather";
 import {subStr, getAccessLevel} from "../common/Common";
