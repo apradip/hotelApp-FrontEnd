@@ -157,7 +157,7 @@ const EmployeeCard = forwardRef((props, ref) => {
 
                     <Row className="m-1">
                         <Col xs={4} sm={4} md={5} lg={5} xl={5} className="p-0 m-0">
-                            obile no.
+                            Mobile no.
                         </Col>
                         <Col xs={8} sm={8} md={7} lg={7} xl={7} className="text-right p-0 m-0">
                             {props.pMobile}

@@ -14,8 +14,7 @@ const useFetch = (params) => {
         await axiosPublic.post(`${params.url}`, payload)
             .then((response) => {
                 if (response.status === 200) {
-                    setData(response.data)
-                    //store login details in localstore
+                    setData(response.data);
                     localStorage.setItem("user", payload.keyInputUser);
                     localStorage.setItem("password", payload.keyInputPassword);
                 } else {

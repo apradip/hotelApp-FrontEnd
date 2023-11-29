@@ -12,7 +12,8 @@ import ContainerLogin from "./components/ContainerLogin";
 const HotelId = createContext();
 
 function App() {
-  const hotelId = "64252efb369c403b60effae8";  
+  // const hotelId = "64252efb369c403b60effae8";  
+  const hotelId = process.env.REACT_APP_DEFAULT_HOTEL_ID;  
   const [pEmployeeId, setPEmployeeId] = useState(null);
   const [pEmployeeName, setPEmployeeName] = useState(null);
   

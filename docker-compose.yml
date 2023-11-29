@@ -6,9 +6,9 @@ services:
     build: .
       # context: .
     ports:
-      # - 8443:3000
       - 80:3000
     environment:
+      - REACT_APP_DEFAULT_HOTEL_ID=64252efb369c403b60effae8 
       - REACT_APP_FRONTEND_SERVER_DOMAIN=http://hotel.wikitoria.in
       
       - REACT_APP_API_SERVER_DOMAIN=https://hotelapi.wikitoria.in
